@@ -90,28 +90,11 @@ export class OSDate {
     }
 
     public getDateByTimeZone(timeZone?: string): Date {
-        const options: Intl.DateTimeFormatOptions = {
-            timeZone: timeZone || Intl.DateTimeFormat().resolvedOptions().timeZone,
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false
-        };
-
-        const date = new Date(this.date.toISOString());
-
-        const dateString = new Intl.DateTimeFormat('en-US', options).format(date);
-
-        const [month, day, year, hour, minute, second] = dateString.match(/\d+/g)!;
-
-        return new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}`);
+        return getDateByTimeZone(this.date, timeZone);
     }
 
-    public static formatDate(date: Date, addYear?: boolean, addWeek?: boolean) {
-        const today = new Date();
+    public static formatDate(date: Date, timeZone: string, addYear?: boolean, addWeek?: boolean) {
+        const today = getDateByTimeZone(new Date(), timeZone);
         const yesterday = new Date(today);
         yesterday.setDate(today.getDate() - 1);
         const tomorrow = new Date(today);
@@ -160,13 +143,14 @@ export class OSDate {
         return new Intl.DateTimeFormat('en-US', options).format(date);
     }
 
-    public static formatTime(date: Date): string {
+    public static formatTime(date: Date, timeZone?: string): string {
+        const dateUTC = getDateByTimeZone(date, timeZone);
         const options: Intl.DateTimeFormatOptions = {
             hour: '2-digit',
             minute: '2-digit',
             hour12: true,
         };
-        return new Intl.DateTimeFormat('en-US', options).format(date);
+        return new Intl.DateTimeFormat('en-US', options).format(dateUTC);
     }
 
     public static get24Hour(hour: number, isAm: boolean): number {
@@ -214,4 +198,25 @@ export class OSDate {
             minutes: minutes
         };
     }
+}
+
+function getDateByTimeZone(date: Date, timeZone?: string): Date {
+    const options: Intl.DateTimeFormatOptions = {
+        timeZone: timeZone || Intl.DateTimeFormat().resolvedOptions().timeZone,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+    };
+
+    const dateUTC = new Date(date.toISOString());
+
+    const dateString = new Intl.DateTimeFormat('en-US', options).format(dateUTC);
+
+    const [month, day, year, hour, minute, second] = dateString.match(/\d+/g)!;
+
+    return new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}`);
 }

@@ -18,7 +18,8 @@ export class ClockController extends BaseController {
     private timerWorker: Worker;
 
     public stopwatchStatus: boolean = false;
-    public timerData: CountdownData | null = null;
+    public timer: CountdownData | null = null;
+    public stopwatch: StopWatchData | null = null;
 
     public alarms: Alarm[] = [];
 
@@ -32,20 +33,24 @@ export class ClockController extends BaseController {
         this.setupListeners();
     }
 
-    get running(): boolean {
-        return !!this.timerData?.running;
+    get timerRunning(): boolean {
+        return !!this.timer?.running;
+    }
+
+    get stopwatchRunning(): boolean {
+        return !!this.stopwatch?.running;
     }
 
     get remaining() {
-        return this.timerData?.remainingTime || 0;
+        return this.timer?.remainingTime || 0;
     }
 
     get duration() {
-        return this.timerData?.duration || 0;
+        return this.timer?.duration || 0;
     }
     set duration(duration: number) {
-        if (this.timerData) {
-            this.timerData.duration = duration;
+        if (this.timer) {
+            this.timer.duration = duration;
         }
     }
 
@@ -53,18 +58,18 @@ export class ClockController extends BaseController {
         this.clockStore.listen((_, item, operation) => {
             if (operation === 'loaded') {
                 const countdownData = this.clockStore.get('countdown') as CountdownData;
-                this.timerData = countdownData;
+                this.timer = countdownData;
                 this.timerWorker.postMessage({
                     command: 'init',
                     data: countdownData
                 });
 
-                const stopwatch = this.clockStore.get('stopwatch') as StopWatchData;
-                if (stopwatch) {
-                    this.stopwatchStatus = stopwatch.running;
-                    if (!this.timerData.running) {
+                this.stopwatch = this.clockStore.get('stopwatch') as StopWatchData;
+                if (this.stopwatch) {
+                    // this.stopwatchStatus = stopwatch.running;
+                    if (!this.timerRunning) {
                         this.notifyListeners('UPDATE_CLOCK', {
-                            timer: !!this.timerData?.running,
+                            timer: this.timerRunning,
                             stopwatch: this.stopwatchStatus,
                         });
                     }
@@ -73,9 +78,9 @@ export class ClockController extends BaseController {
 
             if (item && item.id === 'stopwatch') {
                 this.stopwatchStatus = item.running;
-                if (!this.timerData?.running) {
+                if (!this.timer?.running) {
                     this.notifyListeners('UPDATE_CLOCK', {
-                        timer: !!this.timerData?.running,
+                        timer: !!this.timer?.running,
                         stopwatch: this.stopwatchStatus,
                     });
                 }
@@ -101,9 +106,9 @@ export class ClockController extends BaseController {
             const { status, data } = event.data;
 
             if (status === 'updateClock') {
-                if (!this.timerData?.running) {
+                if (!this.timer?.running) {
                     this.notifyListeners('UPDATE_CLOCK', {
-                        timer: !!this.timerData?.running,
+                        timer: !!this.timer?.running,
                         stopwatch: this.stopwatchStatus,
                     });
                 }
@@ -119,24 +124,24 @@ export class ClockController extends BaseController {
         });
 
         this.timerWorker.addEventListener('message', (event) => {
-            const { status, remainingTime, timerData } = event.data;
+            const { status, remainingTime, timer } = event.data;
 
-            if (this.timerData){
-                this.timerData.remainingTime = remainingTime;
+            if (this.timer){
+                this.timer.remainingTime = remainingTime;
             }
 
-            if (timerData) {
-                this.timerData = timerData;
-                this.updateTimer(timerData);
-                this.notifyListeners('TIMER_UPDATE', this.timerData);
+            if (timer) {
+                this.timer = timer;
+                this.updateTimer(timer);
+                this.notifyListeners('TIMER_UPDATE', this.timer);
             } else {
-                this.notifyListeners('TIMER_UPDATE', this.timerData);
+                this.notifyListeners('TIMER_UPDATE', this.timer);
             }
 
 
             if (status === 'finished') {
                 this.notifyListeners('TIMER_ALERT', {
-                    timer: !!this.timerData?.running,
+                    timer: !!this.timer?.running,
                     stopwatch: this.stopwatchStatus,
                 });
             }

@@ -89,6 +89,9 @@ export class SettingsController extends BaseController {
 
                 const dateTime = this.settingsStore.get('date-time');
                 this.notifyListeners('UPDATE_TIMEZONE', dateTime);
+
+                const display = this.settingsStore.get('display');
+                this.notifyListeners('UPDATE_THEME', display);
             }
             if (item && item.id === 'apps') {
                 this.apps = item.data || [];

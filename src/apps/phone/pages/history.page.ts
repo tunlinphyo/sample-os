@@ -102,7 +102,7 @@ export class HistoryPage extends Page {
         orderedList.forEach(item => {
             const chatItem = this.createElement('div', ['chatItem', this.getClass(item.type)]);
             const dateTime = this.createElement('div', ['dateTime']);
-            dateTime.innerText = `${OSDate.formatDate(item.date)} ${OSDate.formatTime(item.date)}`;
+            dateTime.innerText = `${OSDate.formatDate(item.date, this.device.timeZone)} ${OSDate.formatTime(item.date, this.device.timeZone)}`;
             const message = this.createElement('div', ['message']);
             message.innerText = this.getText(item);
             chatItem.appendChild(dateTime);

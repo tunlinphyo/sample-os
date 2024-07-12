@@ -1,0 +1,217 @@
+@layer component {
+    .clockArea {
+        width: calc(var(--grid) * 10);
+        height: calc(var(--grid) * 8);
+
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+
+        .clockRing {
+            --icon-color: var(--black);
+            --stoke-color: transparent;
+            --fill-color: var(--black);
+
+            width: calc(var(--grid) * 7.5);
+            height: calc(var(--grid) * 7.5);
+            position: relative;
+
+            outline: 2px solid var(--black);
+            outline-offset: -4px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: none;
+            background-color: transparent;
+            padding: 0;
+            cursor: pointer;
+            border-radius: 50%;
+            background: conic-gradient(var(--fill-color) 100%, var(--stoke-color) 0);
+
+            transition: background-image .3s ease;
+
+            .timeDisplay {
+                font-family: var(--number-fonts);
+                font-weight: 400;
+                position: relative;
+                z-index: 1;
+                font-size: calc(var(--grid) * 2);
+
+                &.withHours {
+                    font-size: calc(var(--grid) * 1.4);
+                    font-weight: 500;
+                }
+            }
+
+            &::before {
+                content: '';
+                position: absolute;
+                z-index: 0;
+                inset: 6px;
+                border-radius: inherit;
+                background: var(--white);
+                transition: all .2s ease-in;
+            }
+        }
+
+        .clock {
+            width: calc(var(--grid) * 7.5);
+            height: calc(var(--grid) * 7.5);
+            border: 4px solid var(--black);
+            border-radius: 50%;
+            position: relative;
+            padding: 6px;
+
+            .currentTime {
+                position: absolute;
+                width: 160px;
+                left: 50%;
+                bottom: calc(var(--grid) * 2);
+
+                translate: -50% 50%;
+
+                background-color: var(--white);
+                text-align: center;
+                border: 2px solid var(--black);
+                border-radius: 5px;
+                font-size: 20px;
+                font-family: var(--number-fonts);
+                font-weight: 500;
+            }
+
+            .clock-face {
+                width: 100%;
+                height: 100%;
+                position: relative;
+                transform: translateY(-3px); /* account for the height of the clock hands */
+
+                .hand {
+                    width: 50%;
+                    height: 2px;
+                    border-radius: 4px;
+                    background: var(--black);
+                    position: absolute;
+                    top: calc(50% - 4px);
+                    left: 0;
+                    transform-origin: 100%;
+                    transform: rotate(90deg);
+                    /* transition: all 0.05s;
+                    transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1); */
+                    overflow: hidden;
+                }
+
+                .hour-hand {
+                    width: 25%;
+                    translate: 99% 0;
+                    border-radius: 12px;
+                    outline: 4px solid var(--black);
+                }
+
+                .minute-hand {
+                    width: 36%;
+                    translate: 38% 0;
+                    outline: 4px solid var(--black);
+                }
+
+                .second-hand {
+                    --size: 14px;
+                    height: var(--size);
+                    background-color: transparent;
+
+                    &::before {
+                        content: '';
+                        display: block;
+                        width: var(--size);
+                        height: var(--size);
+                        border-radius: var(--size);
+                        background-color: var(--black);
+                    }
+                }
+            }
+        }
+    }
+
+    .timeLaps {
+        padding: var(--grid) var(--padding);
+
+        .timeLap {
+            line-height: 2;
+            border-bottom: 2px solid var(--black);
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            .lapTimes {
+                font-family: var(--number-fonts);
+                font-size: 18px;
+                font-weight: 500;
+            }
+        }
+    }
+
+    .alarmList {
+        padding-block: var(--grid);
+
+        .alarmTitle {
+            font-size: var(--grid);
+            padding-inline: var(--padding);
+            margin-bottom: calc(var(--grid) * 0.5);
+
+            display: flex;
+            align-items: center;
+            gap: calc(var(--grid) * 0.5);
+
+            &::after {
+                content: '';
+                flex: 1;
+                border-bottom: 2px solid var(--black);
+            }
+        }
+
+        .alarmItem {
+            width: 100%;
+            height: calc(var(--grid) * 2);
+            padding-inline: var(--padding);
+            cursor: pointer;
+            margin-top: 8px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .alermButton {
+                flex: 1;
+                text-align: left;
+
+                .clock {
+                    font-size: var(--grid);
+                    line-height: 1.2;
+
+                    > small {
+                        font-size: 16px;
+                    }
+                }
+                .label {
+                    font-size: 14px;
+                    line-height: 1.2;
+                }
+            }
+
+
+            .toggle {
+                width: 40px;
+                height: var(--button);
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+    }
+}
