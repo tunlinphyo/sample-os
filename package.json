@@ -1,0 +1,22 @@
+{
+  "name": "sample-os",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/sortablejs": "^1.15.8",
+    "@types/uuid": "^10.0.0",
+    "typescript": "^5.2.2",
+    "vite": "^5.3.1"
+  },
+  "dependencies": {
+    "idb-keyval": "^6.2.1",
+    "sortablejs": "^1.15.2",
+    "uuid": "^10.0.0"
+  }
+}

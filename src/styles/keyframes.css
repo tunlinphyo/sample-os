@@ -1,0 +1,38 @@
+@keyframes PageEnter {
+    from {
+        translate: 0 calc(var(--grid) * 17);
+        display: block;
+    }
+    to {
+        translate: 0 0;
+        display: block;
+        pointer-events: auto;
+    }
+}
+@keyframes PageLeave {
+    from {
+        translate: 0 0;
+        display: block;
+    }
+    to {
+        translate: 0 calc(var(--grid) * 17);
+        display: block;
+        pointer-events: none;
+    }
+}
+@keyframes ScrollProgress {
+    from {
+        top: 0px;
+    }
+    to {
+        top: 50%;
+    }
+}
+@keyframes ShowHide {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}

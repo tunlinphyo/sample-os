@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Home</title>
+</head>
+
+<body class="deviceBody">
+
+    <template id="appTemplate">
+        <div class="screen">
+            <div class="statusBar">
+                <div class="statusBar--container">
+                    <div></div>
+                    <div class="statusBar-title">Recents</div>
+                    <div></div>
+                </div>
+            </div>
+            <div class="mainArea"></div>
+            <div class="actionBar">
+                <div class="actionButton start"></div>
+                <div class="actionButton center"></div>
+                <div class="actionButton end"></div>
+            </div>
+        </div>
+    </template>
+
+    <template id="incommingTemplate">
+        <div class="screen">
+            <div class="statusBar">
+                <div class="statusBar--container">
+                    <div></div>
+                    <div class="statusBar-title">Recents</div>
+                    <div></div>
+                </div>
+            </div>
+            <div class="mainArea"></div>
+            <div class="actionBar">
+                <div class="actionButton center"></div>
+                <div class="actionButton end"></div>
+            </div>
+        </div>
+    </template>
+
+    <template id="keyboardTemplate">
+        <div class="screen">
+            <div class="statusBar">
+                <div class="statusBar--container">
+                    <div></div>
+                    <div class="statusBar-title">Recents</div>
+                    <div></div>
+                </div>
+            </div>
+            <div class="mainArea">
+                <div class="keyboardContainer">
+                    <div class="keyboardTextArea">
+                        <div class="textArea"></div>
+                    </div>
+                    <div class="keyboardKeysArea"></div>
+                </div>
+            </div>
+            <div class="actionBar">
+                <div class="actionButton start"></div>
+                <div class="actionButton center"></div>
+                <div class="actionButton end"></div>
+            </div>
+        </div>
+    </template>
+
+    <template id="datePickerTemplate">
+        <div class="screen screen-popup">
+            <div class="statusBar">
+                <div class="statusBar--container">
+                    <div></div>
+                    <div class="statusBar-title" id="calendarYear"></div>
+                    <div></div>
+                </div>
+            </div>
+            <div class="mainArea">
+                <div class="dateToggle">
+                    <button id="prevButton">
+                        <span class="material-symbols-outlined icon--nu">chevron_left</span>
+                    </button>
+                    <div class="currentDate" id="calendarMonth">December</div>
+                    <button id="nextButton">
+                        <span class="material-symbols-outlined icon--nu">chevron_right</span>
+                    </button>
+                </div>
+                <div class="calendar title">
+                    <div class="cell cellTitle">Su</div>
+                    <div class="cell cellTitle">Mo</div>
+                    <div class="cell cellTitle">Tu</div>
+                    <div class="cell cellTitle">We</div>
+                    <div class="cell cellTitle">Th</div>
+                    <div class="cell cellTitle">Fr</div>
+                    <div class="cell cellTitle">Sa</div>
+                </div>
+                <div class="calendar" id="calendarDays"></div>
+            </div>
+            <div class="actionBar">
+                <div class="actionButton start"></div>
+                <div class="actionButton center"></div>
+                <div class="actionButton end"></div>
+            </div>
+        </div>
+    </template>
+
+    <template id="timePickerTemplate">
+        <div class="screen">
+            <div class="statusBar">
+                <div class="statusBar--container">
+                    <div></div>
+                    <div class="statusBar-title">Recents</div>
+                    <div></div>
+                </div>
+            </div>
+            <div class="mainArea">
+                <div class="timePicker">
+                    <div class="header">
+                        <span class="time-display" id="hourDisplay">07</span>
+                        <span class="time-spreater">:</span>
+                        <span class="time-display" id="minuteDisplay">00</span>
+                        <div class="ampm-toggle">
+                            <button class="ampm-button" id="amButton">AM</button>
+                            <button class="ampm-button" id="pmButton">PM</button>
+                        </div>
+                    </div>
+                    <div class="clockContainer">
+                        <div class="clock-face">
+                            <div class="clock-hand" id="clockHand"></div>
+                            <div class="numbers"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="actionBar">
+                <div class="actionButton start"></div>
+                <div class="actionButton center"></div>
+                <div class="actionButton end"></div>
+            </div>
+        </div>
+    </template>
+
+    <template id="timeWheelTemplate">
+        <div class="screen">
+            <div class="statusBar">
+                <div class="statusBar--container">
+                    <div></div>
+                    <div class="statusBar-title">Recents</div>
+                    <div></div>
+                </div>
+            </div>
+            <div class="mainArea">
+                <div class="timeWheelContainer">
+                    <div class="timeWheel"></div>
+                </div>
+            </div>
+            <div class="actionBar">
+                <div class="actionButton start"></div>
+                <div class="actionButton center"></div>
+                <div class="actionButton end"></div>
+            </div>
+        </div>
+    </template>
+
+    <template id="deviceTemplate">
+        <main class="main">
+            <section class="device">
+                <div class="statusContainer">
+                    <div class="statusStart">
+                        <span style="font-size: 16px;" id="dateTime" class="time">09:24</span>
+                    </div>
+                    <div class="island">
+                        <div class="camera"></div>
+                    </div>
+                    <div class="statusEnd">
+                        <span class="icons">
+                            <span class="material-symbols-outlined fill-icon" style="font-size: 21px; margin-right: 3px; display: none" id="headPhones">headphones</span>
+                            <span class="material-symbols-outlined" style="font-size: 20px;" id="networkStatus">signal_wifi_4_bar</span>
+                            <span class="material-symbols-outlined" style="font-size: 18px; margin-right: 7px; scale: 1.2 1;">signal_cellular_4_bar</span>
+                            <span id="batteryPercentage" data-value="">
+                                <span class="material-symbols-outlined" style="font-size: 24px; rotate: 90deg; scale: 1.4 1.1;" id="batteryStatusIcon">battery_full</span>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <div class="navigationBar">
+                    <button class="navigationBar-btn"></button>
+                </div>
+
+                <button class="activateAi" id="aiButton"></button>
+                <button class="powerButton" id="powerButton"></button>
+                <div class="volume">
+                    <button class="volumeUp" id="volumeUpButton"></button>
+                    <button class="volumeDown" id="volumeDownButton"></button>
+                </div>
+
+                <div class="screen screen--device" id="device">
+                    <iframe
+                        class="iframe"
+                        id="homeFrame"
+                        src="./src/apps/index.html" frameborder="0"></iframe>
+
+                    <section class="appContainer">
+                        <iframe
+                            class="iframe"
+                            id="appFrame"
+                            src="" frameborder="0"></iframe>
+                    </section>
+                </div>
+            </section>
+        </main>
+    </template>
+
+    <div class="callButtons">
+        <button class="callButton" id="rendomCall" title="Call form random mumber">
+            <span class="material-symbols-outlined">shuffle</span>
+            <span class="material-symbols-outlined">call</span>
+        </button>
+        <button class="callButton" id="contactCall" title="Call form contact">
+            <span class="material-symbols-outlined">person</span>
+            <span class="material-symbols-outlined">call</span>
+        </button>
+        <button class="callButton" id="rendomMessage" title="Message form random mumber">
+            <span class="material-symbols-outlined">shuffle</span>
+            <span class="material-symbols-outlined">chat_bubble</span>
+        </button>
+        <button class="callButton" id="contactMessage" title="Message form contact">
+            <span class="material-symbols-outlined">person</span>
+            <span class="material-symbols-outlined">chat_bubble</span>
+        </button>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>
+

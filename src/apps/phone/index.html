@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Phone</title>
+    <style>
+        .loadingScreen {
+            position: absolute;
+            z-index: 999;
+            top: 0;
+            left: 0;
+            width: calc(var(--grid) * 10);
+            height: calc(var(--grid) * 17);
+
+            background-color: var(--white);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: translate .3s ease-out;
+
+            &.remove {
+                translate: 0 -100%;
+            }
+        }
+    </style>
+</head>
+
+<body class="appBody">
+
+    <template id="appTemplate">
+        <div class="screen">
+            <div class="statusBar">
+                <div class="statusBar--container">
+                    <div></div>
+                    <div class="statusBar-title">Recents</div>
+                    <div></div>
+                </div>
+            </div>
+            <div class="mainArea"></div>
+            <div class="actionBar">
+                <div class="actionButton start"></div>
+                <div class="actionButton center"></div>
+                <div class="actionButton end"></div>
+            </div>
+        </div>
+    </template>
+
+    <template id="contactForm">
+        <div class="scrollArea">
+            <div class="formGroup"></div>
+        </div>
+    </template>
+
+    <template id="keypadTemplate">
+        <div class="keypadArea">
+            <div class="phoneDispaly">
+                <button class="addEdit">
+                    <span class="material-symbols-rounded icon">add_circle</span>
+                </button>
+                <div class="phoneNumber">
+                    <input type="text" id="phoneNumber" readonly>
+                </div>
+                <button class="backSpace" id="clear">
+                    <span class="material-symbols-rounded icon" style="rotate: -90deg;">change_history</span>
+                </button>
+            </div>
+            <div class="keypadContainer">
+                <button class="key" data-key="1">1</button>
+                <button class="key" data-key="2">2</button>
+                <button class="key" data-key="3">3</button>
+                <button class="key" data-key="4">4</button>
+                <button class="key" data-key="5">5</button>
+                <button class="key" data-key="6">6</button>
+                <button class="key" data-key="7">7</button>
+                <button class="key" data-key="8">8</button>
+                <button class="key" data-key="9">9</button>
+                <button class="key keyLarge" data-key="*">*</button>
+                <button class="key" data-key="0">0</button>
+                <button class="key keySmall" data-key="#">#</button>
+            </div>
+        </div>
+    </template>
+
+    <section class="loadingScreen">
+        <span class="material-symbols-outlined icon-xxxl">call</span>
+    </section>
+
+    <script type="module" src="./main.ts"></script>
+</body>
+
+</html>

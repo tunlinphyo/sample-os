@@ -1,0 +1,176 @@
+[
+  {
+    "timeZone": "Africa/Cairo",
+    "city": "Cairo",
+    "lat": 30.04442,
+    "lng": 31.235712
+  },
+  {
+    "timeZone": "Africa/Johannesburg",
+    "city": "Johannesburg",
+    "lat": -26.204103,
+    "lng": 28.047305
+  },
+  {
+    "timeZone": "Africa/Lagos",
+    "city": "Lagos",
+    "lat": 6.524379,
+    "lng": 3.379206
+  },
+  {
+    "timeZone": "Africa/Nairobi",
+    "city": "Nairobi",
+    "lat": -1.292066,
+    "lng": 36.821946
+  },
+  {
+    "timeZone": "America/Argentina/Buenos_Aires",
+    "city": "Buenos Aires",
+    "lat": -34.603684,
+    "lng": -58.381559
+  },
+  {
+    "timeZone": "America/Bogota",
+    "city": "Bogota",
+    "lat": 4.711,
+    "lng": -74.0721
+  },
+  {
+    "timeZone": "America/Chicago",
+    "city": "Chicago",
+    "lat": 41.8781,
+    "lng": -87.6298
+  },
+  {
+    "timeZone": "America/Denver",
+    "city": "Denver",
+    "lat": 39.7392,
+    "lng": -104.9903
+  },
+  {
+    "timeZone": "America/Los_Angeles",
+    "city": "Los Angeles",
+    "lat": 34.052235,
+    "lng": -118.243683
+  },
+  {
+    "timeZone": "America/Mexico_City",
+    "city": "Mexico City",
+    "lat": 19.432608,
+    "lng": -99.133209
+  },
+  {
+    "timeZone": "America/New_York",
+    "city": "New York",
+    "lat": 40.712776,
+    "lng": -74.005974
+  },
+  {
+    "timeZone": "America/Sao_Paulo",
+    "city": "Sao Paulo",
+    "lat": -23.55052,
+    "lng": -46.633308
+  },
+  {
+    "timeZone": "Asia/Dubai",
+    "city": "Dubai",
+    "lat": 25.276987,
+    "lng": 55.296249
+  },
+  {
+    "timeZone": "Asia/Hong_Kong",
+    "city": "Hong Kong",
+    "lat": 22.3193039,
+    "lng": 114.1693611
+  },
+  {
+    "timeZone": "Asia/Istanbul",
+    "city": "Istanbul",
+    "lat": 41.0082,
+    "lng": 28.9784
+  },
+  {
+    "timeZone": "Asia/Jakarta",
+    "city": "Jakarta",
+    "lat": -6.2087634,
+    "lng": 106.845599
+  },
+  {
+    "timeZone": "Asia/Kolkata",
+    "city": "Kolkata",
+    "lat": 22.5726,
+    "lng": 88.3639
+  },
+  {
+    "timeZone": "Asia/Shanghai",
+    "city": "Shanghai",
+    "lat": 31.2304,
+    "lng": 121.4737
+  },
+  {
+    "timeZone": "Asia/Singapore",
+    "city": "Singapore",
+    "lat": 1.3521,
+    "lng": 103.8198
+  },
+  {
+    "timeZone": "Asia/Tokyo",
+    "city": "Tokyo",
+    "lat": 35.6895,
+    "lng": 139.6917
+  },
+  {
+    "timeZone": "Europe/Berlin",
+    "city": "Berlin",
+    "lat": 52.52,
+    "lng": 13.405
+  },
+  {
+    "timeZone": "Europe/London",
+    "city": "London",
+    "lat": 51.5074,
+    "lng": -0.1278
+  },
+  {
+    "timeZone": "Europe/Moscow",
+    "city": "Moscow",
+    "lat": 55.7558,
+    "lng": 37.6173
+  },
+  {
+    "timeZone": "Europe/Paris",
+    "city": "Paris",
+    "lat": 48.8566,
+    "lng": 2.3522
+  },
+  {
+    "timeZone": "Europe/Rome",
+    "city": "Rome",
+    "lat": 41.9028,
+    "lng": 12.4964
+  },
+  {
+    "timeZone": "Europe/Madrid",
+    "city": "Madrid",
+    "lat": 40.4168,
+    "lng": -3.7038
+  },
+  {
+    "timeZone": "Europe/Zurich",
+    "city": "Zurich",
+    "lat": 47.3768866,
+    "lng": 8.541694
+  },
+  {
+    "timeZone": "Oceania/Sydney",
+    "city": "Sydney",
+    "lat": -33.8688,
+    "lng": 151.2093
+  },
+  {
+    "timeZone": "Oceania/Auckland",
+    "city": "Auckland",
+    "lat": -36.8485,
+    "lng": 174.7633
+  }
+]

@@ -1,0 +1,43 @@
+:root {
+    --grid: 34px;
+    --padding: calc(var(--grid) * 0.65);
+    --button: calc(var(--grid) * 2);
+    --zero-bit: rgb(55, 54, 44);
+    --one-bit: rgb(186, 185, 177);
+
+    --white: var(--one-bit);
+    --black: var(--zero-bit);
+
+    --device-color: rgb(190, 200, 180);
+    --ai-button: rgb(64, 112, 150);
+
+    --device-button: var(--device-color);
+
+    /* @supports (color: color(display-p3 1 1 1 / 1)) {
+        --device-color: color(display-p3 0.984 0.776 0.318);
+        --ai-button: color(display-p3 0.424 0 1 / 1);
+    } */
+
+    @media (prefers-color-scheme: dark) {
+        --white: var(--zero-bit);
+        --black: var(--one-bit);
+        /* --device-color: #274472; */
+        --device-color: #273c75;
+        --ai-button: #e66c2c;
+
+        --device-color: rgb(73, 75, 77);
+        --ai-button: rgb(130, 140, 142);
+    }
+
+    body[data-schema="light"],
+    body[data-schema="light"] body {
+        --white: var(--one-bit);
+        --black: var(--zero-bit);
+    }
+
+    body[data-schema="dark"],
+    body[data-schema="dark"] body {
+        --white: var(--zero-bit);
+        --black: var(--one-bit);
+    }
+}

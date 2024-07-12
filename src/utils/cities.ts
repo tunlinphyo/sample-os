@@ -1,0 +1,338 @@
+export const CITIES = [
+    {
+        "timeZone": "Africa/Cairo",
+        "city": "Cairo",
+        "country": "Egypt",
+        "lat": 30.04442,
+        "lng": 31.235712
+    },
+    {
+        "timeZone": "Africa/Johannesburg",
+        "city": "Johannesburg",
+        "country": "South Africa",
+        "lat": -26.204103,
+        "lng": 28.047305
+    },
+    {
+        "timeZone": "Africa/Lagos",
+        "city": "Lagos",
+        "country": "Nigeria",
+        "lat": 6.524379,
+        "lng": 3.379206
+    },
+    {
+        "timeZone": "Africa/Nairobi",
+        "city": "Nairobi",
+        "country": "Kenya",
+        "lat": -1.292066,
+        "lng": 36.821946
+    },
+    {
+        "timeZone": "Africa/Algiers",
+        "city": "Algiers",
+        "country": "Algeria",
+        "lat": 36.737232,
+        "lng": 3.086472
+    },
+    {
+        "timeZone": "Africa/Khartoum",
+        "city": "Khartoum",
+        "country": "Sudan",
+        "lat": 15.500654,
+        "lng": 32.559899
+    },
+    {
+        "timeZone": "America/Argentina/Buenos_Aires",
+        "city": "Buenos Aires",
+        "country": "Argentina",
+        "lat": -34.603684,
+        "lng": -58.381559
+    },
+    {
+        "timeZone": "America/Bogota",
+        "city": "Bogota",
+        "country": "Colombia",
+        "lat": 4.711,
+        "lng": -74.0721
+    },
+    {
+        "timeZone": "America/Chicago",
+        "city": "Chicago",
+        "country": "USA",
+        "lat": 41.8781,
+        "lng": -87.6298
+    },
+    {
+        "timeZone": "America/Denver",
+        "city": "Denver",
+        "country": "USA",
+        "lat": 39.7392,
+        "lng": -104.9903
+    },
+    {
+        "timeZone": "America/Los_Angeles",
+        "city": "Los Angeles",
+        "country": "USA",
+        "lat": 34.052235,
+        "lng": -118.243683
+    },
+    {
+        "timeZone": "America/Mexico_City",
+        "city": "Mexico City",
+        "country": "Mexico",
+        "lat": 19.432608,
+        "lng": -99.133209
+    },
+    {
+        "timeZone": "America/New_York",
+        "city": "New York",
+        "country": "USA",
+        "lat": 40.712776,
+        "lng": -74.005974
+    },
+    {
+        "timeZone": "America/Sao_Paulo",
+        "city": "Sao Paulo",
+        "country": "Brazil",
+        "lat": -23.55052,
+        "lng": -46.633308
+    },
+    {
+        "timeZone": "Asia/Dubai",
+        "city": "Dubai",
+        "country": "UAE",
+        "lat": 25.276987,
+        "lng": 55.296249
+    },
+    {
+        "timeZone": "Asia/Hong_Kong",
+        "city": "Hong Kong",
+        "country": "China",
+        "lat": 22.3193039,
+        "lng": 114.1693611
+    },
+    {
+        "timeZone": "Asia/Istanbul",
+        "city": "Istanbul",
+        "country": "Turkey",
+        "lat": 41.0082,
+        "lng": 28.9784
+    },
+    {
+        "timeZone": "Asia/Jakarta",
+        "city": "Jakarta",
+        "country": "Indonesia",
+        "lat": -6.2087634,
+        "lng": 106.845599
+    },
+    {
+        "timeZone": "Asia/Kolkata",
+        "city": "Kolkata",
+        "country": "India",
+        "lat": 22.5726,
+        "lng": 88.3639
+    },
+    {
+        "timeZone": "Asia/Shanghai",
+        "city": "Shanghai",
+        "country": "China",
+        "lat": 31.2304,
+        "lng": 121.4737
+    },
+    {
+        "timeZone": "Asia/Singapore",
+        "city": "Singapore",
+        "country": "Singapore",
+        "lat": 1.3521,
+        "lng": 103.8198
+    },
+    {
+        "timeZone": "Asia/Tokyo",
+        "city": "Tokyo",
+        "country": "Japan",
+        "lat": 35.6895,
+        "lng": 139.6917
+    },
+    {
+        "timeZone": "Europe/Berlin",
+        "city": "Berlin",
+        "country": "Germany",
+        "lat": 52.52,
+        "lng": 13.405
+    },
+    {
+        "timeZone": "Europe/London",
+        "city": "London",
+        "country": "UK",
+        "lat": 51.5074,
+        "lng": -0.1278
+    },
+    {
+        "timeZone": "Europe/Moscow",
+        "city": "Moscow",
+        "country": "Russia",
+        "lat": 55.7558,
+        "lng": 37.6173
+    },
+    {
+        "timeZone": "Europe/Paris",
+        "city": "Paris",
+        "country": "France",
+        "lat": 48.8566,
+        "lng": 2.3522
+    },
+    {
+        "timeZone": "Europe/Rome",
+        "city": "Rome",
+        "country": "Italy",
+        "lat": 41.9028,
+        "lng": 12.4964
+    },
+    {
+        "timeZone": "Europe/Madrid",
+        "city": "Madrid",
+        "country": "Spain",
+        "lat": 40.4168,
+        "lng": -3.7038
+    },
+    {
+        "timeZone": "Europe/Zurich",
+        "city": "Zurich",
+        "country": "Switzerland",
+        "lat": 47.3768866,
+        "lng": 8.541694
+    },
+    {
+        "timeZone": "Oceania/Sydney",
+        "city": "Sydney",
+        "country": "Australia",
+        "lat": -33.8688,
+        "lng": 151.2093
+    },
+    {
+        "timeZone": "Oceania/Auckland",
+        "city": "Auckland",
+        "country": "New Zealand",
+        "lat": -36.8485,
+        "lng": 174.7633
+    },
+    {
+        "timeZone": "Asia/Amman",
+        "city": "Amman",
+        "country": "Jordan",
+        "lat": 31.945367,
+        "lng": 35.928373
+    },
+    {
+        "timeZone": "Asia/Baghdad",
+        "city": "Baghdad",
+        "country": "Iraq",
+        "lat": 33.315241,
+        "lng": 44.366069
+    },
+    {
+        "timeZone": "Asia/Bangkok",
+        "city": "Bangkok",
+        "country": "Thailand",
+        "lat": 13.7563,
+        "lng": 100.5018
+    },
+    {
+        "timeZone": "Asia/Beijing",
+        "city": "Beijing",
+        "country": "China",
+        "lat": 39.9042,
+        "lng": 116.4074
+    },
+    {
+        "timeZone": "Asia/Kuala_Lumpur",
+        "city": "Kuala Lumpur",
+        "country": "Malaysia",
+        "lat": 3.139,
+        "lng": 101.6869
+    },
+    {
+        "timeZone": "Asia/Manila",
+        "city": "Manila",
+        "country": "Philippines",
+        "lat": 14.5995,
+        "lng": 120.9842
+    },
+    {
+        "timeZone": "Asia/Seoul",
+        "city": "Seoul",
+        "country": "South Korea",
+        "lat": 37.5665,
+        "lng": 126.978
+    },
+    {
+        "timeZone": "Asia/Taipei",
+        "city": "Taipei",
+        "country": "Taiwan",
+        "lat": 25.033,
+        "lng": 121.5654
+    },
+    {
+        "timeZone": "Asia/Tehran",
+        "city": "Tehran",
+        "country": "Iran",
+        "lat": 35.6892,
+        "lng": 51.389
+    },
+    {
+        "timeZone": "Asia/Baku",
+        "city": "Baku",
+        "country": "Azerbaijan",
+        "lat": 40.4093,
+        "lng": 49.8671
+    },
+    {
+        "timeZone": "Asia/Riyadh",
+        "city": "Riyadh",
+        "country": "Saudi Arabia",
+        "lat": 24.7136,
+        "lng": 46.6753
+    },
+    {
+        "timeZone": "Asia/Doha",
+        "city": "Doha",
+        "country": "Qatar",
+        "lat": 25.276987,
+        "lng": 51.520008
+    },
+    {
+        "timeZone": "America/Toronto",
+        "city": "Toronto",
+        "country": "Canada",
+        "lat": 43.65107,
+        "lng": -79.347015
+    },
+    {
+        "timeZone": "America/Vancouver",
+        "city": "Vancouver",
+        "country": "Canada",
+        "lat": 49.2827,
+        "lng": -123.1207
+    },
+    {
+        "timeZone": "Europe/Brussels",
+        "city": "Brussels",
+        "country": "Belgium",
+        "lat": 50.8503,
+        "lng": 4.3517
+    },
+    {
+        "timeZone": "Europe/Amsterdam",
+        "city": "Amsterdam",
+        "country": "Netherlands",
+        "lat": 52.3676,
+        "lng": 4.9041
+    },
+    {
+        "timeZone": "Europe/Stockholm",
+        "city": "Stockholm",
+        "country": "Sweden",
+        "lat": 59.3293,
+        "lng": 18.0686
+    }
+];

@@ -1,0 +1,120 @@
+@layer component {
+    .chatHistoryList {
+        padding-inline: var(--padding);
+        .chatItem {
+            width: calc(100% - var(--grid));
+
+            &.from {
+                align-self: flex-start;
+                text-align: left;
+            }
+            &.to {
+                align-self: flex-end;
+                text-align: right;
+            }
+
+            .dateTime {
+                font-size: 14px;
+                margin-bottom: 8px;
+            }
+        }
+    }
+    .flexCenter {
+        h2 {
+            font-size: 24px;
+        }
+        .phoneNumber {
+            font-size: 20px;
+        }
+    }
+
+    .blocked {
+        text-decoration: line-through;
+    }
+
+    .keypadArea {
+        width: calc(var(--grid) * 10);
+        height: calc(var(--grid) * 11);
+
+        .phoneDispaly {
+            width: calc(var(--grid) * 10);
+
+            display: grid;
+            grid-template-columns: var(--button) 1fr var(--button);
+            grid-template-rows: calc(var(--grid) * 3);
+            align-items: flex-end;
+
+            .phoneNumber {
+                height: calc(var(--grid) * 2);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                font-size: 24px;
+                font-weight: 500;
+
+                #phoneNumber {
+                    width: 100%;
+                    height: calc(var(--grid) * 2);
+                    text-align: center;
+                    padding: 0;
+                    background-color: transparent;
+                    border: none;
+                    outline: none;
+                    color: var(--black);
+                }
+            }
+
+            .addEdit,
+            .backSpace {
+                width: var(--button);
+                height: var(--button);
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+
+        .keypadContainer {
+            width: calc(var(--grid) * 10);
+            height: calc(var(--grid) * 8);
+
+            display: grid;
+            grid-template-columns: repeat(3, var(--button));
+            gap: 0 calc(var(--grid) * 1);
+
+            justify-content: center;
+            align-items: center;
+
+            .key {
+                width: var(--button);
+                height: var(--button);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                font-size: var(--grid);
+                font-weight: 500;
+                position: relative;
+
+                cursor: pointer;
+                border-radius: var(--grid);
+
+                &.keyLarge {
+                    padding-bottom: 8px;
+                    font-size: 42px;
+                    font-family: var(--number-fonts);
+                }
+                &.keySmall {
+                    font-size: 30px;
+                }
+
+                &:active {
+                    outline: 2px solid var(--black);
+                    outline-offset: -6px;
+                }
+            }
+        }
+    }
+}

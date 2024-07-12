@@ -1,0 +1,154 @@
+import { App } from "../../../components/app";
+import { SelectItem } from "../../../components/select";
+import { SettingsController } from "../../../controllers/settings.controller";
+import { DeviceController } from "../../../device/device";
+import { HistoryStateManager } from "../../../device/history.manager";
+import { Setting } from "../../../stores/settings.store";
+
+export class SettingApp extends App {
+
+    constructor(
+        history: HistoryStateManager,
+        private device: DeviceController,
+        private setting: SettingsController
+    ) {
+        super(history, { template: 'actionTemplate' });
+        this.render(this.setting.settings);
+        this.init();
+    }
+
+    private init() {
+
+        const settingListener = (status: string) => {
+            switch (status) {
+                case 'UPDATE_THEME':
+                case 'TOGGLE_VALUE':
+                    this.update('update', this.setting.settings);
+                    break;
+            }
+        };
+
+        this.setting.addChangeListener(settingListener);
+
+        this.device.addEventListener('closeApp', () => {
+            this.setting.removeChangeListener(settingListener);
+        });
+    }
+
+    render(settings: Setting[]) {
+        this.createSettingList(settings);
+    }
+
+    update(_: string, list: Setting[]) {
+        for (const item of list) {
+            const valueEl = this.getElement(`#${item.id}Value`);
+            if (!valueEl) continue;
+            valueEl.textContent = item.value;
+        }
+    }
+
+    private createSettingList(list: Setting[]) {
+        const listEl = this.createElement('ul', ['settingList']);
+
+        for(const item of this.filterSettings(list)) {
+            const itemEl = this.createItem(item);
+            listEl.appendChild(itemEl);
+        }
+
+        this.mainArea.appendChild(listEl);
+    }
+
+    private createItem(item: Setting) {
+        const itemEl = this.createElement('li', ['settingItem'], { id: item.id });
+
+        const itemMainButton = this.createElement('button', ['itemMain']);
+        itemMainButton.textContent = item.title;
+        itemEl.appendChild(itemMainButton);
+        this.addEventListener('click', () => {
+            this.openSetting({ type: 'main', data: item });
+        }, itemMainButton);
+
+        const itemToggleButton = this.createElement('button', ['itemToggle']);
+        const value = typeof item.value === "string" ? item.value : item.value;
+        itemToggleButton.innerHTML = `
+            <span id="${item.id}Value">${value}</span>
+            <span class="material-symbols-outlined icon--ssm">arrow_forward_ios</span>
+        `;
+        itemEl.appendChild(itemToggleButton);
+        this.addEventListener('click', () => {
+            this.openSetting({ type: 'toggle', data: item });
+        }, itemToggleButton);
+
+        return itemEl;
+    }
+
+    private filterSettings(list: Setting[]) {
+        return list.filter(item => item.inList);
+    }
+
+    private openSetting(item: { type: 'main' | 'toggle', data: Setting}) {
+        const {type, data} = item;
+
+        switch(data.id) {
+            case 'display':
+                this.changeDisplay(data);
+                break;
+            case 'wifi':
+            case 'bluetooth':
+            case 'cellular':
+                this.handleToggle(type, data);
+                break;
+            case 'apps':
+                console.log('OPEN APPS');
+                this.history.setUrl('/applications', data.id);
+                break;
+            case 'storage':
+                this.history.setUrl('/storage', data);
+                break;
+            case 'battery':
+                this.history.setUrl('/battery', data);
+                break;
+            case 'system':
+                this.history.setUrl('/system', data.id);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private handleToggle(type: string, data: Setting) {
+        if (type === 'main') {
+            const setting = this.setting.getSettingItem(data.id);
+            this.history.setUrl('/toggles', setting?.id);
+        } else {
+            this.setting.toggleSetting(data);
+        }
+    }
+
+    private async changeDisplay(data: Setting) {
+        const list: SelectItem[] = [
+            {
+                title: 'Auto',
+                value: 'auto',
+                icon: 'contrast'
+            },
+            {
+                title: 'Light',
+                value: 'light',
+                icon: 'light_mode'
+            },
+            {
+                title: 'Dark',
+                value: 'dark',
+                icon: 'dark_mode'
+            },
+        ];
+        const selected = await this.device.selectList.openPage('Appearence', list);
+        if (selected) {
+            const item = list.find(item => item.value === selected);
+            if (!item) return;
+            data.value = item.value;
+            this.setting.updateTheme(data);
+        }
+    }
+}

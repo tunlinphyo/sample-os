@@ -1,0 +1,91 @@
+export interface AppStateManager {
+    pattern: string;
+    callback: () => void;
+}
+
+export interface HistoryState {
+    url: string;
+    state: any;
+}
+
+export class HistoryStateManager {
+    private stateChangeListeners: Array<(state: any, url: string) => void> = [];
+    private states: HistoryState[] = [];
+
+    constructor() {
+        window.addEventListener('popstate', this.onPopState.bind(this));
+    }
+
+    get history(): HistoryState[]  {
+        return this.states;
+    }
+
+    set history(state: HistoryState) {
+        this.states.push(state);
+    }
+
+    init(states: HistoryState[]) {
+        this.states = states;
+        console.log('ON_HISTORY_INIT', this.states);
+    }
+
+    public pushState(state: any, title: string, url: string) {
+        try {
+            history.pushState(state, title, url);
+            this.notifyStateChange(state, url);
+        } catch (error) {
+            console.error('Error in pushState:', error);
+        }
+    }
+
+    public replaceState(state: any, title: string, url: string) {
+        try {
+            history.replaceState(state, title, url);
+            this.notifyStateChange(state, url);
+        } catch (error) {
+            console.error('Error in replaceState:', error);
+        }
+    }
+
+    public setUrl(url: string, state: any) {
+        try {
+            this.pushState(state, '', url);
+            this.history = { state, url };
+        } catch (error) {
+            console.error('Error in setUrl:', error);
+        }
+    }
+
+    public goBack() {
+        if (this.states.length) {
+            this.states.pop();
+            console.log('ON_HISTORY_POP', this.history);
+        }
+    }
+
+    public updateState(url: string, state: any) {
+        this.states = this.states.map(item => item.url === url ? { ...item, state } : item);
+    }
+
+    public onStateChange(listener: (state: any, url: string) => void) {
+        this.stateChangeListeners.push(listener);
+    }
+
+    public handleChange(url: string, list: AppStateManager[]) {
+        const data = list.find(item => item.pattern === url);
+        if (data) {
+            data.callback();
+        }
+    }
+
+    private notifyStateChange(state: any, url: string) {
+        for (const listener of this.stateChangeListeners) {
+            listener(state, url);
+        }
+    }
+
+    private onPopState(event: PopStateEvent) {
+        this.goBack();
+        console.log('POPSTATE_EVENT:::::::::::::::', event.state);
+    }
+}
