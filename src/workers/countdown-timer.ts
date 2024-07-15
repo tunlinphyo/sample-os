@@ -1,4 +1,4 @@
-export interface CountdownData {
+export interface TimerData {
     id: string;
     duration: number;
     remainingTime: number;
@@ -17,7 +17,7 @@ export class CountdownTimer {
 
     constructor() {}
 
-    public init(data: CountdownData) {
+    public init(data: TimerData) {
         if (data) {
             this.id = data.id;
             this.duration = data.duration;
@@ -32,6 +32,8 @@ export class CountdownTimer {
             this.timerId = null;
             this.endTime = Date.now() + this.remainingTime;
             this.running = false;
+
+            postMessage({ status: 'reset', remainingTime: this.remainingTime, timer: this.getData() });
         }
 
         if (this.running) {
@@ -39,7 +41,7 @@ export class CountdownTimer {
         }
     }
 
-    private getData(): CountdownData {
+    private getData(): TimerData {
         return {
             id: this.id,
             duration: this.duration,
@@ -56,7 +58,7 @@ export class CountdownTimer {
         }
         this.running = true;
         this.remainingTime = Math.max(this.endTime! - Date.now(), 0);
-        postMessage({ status: 'start', remainingTime: this.remainingTime, timerData: this.getData() });
+        postMessage({ status: 'start', remainingTime: this.remainingTime, timer: this.getData() });
 
         if (this.timerId) {
             clearInterval(this.timerId);
@@ -82,7 +84,7 @@ export class CountdownTimer {
             this.timerId = null;
             this.remainingTime = Math.max(this.endTime! - Date.now(), 0);
             this.running = false;
-            if (post) postMessage({ status: 'stop', remainingTime: this.remainingTime, timerData: this.getData() });
+            if (post) postMessage({ status: 'stop', remainingTime: this.remainingTime, timer: this.getData() });
         }
     }
 
@@ -94,7 +96,7 @@ export class CountdownTimer {
         }
         this.remainingTime = duration || this.duration;
         this.running = false;
-        postMessage({ status: 'reset', remainingTime: this.remainingTime, timerData: this.getData() });
+        postMessage({ status: 'reset', remainingTime: this.remainingTime, timer: this.getData() });
     }
 
     public getRemainingTime(): number {

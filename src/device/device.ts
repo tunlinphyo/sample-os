@@ -9,6 +9,7 @@ import { ChooseList } from "../components/pickers/choose.picker";
 import { KeyboardPage } from "../components/keyboard";
 import { YearPicker } from "../components/pickers/year.picker";
 import { OSDate } from "../utils/date";
+import { TimeWheel } from "../components/pickers/time.wheel";
 
 export type DeviceTheme = 'auto' | 'light' | 'dark';
 
@@ -32,6 +33,7 @@ export class DeviceController extends BaseComponent {
     public callScreen: CallScreen;
     public datePicker: DatePicker;
     public timePicker: TimePicker;
+    public timeWheel: TimeWheel;
     public yearPicker: YearPicker;
     public chooseList: ChooseList;
 
@@ -52,7 +54,8 @@ export class DeviceController extends BaseComponent {
         this.incomingCall = new IncomingCall();
         this.callScreen = new CallScreen();
         this.datePicker = new DatePicker();
-        this.timePicker = new TimePicker();
+        this.timePicker = new TimePicker(this);
+        this.timeWheel = new TimeWheel();
         this.yearPicker = new YearPicker();
         this.chooseList = new ChooseList();
 
@@ -212,5 +215,33 @@ export class DeviceController extends BaseComponent {
         if (this.appFrame.contentDocument && this.appFrame.contentDocument.body) {
             this.appFrame.contentDocument.body.dataset.schema = theme;
         }
+    }
+
+    public updateCountDown(remainingTime: number, icon: string) {
+        const clockElement = this.getElement('#dateTime');
+        const result = this.convertMilliseconds(remainingTime);
+        let time = "";
+        if (result.hours) {
+            time = `${this.pad(result.hours)}:${this.pad(result.minutes)}:${this.pad(result.seconds)}`;
+        } else {
+            time = `${this.pad(result.minutes)}:${this.pad(result.seconds)}`;
+        }
+        clockElement.innerHTML = `
+            <span class="material-symbols-outlined fill-icon" style="font-size: 22px; translate: 0 -1px;">${icon}</span>
+            ${time}
+        `;
+    }
+
+    private convertMilliseconds(totalMilliseconds: number) {
+        const totalSeconds = Math.round(totalMilliseconds / 1000);
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        return { hours, minutes, seconds };
+    }
+
+    public pad(num: number): string {
+        return num.toString().padStart(2, '0');
     }
 }

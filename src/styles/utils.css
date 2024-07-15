@@ -1118,7 +1118,7 @@ body {
                 .chooseList {
                     width: calc(var(--grid) * 10);
                     min-height: calc(var(--grid) * 11);
-                    padding-inline: var(--grid);
+                    padding-inline: var(--padding);
 
                     display: flex;
                     flex-direction: column;

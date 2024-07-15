@@ -4,7 +4,7 @@ import { BaseController } from "./base.controller";
 import AlarmWorker from '../workers/alarm-worker.ts?worker&inline';
 import TimerWorker from '../workers/timer-worker.ts?worker&inline';
 
-export interface CountdownData {
+export interface TimerData {
     id: string;
     duration: number;
     remainingTime: number;
@@ -17,8 +17,7 @@ export class ClockController extends BaseController {
     private alarmWorker: Worker;
     private timerWorker: Worker;
 
-    public stopwatchStatus: boolean = false;
-    public timer: CountdownData | null = null;
+    public timer: TimerData | null = null;
     public stopwatch: StopWatchData | null = null;
 
     public alarms: Alarm[] = [];
@@ -57,11 +56,11 @@ export class ClockController extends BaseController {
     private setupListeners() {
         this.clockStore.listen((_, item, operation) => {
             if (operation === 'loaded') {
-                const countdownData = this.clockStore.get('countdown') as CountdownData;
-                this.timer = countdownData;
+                const timerData = this.clockStore.get('timer') as TimerData;
+                this.timer = timerData;
                 this.timerWorker.postMessage({
                     command: 'init',
-                    data: countdownData
+                    data: timerData
                 });
 
                 this.stopwatch = this.clockStore.get('stopwatch') as StopWatchData;
@@ -70,18 +69,18 @@ export class ClockController extends BaseController {
                     if (!this.timerRunning) {
                         this.notifyListeners('UPDATE_CLOCK', {
                             timer: this.timerRunning,
-                            stopwatch: this.stopwatchStatus,
+                            stopwatch: this.stopwatchRunning,
                         });
                     }
                 }
             }
 
             if (item && item.id === 'stopwatch') {
-                this.stopwatchStatus = item.running;
-                if (!this.timer?.running) {
+                this.stopwatch = item as StopWatchData;
+                if (!this.timerRunning) {
                     this.notifyListeners('UPDATE_CLOCK', {
-                        timer: !!this.timer?.running,
-                        stopwatch: this.stopwatchStatus,
+                        timer: this.timerRunning,
+                        stopwatch: this.stopwatchRunning,
                     });
                 }
             }
@@ -106,10 +105,10 @@ export class ClockController extends BaseController {
             const { status, data } = event.data;
 
             if (status === 'updateClock') {
-                if (!this.timer?.running) {
+                if (!this.timerRunning) {
                     this.notifyListeners('UPDATE_CLOCK', {
-                        timer: !!this.timer?.running,
-                        stopwatch: this.stopwatchStatus,
+                        timer: this.timerRunning,
+                        stopwatch: this.stopwatchRunning,
                     });
                 }
             }
@@ -138,11 +137,10 @@ export class ClockController extends BaseController {
                 this.notifyListeners('TIMER_UPDATE', this.timer);
             }
 
-
             if (status === 'finished') {
                 this.notifyListeners('TIMER_ALERT', {
-                    timer: !!this.timer?.running,
-                    stopwatch: this.stopwatchStatus,
+                    timer: this.timerRunning,
+                    stopwatch: this.stopwatchRunning,
                 });
             }
         });
@@ -155,17 +153,17 @@ export class ClockController extends BaseController {
         });
     }
 
-    public updateTimer(data: CountdownData) {
+    public updateTimer(data: TimerData) {
         this.tryThis(async () => {
-            if (!data.id) await this.clockStore.add(data, 'countdown');
-            else await this.clockStore.update('countdown', data);
+            if (!data.id) await this.clockStore.add(data, 'timer');
+            else await this.clockStore.update('timer', data);
         });
     }
 
     public updateAlarm(data: Alarm) {
         this.tryThis(async () => {
-            if (data.id) await this.alarmStore.update(data.id, data)
-            else await this.alarmStore.add(data)
+            if (data.id) await this.alarmStore.update(data.id, data);
+            else await this.alarmStore.add(data);
         });
     }
 
@@ -173,6 +171,10 @@ export class ClockController extends BaseController {
         this.tryThis(async () => {
             await this.alarmStore.del(data.id);
         });
+    }
+
+    public getAlarm(id: string) {
+        return this.alarms.find(item => item.id === id);
     }
 
     public timerStart() {

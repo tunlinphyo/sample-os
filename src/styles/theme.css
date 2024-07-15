@@ -4,6 +4,8 @@
     --button: calc(var(--grid) * 2);
     --zero-bit: rgb(55, 54, 44);
     --one-bit: rgb(186, 185, 177);
+    --zero-bit: #222;
+    --one-bit: #bbb;
 
     --white: var(--one-bit);
     --black: var(--zero-bit);
@@ -25,8 +27,8 @@
         --device-color: #273c75;
         --ai-button: #e66c2c;
 
-        --device-color: rgb(73, 75, 77);
-        --ai-button: rgb(130, 140, 142);
+        /* --device-color: rgb(73, 75, 77);
+        --ai-button: rgb(130, 140, 142); */
     }
 
     body[data-schema="light"],

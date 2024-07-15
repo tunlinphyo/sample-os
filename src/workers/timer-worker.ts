@@ -11,6 +11,7 @@ addEventListener('message', (event) => {
     switch (command) {
         case 'init':
             timer = new CountdownTimer();
+            console.log("TIMER_INIT", data);
             timer.init(data);
             break;
         case 'start':

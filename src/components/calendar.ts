@@ -1,13 +1,13 @@
 import { DeviceController } from "../device/device";
+import { OSDate } from "../utils/date";
 import { EventListenerInfo } from "./base";
 
 export type ActiveDatesCallback = (date: Date) => Promise<Date[]>;
 
 export class CalendarRenderer {
-    private year: number;
-    private month: number;
-    private day: number;
-    private timezone: string;
+    private year: number = 0;
+    private month: number = 0;
+    private day: number = 0;
     private containerEl: HTMLElement;
     private bodyEl: HTMLElement;
     private monthEl: HTMLElement;
@@ -26,38 +26,36 @@ export class CalendarRenderer {
     constructor(
         private device: DeviceController,
         private component: HTMLElement,
-        timezone: string = 'UTC',
         callBack?: ActiveDatesCallback
     ) {
         this.containerEl = this.getElement('.caleandarContainer');
         this.bodyEl = this.getElement('.jsCalendarDays');
         this.monthEl = this.getElement('.currentDate');
-        this.timezone = timezone;
+
+        this.toTimezoneDate = this.toTimezoneDate.bind(this);
 
         this.callBack = callBack;
-        const date = new Date();
-        const tzDate = this.toTimezoneDate(date);
-        this.year = tzDate.getFullYear();
-        this.month = tzDate.getMonth();
-        this.day = tzDate.getDate();
-
         this.init();
         this.touchEventListeners();
     }
 
     private init() {
+        // this.data = this.toTimezoneDate(new Date());
         this.addEventListener('click', () => {
-            this.data = this.prevMonth();
+            const date = this.prevMonth();
+            this.dispatchCustomEvent('viewDateChange', date);
         }, this.getElement('.prevButton'), false);
 
         this.addEventListener('click', () => {
-            this.data = this.nextMonth();
+            const date = this.nextMonth();
+            this.dispatchCustomEvent('viewDateChange', date);
         }, this.getElement('.nextButton'), false);
 
         this.addEventListener('click', async () => {
             const result = await this.device.yearPicker.openPage('Year, Month', { year: this.year, month: this.month });
             if (result && typeof result !== 'boolean') {
                 this.data = this.toTimezoneDate(new Date(result.year, result.month, 1));
+                this.dispatchCustomEvent('viewDateChange', this.data);
             }
         }, this.getElement('.currentDate'), false);
     }
@@ -77,7 +75,6 @@ export class CalendarRenderer {
 
         this.component.addEventListener('touchend', () => {
             const moveX = this.startX - this.currentX;
-            console.log('END', moveX);
             this.containerEl.style.translate = '0px 0px';
             if (moveX > 75) {
                 this.data = this.nextMonth();
@@ -92,14 +89,13 @@ export class CalendarRenderer {
     }
     set data(date: Date) {
         const tzDate = this.toTimezoneDate(date);
-        console.log('DATE', tzDate);
         this.year = tzDate.getFullYear();
         this.month = tzDate.getMonth();
         this.day = tzDate.getDate();
         if (this.callBack) {
             this.callBack(tzDate).then(data => {
                 this.activeDates = data.map(this.toTimezoneDate);
-                this.renderCalendar();
+                // this.renderCalendar();
             });
         } else {
             this.renderCalendar();
@@ -145,7 +141,7 @@ export class CalendarRenderer {
             if (overflow > 0) {
                 last += 1;
                 if (last <= lastDate) {
-                    const currentDate = this.toTimezoneDate(new Date(this.year, this.month, last));
+                    const currentDate = new Date(this.year, this.month, last);
                     const isToday = currentDate.toDateString() === today.toDateString();
                     const isActive = this.activeDates.find(item => item.toDateString() === currentDate.toDateString());
                     if (isToday) date.classList.add('cellToday');
@@ -167,7 +163,7 @@ export class CalendarRenderer {
 
     private renderCurrentMonthDays(lastDate: number, overflow: number, today: Date): void {
         for (let i = 1; i <= (lastDate - overflow); i++) {
-            const currentDate = this.toTimezoneDate(new Date(this.year, this.month, i));
+            const currentDate = new Date(this.year, this.month, i);
             const isToday = currentDate.toDateString() === today.toDateString();
             const date = document.createElement('div');
             date.classList.add('cell');
@@ -269,18 +265,6 @@ export class CalendarRenderer {
     }
 
     private toTimezoneDate(date: Date): Date {
-        const options: Intl.DateTimeFormatOptions = {
-            timeZone: this.timezone,
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric',
-            second: 'numeric'
-        };
-        const formatter = new Intl.DateTimeFormat('en-US', options);
-        const parts = formatter.formatToParts(date);
-        const getPart = (type: string) => Number(parts.find(p => p.type === type)?.value);
-        return new Date(Date.UTC(getPart('year'), getPart('month') - 1, getPart('day'), getPart('hour'), getPart('minute'), getPart('second')));
+        return new OSDate(date).getDateByTimeZone(this.device.timeZone);
     }
 }

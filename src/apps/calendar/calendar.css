@@ -1,0 +1,68 @@
+@layer component {
+    .scrollArea {
+        &.paddingBlock {
+            padding-block: calc(var(--grid) * 0.5);
+        }
+
+        .dayArea {
+            width: calc(var(--grid) * 10);
+            padding-inline: calc(var(--grid) * 0.5);
+
+            .date {
+                height: calc(var(--grid) * 2.5);
+                padding-block-end: 4px;
+
+                font-size: var(--grid);
+                font-weight: 600;
+
+                display: flex;
+                justify-content: flex-start;
+                align-items: flex-end;
+                gap: calc(var(--grid) * 0.5);
+
+                border-bottom: 2px solid var(--black);
+            }
+
+            .eventList {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: stretch;
+                gap: calc(var(--grid) * 0.5);
+                padding-block-start: var(--padding);
+
+                .noEvent {
+                    width: 100%;
+                    height: calc(var(--grid) * 7);
+                    font-size: 24px;
+                    display: grid;
+                    place-items: center;
+                }
+
+                .eventItem {
+                    min-height: var(--grid);
+                    cursor: pointer;
+                    display: grid;
+                    grid-template-columns: calc(var(--grid) * 2) 1fr;
+                    align-items: baseline;
+
+                    .clock {
+                        font-size: 14px;
+                        /* text-transform: uppercase; */
+                    }
+
+                    .eventName {
+                        font-size: 18px;
+                        display: flex;
+                        justify-content: flex-start;
+                        align-items: center;
+
+                        &.over {
+                            text-decoration: line-through;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

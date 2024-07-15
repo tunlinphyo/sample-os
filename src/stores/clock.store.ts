@@ -10,7 +10,7 @@ export interface StopWatchData {
     timerInterval: number | null;
 }
 
-export interface CountdownData {
+export interface TimerData {
     id: string;
     duration: number;
     remainingTime: number;
@@ -19,7 +19,7 @@ export interface CountdownData {
     running: boolean;
 }
 
-export type ClockData = StopWatchData | CountdownData;
+export type ClockData = StopWatchData | TimerData;
 
 export class ClockStore extends BaseManager<ClockData> {
     private db: DB<ClockData>;

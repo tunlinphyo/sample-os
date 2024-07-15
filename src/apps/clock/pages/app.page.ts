@@ -26,6 +26,7 @@ export class ClockApp extends App {
 
         this.setClock();
         setInterval(() => this.setClock(), 1000);
+        this.render(this.clock.alarms);
     }
 
     private init() {
@@ -73,12 +74,18 @@ export class ClockApp extends App {
     }
 
     render(alarms: Alarm[]) {
+        console.log("alarms", this.sortByTime(alarms));
         for(const alarm of this.sortByTime(alarms)) {
             const alarmItem = this.createElement('div', ['alarmItem']);
             const alarmBtn = this.createElement('button', ['alermButton']);
             const timeEL = this.createElement('div', ['clock']);
-            timeEL.innerHTML = `${this.getHours(alarm.time)}:${String(alarm.time.getMinutes()).padStart(2, '0')}
-                <small>${alarm.time.getHours() < 12 ? 'AM' : 'PM'}</small>`;
+            console.log(alarm);
+            if (this.device.hour12) {
+                timeEL.innerHTML = `${this.getHours(alarm.time)}:${String(alarm.time.getMinutes()).padStart(2, '0')}
+                    <small>${alarm.time.getHours() < 12 ? 'AM' : 'PM'}</small>`;
+            } else {
+                timeEL.innerHTML = `${this.getHours(alarm.time)}:${String(alarm.time.getMinutes()).padStart(2, '0')}`;
+            }
 
             let repeat = ''
             if (alarm.repeat.length) {
@@ -96,7 +103,7 @@ export class ClockApp extends App {
             alarmItem.appendChild(toggleBtn);
 
             this.addEventListener('click', () => {
-                this.history.setUrl('/alarm', alarm);
+                this.history.setUrl('/alarm', alarm.id);
             }, alarmBtn)
 
             this.addEventListener('click', () => {
@@ -140,7 +147,7 @@ export class ClockApp extends App {
     private getHours(time: Date) {
         const hours = time.getHours();
 
-        return hours % 12 || 12;
+        return this.device.hour12 ? hours % 12 || 12 : hours;
     }
 
     private getDays(options: RepeatOption[]) {

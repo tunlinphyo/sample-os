@@ -12,7 +12,7 @@ export default defineConfig({
                 main: resolve(__dirname, '/index.html'),
                 home: resolve(__dirname, '/src/apps/index.html'),
                 phone: resolve(__dirname, '/src/apps/phone/index.html'),
-                // calendar: resolve(__dirname, '/calendar/index.html'),
+                calendar: resolve(__dirname, '/src/apps/calendar/index.html'),
                 // calculator: resolve(__dirname, '/calculator/index.html'),
                 clock: resolve(__dirname, '/src/apps/clock/index.html'),
                 // notes: resolve(__dirname, '/notes/index.html'),

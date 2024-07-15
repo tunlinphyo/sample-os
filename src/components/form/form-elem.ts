@@ -265,7 +265,7 @@ export class CustomDateTimeForm extends CustomForm {
         return new OSDate(this.value).timeObject(true);
     }
     set timeData(value: TimePickerData) {
-        const hours = OSDate.get24Hour(value.hour, value.isAm)
+        const hours = this.device.hour12 ? OSDate.get24Hour(value.hour, value.isAm) : value.hour;
         this.date.setHours(hours);
         this.date.setMinutes(value.minute);
 
@@ -494,7 +494,11 @@ export class CustomTimePickerForm extends CustomForm {
     set value(value: Date) {
         const timeData = new OSDate(value).timeObject(!this.config.allMinutes);
         this.time.setHours(value.getHours(), value.getMinutes(), 0, 0);
-        this.input.innerHTML = `<span>${this.getHour(timeData.hour)}:${String(timeData.minute).padStart(2, '0')}</span><small>${timeData.isAm ? 'AM' : 'PM'}</small>`;
+        if (this.device.hour12) {
+            this.input.innerHTML = `<span>${this.getHour(timeData.hour)}:${String(timeData.minute).padStart(2, '0')}</span><small>${timeData.isAm ? 'AM' : 'PM'}</small>`;
+        } else {
+            this.input.innerHTML = `<span>${timeData.hour}:${String(timeData.minute).padStart(2, '0')}</span>`;
+        }
         this.dispatchFormEvent('change', value);
     }
 
@@ -503,7 +507,10 @@ export class CustomTimePickerForm extends CustomForm {
     }
     set timeData(value: TimePickerData) {
         const date = new Date(this.time);
-        date.setHours(OSDate.get24Hour(value.hour, value.isAm), value.minute, 0, 0);
+        date.setHours(
+            this.device.hour12 ? OSDate.get24Hour(value.hour, value.isAm) : value.hour, 
+            value.minute, 0, 0
+        );
         this.value = date;
     }
 

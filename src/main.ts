@@ -1,4 +1,7 @@
+import './style.css';
+
 import { SystemUpdate } from './components/system/update';
+import { CalendarController } from './controllers/calendar.controller';
 import { ClockController } from './controllers/clock.controller';
 import { PhoneController } from './controllers/phone.controller';
 import { PhoneDummyController } from './controllers/phone.dummy.controller';
@@ -10,9 +13,9 @@ import { ClockAlarmStore } from './stores/alarm.store';
 import { BlocksStore } from './stores/blocked.store';
 import { ClockStore } from './stores/clock.store';
 import { ContactsStore } from './stores/contact.store';
+import { CalendarEventStore } from './stores/event.store';
 import { History, HistoryStore } from './stores/history.store';
 import { DateTimeInfo, SettingStore } from './stores/settings.store';
-import './style.css'
 
 document.addEventListener('DOMContentLoaded', async () => {
     const historyManager = new HistoryStateManager();
@@ -23,23 +26,46 @@ document.addEventListener('DOMContentLoaded', async () => {
     const contactsStore = new ContactsStore();
     const blocksStore = new BlocksStore();
     const historyStore = new HistoryStore();
+    const eventStore = new CalendarEventStore();
 
     const device = new DeviceController(historyManager);
     const settings = new SettingsController(historyManager, settingStore);
     const clock = new ClockController(clockStore, alarmStore);
     const phone = new PhoneController(historyStore, contactsStore, blocksStore);
+    const calendar = new CalendarController(eventStore);
 
     window.device = device;
     window.setting = settings;
     window.clock = clock;
     window.phone = phone;
+    window.calendar = calendar;
 
     new PhoneDummyController(window.device, window.phone);
     new Battery();
 
-    window.clock.addChangeListener((status: string, data: any) => {
+    window.clock.addChangeListener(async (status: string, data: any) => {
         if (status === 'UPDATE_CLOCK') {
-            window.device.updateClock(data.timer, data.stopwatch);
+            window.device.updateClock(window.clock.timerRunning, window.clock.stopwatchRunning);
+        }
+        if (status === 'SHOW_ALARM') {
+            window.device.alertPopup.openPage('Alarm', data.label);
+        }
+        if (status === 'TIMER_UPDATE') {
+            window.device.updateCountDown(
+                window.clock.remaining,
+                window.clock.timerRunning ? 'timer_pause' : 'timer_play'
+            );
+        }
+        if (status === 'TIMER_ALERT') {
+            await window.device.alertPopup.openPage('Timer', {
+                message: "Timer done", btn: {
+                    label: 'REPEAT',
+                    callback: () => {
+                        window.clock.timerStart();
+                    }
+                }
+            });
+            window.device.updateClock(window.clock.timerRunning, window.clock.stopwatchRunning);
         }
     });
 

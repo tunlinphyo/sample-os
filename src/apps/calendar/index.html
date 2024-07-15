@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="https://apis.google.com/js/api.js"></script>
+    <title>Calendar</title>
+    <style>
+        .loadingScreen {
+            position: absolute;
+            z-index: 999;
+            top: 0;
+            left: 0;
+            width: calc(var(--grid) * 10);
+            height: calc(var(--grid) * 17);
+
+            background-color: var(--white);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: translate .3s ease-out;
+
+            &.remove {
+                translate: 0 -100%;
+            }
+        }
+    </style>
+</head>
+
+<body class="appBody">
+
+    <template id="appTemplate">
+        <div class="screen">
+            <div class="statusBar">
+                <div class="statusBar--container">
+                    <div></div>
+                    <div class="statusBar-title">Calendar</div>
+                    <div></div>
+                </div>
+            </div>
+            <div class="mainArea"></div>
+            <div class="actionBar">
+                <div class="actionButton start"></div>
+                <div class="actionButton center"></div>
+                <div class="actionButton end"></div>
+            </div>
+        </div>
+    </template>
+
+    <template id="calendarTemplate">
+        <div class="screen">
+            <div class="statusBar">
+                <div class="statusBar--container">
+                    <div></div>
+                    <div class="statusBar-title">Calendar</div>
+                    <div></div>
+                </div>
+            </div>
+            <div class="mainArea">
+                <div class="dateToggle">
+                    <button class="prevButton">
+                        <span class="material-symbols-outlined icon--nu">chevron_left</span>
+                    </button>
+                    <div class="currentDate" id="dateMonth">December</div>
+                    <button class="nextButton">
+                        <span class="material-symbols-outlined icon--nu">chevron_right</span>
+                    </button>
+                </div>
+                <div class="caleandarContainer">
+                    <div class="calendar title">
+                        <div class="cell cellTitle">Su</div>
+                        <div class="cell cellTitle">Mo</div>
+                        <div class="cell cellTitle">Tu</div>
+                        <div class="cell cellTitle">We</div>
+                        <div class="cell cellTitle">Th</div>
+                        <div class="cell cellTitle">Fr</div>
+                        <div class="cell cellTitle">Sa</div>
+                    </div>
+                    <div class="calendar jsCalendarDays" id="journalDays"></div>
+                </div>
+            </div>
+            <div class="actionBar">
+                <div class="actionButton start"></div>
+                <div class="actionButton center"></div>
+                <div class="actionButton end"></div>
+            </div>
+        </div>
+    </template>
+
+    <template id="eventForm">
+        <div class="scrollArea paddingBlock">
+            <div class="formGroup"></div>
+        </div>
+    </template>
+
+    <section class="loadingScreen">
+        <span class="material-symbols-outlined icon-xxxl">calendar_today</span>
+    </section>
+
+    <script type="module" src="./main.ts"></script>
+</body>
+
+</html>

@@ -1,3 +1,4 @@
+import { CalendarController } from "../controllers/calendar.controller";
 import { ClockController } from "../controllers/clock.controller";
 import { PhoneController } from "../controllers/phone.controller";
 import { SettingsController } from "../controllers/settings.controller";
@@ -9,6 +10,7 @@ declare global {
         clock: ClockController;
         setting: SettingsController;
         phone: PhoneController;
+        calendar: CalendarController;
     }
 }
 
