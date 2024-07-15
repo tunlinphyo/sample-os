@@ -17,7 +17,7 @@ export default defineConfig({
                 clock: resolve(__dirname, '/src/apps/clock/index.html'),
                 // notes: resolve(__dirname, '/notes/index.html'),
                 settings: resolve(__dirname, '/src/apps/settings/index.html'),
-                // weather: resolve(__dirname, '/weather/index.html'),
+                weather: resolve(__dirname, '/src/apps/weather/index.html'),
                 // maps: resolve(__dirname, '/maps/index.html'),
                 // music: resolve(__dirname, '/music/index.html'),
                 // journal: resolve(__dirname, '/journal/index.html'),

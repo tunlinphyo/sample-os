@@ -54,7 +54,7 @@ const appList: HomeApp[] = [
         id: 'calculator',
         name: 'Calculator',
         order: 3,
-        isShow: true,
+        isShow: false,
         isSystem: false,
     },
     {
@@ -75,21 +75,21 @@ const appList: HomeApp[] = [
         id: 'notes',
         name: 'Notes',
         order: 6,
-        isShow: true,
+        isShow: false,
         isSystem: false,
     },
     {
         id: 'maps',
         name: 'Maps',
         order: 7,
-        isShow: true,
+        isShow: false,
         isSystem: false,
     },
     {
         id: 'journal',
         name: 'Journal',
         order: 8,
-        isShow: true,
+        isShow: false,
         isSystem: false,
     },
     {
@@ -229,7 +229,7 @@ const defaultSettings: Setting[] = [
             {
                 id: 'software-update',
                 title: 'Software Update',
-                version: 0.02
+                version: 0.1
             },
             {
                 id: 'date-time',
@@ -253,7 +253,7 @@ const defaultSettings: Setting[] = [
 
 export class SettingStore extends BaseManager<Setting> {
     private db: DB<Setting>;
-    public version: number = 0.02;
+    public version: number = 0.1;
     public message: string = 'Add Date & Time';
 
     constructor() {

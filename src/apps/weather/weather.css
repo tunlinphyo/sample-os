@@ -1,0 +1,243 @@
+@layer component {
+    /* .actionScrollArea {
+        .mainArea {
+            height: calc(var(--grid)* 20);
+            padding-block: calc(var(--grid) * 1.5);
+        }
+    } */
+
+    .weatherData {
+        width: 100%;
+        min-height: 100%;
+        /* background-color: #ff69b411; */
+        padding: 0;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+
+        .weatherIcon {
+            padding-block: 8px 0;
+        }
+
+        .temperture {
+            font-size: calc(var(--grid) * 2.5);
+            text-align: center;
+            font-weight: 300;
+            line-height: 1.5;
+
+            position: static;
+            top: var(--grid);
+        }
+
+        .statusText {
+            text-transform: capitalize;
+            font-size: 18px;
+        }
+
+        .lowHeight {
+            span {
+                display: inline-block;
+                width: 10px;
+            }
+        }
+
+        .weatherGroup {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+
+            margin-block-start: calc(var(--grid) * 1.5);
+
+            .statusGroup {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+
+                &:not(:last-child) {
+                    position: relative;
+
+                    &::after {
+                        content: '';
+                        display: block;
+                        width: 0;
+                        height: var(--grid);
+                        border-right: 2px solid var(--black);
+                        position: absolute;
+                        top: 50%;
+                        right: 0;
+                        translate: 0 -50%;
+                    }
+                }
+            }
+        }
+    }
+
+    .cityList {
+        padding-inline: var(--padding);
+
+        .city {
+            width: 100%;
+            text-align: left;
+            padding-block: 16px;
+            border-bottom: 2px solid var(--black);
+
+            /* &:not(:last-child) {
+                border-bottom: 2px solid var(--black);
+            } */
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .weatherDetail {
+                .itemTitle {
+                    display: block;
+                    font-size: 24px;
+                }
+                .status {
+                    text-transform: capitalize;
+                }
+            }
+
+            .temperature {
+                font-size: var(--grid);
+            }
+        }
+    }
+
+    .actionScrollArea {
+        .searchBarContainer {
+            width: 100%;
+            padding: 0 calc(var(--grid) * 0.5);
+
+            position: sticky;
+            z-index: 1;
+            top: 0;
+            background-color: var(--white);
+
+            .searchBar {
+                width: 100%;
+                height: calc(var(--grid) * 1.2);
+                border: 2px solid var(--black);
+                border-radius: 5px;
+
+                display: grid;
+                grid-template-columns: 24px 1fr 24px;
+                align-items: center;
+                padding-inline: 8px;
+
+                .material-symbols-outlined {
+                    &.hide {
+                        display: none!important;
+                    }
+                }
+
+                .searchInput {
+                    padding-inline: 6px;
+                }
+            }
+        }
+
+        .contantArea {
+            --margin: calc(var(--grid) * 0.5);
+            padding: var(--margin) var(--padding);
+
+            .openingStatus {
+                margin-block: var(--margin);
+            }
+
+            .selectItem {
+                width: 100%;
+                height: var(--grid);
+                font-size: 18px;
+                margin-block: var(--margin);
+                text-align: left;
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+
+                &.withIcon {
+                    gap: calc(var(--grid) * 0.5);
+                }
+            }
+
+            .dayTime {
+                margin-top: var(--margin);
+
+                display: grid;
+                grid-template-columns: calc(var(--grid) * 3) 1fr;
+                font-size: 16px;
+
+                .day {
+                    text-transform: uppercase;
+                    font-weight: 600;
+                }
+            }
+        }
+    }
+
+    .placeList {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: calc(var(--grid) * 0.5);
+        padding-bottom: calc(var(--grid) * 3);
+
+        .place {
+            width: 100%;
+            padding-block: 8px;
+            display: grid;
+            grid-template-columns: 24px 1fr;
+            justify-content: flex-start;
+            align-items: baseline;
+            gap: 8px;
+            text-align: left;
+
+            .material-symbols-outlined {
+                translate: 0 8px;
+            }
+
+            .detail {
+                small {
+                    width: 100%;
+                    display: block;
+                    -webkit-line-clamp: 1;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    word-wrap: break-word;
+                }
+            }
+        }
+    }
+
+    /* HTML: <div class="loader"></div> */
+    .loadingContainer {
+        width: 100%;
+        height: calc(var(--grid) * 16);
+        display: grid;
+        place-items: center;
+
+        .loader {
+            width: 60px;
+            aspect-ratio: 4;
+            background: radial-gradient(circle closest-side,var(--black) 90%,#0000) 0/calc(100%/3) 100% space;
+            clip-path: inset(0 100% 0 0);
+            animation: l1 1s steps(4) infinite;
+        }
+    }
+
+    .pointerNone {
+        pointer-events: none;
+    }
+
+    .cursorPointer {
+        cursor: pointer;
+    }
+}
+
+@keyframes l1 {to{clip-path: inset(0 -34% 0 0)}}
