@@ -45,7 +45,7 @@ export class SystemPage extends Page {
         `;
         itemEl.appendChild(itemMainButton);
         this.addEventListener('click', () => {
-            this.history.setUrl('/system/update', item)
+            this.history.pushState('/system/update', item)
         }, itemMainButton);
 
         return itemEl;

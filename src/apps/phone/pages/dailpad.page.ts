@@ -101,7 +101,7 @@ export class DialpadPage extends Page {
         this.addEventListener('click', () => {
             if (this.dialNumber.length <= 2) return;
             if (this.contact) {
-                this.history.setUrl(`/contacts/detail`, this.phone.getContact(this.contact.id));
+                this.history.pushState(`/contacts/detail`, this.phone.getContact(this.contact.id));
             } else {
                 this.createOrAddNumber(this.dialNumber);
             }
@@ -201,14 +201,14 @@ export class DialpadPage extends Page {
         }
         const selected = await this.device.selectList.openPage('Contact', list);
         if (selected == 'create') {
-            this.history.setUrl(`/contacts/new`, number);
+            this.history.pushState(`/contacts/new`, number);
         } else if (selected == 'add') {
             const contact = await this.contactSelect();
             if (contact) {
                 const newPhone = PhoneLabelHandler.addPhone(contact.phones, number);
                 const clonedContact = OSObject.deepClone(contact);
                 clonedContact.phones.push(newPhone);
-                this.history.setUrl(`/contacts/edit`, clonedContact);
+                this.history.pushState(`/contacts/edit`, clonedContact);
             }
         } else if (selected === 'unblock') {
             this.phone.unblockNumber(number);

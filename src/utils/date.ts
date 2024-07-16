@@ -22,11 +22,10 @@ export class OSDate {
         return `${hour} ${isAm}`
     }
 
-    public getHourMinus() {
-        return {
-            hours: this.date.getHours(),
-            minutes: this.date.getMinutes()
-        }
+    public getHourMinutes() {
+        const hours = this.date.getHours();
+        const minutes = this.date.getMinutes();
+        return (hours * 60) + minutes;
     }
 
     public getHour() {
@@ -153,6 +152,15 @@ export class OSDate {
         return new Intl.DateTimeFormat('en-US', options).format(dateUTC);
     }
 
+    public static getFormatTime(date: Date): string {
+        const options: Intl.DateTimeFormatOptions = {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true,
+        };
+        return new Intl.DateTimeFormat('en-US', options).format(date);
+    }
+
     public static get24Hour(hour: number, isAm: boolean): number {
         if (hour < 1 || hour > 12) {
             throw new Error("Invalid hour. Hour must be between 1 and 12.");
@@ -197,6 +205,20 @@ export class OSDate {
             hours: hours,
             minutes: minutes
         };
+    }
+
+    public static getNextIncrementTime(date: Date, rounded: number = 10): Date {
+        const now = new Date();
+        const minutes = now.getMinutes();
+        const roundedMinutes = Math.floor(minutes / rounded) * rounded;
+
+        const newDate = new Date(date);
+        newDate.setHours(now.getHours());
+        newDate.setMinutes(roundedMinutes + rounded);
+        newDate.setSeconds(0);
+        newDate.setMilliseconds(0);
+
+        return newDate;
     }
 }
 

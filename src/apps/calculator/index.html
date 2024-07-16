@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Calculator</title>
+    <style>
+        .loadingScreen {
+            position: absolute;
+            z-index: 999;
+            top: 0;
+            left: 0;
+            width: calc(var(--grid) * 10);
+            height: calc(var(--grid) * 17);
+
+            background-color: var(--white);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: translate .3s ease-out;
+
+            &.remove {
+                translate: 0 -100%;
+            }
+        }
+    </style>
+</head>
+
+<body class="appBody">
+
+    <template id="appTemplate">
+        <div class="screen">
+            <div class="statusBar">
+                <div class="statusBar--container">
+                    <div></div>
+                    <div class="statusBar-title">Calculator</div>
+                    <div></div>
+                </div>
+            </div>
+            <div class="mainArea"></div>
+        </div>
+    </template>
+
+    <template id="mainareaTemplate">
+        <div class="mainArea">
+            <div class="valueDisplay">
+                <div class="value" id="displayValue">0</div>
+                <button class="backSpace pad" data-action="backspace">
+                    <span class="material-symbols-rounded icon" style="rotate: -90deg;">change_history</span>
+                </button>
+            </div>
+            <div class="numberPad">
+                <div class="pad padGray" data-action="clear">C</div>
+                <div class="pad padGray padFontSmall" data-action="negate" data-value="+/-">+/-</div>
+                <div class="pad padGray" data-action="percent" data-value="%">
+                    <span class="material-symbols-outlined">percent</span>
+                </div>
+                <div class="pad padAction" data-action="operator" data-value="/">
+                    <span class="material-symbols-outlined" style="font-size: 24px; rotate: 45deg;">percent</span>
+                </div>
+                <div class="pad" data-value="7">7</div>
+                <div class="pad" data-value="8">8</div>
+                <div class="pad" data-value="9">9</div>
+                <div class="pad padAction" data-action="operator" data-value="*">
+                    <span class="material-symbols-outlined" style="font-size: 28px;">close</span>
+                </div>
+                <div class="pad" data-value="4">4</div>
+                <div class="pad" data-value="5">5</div>
+                <div class="pad" data-value="6">6</div>
+                <div class="pad padAction" data-action="operator" data-value="-">
+                    <span class="material-symbols-outlined" style="font-size: 32px;">remove</span>
+                </div>
+                <div class="pad" data-value="1">1</div>
+                <div class="pad" data-value="2">2</div>
+                <div class="pad" data-value="3">3</div>
+                <div class="pad padAction" data-action="operator" data-value="+">
+                    <span class="material-symbols-outlined" style="font-size: 32px;">add</span>
+                </div>
+                <div class="pad" data-value="0">0</div>
+                <div class="pad" data-value=".">.</div>
+                <div class="pad padAction padEqual" data-action="equals" data-value="=">
+                    <span class="material-symbols-outlined">equal</span>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <section class="loadingScreen">
+        <span class="material-symbols-outlined icon-xxxl">calculate</span>
+    </section>
+
+    <script type="module" src="./main.ts"></script>
+</body>
+
+</html>

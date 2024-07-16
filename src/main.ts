@@ -16,6 +16,8 @@ import { ContactsStore } from './stores/contact.store';
 import { CalendarEventStore } from './stores/event.store';
 import { History, HistoryStore } from './stores/history.store';
 import { DateTimeInfo, SettingStore } from './stores/settings.store';
+import { WeatherStore } from './stores/weather.store';
+import { WeatherController } from './controllers/weather.controller';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const historyManager = new HistoryStateManager();
@@ -27,18 +29,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     const blocksStore = new BlocksStore();
     const historyStore = new HistoryStore();
     const eventStore = new CalendarEventStore();
+    const weatherStore = new WeatherStore();
 
     const device = new DeviceController(historyManager);
     const settings = new SettingsController(historyManager, settingStore);
     const clock = new ClockController(clockStore, alarmStore);
     const phone = new PhoneController(historyStore, contactsStore, blocksStore);
     const calendar = new CalendarController(eventStore);
+    const weather = new WeatherController(weatherStore);
 
     window.device = device;
     window.setting = settings;
     window.clock = clock;
     window.phone = phone;
     window.calendar = calendar;
+    window.weather = weather;
 
     new PhoneDummyController(window.device, window.phone);
     new Battery();
@@ -94,6 +99,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             window.device.hour12 = info.hour12;
         }
     });
+
+    window.weather.addChangeListener((status: string, data: any) => {
+        if (status === 'WEATHER_LOCATION') {
+            console.log('WEATHER::::::::::', data);
+        }
+    })
 
     // const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     // console.log('TimeZones', timeZone);

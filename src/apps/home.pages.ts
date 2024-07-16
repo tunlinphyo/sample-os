@@ -24,7 +24,7 @@ export class HomePages extends App {
                 const appLink = this.createElement('button', ['appLink']);
                 appLink.textContent = app.name;
                 this.addEventListener('click', () => {
-                    this.history.setUrl('/' + app.id, app.id);
+                    this.history.pushState('/' + app.id, app.id);
                 }, appLink);
                 appList.appendChild(appLink);
             })

@@ -1,6 +1,7 @@
 import { CalendarController } from "../../controllers/calendar.controller";
 import { DeviceController } from "../../device/device";
 import { HistoryState, HistoryStateManager } from "../../device/history.manager";
+import { OSDate } from "../../utils/date";
 import { EventEditPage } from "./pages/event.edit.page";
 import { EventPage } from "./pages/event.page";
 import { EventsPage } from "./pages/events.page";
@@ -30,7 +31,8 @@ export class CalendarAppController {
                 }, {
                     pattern: '/events/new',
                     callback: () => {
-                        this.eventEdit.openPage('New Events', new Date(this.calendar.eventDay));
+                        const date = OSDate.getNextIncrementTime(this.calendar.eventDay);
+                        this.eventEdit.openPage('New Events', date);
                     }
                 },  {
                     pattern: '/events/edit',
@@ -44,7 +46,7 @@ export class CalendarAppController {
                         const event = this.calendar.getEventData(state);
                         this.eventPage.openPage('Event', event);
                     }
-                }, 
+                },
             ]);
         }
 

@@ -24,7 +24,7 @@ export class EventsPage extends Page {
         }, this.btnStart, false);
 
         this.addEventListener('click', () => {
-            this.history.setUrl("/events/new", null);
+            this.history.pushState("/events/new", null);
         }, this.btnEnd, false);
 
         const calendarListener = (status: string) => {
@@ -93,7 +93,7 @@ export class EventsPage extends Page {
             eventItem.appendChild(eventName)
 
             this.addEventListener('click', () => {
-                this.history.setUrl('/events/detail', event.id);
+                this.history.pushState('/events/detail', event.id);
             }, eventItem)
 
             eventList.appendChild(eventItem)
@@ -128,10 +128,10 @@ export class EventsPage extends Page {
         if (today.isOlderThan(eventDate)) {
             return true;
         } else if (today.isSameDay(eventDate)) {
-            const now = today.getHourMinus();
-            const end = new OSDate(event.endTime).getHourMinus();
+            const now = today.getHourMinutes();
+            const end = new OSDate(event.endTime).getHourMinutes();
 
-            return end.hours <= now.hours && end.minutes < now.minutes;
+            return end <= now;
         } else {
             return false;
         }

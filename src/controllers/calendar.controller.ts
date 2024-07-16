@@ -1,7 +1,6 @@
 import { CalendarEvent, CalendarEventStore } from "../stores/event.store";
 import { BaseController } from "./base.controller";
 
-
 export class CalendarController extends BaseController {
     private _events: CalendarEvent[] = [];
     constructor(

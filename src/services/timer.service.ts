@@ -1,13 +1,6 @@
-export interface TimerData {
-    id: string;
-    duration: number;
-    remainingTime: number;
-    timerId: number | null;
-    endTime: number | null;
-    running: boolean;
-}
+import { TimerData } from "../stores/clock.store";
 
-export class CountdownTimer {
+export class TimerService {
     private id: string = '';
     private duration: number = 0;
     private remainingTime: number = 0;

@@ -17,7 +17,7 @@ export class ContactsPage extends Page {
 
     private init() {
         this.addEventListener('click', () => {
-            this.history.setUrl('/contacts/new', null);
+            this.history.pushState('/contacts/new', null);
         }, this.btnEnd, false);
 
         const phoneListener = (status: string) => {
@@ -49,7 +49,7 @@ export class ContactsPage extends Page {
             if (item.isBlocked) contactName.classList.add('blocked');
             contactName.textContent = `${item.firstName} ${item.lastName}`;
             this.addEventListener('click', () => {
-                this.history.setUrl(`/contacts/detail`, this.phone.getContact(item.id));
+                this.history.pushState(`/contacts/detail`, this.phone.getContact(item.id));
             }, contactName);
             noteList.appendChild(contactName);
         });

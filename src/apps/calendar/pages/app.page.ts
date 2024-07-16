@@ -29,12 +29,12 @@ export class CalendarApp extends App {
         }, this.btnStart, false);
 
         this.addEventListener('click', () => {
-            this.history.setUrl('/events/new', null);
+            this.history.pushState('/events/new', null);
         }, this.btnEnd, false);
 
         this.calendarRenderer.listen<Date>('onDateClick', (data) => {
             if (!data) return;
-            this.history.setUrl('/events', data);
+            this.history.pushState('/events', data);
         });
 
         this.calendarRenderer.listen<Date>('viewDateChange', (data) => {

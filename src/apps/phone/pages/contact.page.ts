@@ -27,7 +27,7 @@ export class ContactPage extends Page {
         }, this.btnStart, false);
 
         this.addEventListener('click', () => {
-            this.history.setUrl(`/contacts/edit`, this.contact);
+            this.history.pushState(`/contacts/edit`, this.contact);
         }, this.btnEnd, false);
 
 

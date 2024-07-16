@@ -1,7 +1,8 @@
 /// <reference lib="webworker" />
-import { CountdownTimer } from './countdown-timer';
 
-let timer: CountdownTimer | null = null;
+import { TimerService } from "../services/timer.service";
+
+let timer: TimerService | null = null;
 
 addEventListener('message', (event) => {
     const { command, data } = event.data;
@@ -10,7 +11,7 @@ addEventListener('message', (event) => {
 
     switch (command) {
         case 'init':
-            timer = new CountdownTimer();
+            timer = new TimerService();
             console.log("TIMER_INIT", data);
             timer.init(data);
             break;

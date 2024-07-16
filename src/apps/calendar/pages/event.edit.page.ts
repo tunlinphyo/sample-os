@@ -185,7 +185,7 @@ class EventForm extends FormComponent {
         const events: CalendarEvent[] = [];
         let currentStart = new Date(startTime);
 
-        console.log(currentStart, endTime);
+        console.log('GETTING_DATA', currentStart, endTime);
 
         while (currentStart < endTime) {
             const currentEnd = new Date(currentStart);

@@ -218,22 +218,17 @@ export class CustomDateTimeForm extends CustomForm {
     }
 
     private init(config: DateConfig) {
-        // Reset date to hour
-        config.defaultValue.setMinutes(0);
-        config.defaultValue.setSeconds(0);
-        config.defaultValue.setMilliseconds(0);
         this.value = config.defaultValue;
 
         if (config.type === 'date') this.toggleTime(false)
 
         this.dateInput.addEventListener('click', async () => {
             const result = (await this.device.datePicker.openPage('', { ...this.dateData }));
-            if (result) this.dateData = result as DatePickerData;
+            if (result && typeof result != "boolean") this.dateData = result as DatePickerData;
         });
         this.timeInput.addEventListener('click', async () => {
             const result = (await this.device.timePicker.openPage<TimePickerData>('Time Picker', { ...this.timeData }));
-            console.log(result)
-            if (result) this.timeData = result as TimePickerData;
+            if (result && typeof result != "boolean") this.timeData = result as TimePickerData;
         })
     }
 
@@ -244,7 +239,7 @@ export class CustomDateTimeForm extends CustomForm {
     set value(value: Date) {
         this.date = new Date(value);
         this.dateInput.textContent = OSDate.formatShortDate(value);
-        this.timeInput.textContent = OSDate.formatTime(value);
+        this.timeInput.textContent = OSDate.getFormatTime(value);
         this.dispatchFormEvent('change', value);
     }
 
@@ -508,7 +503,7 @@ export class CustomTimePickerForm extends CustomForm {
     set timeData(value: TimePickerData) {
         const date = new Date(this.time);
         date.setHours(
-            this.device.hour12 ? OSDate.get24Hour(value.hour, value.isAm) : value.hour, 
+            this.device.hour12 ? OSDate.get24Hour(value.hour, value.isAm) : value.hour,
             value.minute, 0, 0
         );
         this.value = date;

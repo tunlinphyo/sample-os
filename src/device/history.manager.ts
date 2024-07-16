@@ -24,13 +24,20 @@ export class HistoryStateManager {
         this.states.push(state);
     }
 
+    set replaceHistory(state: HistoryState) {
+        const is = this.states.find(item => item.url === state.url);
+        if (is) this.states = this.states.map(item => item.url === state.url ? state : item);
+        else this.states.push(state);
+    }
+
     init(states: HistoryState[]) {
         this.states = states;
         console.log('ON_HISTORY_INIT', this.states);
     }
 
-    public pushState(state: any, title: string, url: string) {
+    public pushState(url: string, state: any, title: string = '') {
         try {
+            this.history = { state, url };
             history.pushState(state, title, url);
             this.notifyStateChange(state, url);
         } catch (error) {
@@ -38,21 +45,13 @@ export class HistoryStateManager {
         }
     }
 
-    public replaceState(state: any, title: string, url: string) {
+    public replaceState(url: string, state: any, title: string = '') {
         try {
+            this.replaceHistory = { state, url };
             history.replaceState(state, title, url);
             this.notifyStateChange(state, url);
         } catch (error) {
             console.error('Error in replaceState:', error);
-        }
-    }
-
-    public setUrl(url: string, state: any) {
-        try {
-            this.pushState(state, '', url);
-            this.history = { state, url };
-        } catch (error) {
-            console.error('Error in setUrl:', error);
         }
     }
 

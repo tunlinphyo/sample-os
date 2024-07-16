@@ -1,0 +1,86 @@
+@layer component {
+    .mainArea {
+        height: calc(var(--grid) * 14);
+    }
+    .valueDisplay {
+        width: calc(var(--grid) * 10);
+        height: calc(var(--grid) * 2);
+        /* padding-block-end: calc(var(--grid) * 0.5); */
+
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+
+        .value {
+            width: calc(var(--grid) * 8);
+            height: calc(var(--grid) * 2);
+            font-size: calc(var(--grid) * 1.1);
+            font-weight: 500;
+
+            text-align: right;
+
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+
+            /* font-family: var(--number-fonts); */
+        }
+
+        .backSpace {
+            width: var(--button);
+            height: var(--button);
+
+            display: grid;
+            align-items: center;
+        }
+    }
+    .numberPad {
+        width: calc(var(--grid) * 10);
+        height: calc(var(--grid) * 11);
+
+        display: grid;
+        grid-template-columns: repeat(4, var(--button));
+        justify-content: space-evenly;
+        align-items: space-evenly;
+
+        &.functionsPad {
+            height: auto;
+        }
+
+        .pad {
+            height: var(--button);
+            position: relative;
+            cursor: pointer;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            font-weight: 500;
+
+            border: 2px solid var(--black);
+            border-radius: var(--grid);
+
+            &.padEqual {
+                grid-column: span 2;
+            }
+
+            &.padAction {
+                background-color: var(--black);
+            }
+            &.padAction,
+            &.padDark {
+                color: var(--white);
+            }
+
+            &.padFontSmall {
+                font-size: 18px;
+            }
+
+            &.padGray {
+                outline: 2px solid var(--black);
+                outline-offset: -5px;
+            }
+        }
+    }
+}

@@ -188,7 +188,7 @@ export class HistoryPage extends Page {
             const selected = await this.device.selectList.openPage('History', list);
             if (selected === 'open') {
                 // this.contactPage.openPage('Contact', contact);
-                this.history.setUrl(`/contacts/detail`, this.phone.getContact(contact.id));
+                this.history.pushState(`/contacts/detail`, this.phone.getContact(contact.id));
             } else if (selected === 'delete') {
                 const result = await this.device.confirmPopup.openPage('Delete History', 'Are you sure to delete?');
                 if (result) this.phone.deleteHistory(data.number);
@@ -214,14 +214,14 @@ export class HistoryPage extends Page {
             }
             const selected = await this.device.selectList.openPage('History', list);
             if (selected === 'add') {
-                this.history.setUrl(`/contacts/new`, data.number);
+                this.history.pushState(`/contacts/new`, data.number);
             } else if (selected === 'addto') {
                 const contact = await this.contactSelect();
                 if (contact) {
                     const newPhone = PhoneLabelHandler.addPhone(contact.phones, data.number);
                     const clonedContact = OSObject.deepClone(contact);
                     clonedContact.phones.push(newPhone);
-                    this.history.setUrl(`/contacts/edit`, clonedContact);
+                    this.history.pushState(`/contacts/edit`, clonedContact);
                 }
             } else if (selected === 'delete') {
                 const result = await this.device.confirmPopup.openPage('Delete History', 'Are you sure to delete?');

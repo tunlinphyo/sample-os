@@ -1,23 +1,23 @@
 /// <reference lib="webworker" />
-import { AlarmManager } from "./alarm-manager";
+import { AlarmService } from "../services/alarm.service";
 
-const alarmManager = new AlarmManager();
+const alarmService = new AlarmService();
 
 addEventListener('message', (event) => {
     const { command, data } = event.data;
 
     switch (command) {
         case 'init':
-            alarmManager.items = data;
+            alarmService.items = data;
             break;
         case 'add':
-            alarmManager.add(data);
+            alarmService.add(data);
             break;
         case 'delete':
-            alarmManager.remove(data);
+            alarmService.remove(data);
             break;
         case 'edit':
-            alarmManager.update(data);
+            alarmService.update(data);
             break;
     }
 });

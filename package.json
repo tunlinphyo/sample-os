@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "idb-keyval": "^6.2.1",
+    "openweathermap-ts": "^1.2.10",
     "sortablejs": "^1.15.2",
     "uuid": "^10.0.0"
   }

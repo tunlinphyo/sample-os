@@ -1,8 +1,8 @@
 import { Alarm, ClockAlarmStore } from "../stores/alarm.store";
 import { ClockStore, StopWatchData } from "../stores/clock.store";
 import { BaseController } from "./base.controller";
-import AlarmWorker from '../workers/alarm-worker.ts?worker&inline';
-import TimerWorker from '../workers/timer-worker.ts?worker&inline';
+import AlarmWorker from '../workers/alarm.worker.ts?worker&inline';
+import TimerWorker from '../workers/timer.worker.ts?worker&inline';
 
 export interface TimerData {
     id: string;

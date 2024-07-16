@@ -31,11 +31,11 @@ export class PhoneApp extends App {
 
     private init() {
         this.addEventListener('click', () => {
-            this.history.setUrl('/contacts', null);
+            this.history.pushState('/contacts', null);
         }, this.btnEnd, false);
 
         this.addEventListener('click', () => {
-            this.history.setUrl('/dialpad', null);
+            this.history.pushState('/dialpad', null);
         }, this.btnStart, false);
 
         const phoneListener = () => {
@@ -64,7 +64,7 @@ export class PhoneApp extends App {
             if (item.isBlocked) noteTitle.classList.add('blocked');
             noteTitle.textContent = item.contact ? `${item.contact.firstName} ${item.contact.lastName}` : item.number;
             this.addEventListener('click', () => {
-                this.history.setUrl('/history', item.number);
+                this.history.pushState('/history', item.number);
             }, noteTitle);
             noteList.appendChild(noteTitle);
         });

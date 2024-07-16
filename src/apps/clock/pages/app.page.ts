@@ -46,15 +46,15 @@ export class ClockApp extends App {
 
 
         this.addEventListener('click', () => {
-            this.history.setUrl('/timer', this.clock.timer);
+            this.history.pushState('/timer', this.clock.timer);
         }, this.btnStart, false);
 
         this.addEventListener('click', () => {
-            this.history.setUrl('/alarm', null);
+            this.history.pushState('/alarm', null);
         }, this.btnCenter, false);
 
         this.addEventListener('click', () => {
-            this.history.setUrl('/stopwatch', this.clock.stopwatch);
+            this.history.pushState('/stopwatch', this.clock.stopwatch);
         }, this.btnEnd, false);
 
         const clockListener = (status: string, data: any) => {
@@ -79,7 +79,6 @@ export class ClockApp extends App {
             const alarmItem = this.createElement('div', ['alarmItem']);
             const alarmBtn = this.createElement('button', ['alermButton']);
             const timeEL = this.createElement('div', ['clock']);
-            console.log(alarm);
             if (this.device.hour12) {
                 timeEL.innerHTML = `${this.getHours(alarm.time)}:${String(alarm.time.getMinutes()).padStart(2, '0')}
                     <small>${alarm.time.getHours() < 12 ? 'AM' : 'PM'}</small>`;
@@ -103,7 +102,7 @@ export class ClockApp extends App {
             alarmItem.appendChild(toggleBtn);
 
             this.addEventListener('click', () => {
-                this.history.setUrl('/alarm', alarm.id);
+                this.history.pushState('/alarm', alarm.id);
             }, alarmBtn)
 
             this.addEventListener('click', () => {

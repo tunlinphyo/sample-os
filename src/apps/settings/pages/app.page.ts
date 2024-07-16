@@ -100,16 +100,16 @@ export class SettingApp extends App {
                 break;
             case 'apps':
                 console.log('OPEN APPS');
-                this.history.setUrl('/applications', data.id);
+                this.history.pushState('/applications', data.id);
                 break;
             case 'storage':
-                this.history.setUrl('/storage', data);
+                this.history.pushState('/storage', data);
                 break;
             case 'battery':
-                this.history.setUrl('/battery', data);
+                this.history.pushState('/battery', data);
                 break;
             case 'system':
-                this.history.setUrl('/system', data.id);
+                this.history.pushState('/system', data.id);
                 break;
             default:
                 break;
@@ -119,7 +119,7 @@ export class SettingApp extends App {
     private handleToggle(type: string, data: Setting) {
         if (type === 'main') {
             const setting = this.setting.getSettingItem(data.id);
-            this.history.setUrl('/toggles', setting?.id);
+            this.history.pushState('/toggles', setting?.id);
         } else {
             this.setting.toggleSetting(data);
         }

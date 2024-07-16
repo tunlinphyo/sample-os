@@ -138,7 +138,7 @@ export class DeviceController extends BaseComponent {
         }, 1000);
 
         nav.addEventListener('click', () => {
-            this.history.setUrl('/', 'app');
+            this.history.pushState('/', null);
         });
     }
 

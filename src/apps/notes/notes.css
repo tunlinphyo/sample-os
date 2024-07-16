@@ -1,0 +1,207 @@
+@layer component {
+    .noteList {
+        display: flex;
+        flex-direction: column;
+        gap: var(--grid);
+        padding-block: var(--padding);
+
+        .noteGroup {
+            padding-inline: var(--padding);
+
+            .date {
+                font-size: var(--grid);
+                /* font-weight: 600; */
+                display: flex;
+                align-items: center;
+                gap: calc(var(--grid) * 0.5);
+                line-height: 1.5;
+                color: var(--black);
+                /* border-bottom: 1px solid var(--black); */
+
+                &::after {
+                    content: '';
+                    flex: 1;
+                    border-bottom: 2px solid var(--black);
+                }
+            }
+
+            .noteItem {
+                height: calc(var(--grid) * 1.5);
+                cursor: pointer;
+
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                .noteName {
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+
+    .noteViewArea {
+        padding-inline: calc(var(--grid) * 0.5);
+        /* min-block-size: calc(var(--grid) * 14); */
+
+        h2 {
+            margin-block: 20px;
+            font-size: var(--grid);
+            font-weight: 400;
+            line-height: 1.2;
+        }
+
+        h3 {
+            font-size: 18px;
+            margin-block: 40px 20px;
+        }
+
+        p, div {
+            font-size: 16px;
+            margin-block: 20px;
+        }
+
+        ul, ol {
+            margin-block: 20px;
+            padding-inline-start: 24px;
+
+            li {
+                font-size: 16px;
+                margin-block: 10px;
+            }
+        }
+
+        blockquote {
+            font-size: 16px;
+            margin-block: 10px;
+            border-left: 2px solid var(--black);
+            padding: 8px 0 8px 12px;
+            /* border-radius: 5px; */
+        }
+
+        h2, p, blockquote {
+            span {
+                display: inline;
+                &:not(:last-child) {
+                    padding-inline-end: 5px;
+                }
+            }
+        }
+
+        .checkList {
+
+            .checkItem {
+                display: flex;
+                justify-content: flex-start;
+                align-items: baseline;
+                gap: 8px;
+                margin-block: 15px;
+                text-align: left;
+
+                &::before {
+                    flex-shrink: 0;
+                    content: '';
+                    display: block;
+                    width: 18px;
+                    height: 18px;
+                    border: 2px solid var(--black);
+                    border-radius: 4px;
+                    translate: 0 4px;
+                }
+                &.checked::before {
+                    background-color: var(--black);
+                }
+            }
+        }
+    }
+
+    .keyboardContainer {
+        .keyboardTextArea {
+            display: block;
+
+            width: 100%;
+            height: calc(var(--grid) * 5);
+
+            overflow-y: auto;
+            scrollbar-color: var(--black) var(--white);
+            scrollbar-width: thin;
+            padding: calc(var(--grid) * 0.5);
+
+            .section {
+                font-size: 16px;
+                min-height: 1em;
+                margin-block: 20px;
+
+                &[data-type='title'] {
+                    font-size: var(--grid);
+                    line-height: 1.3;
+
+                    .item {
+                        &.focus::after {
+                            height: var(--grid);
+                        }
+                    }
+                }
+
+                &[data-type='order-list'],
+                &[data-type='unorder-list'] {
+                    .item {
+                        padding-left: 18px;
+                        min-height: 24px;
+                        position: relative;
+
+                        &::before {
+                            content: '-';
+                            position: absolute;
+                            left: 0;
+                        }
+                    }
+                }
+                &[data-type='order-list'] {
+                    counter-reset: item-counter;
+                    .item {
+                        counter-increment: item-counter;
+                        &::before {
+                            min-width: 14px;
+                            content: counter(item-counter) '.';
+                            text-align: right;
+                        }
+                    }
+                }
+
+                .item {
+                    &.focus::after {
+                        content: '';
+                        display: inline-block;
+                        width: 2px;
+                        height: 16px;
+                        background-color: var(--black);
+                        translate: 0 2px;
+
+                        animation: ShowHide 1s steps(2, jump-none) infinite;
+                    }
+                }
+
+                &:first-child {
+                    margin-top: 0;
+                }
+
+                &[data-type='quote'] {
+                    padding-left: 8px;
+                    border-left: 2px solid var(--black);
+                }
+
+                &[data-type='title'],
+                &[data-type='paragraph'],
+                &[data-type='quote'] {
+                    .item {
+                        display: inline;
+                        &:not(:last-child) {
+                            margin-inline-end: 5px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

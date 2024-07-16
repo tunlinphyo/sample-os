@@ -44,25 +44,25 @@ const appList: HomeApp[] = [
         isSystem: true,
     },
     {
+        id: 'clock',
+        name: 'Clock',
+        order: 2,
+        isShow: true,
+        isSystem: true,
+    },
+    {
         id: 'calendar',
         name: 'Calendar',
-        order: 2,
+        order: 3,
         isShow: true,
         isSystem: true,
     },
     {
         id: 'calculator',
         name: 'Calculator',
-        order: 3,
-        isShow: false,
-        isSystem: false,
-    },
-    {
-        id: 'clock',
-        name: 'Clock',
         order: 4,
         isShow: true,
-        isSystem: true,
+        isSystem: false,
     },
     {
         id: 'music',
@@ -75,7 +75,7 @@ const appList: HomeApp[] = [
         id: 'notes',
         name: 'Notes',
         order: 6,
-        isShow: false,
+        isShow: true,
         isSystem: false,
     },
     {
@@ -244,7 +244,7 @@ const defaultSettings: Setting[] = [
         value: '',
         inList: false,
         data: {
-            autoTimeZone: false,
+            autoTimeZone: true,
             timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
             hour12: true
         }

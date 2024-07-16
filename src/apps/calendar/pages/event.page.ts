@@ -26,7 +26,7 @@ export class EventPage extends Page {
 
         this.addEventListener('click', () => {
             if (!this.event) return;
-            this.history.setUrl('/events/edit', this.event.id);
+            this.history.pushState('/events/edit', this.event.id);
         }, this.btnEnd, false);
 
         const calendarListener = (status: string, data: any) => {

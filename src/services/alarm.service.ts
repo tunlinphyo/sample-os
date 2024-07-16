@@ -1,6 +1,6 @@
 import { Alarm, RepeatOption } from '../stores/alarm.store';
 
-export class AlarmManager {
+export class AlarmService {
     private _items: Alarm[] = [];
     constructor() {
         this.initInterval();

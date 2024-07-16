@@ -1,4 +1,20 @@
-export const CITIES = [
+export interface LocationData {
+    timeZone: string;
+    city: string;
+    country: string;
+    lat: number;
+    lng: number;
+}
+
+export const CITY: LocationData = {
+    "timeZone": "Asia/Tokyo",
+    "city": "Tokyo",
+    "country": "Japan",
+    "lat": 35.6895,
+    "lng": 139.6917
+};
+
+export const CITIES: LocationData[] = [
     {
         "timeZone": "Africa/Cairo",
         "city": "Cairo",
