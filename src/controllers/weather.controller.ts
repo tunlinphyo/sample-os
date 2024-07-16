@@ -2,6 +2,7 @@ import { BaseController } from './base.controller';
 import { MY_LOCATION_ID, Weather, WeatherStore } from '../stores/weather.store';
 import { CITIES, CITY, LocationData } from '../utils/cities';
 import WeatherWorker from '../workers/weather.worker.ts?worker&inline';
+import { WeatherService } from '../services/weather.service';
 
 export class WeatherController extends BaseController {
     private weatherWorker: Worker;
@@ -58,7 +59,10 @@ export class WeatherController extends BaseController {
                     else await this.store.add({ location, weather }, MY_LOCATION_ID);
                     this.notifyListeners('WEATHER_FEACHED', { id: MY_LOCATION_ID, location, weather});
                 });
-                this.notifyListeners('WEATHER_LOCATION', { location, weather});
+                console.log("NOTIFIGATION", WeatherService.getNotifigation(weather));
+                if (WeatherService.getNotifigation(weather)) {
+                    this.notifyListeners('WEATHER_LOCATION', { location, weather});
+                }
             }
         });
     }

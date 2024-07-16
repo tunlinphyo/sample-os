@@ -65,6 +65,10 @@ export class WeatherService {
         return icons[icon];
     }
 
+    public static getNotifigation(weather: any) {
+        return !!weather['rain'] || !!weather['snow'];
+    }
+
     public static getSunRiseAndSet(weatherData: CurrentResponse) {
         const convertUnixTimestampToTime = (unixTimestamp: number, timezone: number) => {
             const date = new Date((unixTimestamp + timezone) * 1000);
