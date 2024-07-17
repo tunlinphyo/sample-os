@@ -86,8 +86,8 @@ export class DatePicker extends Popup {
     }
 
     private updateCalendarHeader(year: number, month: string) {
-        this.getElement('#calendarMonth').textContent = month;
-        this.getElement('#calendarYear').textContent = `${year}`;
+        this.getElement('#calendarMonth').textContent = `${year}, ${month}`;
+        // this.getElement('#calendarYear').textContent = 'Date Picker';
     }
 
     private renderPreviousMonthDays(year: number, month: number, firstDay: number, lastDate: number, today: Date) {

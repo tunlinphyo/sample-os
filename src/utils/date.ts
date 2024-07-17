@@ -142,21 +142,21 @@ export class OSDate {
         return new Intl.DateTimeFormat('en-US', options).format(date);
     }
 
-    public static formatTime(date: Date, timeZone?: string): string {
+    public static formatTime(date: Date, hour12: boolean, timeZone?: string): string {
         const dateUTC = getDateByTimeZone(date, timeZone);
         const options: Intl.DateTimeFormatOptions = {
             hour: '2-digit',
             minute: '2-digit',
-            hour12: true,
+            hour12,
         };
         return new Intl.DateTimeFormat('en-US', options).format(dateUTC);
     }
 
-    public static getFormatTime(date: Date): string {
+    public static getFormatTime(date: Date, hour12: boolean): string {
         const options: Intl.DateTimeFormatOptions = {
             hour: '2-digit',
             minute: '2-digit',
-            hour12: true,
+            hour12,
         };
         return new Intl.DateTimeFormat('en-US', options).format(date);
     }

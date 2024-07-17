@@ -16,7 +16,7 @@ export class PhoneDummyController {
             const number = this.phone.historyStore.getRandomNumber();
             if (this.phone.isBlock(number)) return;
             let contact = this.phone.contactsStore.findContactByNumber(number);
-            const result = await this.device.incomingCall.openPage('Incoming Call', { contact, number });
+            const result = await this.device.incomingCall.openPage({ contact, number });
             if (result && typeof result === 'object') {
                 this.device.callScreen.openPage('Phone', { contact: result.contact, number: result.number, status: 'incoming_call' });
             } else {
@@ -34,7 +34,7 @@ export class PhoneDummyController {
             let contact = this.phone.contactsStore.getRandomContact();
             const number = OSArray.getRandomElement(contact.phones.map(i => i.number));
             if (this.phone.isBlock(number)) return;
-            const result = await this.device.incomingCall.openPage('Incoming Call', { contact, number });
+            const result = await this.device.incomingCall.openPage({ contact, number });
             if (result && typeof result === 'object') {
                 this.device.callScreen.openPage('Phone', { contact: result.contact, number: result.number, status: 'incoming_call' });
             } else {

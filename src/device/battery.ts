@@ -46,29 +46,29 @@ export class Battery {
                 battery.onchargingchange = () => {
                     this.charging = battery.charging;
                     this.renderBatteryIcon();
-                    console.log("Battery charging: ", this.charging);
+                    // console.log("Battery charging: ", this.charging);
                 };
 
                 battery.onlevelchange = () => {
                     this.level = battery.level;
                     this.renderBatteryIcon();
-                    console.log("Battery level: ", this.level);
+                    // console.log("Battery level: ", this.level);
                 };
 
                 battery.onchargingtimechange = () => {
                     this.chargingTime = battery.chargingTime;
-                    console.log("Battery charging time: ", this.chargingTime + " seconds");
+                    // console.log("Battery charging time: ", this.chargingTime + " seconds");
                 };
 
                 battery.ondischargingtimechange = () => {
                     this.dischargingTime = battery.dischargingTime;
-                    console.log("Battery discharging time: ", this.dischargingTime + " seconds");
+                    // console.log("Battery discharging time: ", this.dischargingTime + " seconds");
                 };
             }).catch((error: any) => {
                 console.error("Battery Status API is not supported on this device.", error);
             });
         } else {
-            console.log("No battery status support!")
+            // console.log("No battery status support!")
         }
     }
 
@@ -79,10 +79,10 @@ export class Battery {
         this.dischargingTime = battery.dischargingTime;
 
         // Log initial battery status
-        console.log("Battery charging: ", this.charging);
-        console.log("Battery level: ", this.level * 100 + "%");
-        console.log("Battery charging time: ", this.chargingTime + " seconds");
-        console.log("Battery discharging time: ", this.dischargingTime + " seconds");
+        // console.log("Battery charging: ", this.charging);
+        // console.log("Battery level: ", this.level * 100 + "%");
+        // console.log("Battery charging time: ", this.chargingTime + " seconds");
+        // console.log("Battery discharging time: ", this.dischargingTime + " seconds");
     }
 
     private renderBatteryIcon() {
@@ -106,7 +106,7 @@ export class Battery {
     protected getElement<T extends HTMLElement>(selector: string, parent: Document | HTMLElement = document): T {
         const element = parent.querySelector(selector) as T;
         if (!element) {
-            console.log(`Element with selector ${selector} not found.`);
+            // console.log(`Element with selector ${selector} not found.`);
         }
         return element;
     }

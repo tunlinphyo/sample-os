@@ -14,8 +14,8 @@ export class TimeWheel extends Popup {
 
     render(data: number) {
         this.convertSeconds(data);
-        console.log(data);
-        console.log(this.hours, this.minutes, this.seconds);
+        // console.log(data);
+        // console.log(this.hours, this.minutes, this.seconds);
 
         this.mainArea.innerHTML = `
             <div class="timeContainer">

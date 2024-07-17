@@ -25,7 +25,7 @@ export class TimePicker extends Popup {
     }
 
     render(data: TimePickerData) {
-        console.log("TIME_DATA", data);
+        // console.log("TIME_DATA", data);
         const hours = this.device.hour12 ? data.hour % 12 : data.hour;
         this.time.hour = hours;
         this.time = {
@@ -53,7 +53,7 @@ export class TimePicker extends Popup {
         hourEl.scrollTop = SIZE * (this.time.hour);
 
         const minEl = this.createElement('div', ['numberContainer'], { 'data-number': 'min' });
-        console.log('ALL_MINUTES', data.allMinutes);
+        // console.log('ALL_MINUTES', data.allMinutes);
         if (data.allMinutes) {
             for(let i = 0; i < 60; i++) {
                 const number = this.createElement('div', ['number'], { 'data-number': i.toString() });
@@ -69,7 +69,7 @@ export class TimePicker extends Popup {
         }
         this.addEventListener('scroll', () => {
             this.time.minute = Math.floor(minEl.scrollTop / SIZE);
-            console.log(Math.floor(minEl.scrollTop / SIZE));
+            // console.log(Math.floor(minEl.scrollTop / SIZE));
             this.data = this.getData(data.allMinutes);
         }, minEl);
         this.mainArea.appendChild(minEl);

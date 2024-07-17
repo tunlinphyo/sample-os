@@ -59,9 +59,9 @@ export class WeatherController extends BaseController {
                     else await this.store.add({ location, weather }, MY_LOCATION_ID);
                     this.notifyListeners('WEATHER_FEACHED', { id: MY_LOCATION_ID, location, weather});
                 });
-                console.log("NOTIFIGATION", WeatherService.getNotifigation(weather));
+                // console.log("NOTIFIGATION", WeatherService.getNotifigation(weather));
                 if (WeatherService.getNotifigation(weather)) {
-                    this.notifyListeners('WEATHER_LOCATION', { location, weather});
+                    this.notifyListeners('WEATHER_NOTIFIGATION', { location, weather});
                 }
             }
         });

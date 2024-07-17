@@ -52,15 +52,15 @@ const observableDate = new ObservableParameter<Date>(new Date());
 
 // Adding listeners
 observableString.addListener((newValue, oldValue) => {
-    console.log(`String changed from "${oldValue}" to "${newValue}"`);
+    // console.log(`String changed from "${oldValue}" to "${newValue}"`);
 });
 
 observableNumber.addListener((newValue, oldValue) => {
-    console.log(`Number changed from ${oldValue} to ${newValue}`);
+    // console.log(`Number changed from ${oldValue} to ${newValue}`);
 });
 
 observableDate.addListener((newValue, oldValue) => {
-    console.log(`Date changed from ${oldValue.toISOString()} to ${newValue.toISOString()}`);
+    // console.log(`Date changed from ${oldValue.toISOString()} to ${newValue.toISOString()}`);
 });
 
 // Changing values

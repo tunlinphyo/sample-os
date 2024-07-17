@@ -82,7 +82,7 @@ export class TimerService {
     }
 
     public reset(duration?: number): void {
-        console.log('RESET', duration);
+        // console.log('RESET', duration);
         this.stop(false);
         if (duration) {
             this.duration = duration;

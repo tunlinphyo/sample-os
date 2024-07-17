@@ -78,7 +78,7 @@ export class ApplicationsPage extends Page {
                     const toggle = elem.dataset.toggle;
                     const status = toggle === 'on' ? 'off' : 'on'
                     elem.dataset.toggle = status;
-                    console.log("CLICK", elem);
+                    // console.log("CLICK", elem);
                     if (elem.parentElement) {
                         elem.parentElement.dataset.toggle = status;
                     }

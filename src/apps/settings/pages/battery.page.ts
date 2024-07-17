@@ -109,7 +109,7 @@ export class BatteryPage extends Page {
                 console.error("Battery Status API is not supported on this device.", error);
             });
         } else {
-            console.log("No battery status support!")
+            // console.log("No battery status support!")
         }
     }
 

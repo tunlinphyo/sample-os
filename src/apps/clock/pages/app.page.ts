@@ -74,7 +74,7 @@ export class ClockApp extends App {
     }
 
     render(alarms: Alarm[]) {
-        console.log("alarms", this.sortByTime(alarms));
+        // console.log("alarms", this.sortByTime(alarms));
         for(const alarm of this.sortByTime(alarms)) {
             const alarmItem = this.createElement('div', ['alarmItem']);
             const alarmBtn = this.createElement('button', ['alermButton']);

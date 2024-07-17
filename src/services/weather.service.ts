@@ -55,7 +55,7 @@ export class WeatherService {
             if (error instanceof Error) {
                 console.error('Failed to fetch weather data:', error.message);
             } else {
-                console.log("Unknown error");
+                // console.log("Unknown error");
             }
             return null;
         }

@@ -147,7 +147,7 @@ export class EnTextKeyboard extends KeyboardBase {
             this.handleCaps();
         } else if (data === 'EMOJI') {
             // const result = await this.emoji.openPage<string>('Emoji');
-            // console.log('EMOJI', result);
+            // // console.log('EMOJI', result);
             // if (result && typeof result !== 'boolean') {
             //     if (this.callback) this.callback(result);
             // }

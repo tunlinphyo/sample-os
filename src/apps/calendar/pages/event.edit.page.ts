@@ -79,8 +79,6 @@ class EventForm extends FormComponent {
             this.event = event
         }
 
-        console.log(this.event);
-
         this.title = this.input({
             label: 'Event Name',
             type: 'text',
@@ -152,7 +150,6 @@ class EventForm extends FormComponent {
         })
 
         this.allDay.addEventListener<boolean>('change', (data) => {
-            console.log(data)
             this.startTime?.toggleTime(!data)
             this.endTime?.toggle(!data)
         })
@@ -184,8 +181,6 @@ class EventForm extends FormComponent {
 
         const events: CalendarEvent[] = [];
         let currentStart = new Date(startTime);
-
-        console.log('GETTING_DATA', currentStart, endTime);
 
         while (currentStart < endTime) {
             const currentEnd = new Date(currentStart);
@@ -231,7 +226,6 @@ export class EventEditPage extends Modal {
     private init() {
         this.addEventListener('click', () => {
             const events = this.form!.getData();
-            console.log(events);
             events.forEach(event => {
                 this.calendar.updateEvent(event);
             });

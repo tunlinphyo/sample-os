@@ -33,14 +33,14 @@ export class weatherAppController {
             const history = parent.device.getHistory('weather');
             if (!history) return;
             this.history.init(history);
-            // console.log('OPEN_PAGE', JSON.stringify(history));
+            // // console.log('OPEN_PAGE', JSON.stringify(history));
             history.forEach((item: HistoryState) => {
                 handleChange(item.state, item.url);
             })
         })
 
         this.device.addEventListener('closeApp', () => {
-            // console.log('CLOSE_PAGE', JSON.stringify(this.history.history));
+            // // console.log('CLOSE_PAGE', JSON.stringify(this.history.history));
             this.device.setHistory('weather', this.history.history);
         });
     }

@@ -32,13 +32,13 @@ export class CalendarAppController {
                     pattern: '/events/new',
                     callback: () => {
                         const date = OSDate.getNextIncrementTime(this.calendar.eventDay);
-                        this.eventEdit.openPage('New Events', date);
+                        this.eventEdit.openPage('New Event', date);
                     }
                 },  {
                     pattern: '/events/edit',
                     callback: () => {
                         const event = this.calendar.getEvent(state);
-                        this.eventEdit.openPage('Edit Events', event);
+                        this.eventEdit.openPage('Edit Event', event);
                     }
                 }, {
                     pattern: '/events/detail',
@@ -55,7 +55,6 @@ export class CalendarAppController {
         this.device.addEventListener('openAppFinished', () => {
             const history = parent.device.getHistory('calendar');
             if (!history) return;
-            // console.log('OPEN_PAGE', history);
             this.history.init(history);
             history.forEach((item: HistoryState) => {
                 handleChange(item.state, item.url);
@@ -63,7 +62,6 @@ export class CalendarAppController {
         })
 
         this.device.addEventListener('closeApp', () => {
-            // console.log('CLOSE_PAGE', JSON.stringify(this.history.history));
             this.device.setHistory('calendar', this.history.history);
         });
 

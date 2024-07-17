@@ -166,7 +166,7 @@ body {
             top: 0;
             left: 0;
             width: calc(var(--grid) * 10);
-            height: calc(var(--grid) * 1.5);
+            height: calc(var(--grid) * 1.4);
 
             display: grid;
             grid-template-columns: calc(var(--grid) * 4) 1fr calc(var(--grid) * 4);
@@ -181,7 +181,7 @@ body {
 
                 .time {
                     background-color: var(--white);
-                    padding: 2px 6px;
+                    padding: 4px 6px;
                     border-radius: 10px;
                     font-weight: 500;
 
@@ -232,7 +232,7 @@ body {
 
             .statusStart {
                 justify-content: flex-start;
-                padding-inline-start:  calc(var(--grid) * 0.5);
+                padding-inline-start: calc(var(--grid) * 0.5);
             }
 
             .statusEnd {
@@ -510,6 +510,8 @@ body {
             }
 
             .mainArea {
+                position: relative;
+                z-index: 0;
                 width: calc(var(--grid) * 10);
                 height: calc(var(--grid) * 17);
 
@@ -621,7 +623,7 @@ body {
 
             .statusBar--container {
                 width: 100%;
-                height: calc(var(--grid) * 1.5);
+                height: calc(var(--grid) * 1.6);
 
                 display: grid;
                 grid-template-columns: 64px 1fr 64px;
@@ -1625,9 +1627,9 @@ body {
                                 content: '';
                                 inline-size: calc(100% - 16px);
                                 margin-inline: 8px;
-                                block-size: 10px;
+                                block-size: 12px;
 
-                                border: 3px solid var(--black);
+                                border: 2px solid var(--black);
                                 border-block-start: none;
                             }
                         }

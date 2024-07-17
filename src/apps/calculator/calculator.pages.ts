@@ -46,7 +46,6 @@ export class CalculatorApp extends App {
         this.device.addEventListener('openAppFinished', () => {
             const history = parent.device.getHistory('calculator');
             if (!history) return;
-            console.log('OPEN_PAGE', JSON.stringify(history));
             this.history.init(history);
 
             if (history[0]) {
@@ -55,7 +54,6 @@ export class CalculatorApp extends App {
         })
 
         this.device.addEventListener('closeApp', () => {
-            console.log('CLOSE_PAGE', JSON.stringify(this.history.history));
             this.device.setHistory('calculator', this.history.history);
         });
     }

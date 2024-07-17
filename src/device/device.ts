@@ -2,7 +2,7 @@ import { HistoryState, HistoryStateManager } from "./history.manager";
 import { BaseComponent } from "../components/base";
 import { AppAlert } from "../components/popups/alert.popup";
 import { SelectList } from "../components/select";
-import { CallScreen, IncomingCall } from "./call.screen";
+import { CallScreen } from "../components/system/call.screen";
 import { DatePicker } from "../components/pickers/date.picker";
 import { TimePicker } from "../components/pickers/time.picker";
 import { ChooseList } from "../components/pickers/choose.picker";
@@ -10,6 +10,8 @@ import { KeyboardPage } from "../components/keyboard";
 import { YearPicker } from "../components/pickers/year.picker";
 import { OSDate } from "../utils/date";
 import { TimeWheel } from "../components/pickers/time.wheel";
+import { IncomingCall } from "../components/system/incoming.call";
+import { OutgoingCall } from "../components/system/outgoing.call";
 
 export type DeviceTheme = 'auto' | 'light' | 'dark';
 
@@ -29,6 +31,7 @@ export class DeviceController extends BaseComponent {
     public alertPopup: AppAlert;
     public confirmPopup: AppAlert;
     public selectList: SelectList;
+    public outgoingCall: OutgoingCall;
     public incomingCall: IncomingCall;
     public callScreen: CallScreen;
     public datePicker: DatePicker;
@@ -51,6 +54,7 @@ export class DeviceController extends BaseComponent {
         this.alertPopup = new AppAlert();
         this.confirmPopup = new AppAlert(true);
         this.selectList = new SelectList();
+        this.outgoingCall = new OutgoingCall();
         this.incomingCall = new IncomingCall();
         this.callScreen = new CallScreen();
         this.datePicker = new DatePicker();
@@ -142,7 +146,7 @@ export class DeviceController extends BaseComponent {
         });
     }
 
-    private onStateChange(state: string) {
+    private onStateChange(_: string) {
         const path = window.location.pathname;
 
         const pathes = path.split('/');
@@ -150,7 +154,7 @@ export class DeviceController extends BaseComponent {
         this.app = path[1];
 
         if (path && path !== '/') {
-            console.log('OPEN_APP', state);
+            // console.log('OPEN_APP', state);
             this.openApp(`/src/apps/${pathes[1]}/index.html`);
         } else {
             this.closeApp();

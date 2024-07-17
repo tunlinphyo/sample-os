@@ -48,7 +48,7 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
 
-            margin-block-start: calc(var(--grid) * 1.5);
+            margin-block-start: calc(var(--grid) * 1);
 
             .statusGroup {
                 display: flex;

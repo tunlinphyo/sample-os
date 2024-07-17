@@ -1,6 +1,6 @@
-import { Popup } from "../components/popup";
-import { Contact } from "../stores/contact.store";
-import { CallTime } from "../utils/call";
+import { Popup } from "../popup";
+import { Contact } from "../../stores/contact.store";
+import { CallTime } from "../../utils/call";
 
 export interface Call {
     contact?: Contact;
@@ -67,41 +67,12 @@ export class CallScreen extends Popup {
         }, delay);
     }
 
-    update(data: Call) {
-        console.log(data)
-    }
+    update() {}
 
     private createActionButton(iconOn: string) {
         const actionButton = this.createElement('button', ['callAction'], { 'data-status': 'on' });
         actionButton.innerHTML = `<span class="material-symbols-outlined icon">${iconOn}</span>`;
 
         return actionButton;
-    }
-}
-
-export class IncomingCall extends Popup {
-    constructor() {
-        super({ btnEnd: true }, 'incommingTemplate');
-    }
-
-    render(data: { number: string, contact?: Contact }) {
-        this.data = data;
-
-        const flexCenter = this.createFlexCenter();
-        const callingStatus = this.createElement('div', ['callingStatus']);
-        const statusEl = this.createElement('div', ['status']);
-        statusEl.innerText = 'Incoming call';
-        const contactNumber = this.createElement('div', ['contactNumber']);
-        contactNumber.innerText = data.contact ? `${data.contact.firstName} ${data.contact.lastName}` : data.number;
-
-        callingStatus.appendChild(statusEl);
-        callingStatus.appendChild(contactNumber);
-
-        flexCenter.appendChild(callingStatus);
-        this.mainArea.appendChild(flexCenter);
-    }
-
-    update() {
-
     }
 }

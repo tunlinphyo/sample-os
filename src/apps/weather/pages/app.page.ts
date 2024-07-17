@@ -114,7 +114,7 @@ export class WeatherApp extends App {
         // weatherData.appendChild(div);
 
 
-        // console.log('SUN_RISE', sunRise, 'SUN_SET', sunSet);
+        // // console.log('SUN_RISE', sunRise, 'SUN_SET', sunSet);
         // weatherData.appendChild(sunRiseGroup);
 
         this.mainArea.appendChild(weatherData);

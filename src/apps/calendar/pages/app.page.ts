@@ -66,7 +66,7 @@ export class CalendarApp extends App {
 
     render(data?: Date) {
         if (!data) data = new Date();
-        this.calendarRenderer.data = data || new Date();
+        this.calendarRenderer.data = data;
     }
 
     update(_: string, data: Date) {

@@ -44,7 +44,7 @@ export class NoteAppController {
         this.device.addEventListener('openAppFinished', () => {
             const history = parent.device.getHistory('notes');
             if (!history) return;
-            // console.log('OPEN_PAGE', history);
+            // // console.log('OPEN_PAGE', history);
             this.history.init(history);
             history.forEach((item: HistoryState) => {
                 handleChange(item.state, item.url);
@@ -52,7 +52,7 @@ export class NoteAppController {
         })
 
         this.device.addEventListener('closeApp', () => {
-            // console.log('CLOSE_PAGE', JSON.stringify(this.history.history));
+            // // console.log('CLOSE_PAGE', JSON.stringify(this.history.history));
             this.device.setHistory('notes', this.history.history);
         });
     }

@@ -94,6 +94,7 @@ export class CalendarRenderer {
         this.day = tzDate.getDate();
         if (this.callBack) {
             this.callBack(tzDate).then(data => {
+                // console.log("CALLBACKDATA", data);
                 this.activeDates = data.map(this.toTimezoneDate);
                 // this.renderCalendar();
             });
@@ -265,6 +266,7 @@ export class CalendarRenderer {
     }
 
     private toTimezoneDate(date: Date): Date {
+        // console.log("DATE", date);
         return new OSDate(date).getDateByTimeZone(this.device.timeZone);
     }
 }

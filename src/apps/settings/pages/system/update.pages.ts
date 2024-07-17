@@ -19,7 +19,7 @@ export class SoftwareUpdatePage extends Page {
     }
 
     render(data: (System & any)) {
-        console.log(data);
+        // console.log(data);
         const flexCenter = this.createFlexCenter();
 
         const titleEl = this.createElement('div', ['title']);

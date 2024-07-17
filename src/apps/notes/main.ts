@@ -1,7 +1,8 @@
-import { HistoryStateManager } from '../../device/history.manager';
-import { NotesStore } from '../../stores/notes.store';
 import '../../style.css';
 import './notes.css';
+
+import { HistoryStateManager } from '../../device/history.manager';
+import { NotesStore } from '../../stores/notes.store';
 import { NotesApp } from './pages/app.page';
 import { NotesController } from './notes.controller';
 import { NotePage } from './pages/note.page';

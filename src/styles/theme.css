@@ -4,8 +4,8 @@
     --button: calc(var(--grid) * 2);
     --zero-bit: rgb(55, 54, 44);
     --one-bit: rgb(186, 185, 177);
-    --zero-bit: #222;
-    --one-bit: #bbb;
+    --zero-bit: #222222;
+    --one-bit: #bbbbbb;
 
     --white: var(--one-bit);
     --black: var(--zero-bit);

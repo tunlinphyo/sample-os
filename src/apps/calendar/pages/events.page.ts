@@ -69,7 +69,7 @@ export class EventsPage extends Page {
 
         this.addEventListener('click', async () => {
             const ymd = new OSDate(this.calendar.eventDay).getYearMonthDay();
-            const date = await this.device.datePicker.openPage('2024', ymd)
+            const date = await this.device.datePicker.openPage('Date Picker', ymd)
             if (date) {
                 const d = date as DatePickerData;
                 this.calendar.eventDay = new Date(d.year, d.month, d.day);

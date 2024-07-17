@@ -105,7 +105,7 @@ export class TimerPage extends Page {
     }
 
     private updateTimer({ status, data }: { status: string, data: TimerData}) {
-        console.log(status, data);
+        // console.log(status, data);
         switch (status) {
             case 'start':
                 this.clock.timerStart();

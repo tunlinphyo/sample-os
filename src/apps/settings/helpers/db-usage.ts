@@ -54,7 +54,7 @@ export class IndexedDBUsage {
                     totalSize += JSON.stringify(record).length;
                 }
 
-                console.log(`Database: ${db.name}, Object Store: ${storeName}, Size: ${totalSize} bytes`);
+                // console.log(`Database: ${db.name}, Object Store: ${storeName}, Size: ${totalSize} bytes`);
             };
 
             request.onerror = (event) => {
@@ -124,7 +124,7 @@ export class IndexedDBUsage {
                 const clearRequest = store.clear();
 
                 clearRequest.onsuccess = () => {
-                    console.log(`Object store '${storeName}' in database '${dbName}' has been cleared.`);
+                    // console.log(`Object store '${storeName}' in database '${dbName}' has been cleared.`);
                 };
 
                 clearRequest.onerror = (event) => {

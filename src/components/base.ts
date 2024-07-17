@@ -41,7 +41,7 @@ export abstract class BaseComponent {
                 }, scrollElem, false)
             }
         } catch(error) {
-            // console.log(error);
+            // // console.log(error);
         }
     }
 
@@ -122,7 +122,7 @@ export abstract class BaseComponent {
     }
 
     public logEvents() {
-        console.log(this.eventListeners, this.customEvents)
+        // console.log(this.eventListeners, this.customEvents)
     }
 
     public isAllCaps(text: string) {

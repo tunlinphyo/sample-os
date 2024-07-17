@@ -7,12 +7,12 @@ let timer: TimerService | null = null;
 addEventListener('message', (event) => {
     const { command, data } = event.data;
 
-    console.log('EVENT_DATA', command, data);
+    // console.log('EVENT_DATA', command, data);
 
     switch (command) {
         case 'init':
             timer = new TimerService();
-            console.log("TIMER_INIT", data);
+            // console.log("TIMER_INIT", data);
             timer.init(data);
             break;
         case 'start':

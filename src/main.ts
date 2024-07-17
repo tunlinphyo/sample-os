@@ -94,18 +94,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         if (status === 'UPDATE_TIMEZONE' || status == 'UPDATE_HOUR12') {
             const info = data.data as DateTimeInfo;
-            console.log('UPDATE_TIMEZONE', info);
+            // console.log('UPDATE_TIMEZONE', info);
             window.device.timeZone = info.timeZone;
             window.device.hour12 = info.hour12;
         }
     });
 
     window.weather.addChangeListener((status: string, data: any) => {
-        if (status === 'WEATHER_LOCATION') {
-            console.log('WEATHER::::::::::', data);
+        if (status === 'WEATHER_NOTIFIGATION') {
+            // console.log('WEATHER::::::::::', data);
         }
     })
 
-    // const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    // console.log('TimeZones', timeZone);
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    console.log('TimeZones', timeZone);
 });

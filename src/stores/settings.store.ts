@@ -64,13 +64,13 @@ const appList: HomeApp[] = [
         isShow: true,
         isSystem: false,
     },
-    {
-        id: 'music',
-        name: 'Music',
-        order: 5,
-        isShow: false,
-        isSystem: false,
-    },
+    // {
+    //     id: 'music',
+    //     name: 'Music',
+    //     order: 5,
+    //     isShow: false,
+    //     isSystem: false,
+    // },
     {
         id: 'notes',
         name: 'Notes',
@@ -106,13 +106,13 @@ const appList: HomeApp[] = [
         isShow: true,
         isSystem: true,
     },
-    {
-        id: 'wallet',
-        name: 'Wallet',
-        order: 11,
-        isShow: false,
-        isSystem: false,
-    },
+    // {
+    //     id: 'wallet',
+    //     name: 'Wallet',
+    //     order: 11,
+    //     isShow: false,
+    //     isSystem: false,
+    // },
 ];
 
 const stores: StoreInfo[] = [

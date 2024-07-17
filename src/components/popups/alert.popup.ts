@@ -34,6 +34,6 @@ export class AppAlert extends Popup {
     }
 
     update(data: string): void {
-        console.log(data)
+        // console.log(data)
     }
 }

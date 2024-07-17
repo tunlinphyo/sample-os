@@ -50,7 +50,7 @@ export class ClockAppController {
         this.device.addEventListener('openAppFinished', () => {
             const history = parent.device.getHistory('clock');
             if (!history) return;
-            // console.log('OPEN_PAGE', history);
+            // // console.log('OPEN_PAGE', history);
             this.history.init(history);
             history.forEach((item: HistoryState) => {
                 handleChange(item.state, item.url);
@@ -58,7 +58,7 @@ export class ClockAppController {
         })
 
         this.device.addEventListener('closeApp', () => {
-            // console.log('CLOSE_PAGE', JSON.stringify(this.history.history));
+            // // console.log('CLOSE_PAGE', JSON.stringify(this.history.history));
             this.device.setHistory('clock', this.history.history);
         });
 

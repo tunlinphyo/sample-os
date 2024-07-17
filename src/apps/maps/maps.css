@@ -1,0 +1,175 @@
+@layer component {
+    .mapPage {
+
+        .mainArea {
+            height: calc(var(--grid) * 17);
+            position: relative;
+            z-index: 0;
+
+            --space: calc(var(--grid) * 0.5);
+
+            /* background-image: linear-gradient(var(--black) .5px, transparent .5px), linear-gradient(to right, var(--black) .5px, transparent .5px);
+            background-size: calc(var(--space) - .1px) calc(var(--space) - .05px); */
+
+            .mapsArea {
+                width: 100%;
+                height: 100%;
+
+                /* filter: grayscale(100%); */
+            }
+        }
+
+        .actionBar {
+            height: calc(var(--grid) * 3);
+            padding-block-end: var(--grid);
+            position: absolute;
+            z-index: 1;
+            bottom: 0;
+            background-color: var(--white);
+        }
+    }
+
+    /* .actionScrollArea {
+        .mainArea {
+            background-color: #f001;
+        }
+    } */
+
+    .scrollArea {
+        .searchBarContainer {
+            width: 100%;
+            padding-inline: calc(var(--grid) * 0.5);
+
+            position: sticky;
+            z-index: 1;
+            top: 0;
+
+            .searchBar {
+                width: 100%;
+                height: calc(var(--grid) * 1.2);
+                border: 2px solid var(--black);
+                border-radius: 5px;
+                background-color: var(--white);
+
+                display: grid;
+                grid-template-columns: 24px 1fr 24px;
+                align-items: center;
+                padding-inline: 8px;
+
+                .material-symbols-outlined {
+                    &.hide {
+                        display: none!important;
+                    }
+                }
+
+                .searchInput {
+                    padding-inline: 6px;
+                }
+            }
+        }
+
+        .contantArea {
+            --margin: calc(var(--grid) * 0.5);
+            padding: var(--margin) var(--padding);
+
+            .openingStatus {
+                margin-block: var(--margin);
+            }
+
+            .selectItem {
+                width: 100%;
+                height: var(--grid);
+                font-size: 18px;
+                margin-block: var(--margin);
+                text-align: left;
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+
+                &.withIcon {
+                    gap: calc(var(--grid) * 0.5);
+                }
+            }
+
+            .dayTime {
+                margin-top: var(--margin);
+
+                display: grid;
+                grid-template-columns: calc(var(--grid) * 3) 1fr;
+                font-size: 16px;
+
+                .day {
+                    text-transform: uppercase;
+                    font-family: var(--number-fonts);
+                    font-weight: 600;
+                }
+            }
+        }
+    }
+
+    .placeList {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: calc(var(--grid) * 0.5);
+        padding-bottom: calc(var(--grid) * 3);
+
+        .place {
+            width: 100%;
+            padding-block: 8px;
+            display: grid;
+            grid-template-columns: 24px 1fr;
+            justify-content: flex-start;
+            align-items: baseline;
+            gap: 8px;
+            text-align: left;
+
+            .material-symbols-outlined {
+                translate: 0 8px;
+            }
+
+            .detail {
+                small {
+                    width: 100%;
+                    display: block;
+                    -webkit-line-clamp: 1;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    word-wrap: break-word;
+                }
+            }
+        }
+    }
+
+    /* HTML: <div class="loader"></div> */
+    .loadingContainer {
+        width: 100%;
+        height: calc(var(--grid) * 11);
+        display: grid;
+        place-items: center;
+
+        &.mapLoadingContainer {
+            height: calc(var(--grid) * 16);
+        }
+
+        .loader {
+            width: 60px;
+            aspect-ratio: 4;
+            background: radial-gradient(circle closest-side,var(--black) 90%,#0000) 0/calc(100%/3) 100% space;
+            clip-path: inset(0 100% 0 0);
+            animation: l1 1s steps(4) infinite;
+        }
+    }
+
+    .pointerNone {
+        pointer-events: none;
+    }
+
+    .cursorPointer {
+        cursor: pointer;
+    }
+}
+
+@keyframes l1 {to{clip-path: inset(0 -34% 0 0)}}

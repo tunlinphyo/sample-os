@@ -239,7 +239,7 @@ export class CustomDateTimeForm extends CustomForm {
     set value(value: Date) {
         this.date = new Date(value);
         this.dateInput.textContent = OSDate.formatShortDate(value);
-        this.timeInput.textContent = OSDate.getFormatTime(value);
+        this.timeInput.textContent = OSDate.getFormatTime(value, this.device.hour12);
         this.dispatchFormEvent('change', value);
     }
 
@@ -273,6 +273,60 @@ export class CustomDateTimeForm extends CustomForm {
         } else {
             this.timeInput.classList.add('hide')
         }
+    }
+}
+
+export class CustomTimePickerForm extends CustomForm {
+    private input: HTMLButtonElement;
+    private time: Date;
+    private config: AlarmConfig;
+
+    constructor(private device: DeviceController, target: HTMLElement, config: AlarmConfig) {
+        super(target);
+        this.config = config;
+        this.input = this.getElement<HTMLButtonElement>('.inputValue');
+        this.time = new Date(config.defautValue);
+
+        this.init(config)
+    }
+
+    private init(config: AlarmConfig) {
+        this.value = new Date(config.defautValue);
+        this.addEventListener('click', async () => {
+            const result = await this.device.timePicker.openPage(config.label, { ...this.timeData, allMinutes: config.allMinutes });
+            if (result) this.timeData = result as TimePickerData;
+        }, this.input, false)
+    }
+
+    // value
+    get value() {
+        return this.time;
+    }
+    set value(value: Date) {
+        const timeData = new OSDate(value).timeObject(!this.config.allMinutes);
+        this.time.setHours(value.getHours(), value.getMinutes(), 0, 0);
+        if (this.device.hour12) {
+            this.input.innerHTML = `<span>${this.getHour(timeData.hour)}:${String(timeData.minute).padStart(2, '0')}</span><small>${timeData.isAm ? 'AM' : 'PM'}</small>`;
+        } else {
+            this.input.innerHTML = `<span>${timeData.hour}:${String(timeData.minute).padStart(2, '0')}</span>`;
+        }
+        this.dispatchFormEvent('change', value);
+    }
+
+    get timeData() {
+        return new OSDate(this.time).timeObject(!this.config.allMinutes);
+    }
+    set timeData(value: TimePickerData) {
+        const date = new Date(this.time);
+        date.setHours(
+            this.device.hour12 ? OSDate.get24Hour(value.hour, value.isAm) : value.hour,
+            value.minute, 0, 0
+        );
+        this.value = date;
+    }
+
+    private getHour(hours: number) {
+        return String(hours % 12 || 12).padStart(2, '0');
     }
 }
 
@@ -457,59 +511,5 @@ export class CustomPhoneForm extends CustomForm {
             }
             this.device.keyboard.open(keyboard).then(callback);
         })
-    }
-}
-
-export class CustomTimePickerForm extends CustomForm {
-    private input: HTMLButtonElement;
-    private time: Date;
-    private config: AlarmConfig;
-
-    constructor(private device: DeviceController, target: HTMLElement, config: AlarmConfig) {
-        super(target);
-        this.config = config;
-        this.input = this.getElement<HTMLButtonElement>('.inputValue');
-        this.time = new Date(config.defautValue);
-
-        this.init(config)
-    }
-
-    private init(config: AlarmConfig) {
-        this.value = new Date(config.defautValue);
-        this.addEventListener('click', async () => {
-            const result = await this.device.timePicker.openPage(config.label, { ...this.timeData, allMinutes: config.allMinutes });
-            if (result) this.timeData = result as TimePickerData;
-        }, this.input, false)
-    }
-
-    // value
-    get value() {
-        return this.time;
-    }
-    set value(value: Date) {
-        const timeData = new OSDate(value).timeObject(!this.config.allMinutes);
-        this.time.setHours(value.getHours(), value.getMinutes(), 0, 0);
-        if (this.device.hour12) {
-            this.input.innerHTML = `<span>${this.getHour(timeData.hour)}:${String(timeData.minute).padStart(2, '0')}</span><small>${timeData.isAm ? 'AM' : 'PM'}</small>`;
-        } else {
-            this.input.innerHTML = `<span>${timeData.hour}:${String(timeData.minute).padStart(2, '0')}</span>`;
-        }
-        this.dispatchFormEvent('change', value);
-    }
-
-    get timeData() {
-        return new OSDate(this.time).timeObject(!this.config.allMinutes);
-    }
-    set timeData(value: TimePickerData) {
-        const date = new Date(this.time);
-        date.setHours(
-            this.device.hour12 ? OSDate.get24Hour(value.hour, value.isAm) : value.hour,
-            value.minute, 0, 0
-        );
-        this.value = date;
-    }
-
-    private getHour(hours: number) {
-        return String(hours % 12 || 12).padStart(2, '0');
     }
 }

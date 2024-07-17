@@ -8,16 +8,16 @@ export class Dependency {
     private watchers: Set<WatcherCallback> = new Set();
 
     depend(callback: WatcherCallback) {
-        console.log('Adding a dependency', callback);
+        // console.log('Adding a dependency', callback);
         if (callback) {
             this.watchers.add(callback);
         }
     }
 
     notify() {
-        console.log('Notifying watchers', this.watchers);
+        // console.log('Notifying watchers', this.watchers);
         this.watchers.forEach(callback => {
-            console.log('Executing watcher callback');
+            // console.log('Executing watcher callback');
             callback();
         });
     }
@@ -46,7 +46,7 @@ export function reactive<T extends object>(target: T): ReactiveObject<T> {
         get(target, key, receiver) {
             const dep = getDependency(target, key);
             dep.depend(() => {
-                console.log(`Getting value of ${String(key)}`);
+                // console.log(`Getting value of ${String(key)}`);
             });
             return Reflect.get(target, key, receiver);
         },
@@ -60,7 +60,7 @@ export function reactive<T extends object>(target: T): ReactiveObject<T> {
 }
 
 export function watch<T>(reactiveObj: ReactiveObject<T>, key: keyof T, callback: WatcherCallback) {
-    console.log(`Setting up a watcher for ${String(key)}`);
+    // console.log(`Setting up a watcher for ${String(key)}`);
     const dep = getDependency(reactiveObj, key as string | symbol);
     dep.depend(callback);
 }
@@ -72,16 +72,16 @@ const state = reactive({
     message: "Hello, World!"
 });
 
-console.log('BEFORE WATCH');
+// console.log('BEFORE WATCH');
 
 watch(state, 'count', () => {
-    console.log(`Count changed to: ${state.count}`);
+    // console.log(`Count changed to: ${state.count}`);
 });
 
 // watch(state, 'message', () => {
-//     console.log(`Message changed to: ${state.message}`);
+//     // console.log(`Message changed to: ${state.message}`);
 // });
 
 state.count = 1; // Should log: Notifying watchers, Count changed to: 1
 
-console.log('AFTER WATCH');
+// console.log('AFTER WATCH');

@@ -51,7 +51,7 @@ export class CitiesPage extends Page {
                 </span>
                 <span class="temperature">${Math.round(weather.main.temp)}&deg;</span>
             `;
-            console.log("ON_CLICK", cityEl);
+            // console.log("ON_CLICK", cityEl);
             this.addEventListener('click', () => {
                 this.onCitySelect(item, isMyLocation);
             }, cityEl);

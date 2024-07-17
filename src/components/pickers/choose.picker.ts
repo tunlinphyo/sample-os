@@ -54,7 +54,7 @@ export class ChooseList extends Popup {
     }
 
     update(data: ChooseData): void {
-        console.log(data)
+        // console.log(data)
         if (this.chooseList) this.chooseList.innerHTML = '';
 
         this.render(data)

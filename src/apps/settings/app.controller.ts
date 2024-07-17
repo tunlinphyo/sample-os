@@ -84,7 +84,7 @@ export class SettingAppController {
         })
 
         this.device.addEventListener('closeApp', () => {
-            // console.log('CLOSE_PAGE', JSON.stringify(this.history.history));
+            // // console.log('CLOSE_PAGE', JSON.stringify(this.history.history));
             this.device.setHistory('settings', this.history.history);
         });
     }

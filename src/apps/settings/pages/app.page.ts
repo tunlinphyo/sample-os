@@ -99,7 +99,7 @@ export class SettingApp extends App {
                 this.handleToggle(type, data);
                 break;
             case 'apps':
-                console.log('OPEN APPS');
+                // console.log('OPEN APPS');
                 this.history.pushState('/applications', data.id);
                 break;
             case 'storage':

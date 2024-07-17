@@ -32,7 +32,7 @@ export class HistoryStateManager {
 
     init(states: HistoryState[]) {
         this.states = states;
-        console.log('ON_HISTORY_INIT', this.states);
+        // console.log('ON_HISTORY_INIT', this.states);
     }
 
     public pushState(url: string, state: any, title: string = '') {
@@ -58,7 +58,7 @@ export class HistoryStateManager {
     public goBack() {
         if (this.states.length) {
             this.states.pop();
-            console.log('ON_HISTORY_POP', this.history);
+            // console.log('ON_HISTORY_POP', this.history);
         }
     }
 
@@ -85,6 +85,6 @@ export class HistoryStateManager {
 
     private onPopState(event: PopStateEvent) {
         this.goBack();
-        console.log('POPSTATE_EVENT:::::::::::::::', event.state);
+        // console.log('POPSTATE_EVENT:::::::::::::::', event.state);
     }
 }

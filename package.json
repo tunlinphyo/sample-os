@@ -9,14 +9,20 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@types/google.maps": "^3.55.11",
     "@types/sortablejs": "^1.15.8",
     "@types/uuid": "^10.0.0",
     "typescript": "^5.2.2",
     "vite": "^5.3.1"
   },
   "dependencies": {
+    "@googlemaps/js-api-loader": "^1.16.6",
+    "googleapis": "^140.0.1",
     "idb-keyval": "^6.2.1",
+    "install": "^0.13.0",
+    "npm": "^10.8.2",
     "openweathermap-ts": "^1.2.10",
+    "save-dev": "^0.0.1-security",
     "sortablejs": "^1.15.2",
     "uuid": "^10.0.0"
   }
