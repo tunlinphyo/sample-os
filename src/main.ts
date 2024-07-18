@@ -18,7 +18,7 @@ import { History, HistoryStore } from './stores/history.store';
 import { DateTimeInfo, SettingStore } from './stores/settings.store';
 import { WeatherStore } from './stores/weather.store';
 import { WeatherController } from './controllers/weather.controller';
-import { FullscreenController } from './controllers/fullscreen.controller';
+// import { FullscreenController } from './controllers/fullscreen.controller';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const historyManager = new HistoryStateManager();
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     new PhoneDummyController(window.device, window.phone);
     new Battery();
-    const fullScreen = new FullscreenController();
+    // const fullScreen = new FullscreenController();
 
     window.clock.addChangeListener(async (status: string, data: any) => {
         if (status === 'UPDATE_CLOCK') {
@@ -76,13 +76,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    document.getElementById("fullScreen")!.addEventListener("click", () => {
-        if (fullScreen.isFullScreenMode()) {
-            fullScreen.closeFullscreen();
-        } else {
-            fullScreen.openFullscreen(document.body);
-        }
-    });
+    // document.getElementById("fullScreen")!.addEventListener("click", () => {
+    //     if (fullScreen.isFullScreenMode()) {
+    //         fullScreen.closeFullscreen();
+    //     } else {
+    //         fullScreen.openFullscreen(document.body);
+    //     }
+    // });
 
     window.device.callScreen.listen<Omit<History, "id">>('callDone', (data) => {
         if (data) window.phone.addHistory(data);
