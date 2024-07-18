@@ -118,7 +118,7 @@ export class DeviceController extends BaseComponent {
             if (stopwatch) {
                 clockElement.innerHTML = `
                     ${hourString}:${minuteString}${this.hour12 ? ` ${isAm}` : ''}
-                    <span class="material-symbols-outlined fill-icon" style="font-size: 22px; translate: 0 -2px; margin-left: 2px">timer</span>
+                    <span class="material-symbols-outlined fill-icon" style="font-size: 20px; translate: 0 -2px; margin-left: 2px">timer</span>
                 `;
             } else {
                 clockElement.textContent = `${hourString}:${minuteString}${this.hour12 ? ` ${isAm}` : ''}`;
@@ -231,7 +231,7 @@ export class DeviceController extends BaseComponent {
             time = `${this.pad(result.minutes)}:${this.pad(result.seconds)}`;
         }
         clockElement.innerHTML = `
-            <span class="material-symbols-outlined fill-icon" style="font-size: 22px; translate: 0 -1px;">${icon}</span>
+            <span class="material-symbols-outlined fill-icon" style="font-size: 20px; translate: 0 -1px;">${icon}</span>
             ${time}
         `;
     }

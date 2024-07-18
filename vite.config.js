@@ -16,6 +16,7 @@ export default defineConfig({
                 calculator: resolve(__dirname, '/src/apps/calculator/index.html'),
                 clock: resolve(__dirname, '/src/apps/clock/index.html'),
                 notes: resolve(__dirname, '/src/apps/notes/index.html'),
+                books: resolve(__dirname, '/src/apps/books/index.html'),
                 settings: resolve(__dirname, '/src/apps/settings/index.html'),
                 weather: resolve(__dirname, '/src/apps/weather/index.html'),
                 maps: resolve(__dirname, '/src/apps/maps/index.html'),

@@ -23,6 +23,7 @@ export class JournalApp extends App {
 
     private init() {
         this.addEventListener('click', () => {
+            this.history.replaceState('/', new Date());
             this.render(new Date());
         }, this.btnStart, false);
 

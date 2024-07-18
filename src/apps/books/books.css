@@ -1,0 +1,88 @@
+@layer component {
+    .mainArea {
+        overflow: hidden;
+
+        .page {
+            position: absolute;
+            inset: 0;
+            --space: calc(var(--grid) * 1.5);
+
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: var(--space) 1fr var(--space);
+
+            border-radius: calc(var(--grid) * 1.5);
+            background-color: var(--white);
+            outline: 1px solid var(--black);
+            outline-offset: 1px;
+
+
+            transition: translate .7s ease;
+
+            /* background-image: linear-gradient(#444cf722 1px, transparent 1px), linear-gradient(to right, #444cf722 1px, transparent 1px);
+            background-size: calc(var(--grid) - .1px) calc(var(--grid) - .05px); */
+
+            .page-content {
+                padding-inline: var(--padding);
+                text-align: justify;
+
+                > p {
+                    margin-top: 12px;
+                }
+
+
+                .chapter {
+                    height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    padding-bottom: 6px;
+
+                    > h2 {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        text-align: center;
+                        padding-block: var(--grid);
+                        flex: 1;
+                    }
+
+                    > h3 {
+                        width: 100%;
+                        text-align: center;
+                        padding-block-end: calc(var(--grid) * 1.2);
+                    }
+                }
+
+                .cover {
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    text-align: center;
+                    gap: var(--grid);
+                    /* border: 2px solid var(--black);
+                    border-radius: calc(var(--grid) * 0.5); */
+                    padding: 6px;
+
+                    > h1 {
+                        font-size: var(--grid);
+                        font-weight: 500;
+                    }
+                }
+            }
+
+            .page-footer {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+
+                > div {
+                    padding-top: 2px;
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+}
