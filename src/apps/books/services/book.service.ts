@@ -149,8 +149,11 @@ export class BookService {
             if (this.isPrev(page)) {
                 const prevPage = page - 1;
                 this.prevPageEl = this.createPage(prevPage, "prev");
+            } else {
+                this.prevPageEl = undefined;
             }
             this.animating = false;
+            console.log(this.prevPageEl?.id, this.currPageEl?.id, this.nextPageEl?.id);
         };
         this.currPageEl.addEventListener('transitionend', transitionEndHandler);
     }
@@ -174,8 +177,11 @@ export class BookService {
             if (this.isNext(page)) {
                 const nextPage = page + 1;
                 this.nextPageEl = this.createPage(nextPage, "next");
+            } else {
+                this.nextPageEl = undefined;
             }
             this.animating = false;
+            console.log(this.prevPageEl?.id, this.currPageEl?.id, this.nextPageEl?.id);
         };
         this.currPageEl.addEventListener('transitionend', transitionEndHandler);
     }
@@ -366,7 +372,7 @@ export class BookService {
     }
 
     private isNext(page: number) {
-        return page <= this.book!.totalPages;
+        return page < this.book!.totalPages;
     }
 
     private getChapter(page: number) {
