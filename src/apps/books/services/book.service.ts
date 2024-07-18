@@ -350,7 +350,8 @@ export class BookService {
                     a condimentum vitae sapien pellentesque habitant morbi.
                 </p>
                 <p>
-                    Aliquam purus sit amet luctus venenatis lectus magna fringilla urna. Posuere lorem ipsum dolor sit amet consectetur
+                    Aliquam purus sit amet luctus venenatis lectus magna fringilla urna. Posuere lorem ipsum dolor sit amet consectetur.
+                    Sapien nec sagittis aliquam malesuada bibendum arcu vitae amet mauris.
                 </p>
             `,
             `

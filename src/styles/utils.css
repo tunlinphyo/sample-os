@@ -258,12 +258,12 @@ body {
 
             .statusStart {
                 justify-content: flex-start;
-                padding-inline-start: calc(var(--grid) * 0.5);
+                padding-inline-start: var(--padding);
             }
 
             .statusEnd {
                 justify-content: flex-end;
-                padding-inline-end: calc(var(--grid) * 0.5);
+                padding-inline-end: var(--padding);
             }
 
             .island {

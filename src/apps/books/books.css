@@ -5,11 +5,11 @@
         .page {
             position: absolute;
             inset: 0;
-            --space: calc(var(--grid) * 1.5);
+            --space: calc(var(--grid) * 1.4);
 
             display: grid;
             grid-template-columns: 1fr;
-            grid-template-rows: var(--space) 1fr var(--space);
+            grid-template-rows: calc(var(--grid) * 1.5) 1fr calc(var(--grid) * 1.4);
 
             border-radius: calc(var(--grid) * 1.5);
             background-color: var(--white);
@@ -79,8 +79,7 @@
                 align-items: flex-start;
 
                 > div {
-                    padding-top: 2px;
-                    font-size: 14px;
+                    font-size: 15px;
                 }
             }
         }
