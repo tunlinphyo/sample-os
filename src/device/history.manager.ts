@@ -83,7 +83,7 @@ export class HistoryStateManager {
         }
     }
 
-    private onPopState(event: PopStateEvent) {
+    private onPopState(_: PopStateEvent) {
         this.goBack();
         // console.log('POPSTATE_EVENT:::::::::::::::', event.state);
     }

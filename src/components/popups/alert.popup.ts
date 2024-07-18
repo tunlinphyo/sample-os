@@ -33,7 +33,5 @@ export class AppAlert extends Popup {
         this.mainArea.appendChild(flexCenter);
     }
 
-    update(data: string): void {
-        // console.log(data)
-    }
+    update() {}
 }

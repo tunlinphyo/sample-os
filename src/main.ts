@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     window.weather.addChangeListener((status: string, data: any) => {
         if (status === 'WEATHER_NOTIFIGATION') {
-            // console.log('WEATHER::::::::::', data);
+            console.log('WEATHER::::::::::', data);
         }
     })
 

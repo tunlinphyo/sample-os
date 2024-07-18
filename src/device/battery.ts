@@ -79,10 +79,10 @@ export class Battery {
         this.dischargingTime = battery.dischargingTime;
 
         // Log initial battery status
-        // console.log("Battery charging: ", this.charging);
-        // console.log("Battery level: ", this.level * 100 + "%");
-        // console.log("Battery charging time: ", this.chargingTime + " seconds");
-        // console.log("Battery discharging time: ", this.dischargingTime + " seconds");
+        console.log("Battery charging: ", this.charging);
+        console.log("Battery level: ", this.level * 100 + "%");
+        console.log("Battery charging time: ", this.chargingTime + " seconds");
+        console.log("Battery discharging time: ", this.dischargingTime + " seconds");
     }
 
     private renderBatteryIcon() {

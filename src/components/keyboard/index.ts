@@ -124,7 +124,7 @@ export class KeyboardPage extends BaseComponent {
         this.dispatchCustomEvent('keyboardOpen');
     }
 
-    private setupTransitionEndHandler(resolve: (value: string | PromiseLike<string>) => void) {
+    private setupTransitionEndHandler(_: (value: string | PromiseLike<string>) => void) {
         // console.log(resolve);
         const transitionEndHandler = () => {
             this.dispatchCustomEvent('keyboardOpenFinished');
@@ -188,7 +188,7 @@ export class KeyboardPage extends BaseComponent {
         this.textArea.innerHTML = this.text;
     }
 
-    private handleNumKeyPress(data: Keyboard, resolve: (value: string) => void, key: string) {
+    private handleNumKeyPress(data: Keyboard, _: (value: string) => void, key: string) {
         // console.log(resolve);
         if (!key) return;
         if (key === 'DELETE') {

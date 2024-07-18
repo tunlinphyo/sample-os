@@ -1,5 +1,4 @@
 import { App } from "../../../components/app";
-import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
 import { MapsController } from "../maps.controller";
 
