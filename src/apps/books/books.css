@@ -13,8 +13,8 @@
 
             border-radius: calc(var(--grid) * 1.5);
             background-color: var(--white);
-            outline: 1px solid var(--black);
-            outline-offset: 1px;
+            outline: 2px solid var(--black);
+            outline-offset: 0;
 
 
             transition: translate .7s ease;
@@ -79,7 +79,7 @@
                 align-items: flex-start;
 
                 > div {
-                    font-size: 15px;
+                    font-size: 16px;
                 }
             }
         }

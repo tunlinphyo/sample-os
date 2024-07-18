@@ -192,7 +192,7 @@ body {
             top: 0;
             left: 0;
             width: calc(var(--grid) * 10);
-            height: calc(var(--grid) * 1.4);
+            height: calc(var(--grid) * 1.3);
 
             display: grid;
             grid-template-columns: calc(var(--grid) * 4) 1fr calc(var(--grid) * 4);
@@ -295,7 +295,7 @@ body {
 
         .navigationBar {
             width: calc(var(--grid) * 10);
-            height: var(--grid);
+            height: calc(var(--grid) * 0.9);
             pointer-events: none;
 
             position: absolute;
@@ -1243,7 +1243,7 @@ body {
                 }
 
                 .toggleButton {
-                    width: calc(var(--grid) * 1.7);
+                    width: calc(var(--grid) * 1.8);
                     height: var(--grid);
                     border: 2px solid var(--black);
                     border-radius: var(--grid);
