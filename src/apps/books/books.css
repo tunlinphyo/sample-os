@@ -2,10 +2,29 @@
     .mainArea {
         overflow: hidden;
 
+        .bookmark {
+            position: absolute;
+            z-index: 9;
+            width: 24px;
+            height: 48px;
+            background-color: var(--black);
+            clip-path: polygon(50% 16%, 100% 0, 100% 100%, 0 100%, 0 0);
+
+            bottom: 0;
+            left: var(--padding);
+            translate: 0 102%;
+            transition: translate .7s ease;
+
+            &.show {
+                translate: 0 0;
+            }
+        }
+
         .page {
             cursor: grab;
             position: absolute;
             inset: 0;
+            /* overflow: hidden; */
             --space: calc(var(--grid) * 1.4);
 
             display: grid;
@@ -83,6 +102,65 @@
                     font-size: 16px;
                 }
             }
+        }
+
+        .titleList {
+            padding-block: calc(var(--grid) * 0.5) calc(var(--grid) * 1.5);
+            padding-inline: calc(var(--grid) * 0.4);
+
+            .bookItem {
+
+                border: 3px solid var(--black);
+                border-right: none;
+                border-radius: 24px 0 0 24px;
+
+                overflow: hidden;
+                margin-bottom: 2px;
+
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: flex-start;
+
+                padding-inline: 16px;
+                position: relative;
+
+                .bookTitle {
+                    font-size: 20px;
+                    position: relative;
+                    z-index: 1;
+
+                    .oneLine {
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                    }
+                }
+
+                .progressContainer {
+                    position: absolute;
+                    z-index: 0;
+                    top: 2px; bottom: 2px;
+                    right: 8px;
+                    width: 3px;
+                    background-color: var(--black);
+
+                    background-size: 6px 6px;
+                    background-image: repeating-linear-gradient(0deg, var(--black), var(--black) 3px, var(--white) 3px, var(--white));
+
+                    .progress {
+                        width: 5px;
+                        background-color: var(--black);
+                        margin-inline-start: -1px;
+                    }
+                }
+            }
+        }
+    }
+
+    .actionScrollArea {
+        .scrollArea {
+            padding: 0;
         }
     }
 }

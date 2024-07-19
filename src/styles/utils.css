@@ -281,13 +281,13 @@ body {
                 padding-inline: 10px;
 
                 .camera {
-                    --size: calc(var(--grid) * 0.45);
+                    --size: calc(var(--grid) * 0.5);
                     width: var(--size);
                     height: var(--size);
                     border-radius: 50%;
-                    background-color: #222;
+                    background-color: #111;
 
-                    outline: 2px solid #333;
+                    outline: 2px solid #222;
                     outline-offset: -1px;
                     box-shadow: 0 0 0 8px #000;
                 }
@@ -635,7 +635,7 @@ body {
 
             .mainArea {
                 width: calc(var(--grid) * 10);
-                height: calc(var(--grid) * 13);
+                height: calc(var(--grid) * 14);
 
                 overflow-y: auto;
 
@@ -643,11 +643,11 @@ body {
                 scrollbar-width: thin;
 
                 >* {
-                    padding-block: var(--padding) calc(var(--grid) * 3);
+                    padding-block: 0 calc(var(--grid) * 3);
                 }
 
                 .scrollArea {
-                    height: calc(var(--grid) * 15);
+                    height: calc(var(--grid) * 14);
                 }
             }
 
@@ -655,6 +655,7 @@ body {
                 height: calc(var(--grid) * 3);
                 padding-bottom: var(--grid);
                 position: absolute;
+                z-index: 0;
                 bottom: 0;
 
                 .actionButton {
@@ -705,12 +706,9 @@ body {
                 width: 100%;
                 height: calc(var(--grid) * 1.5);
 
-                display: grid;
-                grid-template-columns: 64px 1fr 64px;
-
-                &.full {
-                    grid-template-columns: 1fr;
-                }
+                display: flex;
+                justify-content: center;
+                align-items: center;
 
                 .statusBar-title {
                     display: flex;
@@ -1203,10 +1201,22 @@ body {
                     &.chapters {
                         gap: calc(var(--grid) * 0.5);
                         justify-content: flex-start;
+                        counter-reset: index;
 
                         .selectItem {
                             text-align: left;
-                            font-size: 18px;
+                            font-size: 16px;
+                            counter-increment: index;
+
+                            display: grid;
+                            grid-template-columns: 16px 1fr;
+                            gap: 8px;
+
+                            &::before {
+                                content: counter(index);
+                                text-align: right;
+                                font-family: var(--number-fonts);
+                            }
                         }
                     }
                 }

@@ -9,11 +9,15 @@ export class BooksApp extends App {
         history: HistoryStateManager,
         private book: BooksController
     ) {
-        super(history, { btnEnd: 'more_horiz' });
+        super(history, { template: 'actionTemplate', /* btnEnd: 'shopping_bag' */ });
         this.init();
     }
 
     private init() {
+        // this.addEventListener('click', () => {
+        //     this.history.pushState('/books/store', null);
+        // }, this.btnEnd, false);
+
         this.book.addChangeListener((status: string) => {
             if (status === 'BOOKS_CHANGE') {
                 this.update("update", this.book.books);
@@ -25,13 +29,31 @@ export class BooksApp extends App {
         const scrollArea = this.createScrollArea();
         const bookList = this.createElement('ul', ['titleList']);
         for(const book of books) {
-            const bookTitle = this.createElement('li', ['titleItem']);
-            const titleEl = this.createElement('div', ['itemTitle']);
+            // const bookHeight = Math.max(Math.round(book.totalPages / 200 * 100), 50);
+            const minHeight = Math.max(Math.round(book.totalPages * 0.5), 60);
+            const bookHeight = Math.min(minHeight, 120);
+            const bookTitle = this.createElement('li', ['bookItem'], { style: `height: ${bookHeight}px` });
+
+            const titleEl = this.createElement('div', ['bookTitle']);
+            if (bookHeight < 90) {
+                titleEl.classList.add('oneLine');
+            }
             titleEl.textContent = book.title;
+
+            // const authorEl = this.createElement('small', ['bookAuthor']);
+            // authorEl.textContent = book.author;
+
+            // const bookSize = Math.min(Math.round(book.totalPages / 350 * 100), 100);
+            const readingProgress =  Math.round(book.currantPage / book.totalPages * 100);
+
+            const progressContainerEl = this.createElement('div', ['progressContainer']);
+            const progressEl = this.createElement('div', ['progress'], { style: `height: ${readingProgress}%;` });
+            progressContainerEl.appendChild(progressEl);
+
             bookTitle.appendChild(titleEl);
-            const authorEl = this.createElement('small', ['itemDate']);
-            authorEl.textContent = book.author;
-            bookTitle.appendChild(authorEl);
+            // bookTitle.appendChild(authorEl);
+            bookTitle.appendChild(progressContainerEl);
+
             this.addEventListener('click', () => {
                 this.history.pushState('/books/reader', book.id);
             }, bookTitle)

@@ -9,6 +9,7 @@ export class BookReader extends Modal {
     private bookService: BookService;
 
     private startX: number = 0;
+    private startY: number = 0;
     private currentX: number = 0;
 
     constructor(
@@ -16,7 +17,7 @@ export class BookReader extends Modal {
         private book: BooksController,
         private device: DeviceController
     ) {
-        super(history, { template: 'readerTemplate', btnEnd: 'list' });
+        super(history, { template: 'readerTemplate', btnStart: 'bookmarks', btnEnd: 'list' });
 
         this.bookService = new BookService(this.mainArea);
         this.touchEventListeners = this.touchEventListeners.bind(this);
@@ -25,6 +26,16 @@ export class BookReader extends Modal {
     }
 
     private init() {
+        this.addEventListener('click', async () => {
+            // this.bookService.toggleBookmark();
+            // this.renderBookmark();
+            const result = await this.device.selectList.openPage('Bookmarks', this.bookService.getBookmarks());
+            if (result) {
+                this.bookService.chapter = parseInt(result);
+                this.hideMenu();
+            }
+        }, this.btnStart, false);
+
         this.addEventListener('click', async () => {
             const result = await this.device.selectList.openPage('Chapters', this.bookService.getChapters(), 'chapters');
             if (result) {
@@ -52,24 +63,26 @@ export class BookReader extends Modal {
     }
 
     private touchEventListeners() {
-        this.component.addEventListener('touchstart', (event) => {
+        this.mainArea.addEventListener('touchstart', (event) => {
             this.startX = event.touches[0].clientX;
+            this.startY = event.touches[0].clientY;
             this.currentX = event.touches[0].clientX;
         }, false);
 
-        this.component.addEventListener('touchmove', (event) => {
+        this.mainArea.addEventListener('touchmove', (event) => {
             this.currentX = event.touches[0].clientX;
             const moveX = this.currentX - this.startX;
             this.bookService.moving(moveX);
         }, false);
 
-        this.component.addEventListener('touchend', () => {
+        this.mainArea.addEventListener('touchend', () => {
             const moveX = this.currentX - this.startX;
             this.bookService.moveEnd(moveX);
         }, false);
 
-        this.component.addEventListener('mousedown', (event) => {
+        this.mainArea.addEventListener('mousedown', (event) => {
             this.startX = event.clientX;
+            this.startY = event.clientY;
             this.currentX = event.clientX;
 
             const onMouseMove = (moveEvent: MouseEvent) => {
@@ -80,9 +93,12 @@ export class BookReader extends Modal {
 
             const onMouseUp = () => {
                 const moveX = this.currentX - this.startX;
+                console.log(this.startY, this.mainArea.clientHeight);
                 if (moveX < 80 && moveX > -80) {
                     if (this.bookService.animating) return;
-                    if (this.startX < 100) {
+                    if (this.startX < 100 && this.startY > 478) {
+                        this.bookService.toggleBookmark();
+                    } else if (this.startX < 100) {
                         this.bookService.prev();
                         this.hideMenu();
                     } else if (this.startX < 240) {
@@ -105,6 +121,9 @@ export class BookReader extends Modal {
     }
 
     render(book: Book) {
+        const bookmarkEl = this.createElement("div", ['bookmark']);
+        this.mainArea.appendChild(bookmarkEl);
+
         this.bookService.init(book);
     }
 

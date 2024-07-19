@@ -27,6 +27,7 @@ export class BookService {
             this.renderNext(page);
         }
         this._page = page;
+        this.toggleCurrPageBookmark();
     }
 
     get chapters(): number[] {
@@ -36,6 +37,7 @@ export class BookService {
     set chapter(page: number) {
         this.renderChapter(page);
         this._page = page;
+        this.toggleCurrPageBookmark();
     }
 
     get prevPage() {
@@ -48,9 +50,20 @@ export class BookService {
         return this.page + 1;
     }
 
+    get percentage() {
+        if (!this.book) return 0;
+        return Math.round(this.book.currantPage / this.book.totalPages * 100);
+    }
+
+    get isBookmarked() {
+        if (!this.book) return false;
+        return this.book.bookmarks.includes(this._page);
+    }
+
     init(book: Book) {
         this.book = book;
         this.page = book.currantPage;
+        this.animating = false;
         this.renderPage();
     }
 
@@ -75,6 +88,21 @@ export class BookService {
         this.book.lastReadDate = new Date();
         this.book.currantPage = this.page;
         return this.book;
+    }
+
+    getBookmarks() {
+        const list: SelectItem[] = [];
+        const bookmarks = this.book!.bookmarks.sort((a, b) => a - b);
+
+        for(const item of bookmarks) {
+            list.push({
+                title: `Page number: ${item - 1}`,
+                value: item.toString(),
+                icon: 'bookmark'
+            });
+        }
+
+        return list;
     }
 
     getChapters() {
@@ -127,6 +155,17 @@ export class BookService {
         if (this.prevPageEl) {
             this.prevPageEl.style.transition = "translate .7s ease";
             if (!move) this.prevPageEl.style.translate = `-101% 0`;
+        }
+    }
+
+    toggleBookmark() {
+        if (!this.book) return;
+        if (this.isBookmarked) {
+            this.book.bookmarks = this.book.bookmarks.filter(item => item != this._page);
+            this.toggleCurrPageBookmark();
+        } else {
+            this.book.bookmarks.push(this._page);
+            this.toggleCurrPageBookmark();
         }
     }
 
@@ -187,6 +226,10 @@ export class BookService {
     }
 
     private renderPage() {
+        if (this.prevPageEl) this.prevPageEl.remove();
+        if (this.currPageEl) this.currPageEl.remove();
+        if (this.nextPageEl) this.nextPageEl.remove();
+
         this.currPageEl = this.createPage(this.page, "curr");
         if (this.prevPage) this.prevPageEl = this.createPage(this.prevPage, "prev");
         if (this.nextPage) this.nextPageEl = this.createPage(this.nextPage, "next");
@@ -229,7 +272,7 @@ export class BookService {
         footerEl.classList.add("page-footer");
         if (pageNumber > 1) {
             footerEl.innerHTML = `
-                <div class="pageNumber">${pageNumber}</div>
+                <div class="pageNumber">${pageNumber - 1}</div>
             `;
         }
 
@@ -378,5 +421,15 @@ export class BookService {
 
     private getChapter(page: number) {
         return this.book!.chapters.find(item => item.pageNumber === page);
+    }
+
+    private toggleCurrPageBookmark() {
+        const bookamrkEl = this.component.querySelector(".bookmark");
+        if (!bookamrkEl) return;
+        if (this.isBookmarked) {
+            bookamrkEl.classList.add("show");
+        } else {
+            bookamrkEl.classList.remove("show");
+        }
     }
 }

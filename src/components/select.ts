@@ -13,7 +13,7 @@ export class SelectList extends BaseComponent {
     public btnCenter?: HTMLButtonElement | undefined;
 
     constructor() {
-        super('appTemplate');
+        super('actionTemplate');
 
         this.component.classList.add('screen--popup')
         this.selectList = this.createBody()

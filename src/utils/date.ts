@@ -220,6 +220,10 @@ export class OSDate {
 
         return newDate;
     }
+
+    public static oldestDate() {
+        return new Date(-8640000000000000);
+    }
 }
 
 function getDateByTimeZone(date: Date, timeZone?: string): Date {

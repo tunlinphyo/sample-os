@@ -11,7 +11,11 @@ export class BooksController extends BaseController {
     }
 
     get books() {
-        return this._books;
+        return this._books.sort((a, b) => {
+            if (!a.lastReadDate) return 1;
+            if (!b.lastReadDate) return -1;
+            return b.lastReadDate.getTime() - a.lastReadDate.getTime();
+        });
     }
 
     private setupListeners() {
