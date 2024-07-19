@@ -192,10 +192,10 @@ body {
             top: 0;
             left: 0;
             width: calc(var(--grid) * 10);
-            height: calc(var(--grid) * 1.3);
+            height: calc(var(--grid) * 1.4);
 
             display: grid;
-            grid-template-columns: calc(var(--grid) * 4) 1fr calc(var(--grid) * 4);
+            grid-template-columns: 1fr calc(var(--grid) * 2.5) 1fr;
             align-items: flex-end;
 
             .statusStart,
@@ -219,7 +219,7 @@ body {
                 }
 
                 .icons {
-                    max-width: calc(var(--grid) * 4);
+                    max-width: calc(var(--grid) * 3.5);
                     background-color: var(--white);
                     padding: 2px 4px;
                     border-radius: 10px;
@@ -238,7 +238,7 @@ body {
                         content: attr(data-value);
                         position: absolute;
                         inset: 0;
-                        font-size: 12px;
+                        font-size: 11px;
                         line-height: 1;
                         font-weight: 600;
                         color: var(--white);
@@ -246,6 +246,7 @@ body {
 
                         display: grid;
                         place-items: center;
+                        display: none;
                     }
 
                     .batteryCharging {
@@ -256,7 +257,7 @@ body {
                 }
             }
 
-            .statusStart {
+            /* .statusStart {
                 justify-content: flex-start;
                 padding-inline-start: var(--padding);
             }
@@ -264,21 +265,21 @@ body {
             .statusEnd {
                 justify-content: flex-end;
                 padding-inline-end: var(--padding);
-            }
+            } */
 
             .island {
-                width: calc(var(--grid) * 2);
+                width: calc(var(--grid) * 2.5);
                 height: var(--grid);
 
-                /* border-radius: var(--grid);
+                border-radius: var(--grid);
                 background-color: #000;
-                outline: 1px solid #000; */
+                overflow: hidden;
 
                 display: flex;
-                justify-content: center;
+                justify-content: flex-end;
                 align-items: center;
+                padding-inline: 8px;
 
-                /* opacity: 0; */
                 .camera {
                     --size: calc(var(--grid) * 0.5);
                     width: var(--size);
@@ -702,7 +703,7 @@ body {
 
             .statusBar--container {
                 width: 100%;
-                height: calc(var(--grid) * 1.6);
+                height: calc(var(--grid) * 1.5);
 
                 display: grid;
                 grid-template-columns: 64px 1fr 64px;
@@ -1243,7 +1244,7 @@ body {
                 }
 
                 .toggleButton {
-                    width: calc(var(--grid) * 1.8);
+                    width: calc(var(--grid) * 1.7);
                     height: var(--grid);
                     border: 2px solid var(--black);
                     border-radius: var(--grid);
