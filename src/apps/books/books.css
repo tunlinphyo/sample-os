@@ -3,6 +3,7 @@
         overflow: hidden;
 
         .page {
+            cursor: grab;
             position: absolute;
             inset: 0;
             --space: calc(var(--grid) * 1.4);

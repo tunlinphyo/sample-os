@@ -195,7 +195,7 @@ body {
             height: calc(var(--grid) * 1.4);
 
             display: grid;
-            grid-template-columns: 1fr calc(var(--grid) * 2.5) 1fr;
+            grid-template-columns: 1fr calc(var(--grid) * 2.2) 1fr;
             align-items: flex-end;
 
             .statusStart,
@@ -268,7 +268,7 @@ body {
             } */
 
             .island {
-                width: calc(var(--grid) * 2.5);
+                width: calc(var(--grid) * 2.2);
                 height: var(--grid);
 
                 border-radius: var(--grid);
@@ -278,10 +278,10 @@ body {
                 display: flex;
                 justify-content: flex-end;
                 align-items: center;
-                padding-inline: 8px;
+                padding-inline: 10px;
 
                 .camera {
-                    --size: calc(var(--grid) * 0.5);
+                    --size: calc(var(--grid) * 0.45);
                     width: var(--size);
                     height: var(--size);
                     border-radius: 50%;
