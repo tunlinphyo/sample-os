@@ -91,24 +91,15 @@
             </div>
             <div class="mainArea">
                 <div class="dateToggle">
-                    <button id="prevButton">
-                        <span class="material-symbols-outlined icon--nu">chevron_left</span>
+                    <div class="currentDate" id="dateMonth">December</div>
+                    <button class="prevButton">
+                        <span class="material-symbols-outlined">arrow_back</span>
                     </button>
-                    <div class="currentDate" id="calendarMonth">December</div>
-                    <button id="nextButton">
-                        <span class="material-symbols-outlined icon--nu">chevron_right</span>
+                    <button class="nextButton">
+                        <span class="material-symbols-outlined">arrow_forward</span>
                     </button>
                 </div>
-                <div class="calendar title">
-                    <div class="cell cellTitle">Su</div>
-                    <div class="cell cellTitle">Mo</div>
-                    <div class="cell cellTitle">Tu</div>
-                    <div class="cell cellTitle">We</div>
-                    <div class="cell cellTitle">Th</div>
-                    <div class="cell cellTitle">Fr</div>
-                    <div class="cell cellTitle">Sa</div>
-                </div>
-                <div class="calendar" id="calendarDays"></div>
+                <div class="calendarUI" id="calendarUI"></div>
             </div>
             <div class="actionBar">
                 <div class="actionButton start"></div>
@@ -185,7 +176,7 @@
                     <div class="statusEnd">
                         <span class="icons">
                             <span class="material-symbols-outlined fill-icon" style="font-size: 18px; margin-right: 3px; display: none" id="headPhones">headphones</span>
-                            <span class="material-symbols-outlined" style="font-size: 18px; margin-right: 4px;" id="networkStatus">signal_wifi_4_bar</span>
+                            <span class="material-symbols-outlined" style="font-size: 18px; margin-right: 2px;" id="networkStatus">signal_wifi_4_bar</span>
                             <span class="material-symbols-outlined" style="font-size: 16px; margin-right: 10px; scale: 1.4 1;">signal_cellular_4_bar</span>
                             <span id="batteryPercentage" data-value="">
                                 <span class="material-symbols-outlined" style="font-size: 22px; rotate: 90deg; scale: 1.3 1.3;" id="batteryStatusIcon">battery_full</span>

@@ -122,11 +122,11 @@ export class BookService {
         if (this.animating) return;
         if (this.currPageEl) {
             this.currPageEl.style.transition = "none";
-            this.currPageEl.style.translate = `${num > 0 ? num * 0.5 : num}px 0`;
+            this.currPageEl.style.translate = `${num > 0 ? num * 0.35 : num}px 0`;
         }
         if (this.nextPageEl) {
             this.nextPageEl.style.transition = "none";
-            this.nextPageEl.style.translate = `calc(50% + ${num > 0 ? 0 : num * 0.5}px) 0`;
+            this.nextPageEl.style.translate = `calc(35% + ${num > 0 ? 0 : num * 0.35}px) 0`;
         }
         if (this.prevPageEl) {
             this.prevPageEl.style.transition = "none";
@@ -150,7 +150,7 @@ export class BookService {
         }
         if (this.nextPageEl) {
             this.nextPageEl.style.transition = "translate .7s ease";
-            if (!move) this.nextPageEl.style.translate = `50% 0`;
+            if (!move) this.nextPageEl.style.translate = `35% 0`;
         }
         if (this.prevPageEl) {
             this.prevPageEl.style.transition = "translate .7s ease";
@@ -174,7 +174,7 @@ export class BookService {
         this.animating = true;
 
         this.prevPageEl.style.translate = "0 0";
-        this.currPageEl.style.translate = "50% 0";
+        this.currPageEl.style.translate = "35% 0";
 
         const transitionEndHandler = () => {
             this.currPageEl!.removeEventListener('transitionend', transitionEndHandler);
@@ -286,7 +286,7 @@ export class BookService {
                 pageEl.style.zIndex = "6";
                 break;
             case "next":
-                pageEl.style.translate = "50% 0";
+                pageEl.style.translate = "35% 0";
                 pageEl.style.zIndex = "4";
                 break;
             default:

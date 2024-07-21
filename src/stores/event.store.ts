@@ -151,8 +151,8 @@ export class CalendarEventStore extends BaseManager<CalendarEvent> {
         }
     }
 
-    public getEvents(): CalendarEvent[] {
-        const today = new OSDate(this.viewDay).getYearMonthDay();
+    public getEvents(date?: Date): CalendarEvent[] {
+        const today = new OSDate(date || this.viewDay).getYearMonthDay();
         const todayStart = new Date(today.year, today.month, today.day);
         const todayEnd = new Date(today.year, today.month, today.day, 23, 59, 59, 999);
 
@@ -193,7 +193,8 @@ export class CalendarEventStore extends BaseManager<CalendarEvent> {
             return false;
         });
 
-        return todayEvents.sort((a, b) => new Date(a.startTime).getHours() - new Date(b.startTime).getHours());
+        // return todayEvents.sort((a, b) => new Date(a.startTime).getHours() - new Date(b.startTime).getHours());
+        return todayEvents.sort((a, b) => OSDate.getHMinM(a.startTime) - OSDate.getHMinM(b.startTime));
     }
 
     private generateCustomDates(startTime: Date, rule: string, until?: Date): Date[] {

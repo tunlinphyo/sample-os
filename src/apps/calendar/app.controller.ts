@@ -25,20 +25,18 @@ export class CalendarAppController {
                 {
                     pattern: '/events',
                     callback: () => {
-                        const eventsData = this.calendar.setEventsData(state);
-                        this.eventsPage.openPage('Events', eventsData);
+                        this.eventsPage.openPage('Events', state);
                     }
                 }, {
                     pattern: '/events/new',
                     callback: () => {
                         const date = OSDate.getNextIncrementTime(this.calendar.eventDay);
-                        this.eventEdit.openPage('New Event', date);
+                        this.eventEdit.openPage('New Event', state || date);
                     }
                 },  {
                     pattern: '/events/edit',
                     callback: () => {
-                        const event = this.calendar.getEvent(state);
-                        this.eventEdit.openPage('Edit Event', event);
+                        this.eventEdit.openPage('Edit Event', state);
                     }
                 }, {
                     pattern: '/events/detail',

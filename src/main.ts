@@ -6,7 +6,7 @@ import { ClockController } from './controllers/clock.controller';
 import { PhoneController } from './controllers/phone.controller';
 import { PhoneDummyController } from './controllers/phone.dummy.controller';
 import { SettingsController } from './controllers/settings.controller';
-import { Battery } from './device/battery';
+// import { Battery } from './device/battery';
 import { DeviceController } from './device/device';
 import { HistoryStateManager } from './device/history.manager';
 import { ClockAlarmStore } from './stores/alarm.store';
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.weather = weather;
 
     new PhoneDummyController(window.device, window.phone);
-    new Battery();
+    // new Battery();
     // const fullScreen = new FullscreenController();
 
     window.clock.addChangeListener(async (status: string, data: any) => {

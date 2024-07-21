@@ -20,15 +20,9 @@ export class CalendarController extends BaseController {
     get eventDay(): Date {
         return this.eventStore.eventDay;
     }
-    set eventDay(date: Date | "today" | "prev" | "next") {
-        if (typeof date === "string") {
-            if (date === "today") this.eventStore.eventDay = new Date();
-            else this.eventStore.changeDateByOneDay(date === "next")
-        } else {
-            this.eventStore.eventDay = date;
-        }
-        const events = this.eventStore.getEvents();
-        this.notifyListeners('EVENTS_DATE_CHANGE', { events, eventDate: this.eventDay });
+    set eventDay(date) {
+        this.eventStore.eventDay = date;
+        this.notifyListeners('EVENTS_DATE_CHANGE', date);
     }
 
     private setupListeners() {
@@ -37,31 +31,24 @@ export class CalendarController extends BaseController {
         });
     }
 
-    public getActives(date: Date) {
+    getActives(date: Date) {
         return this.eventStore.getActiveDates(date);
     }
 
-    public getEventsData(eventDate: Date) {
-        const events = this.eventStore.getEvents();
-        return { events, eventDate };
+    getEvents(date: Date) {
+        return this.eventStore.getEvents(date);
     }
 
-    public setEventsData(eventDate: Date) {
-        this.eventDay = eventDate;
-        const events = this.eventStore.getEvents();
-        return { events, eventDate };
-    }
-
-    public getEventData(id: string) {
+    getEventData(id: string) {
         const event = this.eventStore.get(id);
         return { event, eventDay: this.eventDay };
     }
 
-    public getEvent(id: string) {
+    getEvent(id: string) {
         return this.eventStore.get(id);
     }
 
-    public updateEvent(event: CalendarEvent) {
+    updateEvent(event: CalendarEvent) {
         this.tryThis(async() => {
             let id: string | undefined;
             if (event.id) {
@@ -73,7 +60,7 @@ export class CalendarController extends BaseController {
         });
     }
 
-    public deleteEvent(id: string) {
+    deleteEvent(id: string) {
         this.tryThis(async () => {
             await this.eventStore.del(id);
             this.notifyListeners('EVENT_DELETED', id);

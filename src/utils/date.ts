@@ -15,6 +15,7 @@ export class OSDate {
 
     public get12Hour() {
         const hours = this.date.getHours();
+
         const isAm = hours < 12 ? 'AM' : 'PM';
 
         const hour = String(hours % 12 || 12).padStart(2, '0')
@@ -28,8 +29,11 @@ export class OSDate {
         return (hours * 60) + minutes;
     }
 
-    public getHour() {
+    public getHour(hour12: boolean) {
         const hours = this.date.getHours();
+
+        if (!hour12) return String(hours).padStart(2, '0');
+
         const isAm = hours < 12 ? 'AM' : 'PM';
 
         const hour = String(hours % 12 || 12).padStart(2, '0')
@@ -223,6 +227,31 @@ export class OSDate {
 
     public static oldestDate() {
         return new Date(-8640000000000000);
+    }
+
+    public static getUniqueIdFromDate(date: Date): string {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const day = String(date.getDate()).padStart(2, '0');
+    
+        return `${year}${month}${day}`;
+    }  
+    
+    public static getHMinM(date: Date) {
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+
+        return (hours * 60) + minutes;
+    }
+
+    public static getMinutesDifference(date1: Date, date2: Date): number {
+        const time1 = date1.getTime();
+        const time2 = date2.getTime();
+    
+        const differenceInMilliseconds = Math.abs(time2 - time1);
+        const differenceInMinutes = Math.floor(differenceInMilliseconds / (1000 * 60));
+    
+        return differenceInMinutes;
     }
 }
 

@@ -5,7 +5,6 @@ import { Keyboard } from '../keyboard';
 import { OSDate } from '../../utils/date';
 import { OSArray } from '../../utils/arrays';
 import { phoneNumbers } from "../../stores/history.store";
-import { DatePickerData } from '../pickers/year.picker';
 import { TimePickerData } from '../pickers/time.picker';
 import { ChooseData, ChooseItem } from '../pickers/choose.picker';
 import { DeviceController } from '../../device/device';
@@ -223,8 +222,8 @@ export class CustomDateTimeForm extends CustomForm {
         if (config.type === 'date') this.toggleTime(false)
 
         this.dateInput.addEventListener('click', async () => {
-            const result = (await this.device.datePicker.openPage('', { ...this.dateData }));
-            if (result && typeof result != "boolean") this.dateData = result as DatePickerData;
+            const result = await this.device.datePicker.openPage('Date Picker', this.date, true);
+            if (result && typeof result != "boolean") this.value = result as Date;
         });
         this.timeInput.addEventListener('click', async () => {
             const result = (await this.device.timePicker.openPage<TimePickerData>('Time Picker', { ...this.timeData }));
@@ -241,18 +240,6 @@ export class CustomDateTimeForm extends CustomForm {
         this.dateInput.textContent = OSDate.formatShortDate(value);
         this.timeInput.textContent = OSDate.getFormatTime(value, this.device.hour12);
         this.dispatchFormEvent('change', value);
-    }
-
-    // Date
-    get dateData() {
-        return new OSDate(this.value).getYearMonthDay();
-    }
-    set dateData(value: DatePickerData) {
-        this.date.setFullYear(value.year);
-        this.date.setMonth(value.month);
-        this.date.setDate(value.day);
-
-        this.value = this.date;
     }
 
     // Time

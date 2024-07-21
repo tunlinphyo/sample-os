@@ -1,12 +1,22 @@
 import { App } from "../../../components/app";
-import { CalendarRenderer } from "../../../components/calendar";
+import { CalendarService } from "../../../components/calendar/calendar";
 import { CalendarController } from "../../../controllers/calendar.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
+import { OSBrowser } from "../../../utils/browser";
+import { OSNumber } from "../../../utils/number";
 
 
 export class CalendarApp extends App {
-    private calendarRenderer: CalendarRenderer;
+    private calendarService: CalendarService;
+
+    private dateMonthEl: HTMLElement;
+    private prevButton: HTMLElement;
+    private nextButton: HTMLElement;
+
+    private startX: number = 0;
+    private moveX: number = 0;
+    private currentX: number = 0;
 
     constructor(
         history: HistoryStateManager,
@@ -15,40 +25,83 @@ export class CalendarApp extends App {
     ) {
         super(history, { template: 'calendarTemplate', btnStart: 'today', btnEnd: 'add' });
 
-        this.onCallback = this.onCallback.bind(this);
-        this.calendarRenderer = new CalendarRenderer(this.device, this.mainArea, this.onCallback);
-        this.mainArea = this.getElement('#journalDays');
+        this.dateMonthEl = this.getElement('#dateMonth');
+        this.prevButton = this.getElement(".prevButton");
+        this.nextButton = this.getElement(".nextButton");
+        this.calendarService = new CalendarService(
+            this.getElement('#calendarUI'), 
+            this.dateMonthEl, async (date: Date) => {
+                return this.calendar.getActives(date);
+            }
+        );
+
         this.init();
+        this.touchEventListeners();
     }
 
     private init() {
         this.render(this.calendar.eventDay);
 
-        this.addEventListener('click', () => {
-            this.calendar.eventDay = "today";
-        }, this.btnStart, false);
+        this.addEventListener("click", () => {
+            // this.calendarService.prev();
+            this.calendar.eventDay = this.calendarService.prevDateObject;
+        }, this.prevButton, false);
 
-        this.addEventListener('click', () => {
-            this.history.pushState('/events/new', null);
-        }, this.btnEnd, false);
+        this.addEventListener("click", () => {
+            // this.calendarService.next();
+            this.calendar.eventDay = this.calendarService.nextDateObject;
+        }, this.nextButton, false);
 
-        this.calendarRenderer.listen<Date>('onDateClick', (data) => {
-            if (!data) return;
-            this.history.pushState('/events', data);
-        });
+        if (OSBrowser.isTouchSupport()) {
+            this.addEventListener('touchend', (event) => {
+                event.preventDefault();
+                this.calendar.eventDay = new Date();
+            }, this.btnStart, false);
 
-        this.calendarRenderer.listen<Date>('viewDateChange', (data) => {
-            if (!data) return;
-            this.calendar.eventDay = data;
-        });
+            this.addEventListener('touchend', (event) => {
+                event.preventDefault();
+                this.history.pushState('/events/new', null);
+            }, this.btnEnd, false);
+        } else {
+            this.addEventListener('click', () => {
+                this.calendar.eventDay = new Date();
+            }, this.btnStart, false);
 
+            this.addEventListener('click', () => {
+                this.history.pushState('/events/new', null);
+            }, this.btnEnd, false);
+        }
 
-        const calendarListener = (status: string, data: any) => {
+        this.addEventListener('click', async () => {
+            const result = await this.device.yearPicker.openPage('Year, Month', { 
+                year: this.calendarService.date.year, 
+                month: this.calendarService.date.month 
+            });
+            if (result && typeof result !== 'boolean') {
+                this.calendarService.date = result;
+            }
+        }, this.dateMonthEl, false);
+
+        this.calendarService.addChangeListener((status: string, date: Date) => {
+            if (status === 'DATE' && OSNumber.isInRange(this.moveX, [-1, 1])) {
+                this.history.pushState('/events', date);
+                this.calendar.eventDay = date;
+            }
+            if (status === 'DATE_CHANGE') {
+                this.calendar.eventDay = date;
+            }
+        })
+
+        const calendarListener = (status: string) => {
             switch (status) {
                 case 'EVENTS_DATE_CHANGE':
                 case 'EVENT_UPDATED':
                 case 'EVENT_DELETED':
-                    this.update('update', data.eventDate)
+                    if (this.calendarService.isSameDate(this.calendar.eventDay)) {
+                        this.calendarService.updatedData();
+                    } else {
+                        this.calendarService.toDate = this.calendar.eventDay;
+                    }
                     break;
             }
         };
@@ -60,16 +113,53 @@ export class CalendarApp extends App {
         });
     }
 
-    async onCallback(date: Date): Promise<Date[]> {
-        return this.calendar.getActives(date);
+    private touchEventListeners() {
+        this.mainArea.addEventListener('touchstart', (event) => {
+            this.startX = event.touches[0].clientX;
+            // this.startY = event.touches[0].clientY;
+            this.currentX = event.touches[0].clientX;
+        }, false);
+
+        this.mainArea.addEventListener('touchmove', (event) => {
+            this.currentX = event.touches[0].clientX;
+            const moveX = this.currentX - this.startX;
+            this.calendarService.moving(moveX);
+        }, false);
+
+        this.mainArea.addEventListener('touchend', () => {
+            const moveX = this.currentX - this.startX;
+            this.moveX = moveX;
+            this.calendarService.moveEnd(moveX);
+        }, false);
+
+        this.mainArea.addEventListener('mousedown', (event) => {
+            this.startX = event.clientX;
+            // this.startY = event.clientY;
+            this.currentX = event.clientX;
+
+            const onMouseMove = (moveEvent: MouseEvent) => {
+                this.currentX = moveEvent.clientX;
+                const moveX = this.currentX - this.startX;
+                this.calendarService.moving(moveX);
+            };
+
+            const onMouseUp = () => {
+                const moveX = this.currentX - this.startX;
+                this.moveX = moveX;
+                this.calendarService.moveEnd(moveX);
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+            };
+
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        }, false);
     }
 
     render(data?: Date) {
         if (!data) data = new Date();
-        this.calendarRenderer.data = data;
+        this.calendarService.init(data);
     }
 
-    update(_: string, data: Date) {
-        this.render(data)
-    }
+    update() {}
 }

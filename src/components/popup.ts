@@ -42,7 +42,7 @@ export abstract class Popup extends BaseComponent {
         }, this.component, false)
     }
 
-    public openPage<T>(title?: string, data?: T[] | T): Promise<T|boolean> {
+    public openPage<T>(title?: string, data?: T[] | T, isCalendar?: boolean): Promise<T|boolean> {
         return new Promise((resolve) => {
             try {
                 this.getElement('#device', document.body).appendChild(this.component)
@@ -62,7 +62,7 @@ export abstract class Popup extends BaseComponent {
                 }, this.btnEnd);
             }
 
-            this.mainArea.innerHTML = ''
+            if (!isCalendar) this.mainArea.innerHTML = '';
             this.render(data);
 
             if (title) this.getElement('.statusBar-title').innerHTML = title;

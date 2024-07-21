@@ -209,6 +209,20 @@ class EventForm extends FormComponent {
 
         return events;
     }
+
+    getCurrentData() {
+        return {
+            id: this.event?.id || "",
+            title: this.title!.value,
+            description: this.description!.value,
+            startTime: new Date(this.startTime!.value),
+            endTime: new Date(this.endTime!.value),
+            allDay: this.allDay?.value,
+            repeat: this.repeat!.value as RepeatType,
+            endRepeat: this.endRepeat!.value as EndRepeatType,
+            until: this.endDate!.value,
+        }
+    }
 }
 
 export class EventEditPage extends Modal {
@@ -226,12 +240,14 @@ export class EventEditPage extends Modal {
     private init() {
         this.addEventListener('click', () => {
             const events = this.form!.getData();
+            console.log(events);
             events.forEach(event => {
                 this.calendar.updateEvent(event);
             });
         }, this.btnEnd, false);
 
-        const calendarListener = (status: string) => {
+        const calendarListener = (status: string, data: any) => {
+            console.log(status, data);
             switch (status) {
                 case 'EVENT_UPDATED':
                     this.closePage();
@@ -243,6 +259,11 @@ export class EventEditPage extends Modal {
 
         this.device.addEventListener('closeApp', () => {
             this.calendar.removeChangeListener(calendarListener);
+            const data = this.form?.getCurrentData();
+            if (data) {
+                if (data.id) this.history.updateState(`/events/edit`, data);
+                else this.history.updateState(`/events/new`, data);
+            }
         });
     }
 

@@ -1,4 +1,5 @@
 @layer component {
+
     .mainArea {
         overflow: hidden;
 
@@ -6,7 +7,7 @@
             position: absolute;
             z-index: 9;
             width: 24px;
-            height: 48px;
+            height: 42px;
             background-color: var(--black);
             clip-path: polygon(50% 16%, 100% 0, 100% 100%, 0 100%, 0 0);
 
@@ -36,7 +37,6 @@
             outline: 2px solid var(--black);
             outline-offset: 0;
 
-
             transition: translate .7s ease;
 
             /* background-image: linear-gradient(#444cf722 1px, transparent 1px), linear-gradient(to right, #444cf722 1px, transparent 1px);
@@ -45,6 +45,7 @@
             .page-content {
                 padding-inline: var(--padding);
                 text-align: justify;
+                pointer-events: none;
 
                 > p {
                     margin-top: 12px;
@@ -105,10 +106,11 @@
         }
 
         .titleList {
-            padding-block: calc(var(--grid) * 0.5) calc(var(--grid) * 1.5);
-            padding-inline: calc(var(--grid) * 0.4);
+            padding-block: calc(var(--grid) * 1.5) calc(var(--grid) * 1.5);
+            padding-inline: calc(var(--grid) * 0.5);
 
             .bookItem {
+                cursor: pointer;
 
                 border: 3px solid var(--black);
                 border-right: none;
@@ -124,6 +126,13 @@
 
                 padding-inline: 16px;
                 position: relative;
+
+                &:first-child {
+                    transform-origin: bottom left;
+                    translate: 5px 0;
+                    rotate: -7deg;
+                    margin-bottom: 0;
+                }
 
                 .bookTitle {
                     font-size: 20px;
@@ -141,7 +150,7 @@
                     position: absolute;
                     z-index: 0;
                     top: 2px; bottom: 2px;
-                    right: 8px;
+                    right: 12px;
                     width: 3px;
                     background-color: var(--black);
 

@@ -95,6 +95,7 @@ body {
 }
 
 body {
+    --main-font: 'Poppins', sans-serif, "Noto Sans Symbols 2", sans-serif;
     --number-fonts: "IBM Plex Mono", monospace;
 
     display: flex;
@@ -102,7 +103,7 @@ body {
     align-items: center;
     background-color: #fff;
     color: var(--black);
-    font-family: 'Poppins', sans-serif, "Noto Sans Symbols 2", sans-serif;
+    font-family: var(--main-font);
     font-size: 16px;
     font-weight: 500;
 
@@ -273,6 +274,7 @@ body {
 
                 border-radius: var(--grid);
                 background-color: #000;
+                outline: 1px solid #000;
                 overflow: hidden;
 
                 display: flex;
@@ -1347,15 +1349,13 @@ body {
                 width: calc(var(--grid) * 10);
                 height: calc(var(--grid) * 2);
 
-                /* background-color: #f001; */
-
                 display: grid;
-                grid-template-columns: calc(var(--grid) * 2) 1fr calc(var(--grid) * 2);
+                grid-template-columns: 1fr calc(var(--grid) * 1.6) calc(var(--grid) * 1.8);
                 align-items: center;
 
-                >button {
-                    width: var(--button);
-                    height: var(--button);
+                > button {
+                    width: calc(var(--grid) * 1.5);
+                    height: calc(var(--grid) * 1.5);
 
                     display: grid;
                     place-items: center;
@@ -1363,15 +1363,38 @@ body {
 
                 .currentDate {
                     display: flex;
-                    justify-content: center;
+                    justify-content: flex-start;
                     align-items: center;
-                    font-size: 18px;
+                    font-size: 20px;
+                    padding-inline-start: var(--padding);
+                    cursor: pointer;
                 }
             }
 
-            .caleandarContainer {
+            .calendarUI {
                 width: calc(var(--grid) * 10);
                 height: calc(var(--grid) * 9);
+
+                position: relative;
+                overflow: hidden;
+
+                .caleandarContainer {
+                    position: absolute;
+                    inset: 0;
+                    background-color: var(--white);
+
+                    transition: translate .7s ease;
+
+                    &.curr {
+                        translate: 0 0;
+                    }
+                    &.prev {
+                        translate: -100% 0;
+                    }
+                    &.next {
+                        translate: 100% 0;
+                    }
+                }
             }
 
             .calendar {
@@ -1397,7 +1420,8 @@ body {
                     font-weight: 500;
 
                     &.cellTitle {
-                        font-weight: 600;
+                        font-weight: 500;
+                        font-family: var(--main-font);
                     }
 
                     &.cellToday {
@@ -1794,6 +1818,9 @@ body {
             justify-content: space-between;
             align-items: center;
             pointer-events: none;
+
+            position: relative;
+            z-index: 1;
 
             &.withBorder {
                 height: calc(var(--grid) * 3);
