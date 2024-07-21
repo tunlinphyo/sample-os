@@ -51,6 +51,7 @@ export class EventsService extends BaseController {
 
     public animating: boolean = false;
     private scrollY: number = 0;
+    private toSchool: boolean = false;
 
     constructor(
         private device: DeviceController,
@@ -99,7 +100,12 @@ export class EventsService extends BaseController {
         this.renderAction();
         this.renderEvents(this.date);
         this.touchEventListeners();
-        this.scrollTo();
+        if (this.isToday(date)) {
+            this.toSchool = true;
+            this.scrollTo();
+        } else {
+            this.toSchool = false;
+        }
     }
 
     moving(x: number, y: number) {
@@ -176,10 +182,13 @@ export class EventsService extends BaseController {
         }
     }
 
-    private scrollTo() {
+    private scrollTo(isSmooth?: boolean) {
         setTimeout(() => {
             const y = this.getTop(new Date());
-            if (this.currDateEl) this.currDateEl.scrollTo(0, (y - 140));
+            if (this.currDateEl) this.currDateEl.scrollTo({
+                top: y - 140,
+                behavior: isSmooth ? 'smooth' : 'instant'
+            });
         }, 0);
     }
 
@@ -216,6 +225,7 @@ export class EventsService extends BaseController {
             const prevDate = this.getPrevDate(this.date);
             this.prevDateEl = this.createEvents(prevDate, this.callback(prevDate), "prev");
             this.animating = false;
+            if (this.isToday(this.date)) this.scrollTo(true);
         };
         this.currDateEl.addEventListener('transitionend', transitionEndHandler);
     }
@@ -237,6 +247,7 @@ export class EventsService extends BaseController {
             const nextDate = this.getNextDate(this.date);
             this.nextDateEl = this.createEvents(nextDate, this.callback(nextDate), "next");
             this.animating = false;
+            if (this.isToday(this.date)) this.scrollTo(true);
         };
         this.currDateEl.addEventListener('transitionend', transitionEndHandler);
     }
@@ -261,7 +272,7 @@ export class EventsService extends BaseController {
             const prevDate = this.getPrevDate(date);
             this.prevDateEl = this.createEvents(prevDate, this.callback(prevDate), "prev");
             this.animating = false;
-            this.scrollTo();
+            if (this.isToday(date)) this.scrollTo();
         };
         this.currDateEl!.addEventListener('transitionend', transitionEndHandler);
     }
@@ -286,7 +297,7 @@ export class EventsService extends BaseController {
             const nextDate = this.getNextDate(date);
             this.nextDateEl = this.createEvents(nextDate, this.callback(nextDate), "next");
             this.animating = false;
-            this.scrollTo();
+            if (this.isToday(date)) this.scrollTo();
         };
         this.currDateEl!.addEventListener('transitionend', transitionEndHandler);
     }
@@ -326,6 +337,7 @@ export class EventsService extends BaseController {
                 return;
             }
             this.scrollY = scrollArea.scrollTop;
+            this.toSchool = true;
             if (this.currDateEl && this.currDateEl.id != scrollArea.id) {
                 this.currDateEl.scrollTo(0, this.scrollY);
                 // this.currDateEl.scrollTop = this.scrollY;
@@ -365,7 +377,8 @@ export class EventsService extends BaseController {
         container.appendChild(hourList);
 
         setTimeout(() => {
-            elem.scrollTo(0, this.scrollY);
+            // if (this.isToday(this.date)) 
+            if (this.toSchool) elem.scrollTo(0, this.scrollY);
         }, 0);
     }
 

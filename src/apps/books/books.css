@@ -7,7 +7,7 @@
             position: absolute;
             z-index: 9;
             width: 24px;
-            height: 42px;
+            height: 48px;
             background-color: var(--black);
             clip-path: polygon(50% 16%, 100% 0, 100% 100%, 0 100%, 0 0);
 
@@ -91,6 +91,16 @@
                         font-size: var(--grid);
                         font-weight: 500;
                     }
+
+                    > h2 {
+                        font-size: 28px;
+                        font-weight: 500;
+                    }
+
+                    > h4 {
+                        font-size: 20px;
+                        font-weight: 500;
+                    }
                 }
             }
 
@@ -128,6 +138,7 @@
                 position: relative;
 
                 &:first-child {
+                    width: calc(100% - 4px);
                     transform-origin: bottom left;
                     translate: 5px 0;
                     rotate: -7deg;

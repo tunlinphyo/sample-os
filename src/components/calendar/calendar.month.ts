@@ -133,7 +133,7 @@ export class CalendarMonth {
 
     private renderOverflow(bodyEl: HTMLElement, firstDay: number, last: number, lastDate: number, overflow: number, today: Date) {
         for (let i = firstDay; i > 0; i--) {
-            const dateEl = this.createElement('div', ['cell']);
+            const dateEl = this.createElement('div', ['cell'], { "data-day": `${last + 1}` });
             if (overflow > 0) {
                 last += 1;
                 if (last <= lastDate) {
@@ -143,10 +143,11 @@ export class CalendarMonth {
                     if (isToday) dateEl.classList.add('cellToday');
                     if (currentDate > today) dateEl.classList.add('disabled');
                     if (isActive) dateEl.classList.add(this.isPicker ? 'selected' : 'callActive');
-                    dateEl.textContent = this.padStart(last);
-                    dateEl.addEventListener("click", () => {
-                        this.callback(new Date(this.year, this.month, last));
+                    dateEl.addEventListener("click", (event) => {
+                        const elem = event.target as HTMLElement;
+                        this.callback(new Date(this.year, this.month, Number(elem.dataset.day)));
                     });
+                    dateEl.textContent = this.padStart(last);
                 } else {
                     dateEl.classList.add('cellGhost');
                 }

@@ -42,12 +42,12 @@ export class BookService {
 
     get prevPage() {
         if (!this.page) return 0;
-        return this.page - 1;
+        return Math.max(this.page - 1, 0);
     }
     get nextPage() {
-        if (!this.page) return 2;
-        if (this.book?.totalPages === this.page) return 0;
-        return this.page + 1;
+        if (!this.page) return 0;
+        if (this.book!.totalPages <= this.page) return 0;
+        return Math.min(this.page + 1, this.book?.totalPages || 0);
     }
 
     get percentage() {
@@ -138,11 +138,11 @@ export class BookService {
         if (this.animating) return;
         let move: boolean = false;
         if (num > 80) {
-            this.page = this.page - 1;
-            move = true;
+            move = this.page != 1;
+            this.page = Math.max(this.page - 1, 1);
         } else if (num < -80) {
-            this.page = this.page + 1;
-            move = true;
+            move = this.page != this.book!.totalPages;
+            this.page = Math.min(this.page + 1, this.book!.totalPages);
         }
         if (this.currPageEl) {
             this.currPageEl.style.transition = "translate .7s ease";
@@ -230,6 +230,8 @@ export class BookService {
         if (this.currPageEl) this.currPageEl.remove();
         if (this.nextPageEl) this.nextPageEl.remove();
 
+        console.log("RENDER", this.nextPage);
+
         this.currPageEl = this.createPage(this.page, "curr");
         if (this.prevPage) this.prevPageEl = this.createPage(this.prevPage, "prev");
         if (this.nextPage) this.nextPageEl = this.createPage(this.nextPage, "next");
@@ -264,6 +266,8 @@ export class BookService {
             if (chapter) textEl.innerHTML = this.getChapterPage(chapter);
         } else if (this.chapters.includes(pageNumber + 1)) {
             textEl.innerHTML = this.getPreChapter();
+        } else if (pageNumber === this.book?.totalPages) {
+            textEl.innerHTML = this.getAboutAuthor();
         } else {
             textEl.innerHTML = this.getBodyPage();
         }
@@ -304,6 +308,19 @@ export class BookService {
             <div class="cover">
                 <h1>${this.book?.title}</h1>
                 <p>${this.book?.author}</p>
+            </div>
+        `;
+    }
+
+    private getAboutAuthor() {
+        return `
+            <div class="cover">
+                <h2>About the Author</h2>
+                <h4>${this.book?.author}</h4>
+                <p>
+                    Aliquam nulla facilisi cras odio eu feugiat pretium nibh. Blandit cursus risus at ultrices. Et netus et malesuada fames ac
+                    turpis egestas sed tempus. Suspendisse in est ante in nibh.
+                </p>
             </div>
         `;
     }
