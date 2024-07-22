@@ -57,7 +57,7 @@ export class DeviceController extends BaseComponent {
         this.outgoingCall = new OutgoingCall();
         this.incomingCall = new IncomingCall();
         this.callScreen = new CallScreen();
-        this.datePicker = new DatePicker();
+        this.datePicker = new DatePicker(this.timeZone);
         this.timePicker = new TimePicker(this);
         this.timeWheel = new TimeWheel();
         this.yearPicker = new YearPicker();

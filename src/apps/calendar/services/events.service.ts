@@ -6,34 +6,114 @@ import { OSNumber } from "../../../utils/number";
 
 export type EventsCallback = (date: Date) => CalendarEvent[];
 export type SetDateCallback = (date: Date) => void;
+export interface HourMap {
+    hour12: string;
+    hour24: string;
+}
 
 export class EventsService extends BaseController {
     private _date: Date = new Date();
-    private hourMap: Record<string, number> = {
-        '12 AM': 0,
-        '1 AM': 1,
-        '2 AM': 2,
-        '3 AM': 3,
-        '4 AM': 4,
-        '5 AM': 5,
-        '6 AM': 6,
-        '7 AM': 7,
-        '8 AM': 8,
-        '9 AM': 9,
-        '10 AM': 10,
-        '11 AM': 11,
-        'Noon': 12,
-        '1 PM': 13,
-        '2 PM': 14,
-        '3 PM': 15,
-        '4 PM': 16,
-        '5 PM': 17,
-        '6 PM': 18,
-        '7 PM': 19,
-        '8 PM': 20,
-        '9 PM': 21,
-        '10 PM': 22,
-        '11 PM': 23,
+    private hoursMap: Record<number, HourMap> = {
+        0: {
+            hour12: '12 AM',
+            hour24: '00:00'
+        },
+        1: {
+            hour12: '1 AM',
+            hour24: '01:00'
+        },
+        2: {
+            hour12: '2 AM',
+            hour24: '02:00'
+        },
+        3: {
+            hour12: '3 AM',
+            hour24: '03:00'
+        },
+        4: {
+            hour12: '4 AM',
+            hour24: '04:00'
+        },
+        5: {
+            hour12: '5 AM',
+            hour24: '05:00'
+        },
+        6: {
+            hour12: '6 AM',
+            hour24: '06:00'
+        },
+        7: {
+            hour12: '7 AM',
+            hour24: '07:00'
+        },
+        8: {
+            hour12: '8 AM',
+            hour24: '08:00'
+        },
+        9: {
+            hour12: '9 AM',
+            hour24: '09:00'
+        },
+        10: {
+            hour12: '10 AM',
+            hour24: '10:00'
+        },
+        11: {
+            hour12: '11 AM',
+            hour24: '11:00'
+        },
+        12: {
+            hour12: 'Noon',
+            hour24: '12:00'
+        },
+        13: {
+            hour12: '1 PM',
+            hour24: '13:00'
+        },
+        14: {
+            hour12: '2 PM',
+            hour24: '14:00'
+        },
+        15: {
+            hour12: '3 PM',
+            hour24: '15:00'
+        },
+        16: {
+            hour12: '4 PM',
+            hour24: '16:00'
+        },
+        17: {
+            hour12: '5 PM',
+            hour24: '17:00'
+        },
+        18: {
+            hour12: '6 PM',
+            hour24: '18:00'
+        },
+        19: {
+            hour12: '7 PM',
+            hour24: '19:00'
+        },
+        20: {
+            hour12: '8 PM',
+            hour24: '20:00'
+        },
+        21: {
+            hour12: '9 PM',
+            hour24: '21:00'
+        },
+        22: {
+            hour12: '10 PM',
+            hour24: '22:00'
+        },
+        23: {
+            hour12: '11 PM',
+            hour24: '23:00'
+        },
+        24: {
+            hour12: '12 AM',
+            hour24: '00:00'
+        },
     }
 
     private prevDateEl: HTMLElement | undefined;
@@ -87,11 +167,7 @@ export class EventsService extends BaseController {
     }
 
     get hours() {
-        return [
-            '12 AM', '1 AM', '2 AM', '3 AM', '4 AM', '5AM', '6 AM', '7AM', '8 AM', '9 AM', '10 AM', '11 AM',
-            'Noon',
-            '1 PM', '2 PM', '3 PM', '4 PM', '5 PM', '6 PM', '7 PM', '8 PM', '9 PM', '10 PM', '11 PM', '12 AM', 
-        ];
+        return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
     }
 
     init(date: Date) {
@@ -184,7 +260,7 @@ export class EventsService extends BaseController {
 
     private scrollTo(isSmooth?: boolean) {
         setTimeout(() => {
-            const y = this.getTop(new Date());
+            const y = this.getTop(new OSDate().getDateByTimeZone(this.device.timeZone));
             if (this.currDateEl) this.currDateEl.scrollTo({
                 top: y - 140,
                 behavior: isSmooth ? 'smooth' : 'instant'
@@ -323,7 +399,7 @@ export class EventsService extends BaseController {
 
         const eventList = this.createElement('div', ['eventList']);
         // this.renderNoEvent(eventList, 'No Event');
-        
+
         dayArea.appendChild(eventList);
         scrollArea.appendChild(dayArea);
 
@@ -361,12 +437,12 @@ export class EventsService extends BaseController {
 
         for (const hour of this.hours) {
             const hourItem = this.createElement('div', ['hourItem']);
-            hourItem.textContent = hour;
+            hourItem.textContent = this.getHourString(hour, this.device.hour12);
 
             hourItem.addEventListener('click', () => {
                 if (OSNumber.isInRange(this.moveX, [-1, 1]) && OSNumber.isInRange(this.moveY, [-1, 1])) {
                     const eventDate = new Date(date);
-                    eventDate.setHours(this.hourMap[hour]);
+                    eventDate.setHours(hour);
                     this.notifyListeners('NEW_EVENT', eventDate);
                 }
             })
@@ -377,7 +453,7 @@ export class EventsService extends BaseController {
         container.appendChild(hourList);
 
         setTimeout(() => {
-            // if (this.isToday(this.date)) 
+            // if (this.isToday(this.date))
             if (this.toSchool) elem.scrollTo(0, this.scrollY);
         }, 0);
     }
@@ -393,7 +469,7 @@ export class EventsService extends BaseController {
         let move: boolean = false;
         let index: number = 0;
 
-        for(const event of events) {
+        for (const event of events) {
             const eventItem = this.createElement('div', ['eventItem']);
             const eventName = this.createElement('div', ['eventName']);
             eventName.textContent = event.title;
@@ -407,19 +483,19 @@ export class EventsService extends BaseController {
             } else {
                 const diffMinutes = OSDate.getMinutesDifference(event.startTime, event.endTime);
                 const isOverlap = prevEnd ? event.startTime.getTime() < prevEnd.getTime() : false;
-                prevEnd = prevEnd 
+                prevEnd = prevEnd
                     ? (event.endTime.getTime() < prevEnd!.getTime() ? prevEnd : event.endTime)
                     : event.endTime;
-                
-                const top = this.getTop(event.startTime);
+
+                const top = this.getTop(new OSDate(event.startTime).getDateByTimeZone(this.device.timeZone));
                 const height = OSNumber.mapRange(diffMinutes, 0, 60, 0, 51);
                 eventItem.style.top = `${top}px`;
                 eventItem.style.minHeight = `${height}px`;
-    
+
                 if (height < 50) {
                     eventItem.classList.add("oneLine");
                 }
-    
+
                 if (move) {
                     move = false;
                     if (isOverlap) eventItem.style.right = 'calc(var(--half) + 30px)';
@@ -550,11 +626,16 @@ export class EventsService extends BaseController {
         const dayArea = elem.querySelector('.dayArea');
         if (!dayArea) return;
         const nowEl = this.createElement('div', ['nowLine']);
-        
-        const top = this.getTop(new Date());
+
+        const top = this.getTop(new OSDate().getDateByTimeZone(this.device.timeZone));
         nowEl.style.top = `${top}px`;
 
         dayArea.appendChild(nowEl);
+    }
+
+    private getHourString(hour: number, hour12: boolean) {
+        if (hour12) return this.hoursMap[hour].hour12;
+        return this.hoursMap[hour].hour24;
     }
 
     // private renderNoEvent(parentEl: HTMLElement, message: string) {
@@ -584,13 +665,13 @@ export class EventsService extends BaseController {
     }
 
     private isToday(date: Date) {
-        const today = new Date();
+        const today = new OSDate().getDateByTimeZone(this.device.timeZone);
         today.setHours(0, 0, 0, 0);
         return today.toDateString() === date.toDateString()
     }
 
     private getTop(date: Date) {
-        const minutes = OSDate.getHMinM(new Date(date)) + 30;
+        const minutes = OSDate.getHMinM(new Date(date)) + 28;
         const parentH = 1224;
         const minutesMax = 24 * 60;
 

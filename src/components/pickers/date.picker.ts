@@ -21,18 +21,19 @@ export class DatePicker extends Popup {
     private moveX: number = 0;
     private currentX: number = 0;
 
-    constructor() {
+    constructor(private timeZone: string) {
         super({ btnStart: 'today', btnEnd: true }, 'datePickerTemplate');
-        
+
         this.yearPicker = new YearPicker();
         this.dateMonthEl = this.getElement('#dateMonth');
         this.prevButton = this.getElement(".prevButton");
         this.nextButton = this.getElement(".nextButton");
 
         this.calendarService = new CalendarService(
-            this.getElement('#calendarUI'), 
-            this.dateMonthEl, 
+            this.getElement('#calendarUI'),
+            this.dateMonthEl,
             async () => [this.data],
+            this.timeZone,
             true
         );
         this.init();
@@ -53,14 +54,13 @@ export class DatePicker extends Popup {
         }, this.nextButton, false);
 
         this.addEventListener('click', () => {
-            // this.data = new Date();
-            this.calendarService.toDate = new Date();
+            this.calendarService.today();
         }, this.btnStart, false);
 
         this.addEventListener('click', async () => {
-            const result = await this.yearPicker.openPage('Year, Month', { 
-                year: this.calendarService.date.year, 
-                month: this.calendarService.date.month 
+            const result = await this.yearPicker.openPage('Year, Month', {
+                year: this.calendarService.date.year,
+                month: this.calendarService.date.month
             });
             if (result && typeof result !== 'boolean') {
                 this.calendarService.date = result;
@@ -71,6 +71,9 @@ export class DatePicker extends Popup {
             if (status === 'DATE' && OSNumber.isInRange(this.moveX, [-1, 1])) {
                 this.data = date;
                 this.calendarService.updatedData();
+            }
+            if (status === 'DATE_CHANGE') {
+                this.calendarService.toDate = date;
             }
         });
     }

@@ -4,6 +4,7 @@ import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
 import { Alarm, RepeatOption } from "../../../stores/alarm.store";
 import { OSArray } from "../../../utils/arrays";
+import { OSDate } from "../../../utils/date";
 
 export class ClockApp extends App {
     private hourHand: HTMLElement;
@@ -80,10 +81,10 @@ export class ClockApp extends App {
             const alarmBtn = this.createElement('button', ['alermButton']);
             const timeEL = this.createElement('div', ['clock']);
             if (this.device.hour12) {
-                timeEL.innerHTML = `${this.getHours(alarm.time)}:${String(alarm.time.getMinutes()).padStart(2, '0')}
+                timeEL.innerHTML = `${this.getHours(alarm.time)}:${String(this.getMinutes(alarm.time)).padStart(2, '0')}
                     <small>${alarm.time.getHours() < 12 ? 'AM' : 'PM'}</small>`;
             } else {
-                timeEL.innerHTML = `${this.getHours(alarm.time)}:${String(alarm.time.getMinutes()).padStart(2, '0')}`;
+                timeEL.innerHTML = `${this.getHours(alarm.time)}:${String(this.getMinutes(alarm.time)).padStart(2, '0')}`;
             }
 
             let repeat = ''
@@ -120,7 +121,7 @@ export class ClockApp extends App {
     }
 
     private setClock() {
-        const now = new Date();
+        const now = new OSDate().getDateByTimeZone(this.device.timeZone);
 
         const seconds = now.getSeconds();
         const secondsDegrees = ((seconds / 60) * 360) + 90; // Offset by 90 degrees
@@ -144,9 +145,15 @@ export class ClockApp extends App {
     }
 
     private getHours(time: Date) {
-        const hours = time.getHours();
+        const dateUTC = new OSDate(time).getDateByTimeZone(this.device.timeZone);
+        const hours = dateUTC.getHours();
 
         return this.device.hour12 ? hours % 12 || 12 : hours;
+    }
+
+    private getMinutes(time: Date) {
+        const dateUTC = new OSDate(time).getDateByTimeZone(this.device.timeZone);
+        return dateUTC.getMinutes();
     }
 
     private getDays(options: RepeatOption[]) {

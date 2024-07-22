@@ -41,19 +41,20 @@ export class OSDate {
         return `${hour} ${isAm}`
     }
 
-    public timeObject(rounded?: boolean): { hour: number, minute: number, isAm: boolean } {
-        const minutes = this.date.getMinutes();
+    public timeObject(rounded?: boolean, timeZone?: string): { hour: number, minute: number, isAm: boolean } {
+        const dateUTC = getDateByTimeZone(this.date, timeZone);
+        const minutes = dateUTC.getMinutes();
         if (rounded) {
             const roundedMinutes = Math.round(minutes / 5) * 5;
-            this.date.setMinutes(roundedMinutes);
+            dateUTC.setMinutes(roundedMinutes);
         } else {
-            this.date.setMinutes(minutes);
+            dateUTC.setMinutes(minutes);
         }
-        this.date.setSeconds(0);
-        this.date.setMilliseconds(0);
+        dateUTC.setSeconds(0);
+        dateUTC.setMilliseconds(0);
 
-        const hours = this.date.getHours();
-        const minute = this.date.getMinutes();
+        const hours = dateUTC.getHours();
+        const minute = dateUTC.getMinutes();
         const isAm = hours < 12 ? true : false;
 
         return {
@@ -125,13 +126,14 @@ export class OSDate {
         }
     }
 
-    public static formatShortDate(date: Date): string {
+    public static formatShortDate(date: Date, timeZone?: string): string {
         const options: Intl.DateTimeFormatOptions = {
             year: 'numeric',
             month: 'short',
             day: '2-digit'
         };
-        return new Intl.DateTimeFormat('en-US', options).format(date);
+        const dateUTC = getDateByTimeZone(date, timeZone);
+        return new Intl.DateTimeFormat('en-US', options).format(dateUTC);
     }
 
     public static formatFullDate(date: Date, weekDays?: boolean) {
@@ -156,13 +158,14 @@ export class OSDate {
         return new Intl.DateTimeFormat('en-US', options).format(dateUTC);
     }
 
-    public static getFormatTime(date: Date, hour12: boolean): string {
+    public static getFormatTime(date: Date, hour12: boolean, timeZone?: string): string {
         const options: Intl.DateTimeFormatOptions = {
             hour: '2-digit',
             minute: '2-digit',
             hour12,
         };
-        return new Intl.DateTimeFormat('en-US', options).format(date);
+        const dateUTC = getDateByTimeZone(date, timeZone);
+        return new Intl.DateTimeFormat('en-US', options).format(dateUTC);
     }
 
     public static get24Hour(hour: number, isAm: boolean): number {
@@ -211,8 +214,8 @@ export class OSDate {
         };
     }
 
-    public static getNextIncrementTime(date: Date, rounded: number = 10): Date {
-        const now = new Date();
+    public static getNextIncrementTime(date: Date, rounded: number = 10, timeZone?: string): Date {
+        const now = getDateByTimeZone(new Date(), timeZone);
         const minutes = now.getMinutes();
         const roundedMinutes = Math.floor(minutes / rounded) * rounded;
 
@@ -233,10 +236,10 @@ export class OSDate {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
         const day = String(date.getDate()).padStart(2, '0');
-    
+
         return `${year}${month}${day}`;
-    }  
-    
+    }
+
     public static getHMinM(date: Date) {
         const hours = date.getHours();
         const minutes = date.getMinutes();
@@ -247,10 +250,10 @@ export class OSDate {
     public static getMinutesDifference(date1: Date, date2: Date): number {
         const time1 = date1.getTime();
         const time2 = date2.getTime();
-    
+
         const differenceInMilliseconds = Math.abs(time2 - time1);
         const differenceInMinutes = Math.floor(differenceInMilliseconds / (1000 * 60));
-    
+
         return differenceInMinutes;
     }
 }

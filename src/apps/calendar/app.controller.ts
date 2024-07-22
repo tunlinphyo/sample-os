@@ -30,7 +30,8 @@ export class CalendarAppController {
                 }, {
                     pattern: '/events/new',
                     callback: () => {
-                        const date = OSDate.getNextIncrementTime(this.calendar.eventDay);
+                        const timezoneDate = new OSDate(this.calendar.eventDay).getDateByTimeZone(this.device.timeZone);
+                        const date = OSDate.getNextIncrementTime(timezoneDate, 30, this.device.timeZone);
                         this.eventEdit.openPage('New Event', state || date);
                     }
                 },  {

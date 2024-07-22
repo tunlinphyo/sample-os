@@ -4,6 +4,7 @@ import { CalendarController } from "../../../controllers/calendar.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
 import { OSBrowser } from "../../../utils/browser";
+import { OSDate } from "../../../utils/date";
 import { OSNumber } from "../../../utils/number";
 
 
@@ -29,10 +30,11 @@ export class CalendarApp extends App {
         this.prevButton = this.getElement(".prevButton");
         this.nextButton = this.getElement(".nextButton");
         this.calendarService = new CalendarService(
-            this.getElement('#calendarUI'), 
+            this.getElement('#calendarUI'),
             this.dateMonthEl, async (date: Date) => {
                 return this.calendar.getActives(date);
-            }
+            },
+            this.device.timeZone,
         );
 
         this.init();
@@ -43,13 +45,11 @@ export class CalendarApp extends App {
         this.render(this.calendar.eventDay);
 
         this.addEventListener("click", () => {
-            // this.calendarService.prev();
-            this.calendar.eventDay = this.calendarService.prevDateObject;
+            this.calendarService.prev();
         }, this.prevButton, false);
 
         this.addEventListener("click", () => {
-            // this.calendarService.next();
-            this.calendar.eventDay = this.calendarService.nextDateObject;
+            this.calendarService.next();
         }, this.nextButton, false);
 
         if (OSBrowser.isTouchSupport()) {
@@ -64,7 +64,7 @@ export class CalendarApp extends App {
             }, this.btnEnd, false);
         } else {
             this.addEventListener('click', () => {
-                this.calendar.eventDay = new Date();
+                this.calendarService.today();
             }, this.btnStart, false);
 
             this.addEventListener('click', () => {
@@ -73,9 +73,9 @@ export class CalendarApp extends App {
         }
 
         this.addEventListener('click', async () => {
-            const result = await this.device.yearPicker.openPage('Year, Month', { 
-                year: this.calendarService.date.year, 
-                month: this.calendarService.date.month 
+            const result = await this.device.yearPicker.openPage('Year, Month', {
+                year: this.calendarService.date.year,
+                month: this.calendarService.date.month
             });
             if (result && typeof result !== 'boolean') {
                 this.calendarService.date = result;
@@ -97,11 +97,7 @@ export class CalendarApp extends App {
                 case 'EVENTS_DATE_CHANGE':
                 case 'EVENT_UPDATED':
                 case 'EVENT_DELETED':
-                    if (this.calendarService.isSameDate(this.calendar.eventDay)) {
-                        this.calendarService.updatedData();
-                    } else {
-                        this.calendarService.toDate = this.calendar.eventDay;
-                    }
+                    this.calendarService.toDate = this.calendar.eventDay;
                     break;
             }
         };
@@ -157,7 +153,7 @@ export class CalendarApp extends App {
     }
 
     render(data?: Date) {
-        if (!data) data = new Date();
+        if (!data) data = new OSDate().getDateByTimeZone(this.device.timeZone);
         this.calendarService.init(data);
     }
 

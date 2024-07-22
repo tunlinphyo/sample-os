@@ -258,12 +258,12 @@ export class EventEditPage extends Modal {
         this.calendar.addChangeListener(calendarListener);
 
         this.device.addEventListener('closeApp', () => {
-            this.calendar.removeChangeListener(calendarListener);
             const data = this.form?.getCurrentData();
             if (data) {
                 if (data.id) this.history.updateState(`/events/edit`, data);
                 else this.history.updateState(`/events/new`, data);
             }
+            this.calendar.removeChangeListener(calendarListener);
         });
     }
 

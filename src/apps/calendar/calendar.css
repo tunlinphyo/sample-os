@@ -33,23 +33,23 @@
         .swipable {
             height: calc(var(--grid)* 14);
             position: relative;
-    
+
             .dateToggle {
                 position: absolute;
                 z-index: 2;
                 top: 0;
                 background-color: var(--white);
             }
-    
+
             .scrollArea {
                 height: calc(var(--grid)* 14);
                 position: absolute;
                 z-index: 0;
                 inset: 0;
-    
+
                 padding-block: var(--button) var(--grid);
                 transition: translate .7s ease;
-    
+
                 &.curr {
                     translate: 0 0;
                 }
@@ -82,11 +82,11 @@
                 position: absolute;
                 z-index: 0;
                 top: 0;
-                left: 0; 
+                left: 0;
                 right: 0;
                 pointer-events: none;
 
-                border-top: 2px solid var(--black);
+                border-top: 4px solid var(--black);
             }
 
             .hourList {
@@ -98,15 +98,15 @@
                     align-items: center;
                     font-size: 14px;
                     text-align: right;
-    
+
                     &::after {
                         content: "";
                         display: block;
                         border-top: 1px dotted var(--black);
                     }
-                }    
+                }
             }
-    
+
             .eventList {
                 display: flex;
                 flex-direction: column;
@@ -126,7 +126,7 @@
                     position: absolute;
                     z-index: 2;
                     top: 0;
-                    left: calc(var(--half) + 50px); 
+                    left: calc(var(--half) + 50px);
                     right: var(--half);
 
                     background-color: var(--white);
@@ -149,6 +149,8 @@
 
                     &.oneLine {
                         .eventName {
+                            max-width: 100%;
+                            display: block;
                             overflow: hidden;
                             white-space: nowrap;
                             text-overflow: ellipsis;

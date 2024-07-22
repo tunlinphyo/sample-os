@@ -258,15 +258,13 @@ body {
                 }
             }
 
-            /* .statusStart {
-                justify-content: flex-start;
-                padding-inline-start: var(--padding);
+            .statusStart {
+                padding-inline-start: 5px;
             }
 
             .statusEnd {
-                justify-content: flex-end;
-                padding-inline-end: var(--padding);
-            } */
+                padding-inline-end: 5px;
+            }
 
             .island {
                 width: calc(var(--grid) * 2.2);

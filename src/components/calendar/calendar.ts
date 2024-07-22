@@ -1,4 +1,5 @@
 import { BaseController } from "../../controllers/base.controller";
+import { OSDate } from "../../utils/date";
 import { CalendarMonth } from "./calendar.month";
 
 export type ActiveDatesCallback = (date: Date) => Promise<Date[]>;
@@ -27,7 +28,8 @@ export class CalendarService extends BaseController {
         private component: HTMLElement,
         private dateElem: HTMLElement,
         private callback: ActiveDatesCallback,
-        private isPicker: boolean = false
+        private timeZone: string,
+        private isPicker: boolean = false,
     ) {
         super();
     }
@@ -86,20 +88,29 @@ export class CalendarService extends BaseController {
     }
 
     set toDate(date: Date) {
-        this.date = { year: date.getFullYear(), month: date.getMonth() };
+        if (this.isSameDate(date)) {
+            this.updatedData();
+        } else {
+            this.date = { year: date.getFullYear(), month: date.getMonth() };
+        }
     }
 
     prev() {
         setTimeout(() => {
             if (this.animating) return;
-            this.date = this.prevDate;
+            this.notifyListeners('DATE_CHANGE', this.prevDateObject);
         }, 0);
     }
-
     next() {
         setTimeout(() => {
             if (this.animating) return;
-            this.date = this.nextDate;
+            this.notifyListeners('DATE_CHANGE', this.nextDateObject);
+        }, 0);
+    }
+    today() {
+        setTimeout(() => {
+            if (this.animating) return;
+            this.notifyListeners('DATE_CHANGE', new OSDate().getDateByTimeZone(this.timeZone));
         }, 0);
     }
 
@@ -124,19 +135,17 @@ export class CalendarService extends BaseController {
 
     moveEnd(num: number) {
         if (this.animating) return;
-        
+
         if (num > 80) {
             this.currMonthEl?.animate(false);
             this.nextMonthEl?.animate(false);
             this.prevMonthEl?.animate(false);
-            this.date = this.prevDate;
-            this.notifyListeners('DATE_CHANGE', this.dateObject);
+            this.prev();
         } else if (num < -80) {
             this.currMonthEl?.animate(false);
             this.nextMonthEl?.animate(false);
             this.prevMonthEl?.animate(false);
-            this.date = this.nextDate;  
-            this.notifyListeners('DATE_CHANGE', this.dateObject);  
+            this.next();
         } else {
             this.currMonthEl?.animate();
             this.nextMonthEl?.animate();
@@ -200,7 +209,7 @@ export class CalendarService extends BaseController {
     private async renderPrevDate(date: YearMonth) {
         if (!(this.currMonthEl && this.nextMonthEl && this.prevMonthEl)) return;
         this.animating = true;
-        
+
         this.currMonthEl.prev();
         this.prevMonthEl.prev();
         const dates = await this.callback(new Date(date.year, date.month, 1));
@@ -226,7 +235,7 @@ export class CalendarService extends BaseController {
     private async renderNextDate(date: YearMonth) {
         if (!(this.currMonthEl && this.nextMonthEl && this.prevMonthEl)) return;
         this.animating = true;
-        
+
         this.currMonthEl.next();
         this.nextMonthEl.next();
         const dates = await this.callback(new Date(date.year, date.month, 1));
@@ -239,7 +248,7 @@ export class CalendarService extends BaseController {
             this.prevMonthEl = this.currMonthEl;
             this.nextMonthEl!.position = "curr";
             this.currMonthEl = this.nextMonthEl;
-            
+
             const prevDate = this.getPrevDate(date);
             const dates = await this.callback(new Date(prevDate.year, prevDate.month, 1));
             this.prevMonthEl!.updateBody(prevDate, dates);
@@ -273,7 +282,7 @@ export class CalendarService extends BaseController {
             if (this._year === year && this._month === month) {
                 this.notifyListeners('DATE', date);
             }
-        }, this.isPicker);
+        }, this.isPicker, this.timeZone);
 
         this.component.appendChild(calendar.component);
         return calendar;

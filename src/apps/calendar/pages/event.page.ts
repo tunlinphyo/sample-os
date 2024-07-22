@@ -63,7 +63,9 @@ export class EventPage extends Page {
         fullDate.textContent = OSDate.formatFullDate(data.eventDay, true);
 
         const rangeEl = this.createElement('div', [])
-        rangeEl.textContent = this.event.allDay ? 'All day' : `from ${OSDate.formatTime(this.event.startTime, this.device.hour12)} to ${OSDate.formatTime(this.event.endTime, this.device.hour12)}`
+        rangeEl.textContent = this.event.allDay ? 'All day' : `
+            from ${OSDate.formatTime(this.event.startTime, this.device.hour12, this.device.timeZone)}
+            to ${OSDate.formatTime(this.event.endTime, this.device.hour12, this.device.timeZone)}`
 
         contantArea.appendChild(titleEl)
         contantArea.appendChild(fullDate)

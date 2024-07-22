@@ -29,6 +29,14 @@ export interface StoreInfo {
     order: number;
 }
 
+export interface ConnectionInfo {
+    id: string;
+    title: string;
+    order: number;
+    value: string;
+    data?: any;
+}
+
 export interface DateTimeInfo {
     autoTimeZone: boolean;
     timeZone: string;
@@ -181,25 +189,31 @@ const stores: StoreInfo[] = [
 
 const defaultSettings: Setting[] = [
     {
-        id: 'wifi',
-        title: 'Wi-Fi',
+        id: 'connection',
+        title: 'Connection',
         order: 1,
         value: 'on',
         inList: true,
-    },
-    {
-        id: 'bluetooth',
-        title: 'Bluetooth',
-        order: 2,
-        value: 'off',
-        inList: true,
-    },
-    {
-        id: 'cellular',
-        title: 'Cellular',
-        order: 3,
-        value: 'on',
-        inList: true,
+        data: [
+            {
+                id: 'wifi',
+                title: 'Wi-Fi',
+                order: 1,
+                value: 'on',
+            },
+            {
+                id: 'bluetooth',
+                title: 'Bluetooth',
+                order: 2,
+                value: 'off',
+            },
+            {
+                id: 'cellular',
+                title: 'Cellular',
+                order: 3,
+                value: 'on',
+            },
+        ]
     },
     {
         id: 'display',
@@ -242,7 +256,7 @@ const defaultSettings: Setting[] = [
             {
                 id: 'software-update',
                 title: 'Software Update',
-                version: 0.13
+                version: 0.15
             },
             {
                 id: 'date-time',
@@ -266,8 +280,8 @@ const defaultSettings: Setting[] = [
 
 export class SettingStore extends BaseManager<Setting> {
     private db: DB<Setting>;
-    public version: number = 0.13;
-    public message: string = 'Add Date & Time';
+    public version: number = 0.15;
+    public message: string = 'Group connections.';
 
     constructor() {
         super([]);
