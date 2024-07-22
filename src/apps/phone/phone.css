@@ -119,7 +119,6 @@
     }
 
     .contactList {
-        padding-block: var(--padding);
         .titleItem {
             /* border: 1px solid var(--black);
             margin-bottom: 5px;
@@ -139,6 +138,10 @@
                 display: inline-block;
                 border: 2px solid var(--black);
                 border-radius: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                overflow: hidden;
             }
         }
     }

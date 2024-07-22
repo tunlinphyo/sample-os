@@ -858,6 +858,7 @@ body {
                 .titleList {
                     margin: 0;
                     padding-inline: 0;
+                    padding-block: var(--padding);
                     list-style: none;
 
                     .titleItem {
