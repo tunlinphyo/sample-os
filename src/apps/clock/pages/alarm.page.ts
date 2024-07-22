@@ -56,32 +56,39 @@ class AlarmForm extends FormComponent {
             defautValue: this.alarm.repeat.map(item => item.toString()),
             list: [
                 {
-                    label: 'Every Sunday',
-                    value: '0'
+                    label: 'Sunday',
+                    value: '0',
+                    icon: 'calendar_today'
                 },
                 {
-                    label: 'Every Monday',
-                    value: '1'
+                    label: 'Monday',
+                    value: '1',
+                    icon: 'calendar_today'
                 },
                 {
-                    label: 'Every Tuesday',
-                    value: '2'
+                    label: 'Tuesday',
+                    value: '2',
+                    icon: 'calendar_today'
                 },
                 {
-                    label: 'Every Wendesday',
-                    value: '3'
+                    label: 'Wendesday',
+                    value: '3',
+                    icon: 'calendar_today'
                 },
                 {
-                    label: 'Every Thursday',
-                    value: '4'
+                    label: 'Thursday',
+                    value: '4',
+                    icon: 'calendar_today'
                 },
                 {
-                    label: 'Every Friday',
-                    value: '5'
+                    label: 'Friday',
+                    value: '5',
+                    icon: 'calendar_today'
                 },
                 {
-                    label: 'Every Saturday',
-                    value: '6'
+                    label: 'Saturday',
+                    value: '6',
+                    icon: 'calendar_today'
                 },
             ]
         }, groupEl)

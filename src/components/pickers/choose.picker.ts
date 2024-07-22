@@ -3,6 +3,7 @@ import { Popup } from "../popup";
 export interface ChooseItem {
     label: string;
     value: string;
+    icon?: string;
 }
 
 export interface ChooseData {
@@ -27,10 +28,15 @@ export class ChooseList extends Popup {
         for(const item of list) {
             const isSelected = this.data.includes(item.value)
             const chooseItem = this.createElement('button', ['chooseItem'], { 'data-selected': isSelected.toString() });
+            // if (item.icon) {
+            //     const iconEl = this.createElement('span', ['material-symbols-outlined']);
+            //     iconEl.textContent = item.icon;
+            //     chooseItem.appendChild(iconEl);
+            // }
             const nameEl = this.createElement('div', ['selectName']);
             nameEl.textContent = item.label;
-            const iconEl = this.createElement('div', ['selectIcon']);
-            iconEl.innerHTML = '<span class="material-symbols-outlined icon--sm">check</span>';
+            const toggleEl = this.createElement('span', ['material-symbols-outlined', 'icon', 'selectIcon']);
+            toggleEl.textContent = 'check';
 
             this.addEventListener('click', () => {
                 const selected = chooseItem.dataset.selected;
@@ -44,7 +50,7 @@ export class ChooseList extends Popup {
             }, chooseItem)
 
             chooseItem.appendChild(nameEl);
-            chooseItem.appendChild(iconEl);
+            chooseItem.appendChild(toggleEl);
 
             this.chooseList.appendChild(chooseItem);
         }

@@ -1,4 +1,25 @@
 @layer component {
+    .clockPage,
+    .stopwatchPage {
+        .clockArea {
+            position: sticky;
+            z-index: 0;
+            top: 0;
+        }
+
+        .alarmList,
+        .timeLaps {
+            position: relative;
+            z-index: 1;
+            background-color: var(--white);
+            border-radius: var(--grid) var(--grid) 0 0;
+
+            &.bordered {
+                border-top: 2px solid var(--black);
+            }
+        }
+    }
+
     .clockArea {
         width: calc(var(--grid) * 10);
         height: calc(var(--grid) * 8);
@@ -133,11 +154,12 @@
     }
 
     .timeLaps {
-        padding: var(--grid) var(--padding);
+        margin-block-start: var(--grid);
+        padding: var(--half) var(--padding);
 
         .timeLap {
             line-height: 2;
-            border-bottom: 2px solid var(--black);
+            border-bottom: 1px solid var(--black);
 
             display: flex;
             justify-content: space-between;
@@ -156,22 +178,13 @@
     }
 
     .alarmList {
-        padding-block: var(--grid);
+        margin-block-start: var(--grid);
+        padding-block: var(--half);
 
-        .alarmTitle {
-            font-size: var(--grid);
-            padding-inline: var(--padding);
-            margin-bottom: calc(var(--grid) * 0.5);
-
-            display: flex;
-            align-items: center;
-            gap: calc(var(--grid) * 0.5);
-
-            &::after {
-                content: '';
-                flex: 1;
-                border-bottom: 2px solid var(--black);
-            }
+        .dateContainer {
+            text-align: center;
+            padding: calc(var(--grid) * 0.25);
+            font-size: 18px;
         }
 
         .alarmItem {

@@ -126,6 +126,12 @@ export class OSDate {
         }
     }
 
+    public static customFormat(date: Date, options: Intl.DateTimeFormatOptions, timeZone: string) {
+        const dateUTC = getDateByTimeZone(date, timeZone);
+
+        return dateUTC.toLocaleDateString('en-US', options);
+    }
+
     public static formatShortDate(date: Date, timeZone?: string): string {
         const options: Intl.DateTimeFormatOptions = {
             year: 'numeric',

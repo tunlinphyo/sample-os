@@ -1091,7 +1091,7 @@ body {
 
                     .alarmPicker {
                         width: 100%;
-                        height: calc(var(--grid) * 3);
+                        height: calc(var(--grid) * 4);
 
                         .inputValue {
                             width: 100%;
@@ -1102,11 +1102,11 @@ body {
                             align-items: center;
                             gap: 6px;
 
-                            background-color: var(--black);
-                            color: var(--white);
+                            /* background-color: var(--black);
+                            color: var(--white); */
                             font-size: 60px;
 
-                            /* border: 2px solid var(--black); */
+                            border: 2px solid var(--black);
                             border-radius: 5px;
 
                             small {
@@ -1243,6 +1243,11 @@ body {
                         justify-content: space-between;
                         align-items: center;
                         gap: calc(var(--grid) * 0.5);
+
+                        .selectName {
+                            flex: 1;
+                            text-align: left;
+                        }
 
                         &[data-selected=false] {
                             .selectIcon {

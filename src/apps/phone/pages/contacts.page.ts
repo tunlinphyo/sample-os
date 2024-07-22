@@ -43,7 +43,7 @@ export class ContactsPage extends Page {
 
         const list = this.sortByName(data);
         const scrollArea = this.createScrollArea();
-        const noteList = this.createElement('ul', ['titleList']);
+        const noteList = this.createElement('ul', ['titleList', 'contactList']);
         list.forEach(item => {
             const contactName = this.createElement('li', ['titleItem', 'textLarge']);
             if (item.isBlocked) contactName.classList.add('blocked');

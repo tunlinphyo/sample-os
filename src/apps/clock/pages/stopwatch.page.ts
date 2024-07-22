@@ -27,7 +27,9 @@ export class StopwatchPage extends Page {
         private device: DeviceController,
         private clock: ClockController
     ) {
-        super(history, { btnStart: 'LAP', btnEnd: 'START' })
+        super(history, { btnStart: 'LAP', btnEnd: 'START' });
+
+        this.component.classList.add('stopwatchPage');
 
         this.init();
     }
@@ -134,7 +136,14 @@ export class StopwatchPage extends Page {
         const timeLaps = this.getElement('.timeLaps');
         timeLaps.innerHTML = '';
 
-        for(const lap of this.getLaps()) {
+        const laps = this.getLaps();
+        if (laps.length) {
+            timeLaps.classList.add('bordered');
+        } else {
+            timeLaps.classList.remove('bordered');
+        }
+        
+        for(const lap of laps) {
             const {hours, minutes, seconds, milliseconds} = this.getTimes(lap.time);
             const timelLap = this.createElement('div', ['timeLap'])
             timelLap.innerHTML = `<span>Lap ${lap.index}</span><span class="lapTimes">${this.pad(hours)}:${this.pad(minutes)}:${this.pad(seconds)}:${this.pad(milliseconds)}</span>`;

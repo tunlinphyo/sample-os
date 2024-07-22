@@ -138,10 +138,9 @@
                 position: relative;
 
                 &:first-child {
-                    width: calc(100% - 4px);
                     transform-origin: bottom left;
-                    translate: 5px 0;
-                    rotate: -7deg;
+                    translate: 2px 0;
+                    rotate: -6deg;
                     margin-bottom: 0;
                 }
 

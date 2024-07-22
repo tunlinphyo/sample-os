@@ -18,7 +18,9 @@ export class ClockApp extends App {
         private clock: ClockController
     ) {
         super(history, { btnStart: 'timer_play', btnCenter: 'add', btnEnd: 'timer' })
-        this.init()
+        this.init();
+
+        this.component.classList.add('clockPage');
 
         this.hourHand = this.getElement('.hour-hand');
         this.minuteHand = this.getElement('.minute-hand');
@@ -75,7 +77,12 @@ export class ClockApp extends App {
     }
 
     render(alarms: Alarm[]) {
-        // console.log("alarms", this.sortByTime(alarms));
+        if (alarms.length) {
+            this.alarmList.classList.add('bordered');
+        } else {
+            this.alarmList.classList.remove('bordered');
+            this.renderDate();
+        }
         for(const alarm of this.sortByTime(alarms)) {
             const alarmItem = this.createElement('div', ['alarmItem']);
             const alarmBtn = this.createElement('button', ['alermButton']);
@@ -118,6 +125,17 @@ export class ClockApp extends App {
         this.alarmList.innerHTML = '';
         this.removeAllEventListeners();
         this.render(alarms);
+    }
+
+    private renderDate() {
+        const dateContainer = this.createElement('div', ['dateContainer']);
+        dateContainer.textContent = OSDate.customFormat(new Date(), {
+            weekday: 'long',
+            month: 'long',
+            day: 'numeric'
+        }, this.device.timeZone);
+
+        this.alarmList.appendChild(dateContainer);
     }
 
     private setClock() {

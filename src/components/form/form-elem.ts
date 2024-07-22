@@ -274,7 +274,7 @@ export class CustomTimePickerForm extends CustomForm {
         this.input = this.getElement<HTMLButtonElement>('.inputValue');
         this.time = new Date(config.defautValue);
 
-        this.init(config)
+        this.init(config);
     }
 
     private init(config: AlarmConfig) {
