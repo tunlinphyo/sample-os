@@ -671,7 +671,7 @@ export class EventsService extends BaseController {
     }
 
     private getTop(date: Date) {
-        const minutes = OSDate.getHMinM(new Date(date)) + 28;
+        const minutes = OSDate.getHMinM(new Date(date)) + 30;
         const parentH = 1224;
         const minutesMax = 24 * 60;
 
