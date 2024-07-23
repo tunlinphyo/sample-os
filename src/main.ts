@@ -18,6 +18,8 @@ import { History, HistoryStore } from './stores/history.store';
 import { DateTimeInfo, SettingStore } from './stores/settings.store';
 import { WeatherStore } from './stores/weather.store';
 import { WeatherController } from './controllers/weather.controller';
+import { GestureService } from './services/gesture.service';
+import { LockedScreenPage } from './components/system/locked.screen';
 // import { FullscreenController } from './controllers/fullscreen.controller';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -46,7 +48,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.calendar = calendar;
     window.weather = weather;
 
+    new LockedScreenPage(historyManager, window.device);
     new PhoneDummyController(window.device, window.phone);
+    new GestureService(historyManager, window.device);
     // new Battery();
     // const fullScreen = new FullscreenController();
 

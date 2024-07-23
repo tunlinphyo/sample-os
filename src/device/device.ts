@@ -12,18 +12,23 @@ import { OSDate } from "../utils/date";
 import { TimeWheel } from "../components/pickers/time.wheel";
 import { IncomingCall } from "../components/system/incoming.call";
 import { OutgoingCall } from "../components/system/outgoing.call";
+import { OSBrowser } from "../utils/browser";
 
 export type DeviceTheme = 'auto' | 'light' | 'dark';
 
 export class DeviceController extends BaseComponent {
+    public deviceEl: HTMLElement;
     public appContainer: HTMLElement;
     public appFrame: HTMLIFrameElement;
     public homeFrame: HTMLIFrameElement;
+    public navEl: HTMLButtonElement;
 
     private app: string = '';
     private _theme: DeviceTheme = 'auto';
     private _timeZone: string = Intl.DateTimeFormat().resolvedOptions().timeZone;
     private _hour12: boolean = true;
+    private _appOpen: boolean = false;
+    private _animating: boolean = false;
 
     private _appHistory: Record<string, HistoryState[]> = {};
 
@@ -46,9 +51,11 @@ export class DeviceController extends BaseComponent {
         super('deviceTemplate', document.body);
         this.history.onStateChange(this.onStateChange.bind(this));
 
+        this.deviceEl = this.getElement("#device");
         this.appContainer = this.getElement('.appContainer');
         this.appFrame = this.getElement<HTMLIFrameElement>('#appFrame');
         this.homeFrame = this.getElement<HTMLIFrameElement>('#homeFrame');
+        this.navEl = this.getElement('.navigationBar-btn');
 
         this.keyboard = new KeyboardPage();
         this.alertPopup = new AppAlert();
@@ -88,6 +95,13 @@ export class DeviceController extends BaseComponent {
     set hour12(hour12: boolean) {
         this._hour12 = hour12;
         this.updateClock(false, false);
+    }
+
+    get appOpened() {
+        return this._appOpen;
+    }
+    get animating() {
+        return this._animating;
     }
 
     // public
@@ -132,17 +146,29 @@ export class DeviceController extends BaseComponent {
     }
 
     private init() {
-        const nav = this.getElement('.navigationBar-btn');
-        // this.updateClock = this.updateClock.bind(this);
-
         this.updateClock(false, false);
 
         setTimeout(() => {
             this.onStateChange(history.state);
         }, 1000);
 
-        nav.addEventListener('click', () => {
-            this.history.pushState('/', null);
+        this.navEl.addEventListener('click', () => {
+            if (!this.appOpened) return;
+            if (!OSBrowser.isTouchSupport()) {
+                this.history.pushState('/', null);
+            } else {
+                this.navEl.animate([
+                    { transform: 'translateY(0)' },
+                    { transform: 'translateY(-4px)', offset: 0.3 },
+                    { transform: 'translateY(0)', offset: 0.6 },
+                    { transform: 'translateY(-2px)', offset: 0.8 },
+                    { transform: 'translateY(0)' }
+                ], {
+                    duration: 1000,
+                    easing: 'ease-in-out',
+                    iterations: 1
+                });
+            }
         });
     }
 
@@ -162,14 +188,26 @@ export class DeviceController extends BaseComponent {
     }
 
     private openApp(src: string) {
+        this._appOpen = true;
+        this._animating = true;
         this.appFrame.src = src;
 
-        this.homeFrame.classList.add('hide');
+        // this.homeFrame.classList.add('hide');
+        // this.appContainer.classList.add('show');
         this.appContainer.classList.remove('hide');
-        this.appContainer.classList.add('show');
+
+        this.appContainer.style.transition = 'all .5s ease';
+        this.appContainer.style.translate = '0 0';
+        this.appContainer.style.scale = '1';
+
+        this.homeFrame.style.transition = 'scale .5s ease';
+        this.homeFrame.style.scale = '.7';
+
 
         this.dispatchCustomEvent('openApp');
         const transitionEndHandler = () => {
+            this._animating = false;
+            this.navEl.style.opacity = '1';
             this.setTheme(this.theme);
             this.dispatchCustomEvent('openAppFinished');
             this.appContainer.removeEventListener('transitionend', transitionEndHandler);
@@ -178,9 +216,20 @@ export class DeviceController extends BaseComponent {
     }
 
     private closeApp() {
-        this.homeFrame.classList.remove('hide');
-        this.appContainer.classList.remove('show');
+        this._appOpen = false;
+        this._animating = true;
+        // this.homeFrame.classList.remove('hide');
+        // this.appContainer.classList.remove('show');
         this.appContainer.classList.add('hide');
+
+        this.appContainer.style.transition = 'all .5s ease';
+        this.appContainer.style.translate = '0 100%';
+        this.appContainer.style.scale = '.5';
+
+        this.homeFrame.style.transition = 'scale .5s ease';
+        this.homeFrame.style.scale = '1';
+
+        this.navEl.style.opacity = '0';
 
         this.dispatchCustomEvent('closeApp');
 
@@ -192,6 +241,7 @@ export class DeviceController extends BaseComponent {
         this.keyboard.close();
 
         const transitionEndHandler = () => {
+            this._animating = false;
             this.dispatchCustomEvent('closeAppFinished');
             if (this.appContainer.classList.contains('hide')) {
                 this.appFrame.src = '';

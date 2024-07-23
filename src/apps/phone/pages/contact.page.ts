@@ -4,6 +4,7 @@ import { SelectItem } from "../../../components/select";
 import { PhoneController } from "../../../controllers/phone.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
+import { PhoneService } from "../../../services/phone.service";
 import { Contact, ContactWithBlock } from "../../../stores/contact.store";
 import { History, randomMessages } from "../../../stores/history.store";
 
@@ -11,6 +12,7 @@ import { History, randomMessages } from "../../../stores/history.store";
 
 export class ContactPage extends Page {
     private contact: ContactWithBlock | undefined;
+    private phoneService: PhoneService;
 
     constructor(
         history: HistoryStateManager,
@@ -18,6 +20,7 @@ export class ContactPage extends Page {
         private phone: PhoneController,
     ) {
         super(history, { btnStart: 'more_horiz', btnEnd: 'edit' });
+        this.phoneService = new PhoneService(this.device, this.phone);
         this.init();
     }
 
@@ -68,7 +71,7 @@ export class ContactPage extends Page {
             phoneEl.innerHTML = `<span class="material-symbols-outlined">call</span>${phone.number}`;
             if (contact.isBlocked) phoneEl.classList.add('blockedNumber');
             this.addEventListener('click', () => {
-                this.callOrMessage(contact, phone.number);
+                this.callOrMessage(phone.number);
             }, phoneEl);
             selectList.appendChild(phoneEl);
         });
@@ -125,38 +128,16 @@ export class ContactPage extends Page {
         }
     }
 
-    private async callOrMessage(contact: Contact, number: string) {
+    private async callOrMessage(number: string) {
         const list: SelectItem[] = [
             { title: 'Call', value: 'call', icon: 'phone' },
             { title: 'Message', value: 'message', icon: 'chat_bubble' }
         ];
         const selected = await this.device.selectList.openPage(number, list);
         if (selected === 'call') {
-            this.device.callScreen.openPage('Phone', { contact, number, status: 'outgoing_call' });
+            this.phoneService.makeACall(number);
         } else if (selected === 'message') {
-            this.typeMessage(number, (value) => {
-                if (!value) return;
-                const newHistory: Omit<History, 'id'> = {
-                    type: 'to_message',
-                    date: new Date(),
-                    contact,
-                    number,
-                    data: value
-                };
-                this.phone.addHistory(newHistory);
-            });
+            this.phoneService.textAMessage(number);
         }
     }
-
-    private typeMessage(number: string, callback: (value: string) => void, name?: string) {
-        const keyboard: Keyboard = {
-            label: name || number,
-            defaultValue: '',
-            type: 'textarea',
-            keys: randomMessages,
-            btnEnd: 'send',
-        };
-        this.device.keyboard.open(keyboard).then(callback);
-    }
-
 }

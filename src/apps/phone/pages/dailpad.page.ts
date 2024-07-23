@@ -5,6 +5,7 @@ import { SelectItem } from "../../../components/select";
 import { PhoneController } from "../../../controllers/phone.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
+import { PhoneService } from "../../../services/phone.service";
 import { Contact, ContactWithBlock } from "../../../stores/contact.store";
 import { History, phoneNumbers, randomMessages } from "../../../stores/history.store";
 import { OSObject } from "../../../utils/object";
@@ -13,6 +14,7 @@ import { OSObject } from "../../../utils/object";
 export class DialpadPage extends Page {
     public dialNumber: string = '';
     private _contact: ContactWithBlock | null | undefined;
+    private phoneService: PhoneService;
 
     constructor(
         history: HistoryStateManager,
@@ -20,16 +22,19 @@ export class DialpadPage extends Page {
         private phone: PhoneController
     ) {
         super(history, { btnStart: 'phone', btnEnd: 'chat_bubble' });
+
+        this.phoneService = new PhoneService(this.device, this.phone);
+
         this.init();
     }
 
     private init() {
         this.addEventListener('click', () => {
-            this.makeACall(this.dialNumber);
+            this.phoneService.makeACall(this.dialNumber);
         }, this.btnStart, false);
 
         this.addEventListener('click', () => {
-            this.textAMessage(this.dialNumber);
+            this.phoneService.textAMessage(this.dialNumber);
         }, this.btnEnd, false);
 
         const phoneListener = (status: string) => {
@@ -124,62 +129,6 @@ export class DialpadPage extends Page {
             if (isContact) iconEl.textContent = 'person';
             else iconEl.textContent = 'add_circle';
         } catch(error) {}
-    }
-
-    private async makeACall(number?: string) {
-        if (!number || number.length < 6) return;
-        const contact = this.phone.contactsStore.findContactByNumber(number);
-        const isBlock = this.phone.isBlock(number);
-        if (isBlock) {
-            const name = contact ? `${contact.firstName} ${contact.lastName}` : number;
-            const result = await this.device.confirmPopup.openPage(
-                'Blocked',
-                `${name} is blocked. Do you want to unblock?`
-            );
-            if (result) {
-                this.phone.unblockNumber(contact || number);
-            } else {
-                return;
-            }
-        }
-        this.device.callScreen.openPage('Phone', { contact, number, status: 'outgoing_call' });
-    }
-
-    private async textAMessage(number?: string) {
-        if (!number || number.length < 6) return;
-        const contact = this.phone.contactsStore.findContactByNumber(number);
-        const isBlock = this.phone.isBlock(number);
-        if (isBlock) {
-            const name = contact ? `${contact.firstName} ${contact.lastName}` : number;
-            const result = await this.device.confirmPopup.openPage(
-                'Blocked',
-                `${name} is blocked. Do you want to unblock?`
-            );
-            if (result) {
-                this.phone.unblockNumber(contact || number);
-            } else {
-                return;
-            }
-        }
-        const keyboardConfig: Keyboard = {
-            label: contact ? `${contact.firstName} ${contact.lastName}` : number,
-            defaultValue: '',
-            type: 'textarea',
-            keys: randomMessages,
-            btnEnd: 'send',
-        };
-        this.device.keyboard.open(keyboardConfig).then(data => {
-            if (data) {
-                const newHistory: Omit<History, 'id'> = {
-                    type: 'to_message',
-                    date: new Date(),
-                    contact: contact || undefined,
-                    number: number,
-                    data: data
-                };
-                this.phone.addHistory(newHistory);
-            }
-        });
     }
 
     private async createOrAddNumber(number?: string) {

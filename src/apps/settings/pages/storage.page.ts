@@ -15,6 +15,7 @@ export class StoragePage extends Page {
         private setting: SettingsController,
     ) {
         super(history, {});
+        this.component.classList.add('fullBottom');
         this.storage = new IndexedDBUsage();
         // this.storage.getUsage();
         this.addListeners();

@@ -61,7 +61,14 @@ export class PhoneAppController {
             ]);
         }
 
+        const errorAlert = (status: string, message: string) => {
+            if (status === 'ERROR') {
+                this.device.alertPopup.openPage('Error', message);
+            }
+        }
+
         this.history.onStateChange(handleChange);
+        this.phone.addChangeListener(errorAlert);
 
         this.device.addEventListener('openAppFinished', () => {
             const history = parent.device.getHistory('phone');
@@ -75,6 +82,7 @@ export class PhoneAppController {
 
         this.device.addEventListener('closeApp', () => {
             // // console.log('CLOSE_PAGE', JSON.stringify(this.history.history));
+            this.phone.removeChangeListener(errorAlert);
             this.device.setHistory('phone', this.history.history);
         });
     }

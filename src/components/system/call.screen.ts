@@ -41,7 +41,7 @@ export class CallScreen extends Popup {
         const contactNumber = this.createElement('div', ['contactNumber'])
         contactNumber.innerText = data.contact ? `${data.contact.firstName} ${data.contact.lastName}` : data.number;
 
-        const callActions = this.createElement('div', ['callActions', 'hide']);
+        const callActions = this.createElement('div', ['callActions']);
 
         const micIcon = this.createActionButton('mic');
         callActions.appendChild(micIcon);
@@ -59,12 +59,10 @@ export class CallScreen extends Popup {
         flexCenter.appendChild(callingStatus)
         this.mainArea.appendChild(flexCenter)
 
-        const delay = data.status === 'incoming_call' ? 0 : 1000;
         setTimeout(() => {
             this.stopwatch.setDisplay(statusEl);
             this.stopwatch.start();
-            callActions.classList.remove('hide');
-        }, delay);
+        }, 0);
     }
 
     update() {}

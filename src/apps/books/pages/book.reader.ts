@@ -70,6 +70,7 @@ export class BookReader extends Modal {
         }, false);
 
         this.mainArea.addEventListener('touchmove', (event) => {
+            event.preventDefault();
             this.currentX = event.touches[0].clientX;
             const moveX = this.currentX - this.startX;
             this.bookService.moving(moveX);

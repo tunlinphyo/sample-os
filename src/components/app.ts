@@ -6,6 +6,7 @@ export interface AppActions {
     btnCenter?: string;
     btnEnd?: string;
     template?: string;
+    parentEl?: HTMLElement
 }
 
 export abstract class App extends BaseComponent {
@@ -19,7 +20,7 @@ export abstract class App extends BaseComponent {
         protected history: HistoryStateManager,
         actions?: AppActions
     ) {
-        super(actions?.template || 'appTemplate', document.body)
+        super(actions?.template || 'appTemplate', actions?.parentEl || document.body)
 
         this.component.classList.add('screen--app');
         this.mainArea = this.getElement('.mainArea');

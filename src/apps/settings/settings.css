@@ -1,8 +1,56 @@
 @layer component {
+
+    .fullBottom {
+        .mainArea {
+            height: calc(var(--grid) * 14);
+
+            .scrollArea {
+                height: calc(var(--grid) * 14);
+                padding-block-end: var(--grid);
+            }
+        }
+
+        .actionBar {
+            position: absolute;
+            bottom: var(--grid);
+        }
+
+        .actionBar {
+            position: absolute;
+            z-index: 0;
+            bottom: var(--grid);
+
+            .actionButton {
+                pointer-events: none;
+
+                &:has(span) {
+                    pointer-events: auto;
+                    border-radius: calc(var(--grid) * 1.5);
+                    /* background-color: var(--white); */
+                    /* outline: 2px solid var(--black);
+                    outline-offset: -8px; */
+                    position: relative;
+                    z-index: 0;
+
+                    &::before {
+                        content: '';
+                        inset: 10px;
+                        display: block;
+                        position: absolute;
+                        z-index: -1;
+                        background-color: var(--white);
+                        border-radius: 50%;
+                        /* border: 2px solid var(--black); */
+                    }
+                }
+            }
+        }
+    }
+
     .settingList {
         list-style: none;
         margin: 0;
-        padding: 0 var(--padding);
+        padding: var(--half) var(--padding);
         padding-block-end: calc(var(--grid) * 1.5);
 
         .settingItem {
@@ -43,7 +91,7 @@
 
     .appList {
         margin: 0;
-        padding-inline: var(--padding);
+        padding: var(--half) var(--padding);
         list-style: none;
         --toggle: calc(var(--grid)* 1.7);
 

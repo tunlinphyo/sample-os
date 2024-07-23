@@ -1,7 +1,8 @@
+import { Keyboard } from "../components/keyboard";
 import { PhoneController } from "../controllers/phone.controller";
 import { DeviceController } from "../device/device";
 import { Contact } from "../stores/contact.store";
-import { History } from "../stores/history.store";
+import { History, randomMessages } from "../stores/history.store";
 
 
 export class PhoneService {
@@ -13,13 +14,63 @@ export class PhoneService {
     async makeACall(number: string) {
         if (this.phone.isBlock(number)) return;
         let contact = this.phone.contactsStore.findContactByNumber(number);
+        const isBlock = this.phone.isBlock(number);
+        if (isBlock) {
+            const name = contact ? `${contact.firstName} ${contact.lastName}` : number;
+            const result = await this.device.confirmPopup.openPage(
+                'Blocked',
+                `${name} is blocked. Do you want to unblock?`
+            );
+            if (result) {
+                this.phone.unblockNumber(contact || number);
+            } else {
+                return;
+            }
+        }
         const result = await this.device.outgoingCall.openPage({ contact, number });
         if (result && typeof result === 'object') {
             this.device.callScreen.openPage('Phone', { contact: result.contact, number: result.number, status: 'outgoing_call' });
         } else {
-            let history = this.generateMissCall(number, false, (contact || undefined));
+            let history = this.generateMissCall(number, true, (contact || undefined));
             this.phone.addHistory(history);
         }
+    }
+
+    async textAMessage(number: string) {
+        if (!number || number.length < 6) return;
+        const contact = this.phone.contactsStore.findContactByNumber(number);
+        const isBlock = this.phone.isBlock(number);
+        if (isBlock) {
+            const name = contact ? `${contact.firstName} ${contact.lastName}` : number;
+            const result = await this.device.confirmPopup.openPage(
+                'Blocked',
+                `${name} is blocked. Do you want to unblock?`
+            );
+            if (result) {
+                this.phone.unblockNumber(contact || number);
+            } else {
+                return;
+            }
+        }
+        const keyboardConfig: Keyboard = {
+            label: contact ? `${contact.firstName} ${contact.lastName}` : number,
+            defaultValue: '',
+            type: 'textarea',
+            keys: randomMessages,
+            btnEnd: 'send',
+        };
+        this.device.keyboard.open(keyboardConfig).then(data => {
+            if (data) {
+                const newHistory: Omit<History, 'id'> = {
+                    type: 'to_message',
+                    date: new Date(),
+                    contact: contact || undefined,
+                    number: number,
+                    data: data
+                };
+                this.phone.addHistory(newHistory);
+            }
+        });
     }
 
     private generateMissCall(number: string, to: boolean, contact?: Contact) {

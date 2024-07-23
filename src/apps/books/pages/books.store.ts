@@ -9,7 +9,15 @@ export class BookStorePage extends Page {
         super(history, {})
     }
 
-    render() {}
+    render() {
+        const flexCenter = this.createFlexCenter();
+
+        const message = this.createElement('div', ['message']);
+        message.textContent = 'Coming soon..';
+
+        flexCenter.appendChild(message);
+        this.mainArea.appendChild(flexCenter);
+    }
 
     update() {}
 }

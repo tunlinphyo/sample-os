@@ -25,7 +25,7 @@ export class CalendarAppController {
                 {
                     pattern: '/events',
                     callback: () => {
-                        this.eventsPage.openPage('Events', state);
+                        this.eventsPage.openPage('', state);
                     }
                 }, {
                     pattern: '/events/new',

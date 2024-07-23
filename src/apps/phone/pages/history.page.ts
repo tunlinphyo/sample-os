@@ -5,6 +5,7 @@ import { SelectItem } from "../../../components/select";
 import { PhoneController } from "../../../controllers/phone.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
+import { PhoneService } from "../../../services/phone.service";
 import { Contact } from "../../../stores/contact.store";
 import { History, HistoryType, randomMessages } from "../../../stores/history.store";
 import { OSDate } from "../../../utils/date";
@@ -12,6 +13,7 @@ import { OSObject } from "../../../utils/object";
 
 export class HistoryPage extends Page {
     private chatHistory: History | undefined;
+    private phoneService: PhoneService;
 
     constructor(
         history: HistoryStateManager,
@@ -19,6 +21,7 @@ export class HistoryPage extends Page {
         private phone: PhoneController
     ) {
         super(history, { btnStart: 'phone', btnEnd: 'chat_bubble' });
+        this.phoneService = new PhoneService(this.device, this.phone);
         this.init();
     }
 
@@ -255,24 +258,16 @@ export class HistoryPage extends Page {
                 ]
             }
             const number = await this.device.selectList.openPage('Phone', list);
-            if (number) this.device.callScreen.openPage('Phone', { contact, number, status: 'outgoing_call' });
+            if (number) {
+                this.phoneService.makeACall(number);
+            }
         }
     }
 
     private async textAMessage(history?: History) {
         if (history) {
             const typeMessage = (number: string) => {
-                this.typeMessage(number, (value) => {
-                    if (!value) return;
-                    const newHistory: Omit<History, 'id'> = {
-                        type: 'to_message',
-                        date: new Date(),
-                        contact: history.contact,
-                        number,
-                        data: value
-                    };
-                    this.phone.addHistory(newHistory);
-                });
+                this.phoneService.textAMessage(number);
             };
             const contact = history.contact;
             if (contact) {

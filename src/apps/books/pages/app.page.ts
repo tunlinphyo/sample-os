@@ -9,14 +9,14 @@ export class BooksApp extends App {
         history: HistoryStateManager,
         private book: BooksController
     ) {
-        super(history, { template: 'actionTemplate', /* btnEnd: 'shopping_bag' */ });
+        super(history, { template: 'actionTemplate', btnEnd: 'shopping_bag' });
         this.init();
     }
 
     private init() {
-        // this.addEventListener('click', () => {
-        //     this.history.pushState('/books/store', null);
-        // }, this.btnEnd, false);
+        this.addEventListener('click', () => {
+            this.history.pushState('/books/store', null);
+        }, this.btnEnd, false);
 
         this.book.addChangeListener((status: string) => {
             if (status === 'BOOKS_CHANGE') {

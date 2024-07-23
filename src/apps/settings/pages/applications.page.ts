@@ -20,6 +20,7 @@ export class ApplicationsPage extends Page {
         private setting: SettingsController
     ) {
         super(history, {}); // btnEnd: 'check'
+        this.component.classList.add('fullBottom');
         this.init();
     }
 

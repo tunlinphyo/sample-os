@@ -120,6 +120,7 @@ export class EventsService extends BaseController {
     private currDateEl: HTMLElement | undefined;
     private nextDateEl: HTMLElement | undefined;
     private dateButton: HTMLElement | undefined;
+    private statusEl: HTMLElement;
 
     private startX: number = 0;
     private currentX: number = 0;
@@ -140,6 +141,8 @@ export class EventsService extends BaseController {
         private setDate: SetDateCallback,
     ) {
         super();
+
+        this.statusEl = this.component.parentElement!.querySelector(".statusBar-title")!;
     }
 
     get date() {
@@ -162,7 +165,8 @@ export class EventsService extends BaseController {
         this._date = newDate;
         this.setDate(newDate);
         if (this.dateButton) {
-            this.dateButton.textContent = OSDate.formatDate(this._date, this.device.timeZone, true, true);
+            this.dateButton.textContent = OSDate.formatDate(this._date, this.device.timeZone, false, true);
+            this.statusEl.textContent = OSDate.customFormat(this._date, { year: 'numeric' }, this.device.timeZone);
         }
     }
 
@@ -522,9 +526,12 @@ export class EventsService extends BaseController {
         const prevButton = this.createElement('button', ['prevButton']);
         prevButton.innerHTML = '<span class="material-symbols-outlined">arrow_back</span>';
         const currentDate = this.createElement('div', ['currentDate']);
-        currentDate.textContent = OSDate.formatDate(this.date, this.device.timeZone, true, true);
+        currentDate.textContent = OSDate.formatDate(this.date, this.device.timeZone, false, true);
         const nextButton = this.createElement('button', ['nextButton']);
         nextButton.innerHTML = '<span class="material-symbols-outlined">arrow_forward</span>';
+
+        console.log(this.statusEl, "ELELEL");
+        this.statusEl.textContent = OSDate.customFormat(this.date, { year: 'numeric' }, this.device.timeZone);
 
         dateToggle.appendChild(currentDate);
         dateToggle.appendChild(prevButton);
@@ -554,6 +561,7 @@ export class EventsService extends BaseController {
             this.currentY = event.touches[0].clientY;
             const moveX = this.currentX - this.startX;
             const moveY = this.currentY - this.startY;
+            if (Math.abs(moveY) <= Math.abs(moveX)) event.preventDefault();
             this.moving(moveX, moveY);
         }, false);
 

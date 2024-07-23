@@ -106,9 +106,9 @@ export class OSDate {
 
         const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'long' });
         const startOfWeek = new Date(today);
-        startOfWeek.setDate(today.getDate() - today.getDay());
+        startOfWeek.setDate(today.getDate() - today.getDay() - 1);
         const endOfWeek = new Date(today);
-        endOfWeek.setDate(today.getDate() + (7 - today.getDay()));
+        endOfWeek.setDate(today.getDate() + (6 - today.getDay()));
 
         if (date.toDateString() === today.toDateString()) {
             return 'Today';
@@ -121,7 +121,7 @@ export class OSDate {
         } else {
             const options: Intl.DateTimeFormatOptions = { month: 'short', day: '2-digit' };
             if (addYear) options.year = 'numeric';
-            if (addWeek) options.weekday = 'short';
+            if (addWeek) options.weekday = 'long';
             return date.toLocaleDateString('en-US', options);
         }
     }

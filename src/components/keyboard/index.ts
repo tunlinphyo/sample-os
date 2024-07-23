@@ -73,6 +73,13 @@ export class KeyboardPage extends BaseComponent {
         this.parentEl.appendChild(this.component);
         this.initializeTextList(data);
 
+        const textArea = this.getElement(".textArea");
+        if (data.type === 'textarea') {
+            textArea.classList.remove("laregeText");
+        } else {
+            textArea.classList.add("laregeText");
+        }
+
         return new Promise(resolve => {
             this.setupTextArea();
 

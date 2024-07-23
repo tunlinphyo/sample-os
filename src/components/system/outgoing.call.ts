@@ -18,7 +18,8 @@ export class OutgoingCall extends BaseComponent {
     constructor() {
         super('appTemplate');
 
-        this.component.classList.add('screen--popup')
+        this.component.classList.add('screen--popup');
+        this.component.classList.add('callingPage');
         this.mainArea = this.getElement('.mainArea')
 
         this.setupActionButton('close', 'center');
@@ -57,12 +58,12 @@ export class OutgoingCall extends BaseComponent {
                 const isSuccess = Math.random() < 0.75;
                 this.closePage()
                 resolve(isSuccess ? data : false)
-            }, 30 * 1000);
+            }, 3 * 1000);
 
             this.mainArea.innerHTML = ''
             this.render(data);
 
-            this.getElement('.statusBar-title').innerHTML = "Incoming call";
+            this.getElement('.statusBar-title').innerHTML = "Calling";
 
             setTimeout(() => {
                 this.component.classList.add('screen--show');

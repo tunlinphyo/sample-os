@@ -45,11 +45,14 @@ export class ContactsPage extends Page {
         const scrollArea = this.createScrollArea();
         const noteList = this.createElement('ul', ['titleList', 'contactList']);
         list.forEach(item => {
-            const contactName = this.createElement('li', ['titleItem', 'textLarge'], { 
-                'data-name': `${item.firstName[0]}${item.lastName[0]}` 
+            const contactName = this.createElement('li', ['titleItem', 'textLarge'], {
+                'data-name': `${item.firstName[0]}${item.lastName[0]}`
             });
             if (item.isBlocked) contactName.classList.add('blocked');
-            contactName.textContent = `${item.firstName} ${item.lastName}`;
+            contactName.innerHTML = `
+                <span class="thumbnail">${item.firstName[0]}${item.lastName[0]}</span>
+                <span>${item.firstName} ${item.lastName}</span>
+            `;
             this.addEventListener('click', () => {
                 this.history.pushState(`/contacts/detail`, this.phone.getContact(item.id));
             }, contactName);

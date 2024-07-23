@@ -6,7 +6,7 @@ export type EventListenerInfo = {
 };
 
 export abstract class BaseComponent {
-    protected component: HTMLElement;
+    public component: HTMLElement;
     private eventListeners: EventListenerInfo[] = [];
     protected customEvents: Set<string> = new Set();
 
