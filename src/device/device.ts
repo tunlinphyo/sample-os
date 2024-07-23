@@ -32,6 +32,8 @@ export class DeviceController extends BaseComponent {
 
     private _appHistory: Record<string, HistoryState[]> = {};
 
+    public lockedDevice: boolean = true;
+
     public keyboard: KeyboardPage;
     public alertPopup: AppAlert;
     public confirmPopup: AppAlert;

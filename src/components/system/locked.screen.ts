@@ -1,5 +1,6 @@
 import { DeviceController } from "../../device/device";
 import { HistoryStateManager } from "../../device/history.manager";
+import { OSBrowser } from "../../utils/browser";
 import { OSDate } from "../../utils/date";
 import { App } from "../app";
 
@@ -8,6 +9,7 @@ export class LockedScreenPage extends App {
     private hourHand: HTMLElement;
     private minuteHand: HTMLElement;
     // private secondHand: HTMLElement;
+    private powerBtn: HTMLButtonElement;
 
     constructor(
         history: HistoryStateManager,
@@ -20,10 +22,29 @@ export class LockedScreenPage extends App {
         this.hourHand = this.getElement('.hour-hand');
         this.minuteHand = this.getElement('.minute-hand');
         // this.secondHand = this.getElement('.second-hand');
+        this.powerBtn = this.getElement("#aiButton", this.device.component);
+        
+        this.init();
+    }
+
+    private init() {
         this.setClock();
         const now = new Date();
         const delay = (60 - now.getSeconds()) * 1000;
         setInterval(() => this.setClock(), delay);
+
+        this.powerBtn.addEventListener('click', () => {
+            this.powerBtn.animate([
+                { translate: '25px 0' },
+                { translate: '20px 0' },
+                { translate: '25px 0' }
+            ], {
+                duration: 500,
+                easing: 'ease',
+                iterations: 1
+            });
+            this.closeLocked(); 
+        });
     }
 
     render() {
@@ -50,25 +71,18 @@ export class LockedScreenPage extends App {
         }, this.device.timeZone);
 
 
-        safeArea.appendChild(clockEl);
         safeArea.appendChild(dateEl);
+        safeArea.appendChild(clockEl);
 
         const homeNavigation = this.createElement('button', ['homeNavigation']);
         const navButton = this.createElement('button', ['navButton']);
 
         navButton.addEventListener('click', () => {
-            console.log("click");
-            navButton.animate([
-                { transform: 'translateY(0)' },
-                { transform: 'translateY(-4px)', offset: 0.3 },
-                { transform: 'translateY(0)', offset: 0.6 },
-                { transform: 'translateY(-2px)', offset: 0.8 },
-                { transform: 'translateY(0)' }
-            ], {
-                duration: 1000,
-                easing: 'ease-in-out',
-                iterations: 1
-            });
+            if (OSBrowser.isTouchSupport()) {
+                this.lockedAnimate();
+            } else {
+                this.openLocked();
+            }
         });
         homeNavigation.appendChild(navButton);
 
@@ -77,6 +91,22 @@ export class LockedScreenPage extends App {
     }
 
     update() {}
+
+    openLocked() {
+        this.device.lockedDevice = false;
+        this.component.style.transition = 'translate .5s ease';
+        this.component.style.translate = '0 -101%';
+    }
+
+    closeLocked() {
+        this.component.style.transition = 'translate 0.3s ease';
+        this.component.style.translate = '0 0';
+        if (this.device.lockedDevice) {
+            this.lockedAnimate();
+        } else {
+            this.device.lockedDevice = true;
+        }
+    }
 
     private setClock() {
         const now = new OSDate().getDateByTimeZone(this.device.timeZone);
@@ -94,4 +124,17 @@ export class LockedScreenPage extends App {
         this.hourHand.style.transform = `rotate(${hoursDegrees}deg)`;
     }
 
+    private lockedAnimate() {
+        this.component.animate([
+            { transform: 'translateY(0)' },
+            { transform: 'translateY(-16px)', offset: 0.3 },
+            { transform: 'translateY(0)', offset: 0.6 },
+            { transform: 'translateY(-8px)', offset: 0.8 },
+            { transform: 'translateY(0)' }
+        ], {
+            duration: 1000,
+            easing: 'ease-in-out',
+            iterations: 1
+        });
+    }
 }

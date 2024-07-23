@@ -1,6 +1,6 @@
 
 
-class NotificationService {
+export class NotificationService {
     constructor() {
 
     }

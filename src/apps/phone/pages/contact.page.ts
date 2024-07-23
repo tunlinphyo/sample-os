@@ -1,12 +1,10 @@
-import { Keyboard } from "../../../components/keyboard";
 import { Page } from "../../../components/page";
 import { SelectItem } from "../../../components/select";
 import { PhoneController } from "../../../controllers/phone.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
 import { PhoneService } from "../../../services/phone.service";
-import { Contact, ContactWithBlock } from "../../../stores/contact.store";
-import { History, randomMessages } from "../../../stores/history.store";
+import { ContactWithBlock } from "../../../stores/contact.store";
 
 
 

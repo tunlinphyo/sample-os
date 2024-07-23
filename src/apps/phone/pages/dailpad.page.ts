@@ -1,5 +1,4 @@
 import { PhoneLabelHandler } from "../../../components/form/form-elem";
-import { Keyboard } from "../../../components/keyboard";
 import { Page } from "../../../components/page";
 import { SelectItem } from "../../../components/select";
 import { PhoneController } from "../../../controllers/phone.controller";
@@ -7,7 +6,7 @@ import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
 import { PhoneService } from "../../../services/phone.service";
 import { Contact, ContactWithBlock } from "../../../stores/contact.store";
-import { History, phoneNumbers, randomMessages } from "../../../stores/history.store";
+import { phoneNumbers } from "../../../stores/history.store";
 import { OSObject } from "../../../utils/object";
 
 

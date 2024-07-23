@@ -515,6 +515,9 @@ body {
             transition: translate .5s ease-out;
             z-index: 996;
             pointer-events: auto;
+            border-radius: calc(var(--grid) * 1.5);
+            outline: 2px solid var(--black);
+            outline-offset: 1px;
 
             .mainArea {
                 height: calc(var(--grid) * 17);
@@ -529,6 +532,7 @@ body {
 
                     .clockArea {
                         height: calc(var(--grid) * 8);
+                        align-items: flex-start;
                     }
 
                     .dateContainer {

@@ -48,9 +48,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.calendar = calendar;
     window.weather = weather;
 
-    new LockedScreenPage(historyManager, window.device);
+    const lockedScreen = new LockedScreenPage(historyManager, window.device);
     new PhoneDummyController(window.device, window.phone);
-    new GestureService(historyManager, window.device);
+    new GestureService(historyManager, window.device, lockedScreen);
     // new Battery();
     // const fullScreen = new FullscreenController();
 
