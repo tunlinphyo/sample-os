@@ -16,7 +16,7 @@ export abstract class Popup extends BaseComponent {
 
     public isActive: boolean = false
 
-    constructor(actions: PageActions, templateId?: string) {
+    constructor(private iframeEl: HTMLIFrameElement, actions: PageActions, templateId?: string) {
         super(templateId || 'appTemplate');
 
         this.component.classList.add('screen--popup')
@@ -31,8 +31,7 @@ export abstract class Popup extends BaseComponent {
         this.closePage = this.closePage.bind(this)
     }
 
-    abstract render(data: any): void;
-    abstract update(data: any[] | any): void;
+    abstract render(data: any, className?: string): Promise<any | boolean>;
 
     public listen<T>(eventName: string, callback: (data?: T) => void): void {
         this.addEventListener(eventName, (event) => {
@@ -42,28 +41,21 @@ export abstract class Popup extends BaseComponent {
         }, this.component, false)
     }
 
-    public openPage<T>(title?: string, data?: T[] | T, isCalendar?: boolean): Promise<T|boolean> {
-        return new Promise((resolve) => {
-            try {
-                this.getElement('#device', document.body).appendChild(this.component)
-            } catch(_) {
-                document.body.appendChild(this.component)
-            }
+    public openPage<T>(title?: string, data?: any[] | any, className?: string): Promise<T|boolean> {
+        return new Promise(async (resolve) => {
+            if (!this.iframeEl.contentDocument) return false;
+            this.iframeEl.contentDocument.body.appendChild(this.component);
             this.addEventListener('click', async () => {
                 this.closePage()
                 resolve(false)
-            }, this.btnCenter);
+            }, this.btnCenter, false);
 
             if (this.btnEnd) {
-                // this.removeBtnStart();
                 this.addEventListener('click', async () => {
                     this.closePage()
                     resolve(this.data || true)
-                }, this.btnEnd);
+                }, this.btnEnd, false);
             }
-
-            if (!isCalendar) this.mainArea.innerHTML = '';
-            this.render(data);
 
             if (title) this.getElement('.statusBar-title').innerHTML = title;
 
@@ -76,7 +68,12 @@ export abstract class Popup extends BaseComponent {
                     this.component.removeEventListener('transitionend', transitionEndHandler);
                 };
                 this.component.addEventListener('transitionend', transitionEndHandler);
-            }, 0)
+            }, 0);
+
+            this.mainArea.innerHTML = '';
+            const result = await this.render(data, className);
+            this.closePage();
+            resolve(result);
         })
     }
 

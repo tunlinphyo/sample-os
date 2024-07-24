@@ -1,11 +1,10 @@
 import { HistoryState, HistoryStateManager } from "./history.manager";
 import { BaseComponent } from "../components/base";
 import { AppAlert } from "../components/popups/alert.popup";
-import { SelectList } from "../components/select";
 import { CallScreen } from "../components/system/call.screen";
 import { DatePicker } from "../components/pickers/date.picker";
 import { TimePicker } from "../components/pickers/time.picker";
-import { ChooseList } from "../components/pickers/choose.picker";
+import { ChoosePicker } from "../components/pickers/choose.picker";
 import { KeyboardPage } from "../components/keyboard";
 import { YearPicker } from "../components/pickers/year.picker";
 import { OSDate } from "../utils/date";
@@ -13,6 +12,7 @@ import { TimeWheel } from "../components/pickers/time.wheel";
 import { IncomingCall } from "../components/system/incoming.call";
 import { OutgoingCall } from "../components/system/outgoing.call";
 import { OSBrowser } from "../utils/browser";
+import { SelectPopup } from "../components/popups/select.popup";
 
 export type DeviceTheme = 'auto' | 'light' | 'dark';
 
@@ -23,10 +23,10 @@ export class DeviceController extends BaseComponent {
     public homeFrame: HTMLIFrameElement;
     public navEl: HTMLButtonElement;
 
-    private app: string = '';
     private _theme: DeviceTheme = 'auto';
     private _timeZone: string = Intl.DateTimeFormat().resolvedOptions().timeZone;
     private _hour12: boolean = true;
+    private _systemOpen: boolean = false;
     private _appOpen: boolean = false;
     private _animating: boolean = false;
 
@@ -34,18 +34,19 @@ export class DeviceController extends BaseComponent {
 
     public lockedDevice: boolean = true;
 
-    public keyboard: KeyboardPage;
-    public alertPopup: AppAlert;
-    public confirmPopup: AppAlert;
-    public selectList: SelectList;
     public outgoingCall: OutgoingCall;
     public incomingCall: IncomingCall;
     public callScreen: CallScreen;
+
+    public keyboard: KeyboardPage;
+    public alertPopup: AppAlert;
+    public confirmPopup: AppAlert;
+    public selectList: SelectPopup;
     public datePicker: DatePicker;
     public timePicker: TimePicker;
     public timeWheel: TimeWheel;
     public yearPicker: YearPicker;
-    public chooseList: ChooseList;
+    public choosePicker: ChoosePicker;
 
     constructor(
         private history: HistoryStateManager
@@ -59,18 +60,19 @@ export class DeviceController extends BaseComponent {
         this.homeFrame = this.getElement<HTMLIFrameElement>('#homeFrame');
         this.navEl = this.getElement('.navigationBar-btn');
 
-        this.keyboard = new KeyboardPage();
-        this.alertPopup = new AppAlert();
-        this.confirmPopup = new AppAlert(true);
-        this.selectList = new SelectList();
-        this.outgoingCall = new OutgoingCall();
-        this.incomingCall = new IncomingCall();
-        this.callScreen = new CallScreen();
-        this.datePicker = new DatePicker(this.timeZone);
-        this.timePicker = new TimePicker(this);
-        this.timeWheel = new TimeWheel();
-        this.yearPicker = new YearPicker();
-        this.chooseList = new ChooseList();
+        this.outgoingCall = new OutgoingCall(this);
+        this.incomingCall = new IncomingCall(this);
+        this.callScreen = new CallScreen(this);
+
+        this.keyboard = new KeyboardPage(this.appFrame);
+        this.alertPopup = new AppAlert(this.appFrame);
+        this.confirmPopup = new AppAlert(this.appFrame, true);
+        this.selectList = new SelectPopup(this.appFrame);
+        this.datePicker = new DatePicker(this.appFrame, this.timeZone);
+        this.timePicker = new TimePicker(this.appFrame, this);
+        this.timeWheel = new TimeWheel(this.appFrame);
+        this.yearPicker = new YearPicker(this.appFrame);
+        this.choosePicker = new ChoosePicker(this.appFrame);
 
         this.init();
     }
@@ -99,6 +101,12 @@ export class DeviceController extends BaseComponent {
         this.updateClock(false, false);
     }
 
+    get systemOpen() {
+        return this._systemOpen;
+    }
+    set systemOpen(isOpen: boolean) {
+        this._systemOpen = isOpen;
+    }
     get appOpened() {
         return this._appOpen;
     }
@@ -118,26 +126,16 @@ export class DeviceController extends BaseComponent {
 
     public updateClock(timer: boolean, stopwatch: boolean) {
         const clockElement = this.getElement('#dateTime');
-        const now = new OSDate().getDateByTimeZone(this.timeZone);
-        const hours = now.getHours();
-        const minutes = now.getMinutes();
-
-        let hourString = hours.toString();
-        const isAm = hours < 12 ? 'AM' : 'PM';
-        if (this.hour12) {
-            hourString = (hours % 12 || 12).toString();
-        }
-
-        const minuteString = minutes < 10 ? '0' + minutes : minutes;
 
         if (!timer) {
+            const hourString = OSDate.getCustomTime(new Date(), this.hour12, this.timeZone);
             if (stopwatch) {
                 clockElement.innerHTML = `
-                    ${hourString}:${minuteString}${this.hour12 ? ` ${isAm}` : ''}
+                    ${hourString}}
                     <span class="material-symbols-outlined fill-icon" style="font-size: 20px; translate: 0 -2px; margin-left: 2px">timer</span>
                 `;
             } else {
-                clockElement.textContent = `${hourString}:${minuteString}${this.hour12 ? ` ${isAm}` : ''}`;
+                clockElement.textContent = hourString;
             }
         }
     }
@@ -151,13 +149,14 @@ export class DeviceController extends BaseComponent {
         this.updateClock(false, false);
 
         setTimeout(() => {
-            this.onStateChange(history.state);
+            const path = window.location.pathname;
+            this.history.pushState(path, null);
         }, 1000);
 
         this.navEl.addEventListener('click', () => {
             if (!this.appOpened) return;
             if (!OSBrowser.isTouchSupport()) {
-                this.history.pushState('/', null);
+                this.history.replaceState('/', null);
             } else {
                 this.navEl.animate([
                     { transform: 'translateY(0)' },
@@ -174,18 +173,12 @@ export class DeviceController extends BaseComponent {
         });
     }
 
-    private onStateChange(_: string) {
-        const path = window.location.pathname;
-
-        const pathes = path.split('/');
-        if (this.app && this.app === pathes[1]) return;
-        this.app = path[1];
-
-        if (path && path !== '/') {
-            // console.log('OPEN_APP', state);
-            this.openApp(`/src/apps/${pathes[1]}/index.html`);
-        } else {
+    private onStateChange(_: any, url: string) {
+        if (url == '/') {
             this.closeApp();
+        } else {
+            const pathes = url.split('/');
+            this.openApp(`/src/apps/${pathes[1]}/index.html`);
         }
     }
 
@@ -194,8 +187,6 @@ export class DeviceController extends BaseComponent {
         this._animating = true;
         this.appFrame.src = src;
 
-        // this.homeFrame.classList.add('hide');
-        // this.appContainer.classList.add('show');
         this.appContainer.classList.remove('hide');
 
         this.appContainer.style.transition = 'all .5s ease';
@@ -220,8 +211,6 @@ export class DeviceController extends BaseComponent {
     private closeApp() {
         this._appOpen = false;
         this._animating = true;
-        // this.homeFrame.classList.remove('hide');
-        // this.appContainer.classList.remove('show');
         this.appContainer.classList.add('hide');
 
         this.appContainer.style.transition = 'all .5s ease';
@@ -234,13 +223,6 @@ export class DeviceController extends BaseComponent {
         this.navEl.style.opacity = '0';
 
         this.dispatchCustomEvent('closeApp');
-
-        this.datePicker.closePage();
-        this.timePicker.closePage();
-        this.yearPicker.closePage();
-        this.selectList.closePage();
-        this.chooseList.closePage();
-        this.keyboard.close();
 
         const transitionEndHandler = () => {
             this._animating = false;

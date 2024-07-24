@@ -22,7 +22,7 @@ export class CitiesPage extends Page {
 
     init() {
         this.addEventListener('click', async () => {
-            const select = await this.device.selectList.openPage('Cities', this.cityList, 'contacts');
+            const select = await this.device.selectList.openPage('Cities', this.cityList);
             if (select) {
                 const city = CITIES.find(item => item.timeZone === select)! as LocationData;
                 this.weather.currentLocation = city;

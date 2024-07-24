@@ -10,6 +10,7 @@ export class BooksApp extends App {
         private book: BooksController
     ) {
         super(history, { template: 'actionTemplate', btnEnd: 'shopping_bag' });
+        this.component.classList.add('booksPage');
         this.init();
     }
 

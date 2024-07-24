@@ -96,7 +96,7 @@ export class BookService {
 
         for(const item of bookmarks) {
             list.push({
-                title: `Page number: ${item - 1}`,
+                title: `Page: ${item - 1}`,
                 value: item.toString(),
                 icon: 'bookmark'
             });

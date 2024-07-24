@@ -20,7 +20,6 @@ export interface Keyboard {
 export class KeyboardPage extends BaseComponent {
     private keyboard: EnTextKeyboard | EnNumberKeyboard | undefined;
 
-    private parentEl: HTMLElement;
     private textArea: HTMLElement;
     private keysArea: HTMLElement;
     private textList: string[] = [];
@@ -33,9 +32,8 @@ export class KeyboardPage extends BaseComponent {
 
     private toSplit: boolean = false;
 
-    constructor() {
+    constructor(private iframeEl: HTMLIFrameElement) {
         super('keyboardTemplate');
-        this.parentEl = this.getElement('#device', document.body);
 
         this.component.classList.add('screen--modal');
         this.textArea = this.getElement('.keyboardTextArea .textArea');
@@ -70,7 +68,7 @@ export class KeyboardPage extends BaseComponent {
 
     public open(data: Keyboard): Promise<string> {
         this.toSplit = (data.type === 'textarea' || !!data.keys) && data.type !== 'number';
-        this.parentEl.appendChild(this.component);
+        this.iframeEl.contentDocument!.body.appendChild(this.component);
         this.initializeTextList(data);
 
         const textArea = this.getElement(".textArea");

@@ -134,8 +134,8 @@ export class NoteEditorPage extends Modal {
                 icon: 'format_quote',
             }
         ]
-        const selected = await this.device.selectList.openPage('Format', list);
-        if (selected) {
+        const selected = await this.device.selectList.openPage<string>('Format', list);
+        if (selected && typeof selected === 'string') {
             this.handleTypeChange(selected);
         }
     }

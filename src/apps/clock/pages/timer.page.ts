@@ -73,7 +73,7 @@ export class TimerPage extends Page {
         }
 
         this.addEventListener('click', async () => {
-            const result = (await this.device.timeWheel.openPage('Timer', data.duration));
+            const result = (await this.device.timeWheel.openPage<number>('Timer', data.duration));
             if (typeof result !== 'boolean' && this.timerData) {
                 this.timerData.duration = result;
                 this.updateTimer({ status: 'reset', data: this.timerData });

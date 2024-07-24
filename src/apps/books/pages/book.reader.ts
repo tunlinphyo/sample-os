@@ -27,10 +27,8 @@ export class BookReader extends Modal {
 
     private init() {
         this.addEventListener('click', async () => {
-            // this.bookService.toggleBookmark();
-            // this.renderBookmark();
             const result = await this.device.selectList.openPage('Bookmarks', this.bookService.getBookmarks());
-            if (result) {
+            if (result && typeof result === 'string') {
                 this.bookService.chapter = parseInt(result);
                 this.hideMenu();
             }
@@ -38,7 +36,7 @@ export class BookReader extends Modal {
 
         this.addEventListener('click', async () => {
             const result = await this.device.selectList.openPage('Chapters', this.bookService.getChapters(), 'chapters');
-            if (result) {
+            if (result && typeof result === 'string') {
                 this.bookService.chapter = parseInt(result);
                 this.hideMenu();
             }
@@ -94,7 +92,6 @@ export class BookReader extends Modal {
 
             const onMouseUp = () => {
                 const moveX = this.currentX - this.startX;
-                console.log(this.startY, this.mainArea.clientHeight);
                 if (moveX < 80 && moveX > -80) {
                     if (this.bookService.animating) return;
                     if (this.startX < 100 && this.startY > 478) {

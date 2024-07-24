@@ -1,5 +1,5 @@
 import { App } from "../../../components/app";
-import { CalendarService } from "../../../components/calendar/calendar";
+import { CalendarService, YearMonth } from "../../../components/calendar/calendar";
 import { CalendarController } from "../../../controllers/calendar.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
@@ -73,10 +73,11 @@ export class CalendarApp extends App {
         }
 
         this.addEventListener('click', async () => {
-            const result = await this.device.yearPicker.openPage('Year, Month', {
+            const result = await this.device.yearPicker.openPage<YearMonth>('Year, Month', {
                 year: this.calendarService.date.year,
                 month: this.calendarService.date.month
             });
+            console.log("YEAR_MONTH", result);
             if (result && typeof result !== 'boolean') {
                 this.calendarService.date = result;
             }

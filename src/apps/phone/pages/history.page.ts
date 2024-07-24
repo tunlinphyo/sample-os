@@ -257,8 +257,8 @@ export class HistoryPage extends Page {
                     }
                 ]
             }
-            const number = await this.device.selectList.openPage('Phone', list);
-            if (number) {
+            const number = await this.device.selectList.openPage<string>('Phone', list);
+            if (number && typeof number === 'string') {
                 this.phoneService.makeACall(number);
             }
         }
@@ -291,8 +291,8 @@ export class HistoryPage extends Page {
                             }
                         ]
                     }
-                    const result = await this.device.selectList.openPage('Message', list);
-                    if (result) typeMessage(result);
+                    const result = await this.device.selectList.openPage<string>('Message', list);
+                    if (result && typeof result === 'string') typeMessage(result);
                 }
             } else {
                 typeMessage(history.number);
@@ -305,8 +305,8 @@ export class HistoryPage extends Page {
         for(const contact of this.sortByName(this.phone.contacts)) {
             list.push({ title: `${contact.firstName} ${contact.lastName}`, value: contact.id });
         }
-        const selected = await this.device.selectList.openPage('Contacts', list, 'contacts');
-        if (selected) {
+        const selected = await this.device.selectList.openPage<string>('Contacts', list);
+        if (selected && typeof selected === 'string') {
             return this.phone.contacts.find(item => item.id === selected);
         }
         return null;

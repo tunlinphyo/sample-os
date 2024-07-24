@@ -222,7 +222,7 @@ export class CustomDateTimeForm extends CustomForm {
         if (config.type === 'date') this.toggleTime(false)
 
         this.dateInput.addEventListener('click', async () => {
-            const result = await this.device.datePicker.openPage('Date Picker', this.date, true);
+            const result = await this.device.datePicker.openPage('Date Picker', this.date);
             if (result && typeof result != "boolean") this.value = result as Date;
         });
         this.timeInput.addEventListener('click', async () => {
@@ -332,8 +332,8 @@ export class CustomSelectForm extends CustomForm {
     private init(config: SelectConfig) {
         this.value = config.defautValue;
         this.input.addEventListener('click', async () => {
-            const value = await this.device.selectList.openPage(config.label, config.list, 'contacts');
-            if (value) this.value = value
+            const value = await this.device.selectList.openPage(config.label, config.list);
+            if (value && typeof value === 'string') this.value = value
         })
     }
 
@@ -365,7 +365,7 @@ export class CustomChooseForm extends CustomForm {
     private init(config: ChooseConfig) {
         this.value = config.defautValue;
         this.input.addEventListener('click', async () => {
-            const value = await this.device.chooseList.openPage<any>(config.label, { list: config.list, selected: config.defautValue } satisfies ChooseData)
+            const value = await this.device.choosePicker.openPage<any>(config.label, { list: config.list, selected: config.defautValue } satisfies ChooseData)
             if (value) {
                 this.value = value as string[];
             }

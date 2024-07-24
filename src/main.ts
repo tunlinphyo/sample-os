@@ -54,6 +54,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // new Battery();
     // const fullScreen = new FullscreenController();
 
+    // window.weather.fetchWeather();
+
     window.clock.addChangeListener(async (status: string, data: any) => {
         if (status === 'UPDATE_CLOCK') {
             window.device.updateClock(window.clock.timerRunning, window.clock.stopwatchRunning);
@@ -117,6 +119,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.weather.addChangeListener((status: string, data: any) => {
         if (status === 'WEATHER_NOTIFIGATION') {
             console.log('WEATHER::::::::::', data);
+        }
+        if (status === 'MY_WEATHER_FETCH') {
+            console.log('MY_WEATHER_FETCH', data);
+            lockedScreen.update(status, data);
         }
     })
 

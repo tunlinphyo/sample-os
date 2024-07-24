@@ -34,28 +34,51 @@ export class GestureService {
             const moveY = this.currentY - this.startY;
             this.moveEnd(moveY);
         }, false);
+
+        this.device.component.addEventListener('mousedown', (event) => {
+            this.startY = event.clientY;
+            this.currentY = event.clientY;
+
+            const onMouseMove = (moveEvent: MouseEvent) => {
+                document.body.style.pointerEvents = 'none';
+                this.currentY = moveEvent.clientY;
+                const moveY = this.currentY - this.startY;
+                this.moving(moveY);
+            };
+
+            const onMouseUp = () => {
+                document.body.style.pointerEvents = 'auto';
+                const moveY = this.currentY - this.startY;
+                this.moveEnd(moveY);
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+            };
+
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        }, false);
     }
 
     private moving(y: number) {
-        console.log(this.device.animating);
-        console.log(y);
+        if (this.device.systemOpen) return;
         const domRect: DOMRect = this.device.component.getBoundingClientRect();
         const max = domRect.height * -1;
-        const startPos = domRect.top + domRect.height - 40;
+        const startPos = domRect.top + domRect.height - 60;
         if (y < max) return;
 
         if (this.device.lockedDevice) {
             this.openLocked(y, startPos);
         } else {
-            if (this.device.animating) return;
+            // if (this.device.animating) return;
             this.openApp(y, startPos, max);
         }
 
     }
 
     private moveEnd(y: number) {
+        if (this.device.systemOpen) return;
         const domRect: DOMRect = this.device.component.getBoundingClientRect();
-        const startPos = domRect.top + domRect.height - 40;
+        const startPos = domRect.top + domRect.height - 60;
         if (this.device.lockedDevice) {
             this.closeLock(y, startPos);
         } else {
@@ -97,7 +120,7 @@ export class GestureService {
 
     private closeApp(y: number, startPos: number) {
         if (this.startY > startPos && y < -80) {
-            this.history.pushState('/', null);
+            this.history.replaceState('/', null);
         } else {
             this.device.appContainer.style.transition = 'all .5s ease';
             this.device.appContainer.style.translate = `0 0`;

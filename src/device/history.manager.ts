@@ -12,9 +12,7 @@ export class HistoryStateManager {
     private stateChangeListeners: Array<(state: any, url: string) => void> = [];
     private states: HistoryState[] = [];
 
-    constructor() {
-        window.addEventListener('popstate', this.onPopState.bind(this));
-    }
+    constructor() {}
 
     get history(): HistoryState[]  {
         return this.states;
@@ -32,23 +30,20 @@ export class HistoryStateManager {
 
     init(states: HistoryState[]) {
         this.states = states;
-        // console.log('ON_HISTORY_INIT', this.states);
     }
 
-    public pushState(url: string, state: any, title: string = '') {
+    public pushState(url: string, state: any) {
         try {
             this.history = { state, url };
-            history.pushState(state, title, url);
             this.notifyStateChange(state, url);
         } catch (error) {
             console.error('Error in pushState:', error);
         }
     }
 
-    public replaceState(url: string, state: any, title: string = '') {
+    public replaceState(url: string, state: any) {
         try {
             this.replaceHistory = { state, url };
-            history.replaceState(state, title, url);
             this.notifyStateChange(state, url);
         } catch (error) {
             console.error('Error in replaceState:', error);
@@ -58,7 +53,6 @@ export class HistoryStateManager {
     public goBack() {
         if (this.states.length) {
             this.states.pop();
-            // console.log('ON_HISTORY_POP', this.history);
         }
     }
 
@@ -81,10 +75,5 @@ export class HistoryStateManager {
         for (const listener of this.stateChangeListeners) {
             listener(state, url);
         }
-    }
-
-    private onPopState(_: PopStateEvent) {
-        this.goBack();
-        // console.log('POPSTATE_EVENT:::::::::::::::', event.state);
     }
 }

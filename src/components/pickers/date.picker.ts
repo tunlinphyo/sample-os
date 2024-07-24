@@ -1,5 +1,5 @@
 import { OSNumber } from "../../utils/number";
-import { CalendarService } from "../calendar/calendar";
+import { CalendarService, YearMonth } from "../calendar/calendar";
 import { Popup } from "../popup";
 import { YearPicker } from "./year.picker";
 
@@ -21,10 +21,10 @@ export class DatePicker extends Popup {
     private moveX: number = 0;
     private currentX: number = 0;
 
-    constructor(private timeZone: string) {
-        super({ btnStart: 'today', btnEnd: true }, 'datePickerTemplate');
+    constructor(iframeEl: HTMLIFrameElement, private timeZone: string) {
+        super(iframeEl, { btnStart: 'today', btnEnd: true }, 'datePickerTemplate');
 
-        this.yearPicker = new YearPicker();
+        this.yearPicker = new YearPicker(iframeEl);
         this.dateMonthEl = this.getElement('#dateMonth');
         this.prevButton = this.getElement(".prevButton");
         this.nextButton = this.getElement(".nextButton");
@@ -58,7 +58,7 @@ export class DatePicker extends Popup {
         }, this.btnStart, false);
 
         this.addEventListener('click', async () => {
-            const result = await this.yearPicker.openPage('Year, Month', {
+            const result = await this.yearPicker.openPage<YearMonth>('Year, Month', {
                 year: this.calendarService.date.year,
                 month: this.calendarService.date.month
             });
@@ -121,10 +121,10 @@ export class DatePicker extends Popup {
     }
 
     render(data: Date) {
-        this.data = data;
-        const date = new Date(data);
-        this.calendarService.init(date);
+        return new Promise(() => {
+            this.data = data;
+            const date = new Date(data);
+            this.calendarService.init(date);
+        });
     }
-
-    update() {}
 }

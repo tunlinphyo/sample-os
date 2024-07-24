@@ -219,9 +219,49 @@ body {
     .device {
         position: relative;
 
-        .statusContainer {
+        .islandContainer {
             position: absolute;
             z-index: 999;
+            top: 0;
+            left: 0;
+            width: calc(var(--grid) * 10);
+            height: calc(var(--grid) * 1.4);
+
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+
+            .island {
+                width: calc(var(--grid) * 2.2);
+                height: var(--grid);
+
+                border-radius: var(--grid);
+                background-color: #000;
+                outline: 1px solid #000;
+                overflow: hidden;
+
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                padding-inline: 10px;
+
+                .camera {
+                    --size: calc(var(--grid) * 0.5);
+                    width: var(--size);
+                    height: var(--size);
+                    border-radius: 50%;
+                    background-color: #111;
+
+                    outline: 2px solid #222;
+                    outline-offset: -1px;
+                    box-shadow: 0 0 0 8px #000;
+                }
+            }
+        }
+
+        .statusContainer {
+            position: absolute;
+            z-index: 90;
             top: 0;
             left: 0;
             width: calc(var(--grid) * 10);
@@ -297,33 +337,6 @@ body {
             .statusEnd {
                 padding-inline-end: 5px;
             }
-
-            .island {
-                width: calc(var(--grid) * 2.2);
-                height: var(--grid);
-
-                border-radius: var(--grid);
-                background-color: #000;
-                outline: 1px solid #000;
-                overflow: hidden;
-
-                display: flex;
-                justify-content: flex-end;
-                align-items: center;
-                padding-inline: 10px;
-
-                .camera {
-                    --size: calc(var(--grid) * 0.5);
-                    width: var(--size);
-                    height: var(--size);
-                    border-radius: 50%;
-                    background-color: #111;
-
-                    outline: 2px solid #222;
-                    outline-offset: -1px;
-                    box-shadow: 0 0 0 8px #000;
-                }
-            }
         }
 
         .navigationBar,
@@ -333,7 +346,7 @@ body {
             pointer-events: none;
 
             position: absolute;
-            z-index: 995;
+            z-index: 90;
             left: 0;
             bottom: 0;
 
@@ -513,7 +526,7 @@ body {
         &.lockedScreen {
             translate: 0 0;
             transition: translate .5s ease-out;
-            z-index: 996;
+            z-index: 95;
             pointer-events: auto;
             border-radius: calc(var(--grid) * 1.5);
             outline: 2px solid var(--black);
@@ -530,19 +543,51 @@ body {
                     height: calc(var(--grid) * 14);
                     margin-top: calc(var(--grid) * 2);
 
-                    .clockArea {
+                    .weatherContainer {
+                        width: calc(var(--grid) * 10);
+                        height: calc(var(--grid) * 2.5);
+
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: flex-end;
+                        align-items: center;
+                        text-align: center;
+
+                        .weatherStatus {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            gap: 5px;
+                            text-transform: capitalize;
+
+                            .degree {
+                                font-size: 18px;
+                            }
+                        }
+                    }
+
+                    .clockContainer {
+                        width: calc(var(--grid) * 10);
                         height: calc(var(--grid) * 8);
+                        display: flex;
+                        justify-content: center;
                         align-items: flex-start;
+                        text-align: center;
+
+                        font-size: calc(var(--grid) * 2.5);
+                        font-weight: 600;
+                        line-height: 1;
                     }
 
                     .dateContainer {
                         width: calc(var(--grid) * 10);
-                        height: calc(var(--grid) * 3.5);
+                        height: calc(var(--grid) * 2.5);
                         display: flex;
                         justify-content: center;
-                        align-items: center;
+                        align-items: flex-end;
                         text-align: center;
-                        font-size: 24px;
+                        font-size: 18px;
+                        padding-block-end: var(--half);
                     }
                 }
 
@@ -576,7 +621,7 @@ body {
             overflow: hidden;
 
             position: absolute;
-            z-index: 1;
+            z-index: 2;
             inset: 0;
 
             translate: 0 100%;
@@ -594,6 +639,24 @@ body {
 
             &.hide {
                 transition: all .2s ease-in;
+            }
+        }
+
+        .systemAlert {
+            width: calc(var(--grid) * 10);
+            height: calc(var(--grid) * 17);
+            border-radius: calc(var(--grid) * 1.5);
+            outline: 2px solid var(--black);
+            outline-offset: 1px;
+            overflow: hidden;
+
+            position: absolute;
+            z-index: 96;
+            inset: 0;
+            display: none;
+
+            .iframe {
+                background-color: var(--white);
             }
         }
 
@@ -723,7 +786,7 @@ body {
                 scrollbar-width: thin;
 
                 >* {
-                    padding-block: 0 calc(var(--grid) * 3);
+                    padding-block: 0 calc(var(--grid) * 2.5);
                 }
 
                 .scrollArea {
@@ -1230,7 +1293,7 @@ body {
                     flex-direction: column;
                     justify-content: center;
                     align-items: center;
-                    gap: calc(var(--grid) * 0.65);
+                    gap: var(--half);
 
                     .selectItem {
                         width: calc((var(--grid) * 10) - (var(--padding) * 2));
@@ -1239,6 +1302,8 @@ body {
                         font-size: 18px;
                         overflow: hidden;
                         text-overflow: ellipsis;
+                        text-align: left;
+                        font-size: 22px;
 
                         &.withIcon {
                             display: flex;
@@ -1270,15 +1335,6 @@ body {
                         }
                     }
 
-                    &.contacts {
-                        gap: calc(var(--grid) * 0.5);
-
-                        .selectItem {
-                            text-align: left;
-                            font-size: 22px;
-                        }
-                    }
-
                     &.chapters {
                         gap: calc(var(--grid) * 0.5);
                         justify-content: flex-start;
@@ -1297,6 +1353,7 @@ body {
                                 content: counter(index);
                                 text-align: right;
                                 font-family: var(--number-fonts);
+                                translate: 0 -1px;
                             }
                         }
                     }

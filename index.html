@@ -28,6 +28,21 @@
 
     <template id="lockedTemplate">
         <div class="screen">
+            <div class="statusContainer">
+                <div class="statusStart">
+                    <span style="font-size: 14px;">DE mobile</span>
+                </div>
+                <div></div>
+                <div class="statusEnd">
+                    <span class="icons">
+                        <span class="material-symbols-outlined" style="font-size: 18px;" id="networkStatus">signal_wifi_4_bar</span>
+                        <span class="material-symbols-outlined" style="font-size: 16px; margin-right: 8px; scale: 1.4 1;">signal_cellular_4_bar</span>
+                        <span id="batteryPercentage" data-value="">
+                            <span class="material-symbols-outlined" style="font-size: 22px; rotate: 90deg; scale: 1.3 1.3;" id="batteryStatusIcon">battery_full</span>
+                        </span>
+                    </span>
+                </div>
+            </div>
             <div class="mainArea"></div>
         </div>
     </template>
@@ -172,13 +187,16 @@
     <template id="deviceTemplate">
         <main class="main">
             <section class="device">
+                <div class="islandContainer">
+                    <div class="island">
+                        <div class="camera"></div>
+                    </div>
+                </div>
                 <div class="statusContainer">
                     <div class="statusStart">
                         <span style="font-size: 16px;" id="dateTime" class="time">09:24</span>
                     </div>
-                    <div class="island">
-                        <div class="camera"></div>
-                    </div>
+                    <div></div>
                     <div class="statusEnd">
                         <span class="icons">
                             <span class="material-symbols-outlined fill-icon" style="font-size: 18px; margin-right: 3px; display: none" id="headPhones">headphones</span>
@@ -212,6 +230,13 @@
                             class="iframe"
                             id="appFrame"
                             src="" frameborder="0"></iframe>
+                    </section>
+
+                    <section class="systemAlert">
+                        <iframe
+                            class="iframe"
+                            id="systemFrame"
+                            src="/src/system/index.html" frameborder="0"></iframe>
                     </section>
                 </div>
             </section>

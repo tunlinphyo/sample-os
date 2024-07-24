@@ -27,9 +27,9 @@ export class PhoneService {
                 return;
             }
         }
-        const result = await this.device.outgoingCall.openPage({ contact, number });
+        const result = await this.device.outgoingCall.open('Calling', { contact, number });
         if (result && typeof result === 'object') {
-            this.device.callScreen.openPage('Phone', { contact: result.contact, number: result.number, status: 'outgoing_call' });
+            this.device.callScreen.open('Phone', { contact: result.contact, number: result.number, status: 'outgoing_call' });
         } else {
             let history = this.generateMissCall(number, true, (contact || undefined));
             this.phone.addHistory(history);

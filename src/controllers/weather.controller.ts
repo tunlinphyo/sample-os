@@ -35,11 +35,11 @@ export class WeatherController extends BaseController {
     }
 
     private setupListeners() {
+
         this.store.listen((list) => {
             this.weathers = list;
             this.notifyListeners('CITY_LIST_CHANGED', list);
         });
-
 
         this.weatherWorker.addEventListener('message', (event) => {
             const { status, location, weather } = event.data;
@@ -50,6 +50,9 @@ export class WeatherController extends BaseController {
                     if (exist) await this.store.update(location.timeZone, { location, weather })
                     else await this.store.add({ location, weather }, location.timeZone);
                     this.notifyListeners('WEATHER_FEACHED', { id: location.timeZone, location, weather});
+                    if (this.myLocation.timeZone === location.timeZone) {
+                        this.notifyListeners('WEATHER_NOTIFIGATION', { location, weather});
+                    }
                 });
             }
             if (status === "location") {
@@ -59,7 +62,9 @@ export class WeatherController extends BaseController {
                     else await this.store.add({ location, weather }, MY_LOCATION_ID);
                     this.notifyListeners('WEATHER_FEACHED', { id: MY_LOCATION_ID, location, weather});
                 });
-                // console.log("NOTIFIGATION", WeatherService.getNotifigation(weather));
+                if (this.myLocation.timeZone === location.timeZone) {
+                    this.notifyListeners('MY_WEATHER_FETCH', weather);
+                }
                 if (WeatherService.getNotifigation(weather)) {
                     this.notifyListeners('WEATHER_NOTIFIGATION', { location, weather});
                 }

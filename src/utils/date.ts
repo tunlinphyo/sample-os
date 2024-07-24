@@ -174,6 +174,19 @@ export class OSDate {
         return new Intl.DateTimeFormat('en-US', options).format(dateUTC);
     }
 
+    public static getCustomTime(date: Date, hour12: boolean, timeZone?: string) {
+        const now = getDateByTimeZone(date, timeZone);
+        const hours = now.getHours();
+        const minutes = now.getMinutes();
+
+        let hourString = hours.toString();
+        if (hour12) {
+            hourString = (hours % 12 || 12).toString();
+        }
+
+        return  `${hourString}:${minutes.toString().padStart(2, '0')}`;
+    }
+
     public static get24Hour(hour: number, isAm: boolean): number {
         if (hour < 1 || hour > 12) {
             throw new Error("Invalid hour. Hour must be between 1 and 12.");

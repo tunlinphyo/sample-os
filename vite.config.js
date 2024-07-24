@@ -10,6 +10,7 @@ export default defineConfig({
         rollupOptions: {
             input: {
                 main: resolve(__dirname, '/index.html'),
+                system: resolve(__dirname, '/src/system/index.html'),
                 home: resolve(__dirname, '/src/apps/index.html'),
                 phone: resolve(__dirname, '/src/apps/phone/index.html'),
                 calendar: resolve(__dirname, '/src/apps/calendar/index.html'),

@@ -168,8 +168,8 @@ export class DialpadPage extends Page {
         for(const contact of this.sortByName(this.phone.contacts)) {
             list.push({ title: `${contact.firstName} ${contact.lastName}`, value: contact.id });
         }
-        const selected = await this.device.selectList.openPage('Contacts', list, 'contacts');
-        if (selected) {
+        const selected = await this.device.selectList.openPage<string>('Contacts', list);
+        if (selected && typeof selected === 'string') {
             return this.phone.contacts.find(item => item.id === selected);
         }
         return null;

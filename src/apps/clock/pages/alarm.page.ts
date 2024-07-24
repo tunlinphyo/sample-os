@@ -57,38 +57,31 @@ class AlarmForm extends FormComponent {
             list: [
                 {
                     label: 'Sunday',
-                    value: '0',
-                    icon: 'calendar_today'
+                    value: '0'
                 },
                 {
                     label: 'Monday',
-                    value: '1',
-                    icon: 'calendar_today'
+                    value: '1'
                 },
                 {
                     label: 'Tuesday',
-                    value: '2',
-                    icon: 'calendar_today'
+                    value: '2'
                 },
                 {
                     label: 'Wendesday',
-                    value: '3',
-                    icon: 'calendar_today'
+                    value: '3'
                 },
                 {
                     label: 'Thursday',
-                    value: '4',
-                    icon: 'calendar_today'
+                    value: '4'
                 },
                 {
                     label: 'Friday',
-                    value: '5',
-                    icon: 'calendar_today'
+                    value: '5'
                 },
                 {
                     label: 'Saturday',
-                    value: '6',
-                    icon: 'calendar_today'
+                    value: '6'
                 },
             ]
         }, groupEl)

@@ -12,6 +12,7 @@ export abstract class BaseComponent {
 
     constructor(templateId: string, parent?: HTMLElement) {
         this.component = this.cloneTemplate(templateId);
+
         if (parent) parent.appendChild(this.component);
 
         this.handleScroll();
@@ -73,14 +74,16 @@ export abstract class BaseComponent {
         if (oldElement.parentNode) {
             oldElement.parentNode.replaceChild(newElement, oldElement);
         } else {
-            throw new Error('Parent node not found for the element to be replaced.');
+            console.log('Parent node not found for the element to be replaced.');
+            // throw new Error('Parent node not found for the element to be replaced.');
         }
     }
 
     protected getElement<T extends HTMLElement>(selector: string, parent: Document | HTMLElement = this.component): T {
         const element = parent.querySelector(selector) as T;
         if (!element) {
-            throw new Error(`Element with selector ${selector} not found.`);
+            // console.log(`Element with selector ${selector} not found.`);
+            // throw new Error(`Element with selector ${selector} not found.`);
         }
         return element;
     }
@@ -88,7 +91,8 @@ export abstract class BaseComponent {
     protected getAllElement<T extends HTMLElement>(selector: string, parent: Document | HTMLElement = this.component): NodeListOf<T> {
         const elements = parent.querySelectorAll(selector) as NodeListOf<T>;
         if (!elements) {
-            throw new Error(`Element with selector ${selector} not found.`);
+            console.log(`Element with selector ${selector} not found.`);
+            // throw new Error(`Element with selector ${selector} not found.`);
         }
         return elements;
     }
