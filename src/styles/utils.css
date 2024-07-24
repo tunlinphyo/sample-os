@@ -574,7 +574,7 @@ body {
                         align-items: flex-start;
                         text-align: center;
 
-                        font-size: calc(var(--grid) * 2.5);
+                        font-size: calc(var(--grid) * 2.25);
                         font-weight: 600;
                         line-height: 1;
                     }

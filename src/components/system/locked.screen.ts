@@ -7,8 +7,8 @@ import { App } from "../app";
 
 
 export class LockedScreenPage extends App {
-    private hourHand: HTMLElement;
-    private minuteHand: HTMLElement;
+    // private hourHand: HTMLElement;
+    // private minuteHand: HTMLElement;
     // private secondHand: HTMLElement;
     private powerBtn: HTMLButtonElement;
     private weatherEl: HTMLElement | undefined;
@@ -22,8 +22,8 @@ export class LockedScreenPage extends App {
         this.component.classList.add("lockedScreen");
         this.render();
 
-        this.hourHand = this.getElement('.hour-hand');
-        this.minuteHand = this.getElement('.minute-hand');
+        // this.hourHand = this.getElement('.hour-hand');
+        // this.minuteHand = this.getElement('.minute-hand');
         // this.secondHand = this.getElement('.second-hand');
         this.powerBtn = this.getElement("#aiButton", this.device.component);
 
