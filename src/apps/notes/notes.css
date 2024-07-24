@@ -137,8 +137,10 @@
                     line-height: 1.3;
 
                     .item {
-                        &.focus::after {
-                            height: var(--grid);
+                        &.focus {
+                            &::after {
+                                height: var(--grid);
+                            }
                         }
                     }
                 }
@@ -170,15 +172,19 @@
                 }
 
                 .item {
-                    &.focus::after {
-                        content: '';
-                        display: inline-block;
-                        width: 2px;
-                        height: 16px;
-                        background-color: var(--black);
-                        translate: 0 2px;
-
-                        animation: ShowHide 1s steps(2, jump-none) infinite;
+                    &.focus {
+                        /* background-color: #f00; */
+                        &::after {
+                            content: '';
+                            display: inline-block;
+                            width: 0;
+                            outline: 1px solid var(--black);
+                            height: 16px;
+                            background-color: var(--black);
+                            translate: 0 2px;
+    
+                            animation: ShowHide 1s steps(2, jump-none) infinite;
+                        }
                     }
                 }
 
@@ -198,6 +204,9 @@
                         display: inline;
                         &:not(:last-child) {
                             margin-inline-end: 5px;
+                        }
+                        &:not(.focus):empty {
+                            margin-inline-end: 0;
                         }
                     }
                 }

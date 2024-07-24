@@ -9,7 +9,7 @@ import { NotesController } from "../notes.controller";
 
 export class NoteEditorPage extends Modal {
     private keyboard: EnTextKeyboard;
-    private note: Note | undefined;
+    private note?: Note;
     private keysArea: HTMLElement;
 
     constructor(
@@ -27,112 +27,66 @@ export class NoteEditorPage extends Modal {
     }
 
     private init() {
-        this.listen('pageOpenFinished', () => {
-            this.focusLastElem();
-        });
+        this.listen('pageOpenFinished', () => this.focusLastElem());
 
-        this.addEventListener('click', () => {
-            this.changeType()
-        }, this.btnStart, false);
+        this.addEventListener('click', this.changeType.bind(this), this.btnStart, false);
+        this.addEventListener('click', this.saveNote.bind(this), this.btnEnd, false);
 
-        this.addEventListener('click', () => {
-            const data = this.getData();
-            if (!data) return;
-            this.notes.saveNote(data);
-        }, this.btnEnd, false);
+        this.notes.addChangeListener(this.handleNoteSaved.bind(this));
 
-        this.notes.addChangeListener((status: string) => {
-            if (status === "NOTE_SAVED") {
-                this.closePage();
-            }
-        });
-
-        this.device.addEventListener('closeApp', () => {
-            const data = this.getData();
-            if (data) {
-                if (data.id) this.history.updateState(`/notes/edit`, data);
-                else this.history.updateState(`/notes/new`, data);
-            }
-        });
+        this.device.addEventListener('closeApp', this.handleCloseApp.bind(this));
     }
 
     render(data?: Note) {
-        if (data) this.note = data;
-        else {
-            this.note = {
-                id: '',
-                title: '',
-                body: [
-                    { type: 'title', data: [] }
-                ],
-                createDate: new Date(),
-                deleted: false,
-            }
-        }
+        this.note = data ?? this.createEmptyNote();
         this.renderInitData();
         this.keyEventListeners();
     }
 
-    update() {}
+    update() { }
 
-    private renderInitData() {
-        for (const note of this.note!.body) {
-            this.renderElement(note);
-        }
+    private createEmptyNote(): Note {
+        return {
+            id: '',
+            title: '',
+            body: [{ type: 'title', data: [] }],
+            createDate: new Date(),
+            deleted: false,
+        };
     }
 
-    private getData() {
-        const list: NoteData[] = [];
-        const elems = this.getAllElement('.section');
+    private renderInitData() {
+        this.note!.body.forEach(note => this.renderElement(note));
+    }
 
-        for (const elem of elems) {
+    private getData(): Note | null {
+        const list: NoteData[] = Array.from(this.getAllElement('.section')).map(elem => {
             const type = elem.dataset.type as NoteType;
-            list.push(this.getContent(elem, type));
-        }
-        const title = list.find(item => item.type === 'title')
+            return this.getContent(elem, type);
+        });
+
+        const title = list.find(item => item.type === 'title');
 
         if (!(title && title.data.length)) return null;
 
         this.note!.title = title.data[0] || '';
         this.note!.body = list;
-        this.note
-
-        return this.note;
+        return this.note!;
     }
 
-    private getContent(elem: HTMLElement, type: NoteType) {
-        let data: string[] = this.getItemListDataArray(elem);
+    private getContent(elem: HTMLElement, type: NoteType): NoteData {
+        const data = this.getItemListDataArray(elem);
         return { type, data };
     }
 
     private async changeType() {
         const list: SelectItem[] = [
-            {
-                title: 'Title',
-                value: 'title',
-                icon: 'title',
-            },
-            {
-                title: 'Paragraph',
-                value: 'paragraph',
-                icon: 'format_paragraph',
-            },
-            {
-                title: 'Ordered List',
-                value: 'order-list',
-                icon: 'format_list_numbered',
-            },
-            {
-                title: 'Unordered List',
-                value: 'unorder-list',
-                icon: 'format_list_bulleted',
-            },
-            {
-                title: 'Quote',
-                value: 'quote',
-                icon: 'format_quote',
-            }
-        ]
+            { title: 'Title', value: 'title', icon: 'title' },
+            { title: 'Paragraph', value: 'paragraph', icon: 'format_paragraph' },
+            { title: 'Ordered List', value: 'order-list', icon: 'format_list_numbered' },
+            { title: 'Unordered List', value: 'unorder-list', icon: 'format_list_bulleted' },
+            { title: 'Quote', value: 'quote', icon: 'format_quote' }
+        ];
         const selected = await this.device.selectList.openPage<string>('Format', list);
         if (selected && typeof selected === 'string') {
             this.handleTypeChange(selected);
@@ -157,14 +111,15 @@ export class NoteEditorPage extends Modal {
     }
 
     private handleTypeChange(toType: string) {
-        const foucsed = this.getEl('.focus');
-        if (!foucsed) return;
-        const parentEl = foucsed.parentElement;
-        if(!parentEl) return;
+        const focused = this.getEl('.focus');
+        if (!focused) return;
+        const parentEl = focused.parentElement;
+        if (!parentEl) return;
 
         const type = parentEl.dataset.type as string;
-        if (type === toType) return;
-        parentEl.dataset.type = toType;
+        if (type !== toType) {
+            parentEl.dataset.type = toType;
+        }
     }
 
     private handleKeyText(key: string) {
@@ -174,34 +129,29 @@ export class NoteEditorPage extends Modal {
         if (!parentEl) return;
         const type = parentEl.dataset.type as string;
 
-        if (type === 'title') {
-            if (noteTitles[key]) focused.textContent = noteTitles[key];
-        } else if (this.isParagraph(type)) {
-            const insertData = noteSentences[key] || anotherNoteSentences[key];
-            if (insertData) {
-                this.insertTextItem(focused, insertData)
-            }
-        } else {
-            const insertData = noteSentences[key] || anotherNoteSentences[key];
-            if (insertData) {
-                this.insertListItem(focused, insertData);
+        const insertData = noteSentences[key] || anotherNoteSentences[key];
+        if (insertData) {
+            if (type === 'title') {
+                focused.textContent = noteTitles[key] || insertData;
+            } else {
+                this.insertTextItem(focused, insertData);
             }
         }
     }
 
     private handleEnter() {
-        const foucsed = this.getEl('.focus');
-        if (!foucsed) return;
-        const parentEl = foucsed.parentElement;
+        const focused = this.getEl('.focus');
+        if (!focused) return;
+        const parentEl = focused.parentElement;
         if (!parentEl) return;
 
         const type = parentEl.dataset.type as NoteType;
         if (this.isParagraph(type)) {
-            const nextDatas = this.getNextSiblingsData(foucsed);
+            const nextDatas = this.getNextSiblingsData(focused);
             const data = nextDatas.length ? ['', ...nextDatas] : [''];
             this.createSection(parentEl, { type: 'paragraph', data });
         } else {
-            this.createListItem(parentEl, foucsed);
+            this.createListItem(parentEl, focused);
         }
     }
 
@@ -218,17 +168,14 @@ export class NoteEditorPage extends Modal {
 
     private renderElement(note: NoteData) {
         // @ts-ignore
-        if (note.type === 'check-list') return;
-
-        this.renderSection(note);
+        if (note.type !== 'check-list') {
+            this.renderSection(note);
+        }
     }
 
     private renderSection(note: NoteData, prevEl?: HTMLElement) {
         const newSection = this.createElement('div', ['section'], { 'data-type': note.type });
-        const list = note.data.length ? note.data : [''];
-        for (const text of list) {
-            this.renderItem(newSection, text)
-        }
+        note.data.forEach(text => this.renderItem(newSection, text));
         if (prevEl) {
             prevEl.insertAdjacentElement('afterend', newSection);
         } else {
@@ -247,13 +194,7 @@ export class NoteEditorPage extends Modal {
 
     private createSection(prevEl?: HTMLElement, note?: NoteData) {
         const newSection = this.createElement('div', ['section'], { 'data-type': note?.type || 'paragraph' });
-        const list = note?.data.length ? note.data : [''];
-        let currentEl: HTMLElement | null = null;
-        for (const text of list) {
-            currentEl = this.createItem(newSection, currentEl, text)
-        }
-        if (newSection.firstElementChild)
-            this.focusElement(newSection.firstElementChild as HTMLElement);
+        note?.data.forEach(text => this.createItem(newSection, null, text));
         if (prevEl) {
             prevEl.insertAdjacentElement('afterend', newSection);
         } else {
@@ -266,12 +207,12 @@ export class NoteEditorPage extends Modal {
 
     private createItem(parentEl: HTMLElement, elem: HTMLElement | null, text: string = '') {
         const focused = this.getEl('.focus');
-        if (focused) {
-            focused.classList.remove('focus');
-        }
+        if (focused) focused.classList.remove('focus');
+
         const itemEl = this.createElement('div', ['item']);
         itemEl.textContent = text;
         this.addFocusListener(itemEl);
+
         if (elem) {
             elem.insertAdjacentElement('afterend', itemEl);
         } else {
@@ -297,9 +238,10 @@ export class NoteEditorPage extends Modal {
     }
 
     private insertTextItem(elem: HTMLElement, text: string) {
-        if (!elem.textContent)  {
+        if (!elem.textContent) {
             elem.textContent = text;
-            return this.focusElement(elem);
+            this.focusElement(elem);
+            return;
         }
 
         elem.classList.remove('focus');
@@ -308,11 +250,6 @@ export class NoteEditorPage extends Modal {
         elem.insertAdjacentElement('afterend', itemEl);
         this.addFocusListener(itemEl);
         this.focusElement(itemEl);
-    }
-
-    private insertListItem(elem: HTMLElement, text: string) {
-        elem.textContent = text;
-        this.focusElement(elem);
     }
 
     private removeItem(parent: HTMLElement, item: HTMLElement, type: NoteType) {
@@ -328,50 +265,37 @@ export class NoteEditorPage extends Modal {
         if (previousSibling) {
             item.remove();
             this.focusElement(previousSibling);
-        } else if (!previousSibling) {
-            if (item.textContent) {
-                item.textContent = '';
-            } else {
-                const parentPrevSibling = parent.previousElementSibling as HTMLElement;
-                if (parentPrevSibling) {
-                    if (parent.children.length == 1) {
-                        parent.remove();
-                    } else {
-                        item.remove();
-                    }
-                    if (parentPrevSibling.lastChild) {
-                        this.focusElement(parentPrevSibling.lastChild as HTMLElement);
-                        const childrens = parent.children;
-                        Array.from(childrens).forEach(child => {
-                            const clone = child.cloneNode(true);
-                            parentPrevSibling.appendChild(clone);
-                            this.addFocusListener(clone as HTMLElement);
-                            child.remove();
-                        });
-                        parent.remove();
-                    } else {
-                        this.insertTextToEmpty(parentPrevSibling);
-                        const childrens = parent.children;
-                        Array.from(childrens).forEach(child => {
-                            const clone = child.cloneNode(true);
-                            parentPrevSibling.appendChild(clone);
-                            this.addFocusListener(clone as HTMLElement);
-                            child.remove();
-                        });
-                        parent.remove();
-                    }
-                } else {
-                    item.textContent = '';
-                }
-            }
         } else {
-            item.textContent = '';
+            const parentPrevSibling = parent.previousElementSibling as HTMLElement;
+            if (parentPrevSibling) {
+                if (parent.children.length === 1) {
+                    parent.remove();
+                } else {
+                    item.remove();
+                }
+                if (parentPrevSibling.lastChild) {
+                    this.focusElement(parentPrevSibling.lastChild as HTMLElement);
+                    this.moveChildElements(parent, parentPrevSibling);
+                } else {
+                    this.insertTextToEmpty(parentPrevSibling);
+                    this.moveChildElements(parent, parentPrevSibling);
+                }
+                parent.remove();
+            } else {
+                item.textContent = '';
+            }
         }
+    }
+    private moveChildElements(source: HTMLElement, destination: HTMLElement) {
+        Array.from(source.children).forEach(child => {
+            const clone = child.cloneNode(true);
+            destination.appendChild(clone);
+            child.remove();
+        });
     }
 
     private removeListItem(parent: HTMLElement, item: HTMLElement) {
-        const content = item.textContent;
-        if (content) {
+        if (item.textContent) {
             item.textContent = '';
         } else {
             this.removeTextItem(parent, item);
@@ -379,58 +303,48 @@ export class NoteEditorPage extends Modal {
     }
 
     private focusLastElem() {
-        const laseEl = this.mainArea.lastChild as HTMLElement;
-        if (!laseEl) return;
-        const laseItemEl = laseEl.lastChild as HTMLElement;
-        this.focusElement(laseItemEl);
+        const lastEl = this.mainArea.lastChild as HTMLElement;
+        if (lastEl && lastEl.lastChild) {
+            this.focusElement(lastEl.lastChild as HTMLElement);
+        }
     }
 
     private addFocusListenerParent(elem: HTMLElement) {
         this.addEventListener('click', (event) => {
             const targetEl = event.target as HTMLElement;
-            if (targetEl == elem) {
-                // const position = this.checkPosition(event as MouseEvent);
-                // console.log(position);
+            if (targetEl === elem) {
                 const focused = this.getEl('.focus');
-                if (focused) {
-                    focused.classList.remove('focus');
-                }
+                if (focused) focused.classList.remove('focus');
                 this.focusElement(targetEl.lastElementChild as HTMLElement);
             }
         }, elem);
     }
 
     private checkPosition(event: MouseEvent): "FRONT" | "BACK" | "NULL" {
-        var span = event.target as HTMLSpanElement;
-        var offset = this.getOffsetFromEvent(span, event);
+        const span = event.target as HTMLSpanElement;
+        const offset = this.getOffsetFromEvent(span, event);
 
         if (offset !== null) {
-            var textLength = span.textContent!.length;
-            var halfLength = textLength / 2;
-
-            if (offset < halfLength) {
-                return "FRONT";
-            } else {
-                return "BACK";
-            }
+            const textLength = span.textContent!.length;
+            const halfLength = textLength / 2;
+            return offset < halfLength ? "FRONT" : "BACK";
         } else {
             return "NULL";
         }
     }
 
     private getOffsetFromEvent(element: HTMLElement, event: MouseEvent) {
-        var range = document.createRange();
-        var nodes = element.childNodes!;
-        var totalOffset = 0;
+        const range = document.createRange();
+        const nodes = element.childNodes!;
+        let totalOffset = 0;
 
-        for (var i = 0; i < nodes.length; i++) {
-            var node = nodes[i];
+        for (const node of nodes) {
             if (node.nodeType === Node.TEXT_NODE) {
-                for (var j = 0; j < node.textContent!.length; j++) {
+                for (let j = 0; j < node.textContent!.length; j++) {
                     range.setStart(node, j);
                     range.setEnd(node, j + 1);
 
-                    var rect = range.getBoundingClientRect();
+                    const rect = range.getBoundingClientRect();
                     if (rect.left <= event.clientX && event.clientX <= rect.right &&
                         rect.top <= event.clientY && event.clientY <= rect.bottom) {
                         return totalOffset + j;
@@ -445,9 +359,8 @@ export class NoteEditorPage extends Modal {
     private addFocusListener(elem: HTMLElement) {
         this.addEventListener('click', (event) => {
             const focused = this.getEl('.focus');
-            if (focused) {
-                focused.classList.remove('focus');
-            }
+            if (focused) focused.classList.remove('focus');
+
             const position = this.checkPosition(event as MouseEvent);
             if (position === 'FRONT') {
                 const prevEl = elem.previousElementSibling;
@@ -474,10 +387,10 @@ export class NoteEditorPage extends Modal {
         this.focusElement(itemEl);
     }
 
-    private insertTextToEmpty(parentEL: HTMLElement) {
+    private insertTextToEmpty(parentEl: HTMLElement) {
         const itemEl = this.createElement('div', ['item', 'focus']);
         itemEl.textContent = "";
-        parentEL.insertAdjacentElement('beforeend', itemEl);
+        parentEl.insertAdjacentElement('beforeend', itemEl);
         this.addFocusListener(itemEl);
         this.focusElement(itemEl);
     }
@@ -485,46 +398,49 @@ export class NoteEditorPage extends Modal {
     private focusElement(elem: HTMLElement) {
         setTimeout(() => {
             elem.classList.add('focus');
-            elem.scrollIntoView({
-                behavior: 'auto',
-                block: 'center',
-                inline: 'nearest'
-            });
+            elem.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'nearest' });
         }, 0);
     }
 
-    private getEl<T extends HTMLElement>(selector: string, parent: HTMLElement = this.mainArea) {
-        const elem = parent.querySelector(selector)
-
-        if (!elem) return null;
-        return elem as T;
+    private getEl<T extends HTMLElement>(selector: string, parent: HTMLElement = this.mainArea): T | null {
+        return parent.querySelector(selector) as T | null;
     }
 
-    private getNextSiblingsData(element: HTMLElement) {
+    private getNextSiblingsData(element: HTMLElement): string[] {
         const siblings: string[] = [];
         let nextSibling = element.nextElementSibling;
         while (nextSibling) {
-          siblings.push(nextSibling.textContent || '');
-          const next = nextSibling;
-          nextSibling = next.nextElementSibling;
-          next.remove();
+            siblings.push(nextSibling.textContent || '');
+            nextSibling.remove();
+            nextSibling = nextSibling.nextElementSibling;
         }
         return siblings;
     }
 
-    private getItemListDataArray(elem: HTMLElement) {
-        let list: string[] = [];
-        Array.from(elem.children).forEach(elem => {
-            if (elem.textContent) list.push(elem.textContent);
-        })
-        return list;
+    private getItemListDataArray(elem: HTMLElement): string[] {
+        return Array.from(elem.children).map(child => child.textContent || '');
     }
 
-    private isParagraph(type: string) {
-        return (
-            type === 'paragraph'
-            || type === 'title'
-            || type === 'quote'
-        )
+    private isParagraph(type: string): boolean {
+        return ['paragraph', 'title', 'quote'].includes(type);
+    }
+
+    private saveNote() {
+        const data = this.getData();
+        if (data) this.notes.saveNote(data);
+    }
+
+    private handleNoteSaved(status: string) {
+        if (status === "NOTE_SAVED") {
+            this.closePage();
+        }
+    }
+
+    private handleCloseApp() {
+        const data = this.getData();
+        if (data) {
+            const path = data.id ? `/notes/edit` : `/notes/new`;
+            this.history.updateState(path, data);
+        }
     }
 }

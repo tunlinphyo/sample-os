@@ -103,7 +103,7 @@ export class LockedScreenPage extends App {
         this.weatherEl.innerHTML = `
             <div class="weatherStatus">
                 <span>${weather.weather[0].description}</span>
-                <span class="material-symbols-outlined" style="translate: 0 -2px">${WeatherService.getIcon(weather.weather[0].icon)}</span>:
+                <span class="material-symbols-outlined" style="translate: 0 -2px">${WeatherService.getIcon(weather.weather[0].icon)}</span>
                 <span class="degree">${Math.round(weather.main.temp)}&deg;</span>
             </div>
         `;
