@@ -24,11 +24,7 @@ export class GestureService {
         }, false);
 
         this.device.component.addEventListener('touchmove', (event) => {
-            const domRect: DOMRect = this.device.component.getBoundingClientRect();
-            const startPos = domRect.top + domRect.height - 40;
-            if (this.startY > startPos) {
-                event.preventDefault();
-            }
+            event.preventDefault();
             this.currentY = event.touches[0].clientY;
             const moveY = this.currentY - this.startY;
             this.moving(moveY);
