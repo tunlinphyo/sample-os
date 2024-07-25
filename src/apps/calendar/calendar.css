@@ -86,26 +86,7 @@
                 right: 0;
                 pointer-events: none;
 
-                border-top: 2px solid var(--black);
-
-                &::before,
-                &::after {
-                    content: '';
-                    width: 12px;
-                    height: 12px;
-                    border-radius: 100%;
-                    background-color: var(--black);
-
-                    position: absolute;
-                    top: -7px;
-                }
-                
-                &::before {
-                    left: -7px;
-                }
-                &::after {
-                    right: -7px;
-                }
+                border-top: 3px solid var(--black);
             }
 
             .hourList {

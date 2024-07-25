@@ -275,6 +275,20 @@ export class OSDate {
 
         return differenceInMinutes;
     }
+
+    public static isMidnight(date: Date, timeZone?: string) {
+        const dateUTC = getDateByTimeZone(date, timeZone);
+        return dateUTC.getHours() === 0 &&
+            dateUTC.getMinutes() === 0 &&
+            dateUTC.getSeconds() === 0;
+    }
+
+    public static isEndOfDay(date: Date, timeZone?: string) {
+        const dateUTC = getDateByTimeZone(date, timeZone);
+        return dateUTC.getHours() === 23 &&
+            dateUTC.getMinutes() === 59 &&
+            dateUTC.getSeconds() === 59;
+    }
 }
 
 function getDateByTimeZone(date: Date, timeZone?: string): Date {

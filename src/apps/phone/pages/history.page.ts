@@ -238,6 +238,7 @@ export class HistoryPage extends Page {
     }
 
     private async makeACall(history?: History) {
+        console.log('HISTORY:::MAKE_A_CALL', history);
         if (history) {
             const contact = history.contact;
             const phones = contact?.phones;

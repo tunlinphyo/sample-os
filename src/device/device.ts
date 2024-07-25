@@ -21,6 +21,7 @@ export class DeviceController extends BaseComponent {
     public appContainer: HTMLElement;
     public appFrame: HTMLIFrameElement;
     public homeFrame: HTMLIFrameElement;
+    public systemFrame: HTMLIFrameElement;
     public navEl: HTMLButtonElement;
 
     private _theme: DeviceTheme = 'auto';
@@ -58,6 +59,7 @@ export class DeviceController extends BaseComponent {
         this.appContainer = this.getElement('.appContainer');
         this.appFrame = this.getElement<HTMLIFrameElement>('#appFrame');
         this.homeFrame = this.getElement<HTMLIFrameElement>('#homeFrame');
+        this.systemFrame = this.getElement<HTMLIFrameElement>('#systemFrame');
         this.navEl = this.getElement('.navigationBar-btn');
 
         this.outgoingCall = new OutgoingCall(this);
@@ -105,6 +107,7 @@ export class DeviceController extends BaseComponent {
         return this._systemOpen;
     }
     set systemOpen(isOpen: boolean) {
+        this.dispatchCustomEvent('systemOpenStatus', isOpen);
         this._systemOpen = isOpen;
     }
     get appOpened() {
@@ -155,21 +158,21 @@ export class DeviceController extends BaseComponent {
 
         this.navEl.addEventListener('click', () => {
             if (!this.appOpened) return;
-            if (!OSBrowser.isTouchSupport()) {
-                this.history.replaceState('/', null);
-            } else {
-                this.navEl.animate([
-                    { transform: 'translateY(0)' },
-                    { transform: 'translateY(-4px)', offset: 0.3 },
-                    { transform: 'translateY(0)', offset: 0.6 },
-                    { transform: 'translateY(-2px)', offset: 0.8 },
-                    { transform: 'translateY(0)' }
-                ], {
-                    duration: 1000,
-                    easing: 'ease-in-out',
-                    iterations: 1
-                });
-            }
+            // if (!OSBrowser.isTouchSupport()) {
+            //     this.history.replaceState('/', null);
+            // } else {
+            // }
+            this.navEl.animate([
+                { transform: 'translateY(0)' },
+                { transform: 'translateY(-4px)', offset: 0.3 },
+                { transform: 'translateY(0)', offset: 0.6 },
+                { transform: 'translateY(-2px)', offset: 0.8 },
+                { transform: 'translateY(0)' }
+            ], {
+                duration: 1000,
+                easing: 'ease-in-out',
+                iterations: 1
+            });
         });
     }
 
@@ -252,6 +255,9 @@ export class DeviceController extends BaseComponent {
         }
         if (this.appFrame.contentDocument && this.appFrame.contentDocument.body) {
             this.appFrame.contentDocument.body.dataset.schema = theme;
+        }
+        if (this.systemFrame.contentDocument && this.systemFrame.contentDocument.body) {
+            this.systemFrame.contentDocument.body.dataset.schema = theme;
         }
     }
 

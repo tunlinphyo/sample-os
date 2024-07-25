@@ -190,13 +190,15 @@ class EventForm extends FormComponent {
                 currentEnd.setTime(endTime.getTime());
             }
 
+            console.log('ALL_DAY', currentStart, currentEnd, this.isAllDays(currentStart, currentEnd));
+
             events.push({
                 id: this.event?.id || "",
                 title: this.title!.value,
                 description: this.description!.value,
                 startTime: new Date(currentStart),
                 endTime: new Date(currentEnd),
-                allDay,
+                allDay: this.isAllDays(currentStart, currentEnd),
                 repeat: this.repeat!.value as RepeatType,
                 endRepeat: this.endRepeat!.value as EndRepeatType,
                 until: this.endDate!.value,
@@ -222,6 +224,10 @@ class EventForm extends FormComponent {
             endRepeat: this.endRepeat!.value as EndRepeatType,
             until: this.endDate!.value,
         }
+    }
+
+    private isAllDays(startTime: Date, endTime: Date) {
+        return OSDate.isMidnight(startTime, this.device.timeZone) && OSDate.isEndOfDay(endTime, this.device.timeZone);
     }
 }
 

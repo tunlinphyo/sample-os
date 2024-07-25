@@ -1,6 +1,7 @@
 @layer component {
     .clockPage,
-    .stopwatchPage {
+    .stopwatchPage,
+    .timerPage {
         .clockArea {
             position: sticky;
             z-index: 0;
@@ -8,7 +9,8 @@
         }
 
         .alarmList,
-        .timeLaps {
+        .timeLaps,
+        .timerList {
             position: relative;
             z-index: 1;
             background-color: var(--white);
@@ -56,6 +58,22 @@
                 font-size: 18px;
                 font-weight: 500;
             }
+        }
+    }
+
+    .timerList {
+        margin-block-start: var(--grid);
+        padding-inline: var(--padding);
+        padding-block: var(--grid) var(--padding);
+
+        .timerPrefix {
+            width: 100%;
+            height: calc(var(--grid) * 1.5);
+            padding-block: 8px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
     }
 

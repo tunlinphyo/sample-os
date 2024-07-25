@@ -7,24 +7,32 @@ export interface OutgoingData {
     contact?: Contact | null;
 }
 
-export class OutgoingCall extends BaseSystem {
+export class OutgoingCall extends BaseSystem<OutgoingData> {
+    private timeout: number | null = null;
+
     constructor(device: DeviceController) {
         super({ btnCenter: 'close' }, device);
     }
 
-    render(data: any) {
+    render(data: OutgoingData): Promise<OutgoingData | boolean> {
         return new Promise((resolve) => {
             this.createUI(data);
 
-            setTimeout(() => {
+            this.timeout = setTimeout(() => {
                 const isSuccess = Math.random() < 0.75;
                 this.close()
                 resolve(isSuccess ? data : false)
             }, 3 * 1000);
+
+            this.addEventListener('click', async () => {
+                if (this.timeout) clearTimeout(this.timeout);
+            }, this.btnCenter);
+
         });
     }
 
-    private createUI(data: any) {
+    private createUI(data: OutgoingData) {
+        this.mainArea.innerHTML = "";
         const flexCenter = this.createFlexCenter()
         const callingStatus = this.createElement('div', ['callingStatus'])
         const statusEl = this.createElement('div', ['status'])

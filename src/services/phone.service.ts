@@ -5,6 +5,7 @@ import { Contact } from "../stores/contact.store";
 import { History, randomMessages } from "../stores/history.store";
 
 
+
 export class PhoneService {
     constructor(
         private device: DeviceController,
@@ -12,6 +13,7 @@ export class PhoneService {
     ) {}
 
     async makeACall(number: string) {
+        console.log('SERVICE:::MAKE_A_CALL', history);
         if (this.phone.isBlock(number)) return;
         let contact = this.phone.contactsStore.findContactByNumber(number);
         const isBlock = this.phone.isBlock(number);
@@ -28,8 +30,17 @@ export class PhoneService {
             }
         }
         const result = await this.device.outgoingCall.open('Calling', { contact, number });
+        console.log("CONTACT", contact, number);
         if (result && typeof result === 'object') {
-            this.device.callScreen.open('Phone', { contact: result.contact, number: result.number, status: 'outgoing_call' });
+            const history: Omit<History, 'id'> = {
+                type: 'outgoing_call',
+                date: new Date(),
+                contact: contact ?? undefined,
+                number: number,
+                data: 0
+            }
+            const data = await this.device.callScreen.open('Phone', history);
+            if (data && typeof data !== 'boolean') this.phone.addHistory(data);
         } else {
             let history = this.generateMissCall(number, true, (contact || undefined));
             this.phone.addHistory(history);

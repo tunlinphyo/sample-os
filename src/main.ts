@@ -20,6 +20,7 @@ import { WeatherStore } from './stores/weather.store';
 import { WeatherController } from './controllers/weather.controller';
 import { GestureService } from './services/gesture.service';
 import { LockedScreenPage } from './components/system/locked.screen';
+import { NotificationController } from './controllers/notification.controller';
 // import { FullscreenController } from './controllers/fullscreen.controller';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -51,10 +52,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const lockedScreen = new LockedScreenPage(historyManager, window.device);
     new PhoneDummyController(window.device, window.phone);
     new GestureService(historyManager, window.device, lockedScreen);
+    new NotificationController(historyManager, window.device, window.phone, window.clock, window.weather);
     // new Battery();
     // const fullScreen = new FullscreenController();
 
-    window.weather.fetchWeather();
+    // window.weather.fetchWeather();
 
     window.clock.addChangeListener(async (status: string, data: any) => {
         if (status === 'UPDATE_CLOCK') {
@@ -89,10 +91,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     //         fullScreen.openFullscreen(document.body);
     //     }
     // });
-
-    window.device.callScreen.listen<Omit<History, "id">>('callDone', (data) => {
-        if (data) window.phone.addHistory(data);
-    });
 
     let systemUpdate: SystemUpdate | undefined;
     window.setting.addChangeListener((status: string, data: any) => {

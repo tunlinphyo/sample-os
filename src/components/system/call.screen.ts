@@ -2,6 +2,7 @@ import { Contact } from "../../stores/contact.store";
 import { CallTime } from "../../utils/call";
 import { BaseSystem } from "../system";
 import { DeviceController } from "../../device/device";
+import { History } from "../../stores/history.store";
 
 export interface Call {
     contact?: Contact;
@@ -9,36 +10,21 @@ export interface Call {
     status: 'incoming_call' | 'outgoing_call'
 }
 
-export class CallScreen extends BaseSystem {
-    private call: Call|undefined;
+export class CallScreen extends BaseSystem<Omit<History, 'id'>> {
     private stopwatch: CallTime;
 
     constructor(device: DeviceController) {
-        super({ btnCenter: 'call_end' }, device);
+        super({ template: 'callScreenTemplate', btnEnd: 'call_end' }, device);
         this.stopwatch = new CallTime();
-        this.init()
     }
 
-    private init() {
-        this.listen('pageClose', () => {
-            this.dispatchCustomEvent('callDone', {
-                type: this.call?.status,
-                date: new Date(),
-                contact: this.call?.contact,
-                number: this.call?.number,
-                data: this.stopwatch.getCurrentTime()
-            })
-            this.stopwatch.reset()
-        })
-    }
-
-    render(data: any) {
-        this.call = data;
-        return new Promise(_ => {
+    render(data: Omit<History, 'id'>): Promise<Omit<History, 'id'>> {
+        return new Promise((resolve) => {
+            this.mainArea.innerHTML = "";
             const flexCenter = this.createFlexCenter()
             const callingStatus = this.createElement('div', ['callingStatus'])
             const statusEl = this.createElement('div', ['status'])
-            statusEl.innerText = data.status === 'incoming_call' ? 'Connecting..' : 'Calling...';
+            statusEl.innerText = data.type === 'incoming_call' ? 'Connecting..' : 'Calling...';
             const contactNumber = this.createElement('div', ['contactNumber'])
             contactNumber.innerText = data.contact ? `${data.contact.firstName} ${data.contact.lastName}` : data.number;
 
@@ -59,6 +45,12 @@ export class CallScreen extends BaseSystem {
 
             flexCenter.appendChild(callingStatus)
             this.mainArea.appendChild(flexCenter)
+
+            this.addEventListener('click', () => {
+                data.data = this.stopwatch.getCurrentTime()
+                resolve(data);
+                this.stopwatch.reset();
+            }, this.btnEnd);
 
             setTimeout(() => {
                 this.stopwatch.setDisplay(statusEl);

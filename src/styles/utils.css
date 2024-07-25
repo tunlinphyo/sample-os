@@ -543,13 +543,46 @@ body {
                     height: calc(var(--grid) * 14);
                     margin-top: calc(var(--grid) * 2);
 
-                    .weatherContainer {
+                    .dateContainer {
                         width: calc(var(--grid) * 10);
                         height: calc(var(--grid) * 2.5);
+                        display: flex;
+                        justify-content: center;
+                        align-items: flex-end;
+                        text-align: center;
+                        font-size: 18px;
+                        padding-block-end: var(--half);
+                    }
+
+                    .clockContainer {
+                        width: calc(var(--grid) * 10);
+                        height: calc(var(--grid) * 8);
+                        display: flex;
+                        justify-content: center;
+                        align-items: flex-start;
+                        text-align: center;
+
+                        font-size: calc(var(--grid) * 2.25);
+                        font-weight: 600;
+                        line-height: 1;
+                    }
+
+                    .lockContainer {
+                        width: calc(var(--grid) * 10);
+                        height: var(--grid);
+
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
+
+                    .weatherContainer {
+                        width: calc(var(--grid) * 10);
+                        height: calc(var(--grid) * 2);
 
                         display: flex;
                         flex-direction: column;
-                        justify-content: flex-end;
+                        justify-content: center;
                         align-items: center;
                         text-align: center;
 
@@ -566,29 +599,6 @@ body {
                         }
                     }
 
-                    .clockContainer {
-                        width: calc(var(--grid) * 10);
-                        height: calc(var(--grid) * 8);
-                        display: flex;
-                        justify-content: center;
-                        align-items: flex-start;
-                        text-align: center;
-
-                        font-size: calc(var(--grid) * 2.25);
-                        font-weight: 600;
-                        line-height: 1;
-                    }
-
-                    .dateContainer {
-                        width: calc(var(--grid) * 10);
-                        height: calc(var(--grid) * 2.5);
-                        display: flex;
-                        justify-content: center;
-                        align-items: flex-end;
-                        text-align: center;
-                        font-size: 18px;
-                        padding-block-end: var(--half);
-                    }
                 }
 
                 .navButton {

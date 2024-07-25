@@ -9,7 +9,7 @@ import { App } from "../app";
 export class LockedScreenPage extends App {
     // private hourHand: HTMLElement;
     // private minuteHand: HTMLElement;
-    // private secondHand: HTMLElement;
+    private lockedIcon: HTMLElement;
     private powerBtn: HTMLButtonElement;
     private weatherEl: HTMLElement | undefined;
     private clockEl: HTMLElement | undefined;
@@ -20,13 +20,10 @@ export class LockedScreenPage extends App {
     ) {
         super(history, { template: "lockedTemplate", parentEl: device.deviceEl });
         this.component.classList.add("lockedScreen");
-        this.render();
-
-        // this.hourHand = this.getElement('.hour-hand');
-        // this.minuteHand = this.getElement('.minute-hand');
-        // this.secondHand = this.getElement('.second-hand');
+        this.lockedIcon = this.createLockIcon();
         this.powerBtn = this.getElement("#aiButton", this.device.component);
 
+        this.render();
         this.init();
     }
 
@@ -56,19 +53,6 @@ export class LockedScreenPage extends App {
     render() {
         const safeArea = this.createElement('div', ['safeArea']);
 
-        this.clockEl = this.createElement('div', ['clockContainer']);
-        // clockEl.innerHTML = `
-        //     <div class="clockArea">
-        //         <div class="clock">
-        //             <div class="clock-face">
-        //                 <div class="hand hour-hand"></div>
-        //                 <div class="hand minute-hand"></div>
-        //             </div>
-        //         </div>
-        //     </div>
-        // `;
-        // <div class="hand second-hand"></div>
-
         const dateEl = this.createElement('div', ['dateContainer']);
         dateEl.textContent = OSDate.customFormat(new Date(), {
             month: 'long',
@@ -76,22 +60,28 @@ export class LockedScreenPage extends App {
             weekday: 'long'
         }, this.device.timeZone);
 
+        this.clockEl = this.createElement('div', ['clockContainer']);
+
+        const lockContainer = this.createElement('div', ['lockContainer']);
+        lockContainer.appendChild(this.lockedIcon);
+
         this.weatherEl = this.createElement('div', ['weatherContainer']);
         this.weatherEl.textContent = 'Weather';
 
         safeArea.appendChild(dateEl);
         safeArea.appendChild(this.clockEl);
+        safeArea.appendChild(lockContainer);
         safeArea.appendChild(this.weatherEl);
 
         const homeNavigation = this.createElement('button', ['homeNavigation']);
         const navButton = this.createElement('button', ['navButton']);
 
         navButton.addEventListener('click', () => {
-            if (OSBrowser.isTouchSupport()) {
-                this.lockedAnimate();
-            } else {
-                this.openLocked();
-            }
+            this.lockedAnimate();
+            // if (OSBrowser.isTouchSupport()) {
+            // } else {
+            //     this.openLocked();
+            // }
         });
         homeNavigation.appendChild(navButton);
 
@@ -123,26 +113,23 @@ export class LockedScreenPage extends App {
             this.lockedAnimate();
         } else {
             this.device.lockedDevice = true;
+            this.setLock(true);
         }
+    }
+
+    setLock(isLocked: boolean) {
+        this.lockedIcon.textContent = isLocked ? 'lock' : 'lock_open_right';
     }
 
     private setClock() {
         if (!this.clockEl) return;
         this.clockEl.textContent = OSDate.getCustomTime(new Date(), true, this.device.timeZone);
+    }
 
-        // const now = new OSDate().getDateByTimeZone(this.device.timeZone);
-
-        // const seconds = now.getSeconds();
-        // // const secondsDegrees = ((seconds / 60) * 360) + 90; // Offset by 90 degrees
-        // // this.secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
-
-        // const minutes = now.getMinutes();
-        // const minutesDegrees = ((minutes / 60) * 360) + ((seconds / 60) * 6) + 90;
-        // this.minuteHand.style.transform = `rotate(${minutesDegrees}deg)`;
-
-        // const hours = now.getHours();
-        // const hoursDegrees = ((hours / 12) * 360) + ((minutes / 60) * 30) + 90;
-        // this.hourHand.style.transform = `rotate(${hoursDegrees}deg)`;
+    private createLockIcon() {
+        const lockIcon = this.createElement('span', ['material-symbols-outlined', 'icon--sm']);
+        lockIcon.textContent = 'lock';
+        return lockIcon;
     }
 
     private lockedAnimate() {

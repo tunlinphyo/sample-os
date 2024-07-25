@@ -16,7 +16,7 @@ export abstract class Popup extends BaseComponent {
 
     public isActive: boolean = false
 
-    constructor(private iframeEl: HTMLIFrameElement, actions: PageActions, templateId?: string) {
+    constructor(private iframeEl: HTMLIFrameElement, actions: PageActions, templateId?: string, private isClear: boolean = true) {
         super(templateId || 'appTemplate');
 
         this.component.classList.add('screen--popup')
@@ -70,7 +70,7 @@ export abstract class Popup extends BaseComponent {
                 this.component.addEventListener('transitionend', transitionEndHandler);
             }, 0);
 
-            this.mainArea.innerHTML = '';
+            if (this.isClear) this.mainArea.innerHTML = '';
             const result = await this.render(data, className);
             this.closePage();
             resolve(result);

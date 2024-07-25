@@ -22,7 +22,7 @@ export class DatePicker extends Popup {
     private currentX: number = 0;
 
     constructor(iframeEl: HTMLIFrameElement, private timeZone: string) {
-        super(iframeEl, { btnStart: 'today', btnEnd: true }, 'datePickerTemplate');
+        super(iframeEl, { btnStart: 'today', btnEnd: true }, 'datePickerTemplate', false);
 
         this.yearPicker = new YearPicker(iframeEl);
         this.dateMonthEl = this.getElement('#dateMonth');

@@ -18,7 +18,15 @@ export class PhoneDummyController {
             let contact = this.phone.contactsStore.findContactByNumber(number);
             const result = await this.device.incomingCall.open('Incoming Call', { contact, number });
             if (result && typeof result === 'object') {
-                this.device.callScreen.open('Phone', { contact: result.contact, number: result.number, status: 'incoming_call' });
+                const data: Omit<History, 'id'> = {
+                    type: 'incoming_call',
+                    date: new Date(),
+                    contact: result.contact ?? undefined,
+                    number: result.number,
+                    data: 0
+                }
+                const history = await this.device.callScreen.open('Phone', data);
+                if (history && typeof history !== 'boolean') this.phone.addHistory(history);
             } else {
                 let history: Omit<History, 'id'>;
                 if (contact) {
@@ -36,7 +44,15 @@ export class PhoneDummyController {
             if (this.phone.isBlock(number)) return;
             const result = await this.device.incomingCall.open('Incoming Call', { contact, number });
             if (result && typeof result === 'object') {
-                this.device.callScreen.open('Phone', { contact: result.contact, number: result.number, status: 'incoming_call' });
+                const data: Omit<History, 'id'> = {
+                    type: 'incoming_call',
+                    date: new Date(),
+                    contact: result.contact ?? undefined,
+                    number: result.number,
+                    data: 0
+                }
+                const history = await this.device.callScreen.open('Phone', data);
+                if (history && typeof history !== 'boolean') this.phone.addHistory(history);
             } else {
                 let history: Omit<History, 'id'>;
                 if (contact) {

@@ -8,7 +8,7 @@ export interface SystemActions {
     template?: string;
 }
 
-export abstract class BaseSystem extends BaseComponent {
+export abstract class BaseSystem<T> extends BaseComponent {
     private systemAlert: HTMLElement;
     private iframeEl: HTMLIFrameElement;
     public mainArea: HTMLElement;
@@ -32,10 +32,9 @@ export abstract class BaseSystem extends BaseComponent {
 
     }
 
-    abstract render(data: any): Promise<any | boolean>;
+    abstract render(data: T): Promise<T | boolean>;
 
-    open<T>(title: string, data: T, ): Promise<T | boolean> {
-        this.device.systemOpen = true;
+    open(title: string, data: T, ): Promise<T | boolean> {
         return new Promise(async (resolve) => {
             if (!this.iframeEl.contentDocument) return false;
 
@@ -43,7 +42,6 @@ export abstract class BaseSystem extends BaseComponent {
             if (titleEl) titleEl.innerHTML = title;
 
             this.dispatchCustomEvent('pageOpen');
-            this.iframeEl.contentDocument.body.innerHTML = "";
             this.iframeEl.contentDocument.body.appendChild(this.component);
             this.systemAlert.style.display = 'block';
 
@@ -53,6 +51,8 @@ export abstract class BaseSystem extends BaseComponent {
                     resolve(false)
                 }, this.btnCenter);
             }
+
+            this.device.systemOpen = true;
 
             const result = await this.render(data);
             this.close();
@@ -64,14 +64,7 @@ export abstract class BaseSystem extends BaseComponent {
         this.device.systemOpen = false;
         this.dispatchCustomEvent('pageClose');
         this.systemAlert.style.display = 'none';
-    }
-
-    listen<Contact>(eventName: string, callback: (data?: Contact) => void): void {
-        this.addEventListener(eventName, (event) => {
-            // @ts-ignore
-            const data: Contact = event.detail.data
-            callback(data)
-        }, this.component, false)
+        this.component.remove();
     }
 
     protected setupActionButton(icon: string | undefined, position: 'start' | 'end' | 'center') {

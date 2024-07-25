@@ -40,6 +40,7 @@ export class GestureService {
             this.currentY = event.clientY;
 
             const onMouseMove = (moveEvent: MouseEvent) => {
+                event.preventDefault();
                 document.body.style.pointerEvents = 'none';
                 this.currentY = moveEvent.clientY;
                 const moveY = this.currentY - this.startY;
@@ -89,7 +90,11 @@ export class GestureService {
 
     private openLocked(y: number, startPos: number) {
         if (this.device.lockedDevice && this.startY > startPos && y < 0) {
-
+            if (this.startY > startPos && y < -120) {
+                this.locked.setLock(false);
+            } else {
+                this.locked.setLock(true);
+            }
             this.locked.component.style.transition = 'none';
             this.locked.component.style.translate = `0 ${y}px`;
         }

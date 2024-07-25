@@ -16,7 +16,7 @@ export type EventListenerInfo = {
 
 export abstract class FormComponent extends BaseComponent {
 
-    constructor(private device: DeviceController, template: string, parent: HTMLElement) {
+    constructor(protected device: DeviceController, template: string, parent: HTMLElement) {
         super(template, parent)
     }
 

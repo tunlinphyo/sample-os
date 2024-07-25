@@ -4,11 +4,26 @@ import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
 import { TimerData } from "../../../stores/clock.store";
 
+interface TimerTask {
+    name: string;
+    minutes: string;
+    milliseconds: number;
+};
+
 export class TimerPage extends Page {
     private timerData: TimerData | undefined;
 
     private clockRing: HTMLElement | undefined;
     private timeDisplay: HTMLElement | undefined;
+
+    private timerTasks: TimerTask[] = [
+        { name: "Boil Egg (Soft)", minutes: "4", milliseconds: 240000 },
+        { name: "Boil Egg (Medium)", minutes: "7", milliseconds: 420000 },
+        { name: "Boil Egg (Hard)", minutes: "9", milliseconds: 540000 },
+        { name: "Poached Egg", minutes: "3", milliseconds: 180000 },
+        { name: "Cook Pasta", minutes: "8", milliseconds: 480000 },
+        { name: "Cook Rice", minutes: "20", milliseconds: 1200000 },
+    ];
 
     constructor(
         history: HistoryStateManager,
@@ -16,6 +31,8 @@ export class TimerPage extends Page {
         private clock: ClockController
     ) {
         super(history, { btnStart: 'RESET', btnEnd: 'START' });
+
+        this.component.classList.add('timerPage');
         this.init();
     }
 
@@ -61,6 +78,7 @@ export class TimerPage extends Page {
                 <div class="clockArea">
                     <div class="clockRing"></div>
                 </div>
+                <div class="timerList bordered"></div>
             </div>
         `;
 
@@ -83,6 +101,7 @@ export class TimerPage extends Page {
         const ring = this.getElement('.clockRing');
 
         ring.appendChild(this.timeDisplay);
+        this.renderTimerList();
     }
 
     update(_: string, remainingTime: number, duration: number) {
@@ -101,6 +120,27 @@ export class TimerPage extends Page {
         } else {
             this.btnEnd.dataset.status = 'paused';
             this.btnEnd.innerHTML = 'RESUME';
+        }
+    }
+
+    private renderTimerList() {
+        const timerList = this.getElement('.timerList');
+        timerList.innerHTML = '';
+
+        for(const timer of this.timerTasks) {
+            const timerEl = this.createElement('button', ['timerPrefix']);
+            timerEl.innerHTML = `
+                <span>${timer.name}</span>
+                <span>${timer.minutes} Mins</span>
+            `;
+
+            timerEl.addEventListener('click', () => {
+                if (!this.timerData) return;
+                this.timerData.duration = timer.milliseconds;
+                this.updateTimer({ status: 'reset', data: this.timerData });
+            });
+
+            timerList.appendChild(timerEl);
         }
     }
 

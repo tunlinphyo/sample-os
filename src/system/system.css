@@ -1,0 +1,98 @@
+@layer component {
+    .statusContainer {
+        position: absolute;
+        z-index: 90;
+        top: 0;
+        left: 0;
+        width: calc(var(--grid) * 10);
+        height: calc(var(--grid) * 1.4);
+
+        display: grid;
+        grid-template-columns: 1fr calc(var(--grid) * 2.2) 1fr;
+        align-items: flex-end;
+
+        .statusStart,
+        .statusEnd {
+            height: var(--grid);
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+
+            .time {
+                background-color: var(--white);
+                padding: 4px 6px;
+                border-radius: 10px;
+                font-weight: 500;
+
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                line-height: 1;
+
+            }
+
+            .icons {
+                max-width: calc(var(--grid) * 3.5);
+                background-color: var(--white);
+                padding: 2px 4px;
+                border-radius: 10px;
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            #batteryPercentage {
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                position: relative;
+
+                &::after {
+                    content: attr(data-value);
+                    position: absolute;
+                    inset: 0;
+                    font-size: 11px;
+                    line-height: 1;
+                    font-weight: 600;
+                    color: var(--white);
+                    translate: -1px 0;
+
+                    display: grid;
+                    place-items: center;
+                    display: none;
+                }
+
+                .batteryCharging {
+                    position: absolute;
+                    z-index: 1;
+                    color: var(--white);
+                }
+            }
+        }
+
+        .statusStart {
+            padding-inline-start: 5px;
+        }
+
+        .statusEnd {
+            padding-inline-end: 5px;
+        }
+    }
+
+    .actionBar {
+        .actionButton {
+            pointer-events: none;
+
+            &:has(span) {
+                pointer-events: auto;
+                border-radius: calc(var(--grid) * 1.5);
+                outline: 2px solid var(--black);
+                outline-offset: -8px;
+            }
+        }
+
+        &.actionCenter {
+            justify-content: center;
+        }
+    }
+}

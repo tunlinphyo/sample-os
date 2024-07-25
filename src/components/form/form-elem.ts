@@ -222,8 +222,8 @@ export class CustomDateTimeForm extends CustomForm {
         if (config.type === 'date') this.toggleTime(false)
 
         this.dateInput.addEventListener('click', async () => {
-            const result = await this.device.datePicker.openPage('Date Picker', this.date);
-            if (result && typeof result != "boolean") this.value = result as Date;
+            const result = await this.device.datePicker.openPage('Date Picker', this.dateDate);
+            if (result && typeof result != "boolean") this.dateDate = result as Date;
         });
         this.timeInput.addEventListener('click', async () => {
             const result = (await this.device.timePicker.openPage<TimePickerData>('Time Picker', { ...this.timeData }));
@@ -240,6 +240,16 @@ export class CustomDateTimeForm extends CustomForm {
         this.dateInput.textContent = OSDate.formatShortDate(value, this.device.timeZone);
         this.timeInput.textContent = OSDate.getFormatTime(value, this.device.hour12, this.device.timeZone);
         this.dispatchFormEvent('change', value);
+    }
+
+    get dateDate() {
+        return this.date;
+    }
+    set dateDate(date: Date) {
+        const newDate = new Date(date);
+        newDate.setHours(this.date.getHours());
+        newDate.setMinutes(this.date.getMinutes());
+        this.value = newDate;
     }
 
     // Time
