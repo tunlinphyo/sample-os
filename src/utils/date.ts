@@ -119,7 +119,7 @@ export class OSDate {
         } else if (date >= startOfWeek && date <= endOfWeek) {
             return dayOfWeek;
         } else {
-            const options: Intl.DateTimeFormatOptions = { month: 'short', day: '2-digit' };
+            const options: Intl.DateTimeFormatOptions = { /* month: 'short' , */ day: '2-digit' };
             if (addYear) options.year = 'numeric';
             if (addWeek) options.weekday = 'long';
             return date.toLocaleDateString('en-US', options);

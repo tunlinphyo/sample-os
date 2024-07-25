@@ -166,7 +166,7 @@ export class EventsService extends BaseController {
         this.setDate(newDate);
         if (this.dateButton) {
             this.dateButton.textContent = OSDate.formatDate(this._date, this.device.timeZone, false, true);
-            this.statusEl.textContent = OSDate.customFormat(this._date, { year: 'numeric' }, this.device.timeZone);
+            this.statusEl.textContent = OSDate.customFormat(this._date, { year: 'numeric', month: 'long' }, this.device.timeZone);
         }
     }
 
@@ -531,7 +531,7 @@ export class EventsService extends BaseController {
         nextButton.innerHTML = '<span class="material-symbols-outlined">arrow_forward</span>';
 
         console.log(this.statusEl, "ELELEL");
-        this.statusEl.textContent = OSDate.customFormat(this.date, { year: 'numeric' }, this.device.timeZone);
+        this.statusEl.textContent = OSDate.customFormat(this.date, { year: 'numeric', month: 'long' }, this.device.timeZone);
 
         dateToggle.appendChild(currentDate);
         dateToggle.appendChild(prevButton);

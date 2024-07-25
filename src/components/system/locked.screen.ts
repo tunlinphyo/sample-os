@@ -35,6 +35,7 @@ export class LockedScreenPage extends App {
         const now = new Date();
         const delay = (60 - now.getSeconds()) * 1000;
         setTimeout(() => {
+            this.setClock();
             setInterval(() => this.setClock(), 60000);
         }, delay);
 

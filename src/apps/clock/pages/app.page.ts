@@ -31,6 +31,7 @@ export class ClockApp extends App {
         const now = new Date();
         const delay = 1000 - now.getMilliseconds();
         setTimeout(() => {
+            this.setClock();
             setInterval(() => this.setClock(), 1000);
         }, delay);
         this.render(this.clock.alarms);
