@@ -11,7 +11,7 @@ import { OSDate } from "../utils/date";
 import { TimeWheel } from "../components/pickers/time.wheel";
 import { IncomingCall } from "../components/system/incoming.call";
 import { OutgoingCall } from "../components/system/outgoing.call";
-import { OSBrowser } from "../utils/browser";
+// import { OSBrowser } from "../utils/browser";
 import { SelectPopup } from "../components/popups/select.popup";
 
 export type DeviceTheme = 'auto' | 'light' | 'dark';

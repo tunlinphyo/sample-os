@@ -9,7 +9,7 @@ import { WeatherController } from "./weather.controller";
 export interface NotiType {
     app: string;
     history: HistoryState[];
-    data?: any;
+    data: any;
 }
 
 export class NotificationController extends BaseController {
@@ -35,27 +35,25 @@ export class NotificationController extends BaseController {
     set stopwatch(state: any) {
         this.notification.stopwatch = {
             app: 'clock',
-            history: [{ state, url:"/stopwatch" }]
+            history: [{ state, url:"/stopwatch" }],
+            data: null
         }
     }
 
-    private openNoti(key: string) {
-        const noti = this.notification[key];
-        if (noti) {
-            this.device.setHistory(noti.app, noti.history);
-            this.history.replaceState("", null);
-        }
-    }
-
-    private openTimer() {
-        this.device.setHistory('clock', [{"state":null,"url":"/timer"}]);
-        this.history.replaceState('/clock', null);
-    }
+    // private openNoti(key: string) {
+    //     const noti = this.notification[key];
+    //     if (noti) {
+    //         this.device.setHistory(noti.app, noti.history);
+    //         this.history.replaceState(`/${noti.app}`, noti.data);
+    //     }
+    // }
 
     private setupListeners() {
+        console.log(this.history, this.phone);
         this.clock.addChangeListener(async (status: string, data: any) => {
             if (status === 'UPDATE_CLOCK') {
                 // UPDATE CLOCK
+                console.log(data);
             }
             if (status === 'TIMER_UPDATE') {
                 // UPDATE TIMER
@@ -90,19 +88,19 @@ export class NotificationController extends BaseController {
         return element;
     }
 
-    private createElement<T extends HTMLElement>(elementName: string, classes: string[] = [], attributes: { [key: string]: string } = {}): T {
-        const element = document.createElement(elementName) as T;
+    // private createElement<T extends HTMLElement>(elementName: string, classes: string[] = [], attributes: { [key: string]: string } = {}): T {
+    //     const element = document.createElement(elementName) as T;
 
-        if (classes.length > 0) {
-            element.classList.add(...classes);
-        }
+    //     if (classes.length > 0) {
+    //         element.classList.add(...classes);
+    //     }
 
-        for (const key in attributes) {
-            if (attributes.hasOwnProperty(key)) {
-                element.setAttribute(key, attributes[key]);
-            }
-        }
+    //     for (const key in attributes) {
+    //         if (attributes.hasOwnProperty(key)) {
+    //             element.setAttribute(key, attributes[key]);
+    //         }
+    //     }
 
-        return element;
-    }
+    //     return element;
+    // }
 }

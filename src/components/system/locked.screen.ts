@@ -1,7 +1,7 @@
 import { DeviceController } from "../../device/device";
 import { HistoryStateManager } from "../../device/history.manager";
 import { WeatherService } from "../../services/weather.service";
-import { OSBrowser } from "../../utils/browser";
+// import { OSBrowser } from "../../utils/browser";
 import { OSDate } from "../../utils/date";
 import { App } from "../app";
 

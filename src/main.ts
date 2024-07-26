@@ -14,13 +14,13 @@ import { BlocksStore } from './stores/blocked.store';
 import { ClockStore } from './stores/clock.store';
 import { ContactsStore } from './stores/contact.store';
 import { CalendarEventStore } from './stores/event.store';
-import { History, HistoryStore } from './stores/history.store';
+import { HistoryStore } from './stores/history.store';
 import { DateTimeInfo, SettingStore } from './stores/settings.store';
 import { WeatherStore } from './stores/weather.store';
 import { WeatherController } from './controllers/weather.controller';
 import { GestureService } from './services/gesture.service';
 import { LockedScreenPage } from './components/system/locked.screen';
-import { NotificationController } from './controllers/notification.controller';
+// import { NotificationController } from './controllers/notification.controller';
 // import { FullscreenController } from './controllers/fullscreen.controller';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const lockedScreen = new LockedScreenPage(historyManager, window.device);
     new PhoneDummyController(window.device, window.phone);
     new GestureService(historyManager, window.device, lockedScreen);
-    new NotificationController(historyManager, window.device, window.phone, window.clock, window.weather);
+    // new NotificationController(historyManager, window.device, window.phone, window.clock, window.weather);
     // new Battery();
     // const fullScreen = new FullscreenController();
 
