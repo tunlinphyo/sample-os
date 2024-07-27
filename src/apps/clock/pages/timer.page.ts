@@ -11,18 +11,16 @@ interface TimerTask {
 };
 
 export class TimerPage extends Page {
-    private timerData: TimerData | undefined;
+    private timerData?: TimerData;
 
-    private clockRing: HTMLElement | undefined;
-    private timeDisplay: HTMLElement | undefined;
+    private clockRing?: HTMLElement;
+    private timeDisplay?: HTMLElement;
+    private scrollArea?: HTMLElement;
 
     private timerTasks: TimerTask[] = [
         { name: "Boil Egg (Soft)", minutes: "4", milliseconds: 240000 },
         { name: "Boil Egg (Medium)", minutes: "7", milliseconds: 420000 },
-        { name: "Boil Egg (Hard)", minutes: "9", milliseconds: 540000 },
-        { name: "Poached Egg", minutes: "3", milliseconds: 180000 },
-        { name: "Cook Pasta", minutes: "8", milliseconds: 480000 },
-        { name: "Cook Rice", minutes: "20", milliseconds: 1200000 },
+        { name: "Boil Egg (Hard)", minutes: "9", milliseconds: 540000 }
     ];
 
     constructor(
@@ -84,6 +82,7 @@ export class TimerPage extends Page {
 
         this.clockRing = this.getElement('.clockRing');
         this.timeDisplay = this.createElement('button', ['timeDisplay']);
+        this.scrollArea = this.getElement('.scrollArea');
 
         if (data) {
             this.updateUI(data.remainingTime, data.duration);
@@ -138,10 +137,36 @@ export class TimerPage extends Page {
                 if (!this.timerData) return;
                 this.timerData.duration = timer.milliseconds;
                 this.updateTimer({ status: 'reset', data: this.timerData });
+                this.scrollTop();
             });
 
             timerList.appendChild(timerEl);
         }
+
+        const timerEl = this.createElement('button', ['timerPrefix']);
+        timerEl.innerHTML = `
+            <span>Custom Timer</span>
+            <span class="material-symbols-outlined">add_circle</span>
+        `;
+
+        timerEl.addEventListener('click', async () => {
+            if (!this.timerData) return;
+            const result = (await this.device.timeWheel.openPage<number>('Timer', this.timerData.duration));
+            if (typeof result !== 'boolean' && this.timerData) {
+                this.timerData.duration = result;
+                this.updateTimer({ status: 'reset', data: this.timerData });
+                this.scrollTop();
+            }
+        });
+
+        timerList.appendChild(timerEl);
+    }
+
+    private scrollTop() {
+        this.scrollArea?.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        })
     }
 
     private updateTimer({ status, data }: { status: string, data: TimerData}) {

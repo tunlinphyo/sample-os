@@ -116,13 +116,13 @@
         }
 
         .titleList {
-            padding-block: calc(var(--grid) * 1.5) calc(var(--grid) * 1.5);
-            padding-inline: calc(var(--grid) * 0.5);
+            padding-block: calc(var(--grid) * 2) calc(var(--grid) * 1.5);
+            padding-inline: 10px;
 
             .bookItem {
                 cursor: pointer;
 
-                border: 3px solid var(--black);
+                border: 4px solid var(--black);
                 border-right: none;
                 border-radius: 24px 0 0 24px;
 
@@ -139,8 +139,8 @@
 
                 &:first-child {
                     transform-origin: bottom left;
-                    translate: 2px 0;
-                    rotate: -6deg;
+                    translate: 6px 0;
+                    rotate: -8deg;
                     margin-bottom: 0;
                 }
 
@@ -180,6 +180,46 @@
     .booksPage {
         .scrollArea {
             padding: 0;
+        }
+
+        .actionBar {
+            .actionButton.end {
+                outline: 2px solid var(--black);
+                outline-offset: -10px;
+
+                .icon {
+                    font-size: 28px;
+                }
+            }
+        }
+    }
+
+    .readerActions {
+        background-color: transparent;
+        justify-content: center;
+        .actionButton {
+            &:has(span) {
+                pointer-events: auto;
+                border-radius: calc(var(--grid) * 1.5);
+                position: relative;
+                z-index: 0;
+
+                .icon {
+                    color: var(--white);
+                    font-size: 28px;
+                }
+
+                &::before {
+                    content: '';
+                    inset: 8px;
+                    display: block;
+                    position: absolute;
+                    z-index: -1;
+                    background-color: var(--black);
+                    border-radius: 50%;
+                    /* border: 2px solid var(--black); */
+                }
+            }
         }
     }
 }

@@ -1,40 +1,68 @@
 @layer component {
-    .noteList {
-        display: flex;
-        flex-direction: column;
-        gap: var(--grid);
-        padding-block: var(--padding);
+    .noteListPage {
+        .scrollArea {
+            padding-block: 0 calc(var(--grid) * 1.5);
+        }
 
-        .noteGroup {
-            padding-inline: var(--padding);
-
-            .date {
-                font-size: var(--grid);
-                /* font-weight: 600; */
-                display: flex;
-                align-items: center;
-                gap: calc(var(--grid) * 0.5);
-                line-height: 1.5;
-                color: var(--black);
-                /* border-bottom: 1px solid var(--black); */
-
-                &::after {
-                    content: '';
-                    flex: 1;
-                    border-bottom: 2px solid var(--black);
+        .noteList {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            
+            list-style: none;
+            margin: 0;
+            padding: var(--padding) 10px 0;
+    
+            .noteCard {
+                padding: var(--half);
+                border: 2px solid var(--black);
+                border-radius: var(--padding);
+                background-color: var(--white);
+    
+                .noteTitle {
+                    font-size: 24px;
+                    line-height: 1.3;
+                    margin-block-end: 8px;
+                }
+    
+                .noteContact {
+                    font-size: 16px;
+                    margin-block-end: var(--grid);
+    
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 2;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+    
+                .noteDate {
+                    width: 100%;
+                    font-size: 15px;
+                    text-align: left;
+                    border: 2px dotted var(--black);
+                    padding: 4px 12px;
+                    border-radius: 32px;
                 }
             }
+        }
 
-            .noteItem {
-                height: calc(var(--grid) * 1.5);
-                cursor: pointer;
+        .actionBar {
+            justify-content: center;
 
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
+            .actionButton {
+                .icon {
+                    color: var(--white);
+                    font-size: 28px;
+                }
+                
+                &::before {
+                    inset: 8px;
+                    background-color: var(--black);
+                }
 
-                .noteName {
-                    font-size: 16px;
+                &.start {
+                    display: none;
                 }
             }
         }
@@ -208,6 +236,50 @@
                         &:not(.focus):empty {
                             margin-inline-end: 0;
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    .notePage {
+        .statusBar,
+        .actionBar {
+            z-index: 2;
+        }
+
+        .mainArea {
+            z-index: 0;
+            .scrollArea {
+                position: relative;
+                z-index: -1;
+            }
+        }
+
+        .actionBar {
+            background-color: transparent;
+            justify-content: center;
+            .actionButton {
+                &:has(span) {
+                    pointer-events: auto;
+                    border-radius: calc(var(--grid) * 1.5);
+                    position: relative;
+                    z-index: 0;
+
+                    .icon {
+                        color: var(--white);
+                        font-size: 28px;
+                    }
+
+                    &::before {
+                        content: '';
+                        inset: 8px;
+                        display: block;
+                        position: absolute;
+                        z-index: -1;
+                        background-color: var(--black);
+                        border-radius: 50%;
+                        /* border: 2px solid var(--black); */
                     }
                 }
             }

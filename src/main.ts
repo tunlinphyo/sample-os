@@ -20,6 +20,8 @@ import { WeatherStore } from './stores/weather.store';
 import { WeatherController } from './controllers/weather.controller';
 import { GestureService } from './services/gesture.service';
 import { LockedScreenPage } from './components/system/locked.screen';
+import { AlarmAlert } from './components/system/alarm.alert';
+import { TimerAlert } from './components/system/timer.alert';
 // import { NotificationController } from './controllers/notification.controller';
 // import { FullscreenController } from './controllers/fullscreen.controller';
 
@@ -50,6 +52,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.weather = weather;
 
     const lockedScreen = new LockedScreenPage(historyManager, window.device);
+    const alarmAlert = new AlarmAlert(window.device);
+    const timerAlert = new TimerAlert(window.device, window.clock);
     new PhoneDummyController(window.device, window.phone);
     new GestureService(historyManager, window.device, lockedScreen);
     // new NotificationController(historyManager, window.device, window.phone, window.clock, window.weather);
@@ -63,7 +67,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             window.device.updateClock(window.clock.timerRunning, window.clock.stopwatchRunning);
         }
         if (status === 'SHOW_ALARM') {
-            window.device.alertPopup.openPage('Alarm', data.label);
+            const alarm = await alarmAlert.open('Alarm', data);
+            if (alarm && typeof alarm !== 'boolean') {
+                console.log('SNOOZE', alarm);
+            }
         }
         if (status === 'TIMER_UPDATE') {
             window.device.updateCountDown(
@@ -72,14 +79,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             );
         }
         if (status === 'TIMER_ALERT') {
-            await window.device.alertPopup.openPage('Timer', {
-                message: "Timer done", btn: {
-                    label: 'REPEAT',
-                    callback: () => {
-                        window.clock.timerStart();
-                    }
-                }
-            });
+            timerAlert.open("Timer", data);
             window.device.updateClock(window.clock.timerRunning, window.clock.stopwatchRunning);
         }
     });

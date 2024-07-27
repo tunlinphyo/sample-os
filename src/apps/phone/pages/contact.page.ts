@@ -17,14 +17,22 @@ export class ContactPage extends Page {
         private device: DeviceController,
         private phone: PhoneController,
     ) {
-        super(history, { btnStart: 'more_horiz', btnEnd: 'edit' });
+        super(history, { btnStart: 'delete', btnEnd: 'edit' });
         this.phoneService = new PhoneService(this.device, this.phone);
+        this.component.classList.add("contactPage");
         this.init();
     }
 
     private init() {
         this.addEventListener('click', async () => {
-            this.moreOptions();
+            const isDel = await this.device.confirmPopup.openPage(
+                'Delete Contact',
+                `Are you sure to delete <br/> ${this.contact?.firstName} ${this.contact?.lastName}?`
+            );
+            if (isDel) {
+                if (!this.contact) return;
+                this.phone.deleteContact(this.contact);
+            }
         }, this.btnStart, false);
 
         this.addEventListener('click', () => {
@@ -57,12 +65,18 @@ export class ContactPage extends Page {
         this.contact = contact;
 
         const scrollArea = this.createScrollArea();
-        const selectList = this.createElement('div', ['selectList']);
+        const contactCard = this.createElement('div', ['contactCard']);
 
-        const nameEl = this.createElement('button', ['selectItem', 'title']);
+        const profile = this.createElement('div', ['profile']);
+        const avatar = this.createElement('div', ['avatar']);
+        avatar.textContent = `${contact.firstName[0]}${contact.lastName[0]}`;
+        profile.appendChild(avatar);
+
+        const nameEl = this.createElement('h2', ['title']);
         if (contact.isBlocked) nameEl.classList.add('blocked');
         nameEl.innerHTML = `${contact.firstName} ${contact.lastName}`;
-        selectList.appendChild(nameEl);
+
+        const selectList = this.createElement('div', ['selectList']);
 
         contact.phones.forEach(phone => {
             const phoneEl = this.createElement('button', ['selectItem', 'withIcon']);
@@ -83,6 +97,25 @@ export class ContactPage extends Page {
             selectList.appendChild(emailEl);
         }
 
+
+        const blockEl = this.createElement('button', ['selectItem', 'withIcon']);
+        blockEl.innerHTML = `
+            <span class="material-symbols-outlined">block</span> 
+            ${this.contact?.isBlocked ? 'Unblock' : 'Block'} Contact    
+        `;
+        this.addEventListener('click', () => {
+            if (!this.contact) return;
+            if (this.contact.isBlocked) {
+                this.phone.unblockNumber(this.contact);
+            } else {
+                this.phone.blockNumber(this.contact);
+            }
+        }, blockEl);
+        selectList.appendChild(blockEl);
+
+        contactCard.appendChild(profile);
+        contactCard.appendChild(nameEl);
+        scrollArea.appendChild(contactCard);
         scrollArea.appendChild(selectList);
         this.mainArea.appendChild(scrollArea);
     }
@@ -98,33 +131,33 @@ export class ContactPage extends Page {
         }
     }
 
-    private async moreOptions() {
-        const list: SelectItem[] = [
-            {
-                title: this.contact?.isBlocked ? 'Unblock' : 'Block',
-                value: this.contact?.isBlocked ? 'unblock' : 'block',
-                icon: 'block'
-            },
-            { title: 'Delete', value: 'delete', icon: 'delete' }
-        ];
-        const selected = await this.device.selectList.openPage(`${this.contact?.firstName} ${this.contact?.lastName}`, list);
-        if (selected === 'block') {
-            if (!this.contact) return;
-            this.phone.blockNumber(this.contact);
-        } else if (selected === 'unblock') {
-            if (!this.contact) return;
-            this.phone.unblockNumber(this.contact);
-        } else if (selected === 'delete') {
-            const isDel = await this.device.confirmPopup.openPage(
-                'Delete Contact',
-                `Are you sure to delete <br/> ${this.contact?.firstName} ${this.contact?.lastName}?`
-            );
-            if (isDel) {
-                if (!this.contact) return;
-                this.phone.deleteContact(this.contact);
-            }
-        }
-    }
+    // private async moreOptions() {
+    //     const list: SelectItem[] = [
+    //         {
+    //             title: this.contact?.isBlocked ? 'Unblock' : 'Block',
+    //             value: this.contact?.isBlocked ? 'unblock' : 'block',
+    //             icon: 'block'
+    //         },
+    //         { title: 'Delete', value: 'delete', icon: 'delete' }
+    //     ];
+    //     const selected = await this.device.selectList.openPage(`${this.contact?.firstName} ${this.contact?.lastName}`, list);
+    //     if (selected === 'block') {
+    //         if (!this.contact) return;
+    //         this.phone.blockNumber(this.contact);
+    //     } else if (selected === 'unblock') {
+    //         if (!this.contact) return;
+    //         this.phone.unblockNumber(this.contact);
+    //     } else if (selected === 'delete') {
+    //         const isDel = await this.device.confirmPopup.openPage(
+    //             'Delete Contact',
+    //             `Are you sure to delete <br/> ${this.contact?.firstName} ${this.contact?.lastName}?`
+    //         );
+    //         if (isDel) {
+    //             if (!this.contact) return;
+    //             this.phone.deleteContact(this.contact);
+    //         }
+    //     }
+    // }
 
     private async callOrMessage(number: string) {
         const list: SelectItem[] = [

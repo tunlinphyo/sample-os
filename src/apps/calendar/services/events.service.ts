@@ -165,7 +165,7 @@ export class EventsService extends BaseController {
         this._date = newDate;
         this.setDate(newDate);
         if (this.dateButton) {
-            this.dateButton.textContent = OSDate.formatDate(this._date, this.device.timeZone, false, true);
+            this.dateButton.textContent = OSDate.formatDate(this._date, { weekday: 'long', day: '2-digit' }, this.device.timeZone);
             this.statusEl.textContent = OSDate.customFormat(this._date, { year: 'numeric', month: 'long' }, this.device.timeZone);
         }
     }
@@ -526,7 +526,7 @@ export class EventsService extends BaseController {
         const prevButton = this.createElement('button', ['prevButton']);
         prevButton.innerHTML = '<span class="material-symbols-outlined">arrow_back</span>';
         const currentDate = this.createElement('div', ['currentDate']);
-        currentDate.textContent = OSDate.formatDate(this.date, this.device.timeZone, false, true);
+        currentDate.textContent = OSDate.formatDate(this.date, { weekday: 'long', day: '2-digit' }, this.device.timeZone);
         const nextButton = this.createElement('button', ['nextButton']);
         nextButton.innerHTML = '<span class="material-symbols-outlined">arrow_forward</span>';
 

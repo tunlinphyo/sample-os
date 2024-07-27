@@ -90,6 +90,7 @@ export class ContactEditPage extends Modal {
         private phone: PhoneController
     ) {
         super(history, { btnEnd: 'check' });
+        this.component.classList.add('contactEditPage');
         this.init();
     }
 

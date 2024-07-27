@@ -27,7 +27,7 @@ export class BookReader extends Modal {
 
     private init() {
         this.addEventListener('click', async () => {
-            const result = await this.device.selectList.openPage('Bookmarks', this.bookService.getBookmarks());
+            const result = await this.device.selectList.openPage('Bookmarks', this.bookService.getBookmarks(), 'bookmarks');
             if (result && typeof result === 'string') {
                 this.bookService.chapter = parseInt(result);
                 this.hideMenu();

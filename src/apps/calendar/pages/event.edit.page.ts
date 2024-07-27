@@ -240,6 +240,7 @@ export class EventEditPage extends Modal {
         private calendar: CalendarController
     ) {
         super(history, { btnEnd: 'check' });
+        this.component.classList.add('eventEditPage');
         this.init();
     }
 

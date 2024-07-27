@@ -52,7 +52,7 @@ export class WeatherApp extends App {
         const weatherData = this.createElement('div', ['weatherData']);
 
         const iconEl = this.createElement('div', ['weatherIcon']);
-        iconEl.innerHTML = `<span class="material-symbols-outlined icon--xxl">${WeatherService.getIcon(weather.weather[0].icon)}</span>`;
+        iconEl.innerHTML = `<span class="material-symbols-outlined icon">${WeatherService.getIcon(weather.weather[0].icon)}</span>`;
         weatherData.appendChild(iconEl);
 
         const tempEl = this.createElement('div', ['temperture']);
@@ -83,21 +83,21 @@ export class WeatherApp extends App {
         }
 
         firstStatus.innerHTML = `
-            <span class="material-symbols-outlined icon">${icon}</span>
+            <span class="material-symbols-outlined">${icon}</span>
             <span>${cloudData}${icon === 'filter_drama' ? '%' : 'mm'}</span>
         `;
         weatherGroup.appendChild(firstStatus);
 
         const secondStatus = this.createElement('div', ['statusGroup']);
         secondStatus.innerHTML = `
-            <span class="material-symbols-outlined icon">water_drop</span>
+            <span class="material-symbols-outlined">water_drop</span>
             <span>${weather.main.humidity}%</span>
         `;
         weatherGroup.appendChild(secondStatus);
 
         const thirdStatus = this.createElement('div', ['statusGroup']);
         thirdStatus.innerHTML = `
-            <span class="material-symbols-outlined icon">air</span>
+            <span class="material-symbols-outlined">air</span>
             <span>${Math.round(weather.wind.speed)}mph</span>
         `;
         weatherGroup.appendChild(thirdStatus);

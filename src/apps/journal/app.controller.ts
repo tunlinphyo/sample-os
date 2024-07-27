@@ -31,14 +31,14 @@ export class JournalAppController {
                     callback: () => {
                         const journal = this.journal.getJournalByDate(state);
                         if (journal) {
-                            this.journalPage.openPage(OSDate.formatDate(state, this.device.timeZone, true, true), journal);
+                            this.journalPage.openPage(OSDate.formatDate(state, { weekday: 'long', day: '2-digit' }, this.device.timeZone), journal);
                         }
                     }
                 }, {
                     pattern: '/journal/edit',
                     callback: () => {
                         if (state) {
-                            this.journalEditor.openPage(OSDate.formatDate(state.createDate, this.device.timeZone, true, true), state);
+                            this.journalEditor.openPage(OSDate.formatDate(state.createDate, { weekday: 'long', day: '2-digit' }, this.device.timeZone), state);
                         }
                     }
                 },

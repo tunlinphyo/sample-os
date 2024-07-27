@@ -1,4 +1,9 @@
 @layer component {
+    .screen {
+        position: absolute;
+        inset: 0;
+    }
+
     .statusContainer {
         position: absolute;
         z-index: 90;
@@ -80,6 +85,8 @@
     }
 
     .actionBar {
+        padding-inline:  var(--half);
+        background-color: var(--white);
         .actionButton {
             pointer-events: none;
 
@@ -95,4 +102,91 @@
             justify-content: center;
         }
     }
+
+    .alarmPage,
+    .timerPage {
+
+        /* background-image: linear-gradient(#444cf722 1px, transparent 1px), linear-gradient(to right, #444cf722 1px, transparent 1px);
+        background-size: calc(var(--grid) - .1px) calc(var(--grid) - .05px); */
+
+        .flexCenter {
+            .alarmContainer {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 6px;
+                padding-inline: var(--half);
+
+                .snoozeIcon {
+                    margin-block-end: var(--padding);
+                    .material-symbols-outlined {
+                        font-size: calc(var(--grid) * 2.5);
+                        animation: shake 0.5s infinite;
+                    }
+                }
+    
+                .alarmLabel {
+                    font-size: 24px;
+                    text-align: center;
+                }
+    
+                .alarmTime {
+                    font-size: 16px;
+                }
+            }
+        }
+
+        .actionBar {
+            .actionButton.start {
+                width: calc(var(--grid) * 6.5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 16px;
+                font-size: 18px;
+
+                .material-symbols-outlined {
+                    font-size: 28px;
+                }
+            }
+
+            .actionButton.end {
+                display: none;
+            }
+        }
+    }
+
+    .alarmPage {
+        .actionBar {
+            .actionButton.start {
+                &::after {
+                    content: 'Snooze';
+                }
+            }
+        }
+    }
+    .timerPage {
+        .actionBar {
+            .actionButton.start {
+                &::after {
+                    content: 'Repeat';
+                }
+            }
+        }
+    }
 }
+
+@keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+  }

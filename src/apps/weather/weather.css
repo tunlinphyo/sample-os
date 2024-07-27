@@ -18,13 +18,17 @@
         align-items: center;
 
         .weatherIcon {
-            padding-block: 8px 0;
+            padding-block: 24px 12px;
+
+            .icon {
+                font-size: calc(var(--grid) * 3);
+            }
         }
 
         .temperture {
-            font-size: calc(var(--grid) * 2.5);
+            font-size: calc(var(--grid) * 1.25);
             text-align: center;
-            font-weight: 300;
+            font-weight: 400;
             line-height: 1.5;
 
             position: static;
@@ -48,7 +52,9 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
 
-            margin-block-start: calc(var(--grid) * 1);
+            margin-block-start: calc(var(--grid) * 1.25);
+            /* border: 2px solid var(--black);
+            border-radius: var(--grid); */
 
             .statusGroup {
                 display: flex;

@@ -134,8 +134,8 @@ export class DeviceController extends BaseComponent {
             const hourString = OSDate.getCustomTime(new Date(), this.hour12, this.timeZone);
             if (stopwatch) {
                 clockElement.innerHTML = `
-                    ${hourString}}
-                    <span class="material-symbols-outlined fill-icon" style="font-size: 20px; translate: 0 -2px; margin-left: 2px">timer</span>
+                    ${hourString}
+                    <span class="material-symbols-outlined fill-icon" style="font-size: 20px; margin-left: 2px">pace</span>
                 `;
             } else {
                 clockElement.textContent = hourString;

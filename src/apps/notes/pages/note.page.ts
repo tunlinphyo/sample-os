@@ -12,8 +12,9 @@ export class NotePage extends Page {
         private device: DeviceController,
         private notes: NotesController
     ) {
-        super(history, { template: 'scrollTemplate', btnStart: 'delete', btnEnd: 'edit' })
-        this.init()
+        super(history, { template: 'scrollTemplate', btnStart: 'delete', btnEnd: 'edit' });
+        this.component.classList.add('notePage');
+        this.init();
     }
 
     private init() {

@@ -17,7 +17,7 @@ export class ClockApp extends App {
         private device: DeviceController,
         private clock: ClockController
     ) {
-        super(history, { btnStart: 'timer_play', btnCenter: 'add', btnEnd: 'timer' })
+        super(history, { btnStart: 'timer', btnEnd: 'pace' })
         this.init();
 
         this.component.classList.add('clockPage');
@@ -57,9 +57,9 @@ export class ClockApp extends App {
             this.history.pushState('/timer', this.clock.timer);
         }, this.btnStart, false);
 
-        this.addEventListener('click', () => {
-            this.history.pushState('/alarm', null);
-        }, this.btnCenter, false);
+        // this.addEventListener('click', () => {
+        //     this.history.pushState('/alarm', null);
+        // }, this.btnCenter, false);
 
         this.addEventListener('click', () => {
             this.history.pushState('/stopwatch', this.clock.stopwatch);
@@ -82,12 +82,7 @@ export class ClockApp extends App {
     }
 
     render(alarms: Alarm[]) {
-        if (alarms.length) {
-            this.alarmList.classList.add('bordered');
-        } else {
-            this.alarmList.classList.remove('bordered');
-            this.renderDate();
-        }
+        this.alarmList.classList.add('bordered');
         for(const alarm of this.sortByTime(alarms)) {
             const alarmItem = this.createElement('div', ['alarmItem']);
             const alarmBtn = this.createElement('button', ['alermButton']);
@@ -124,23 +119,19 @@ export class ClockApp extends App {
 
             this.alarmList.appendChild(alarmItem);
         }
+        const addAlarm = this.createElement("button", ['addAlarm']);
+        addAlarm.innerHTML = `<span class="material-symbols-outlined icon">alarm_add</span> Add Alarm`;
+        this.addEventListener('click', () => {
+            this.history.pushState('/alarm', null);
+        }, addAlarm);
+
+        this.alarmList.appendChild(addAlarm);
     }
 
     update(_: string, alarms: Alarm[]) {
         this.alarmList.innerHTML = '';
         this.removeAllEventListeners();
         this.render(alarms);
-    }
-
-    private renderDate() {
-        const dateContainer = this.createElement('div', ['dateContainer']);
-        dateContainer.textContent = OSDate.customFormat(new Date(), {
-            weekday: 'long',
-            month: 'long',
-            day: 'numeric'
-        }, this.device.timeZone);
-
-        this.alarmList.appendChild(dateContainer);
     }
 
     private setClock() {

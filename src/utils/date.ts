@@ -97,7 +97,7 @@ export class OSDate {
         return getDateByTimeZone(this.date, timeZone);
     }
 
-    public static formatDate(date: Date, timeZone: string, addYear?: boolean, addWeek?: boolean) {
+    public static formatDate(date: Date, options: Intl.DateTimeFormatOptions, timeZone: string) {
         const today = getDateByTimeZone(new Date(), timeZone);
         const yesterday = new Date(today);
         yesterday.setDate(today.getDate() - 1);
@@ -119,9 +119,6 @@ export class OSDate {
         } else if (date >= startOfWeek && date <= endOfWeek) {
             return dayOfWeek;
         } else {
-            const options: Intl.DateTimeFormatOptions = { /* month: 'short' , */ day: '2-digit' };
-            if (addYear) options.year = 'numeric';
-            if (addWeek) options.weekday = 'long';
             return date.toLocaleDateString('en-US', options);
         }
     }

@@ -12,6 +12,7 @@ export class ContactsPage extends Page {
         private phone: PhoneController,
     ) {
         super(history, { btnEnd: 'add' });
+        this.component.classList.add('contactsPage');
         this.init();
     }
 

@@ -109,7 +109,8 @@ export class AlarmEdit extends Modal {
         private device: DeviceController,
         private clock: ClockController
     ) {
-        super(history, { btnStart: 'delete', btnEnd: 'check' })
+        super(history, { btnStart: 'delete', btnEnd: 'check' });
+        this.component.classList.add('alarmEditPage');
         this.init()
     }
 

@@ -21,7 +21,7 @@ export class DialpadPage extends Page {
         private phone: PhoneController
     ) {
         super(history, { btnStart: 'phone', btnEnd: 'chat_bubble' });
-
+        this.component.classList.add('dialpadPage');
         this.phoneService = new PhoneService(this.device, this.phone);
 
         this.init();

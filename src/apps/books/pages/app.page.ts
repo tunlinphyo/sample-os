@@ -9,7 +9,7 @@ export class BooksApp extends App {
         history: HistoryStateManager,
         private book: BooksController
     ) {
-        super(history, { template: 'actionTemplate', btnEnd: 'shopping_bag' });
+        super(history, { template: 'actionTemplate', btnEnd: 'storefront' });
         this.component.classList.add('booksPage');
         this.init();
     }

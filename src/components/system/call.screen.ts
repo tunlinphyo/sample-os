@@ -24,7 +24,7 @@ export class CallScreen extends BaseSystem<Omit<History, 'id'>> {
             const flexCenter = this.createFlexCenter()
             const callingStatus = this.createElement('div', ['callingStatus'])
             const statusEl = this.createElement('div', ['status'])
-            statusEl.innerText = data.type === 'incoming_call' ? 'Connecting..' : 'Calling...';
+            statusEl.innerText = 'Connecting..';
             const contactNumber = this.createElement('div', ['contactNumber'])
             contactNumber.innerText = data.contact ? `${data.contact.firstName} ${data.contact.lastName}` : data.number;
 

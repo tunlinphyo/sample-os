@@ -4,7 +4,7 @@ import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
 import { Block } from "../../../stores/blocked.store";
 import { Contact } from "../../../stores/contact.store";
-import { History } from "../../../stores/history.store";
+import { History, HistoryType } from "../../../stores/history.store";
 
 export interface PhoneAppData {
     contacts: Contact[];
@@ -21,6 +21,7 @@ export class PhoneApp extends App {
         private phone: PhoneController,
     ) {
         super(history, { btnStart: 'apps', btnEnd: 'person' });
+        this.component.classList.add('historiesPage');
         this.init();
         this.render({
             contacts: this.phone.contacts,
@@ -62,7 +63,12 @@ export class PhoneApp extends App {
         sortedList.forEach(item => {
             const noteTitle = this.createElement('li', ['titleItem', 'textLarge']);
             if (item.isBlocked) noteTitle.classList.add('blocked');
-            noteTitle.textContent = item.contact ? `${item.contact.firstName} ${item.contact.lastName}` : item.number;
+            noteTitle.innerHTML = `
+                <span class="iconContainer">
+                    <span class="material-symbols-outlined">${this.getIcon(item.type)}</span>
+                </span>
+                <span>${item.contact ? `${item.contact.firstName} ${item.contact.lastName}` : item.number}</span>
+            `;
             this.addEventListener('click', () => {
                 this.history.pushState('/history', item.number);
             }, noteTitle);
@@ -76,6 +82,19 @@ export class PhoneApp extends App {
         this.mainArea.innerHTML = '';
         this.removeAllEventListeners();
         this.render(data);
+    }
+
+    private getIcon(type: HistoryType) {
+        const iconObj: Record<HistoryType, string> = {
+            'outgoing_call': 'call_made',
+            'incoming_call': 'call_received',
+            'from_miss_call': 'call_missed',
+            'to_miss_call': 'call_missed_outgoing',
+            'from_message': 'chat_bubble',
+            'to_message': 'mode_comment'
+        }
+
+        return iconObj[type];
     }
 
     private sortByDate(data: PhoneAppData): HistoryWithBlock[] {

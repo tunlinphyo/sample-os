@@ -12,13 +12,20 @@ export class NotesApp extends App {
         private device: DeviceController,
         private notes: NotesController
     ) {
-        super(history, { template: 'actionTemplate', btnEnd: 'add' });
+        super(history, { template: 'actionTemplate', btnCenter: 'add', btnEnd: 'mic' });
+        this.component.classList.add('noteListPage')
         this.init();
     }
 
     private init() {
         this.addEventListener('click', () => {
             this.history.pushState('/notes/new', null);
+        }, this.btnCenter, false);
+
+
+        this.addEventListener('click', () => {
+            // this.history.pushState('/notes/new', null);
+            this.device.alertPopup.openPage('Alert', 'Coming Soon..');
         }, this.btnEnd, false);
 
         this.notes.addChangeListener((status: string, data: any) => {
@@ -33,14 +40,24 @@ export class NotesApp extends App {
 
         const list = this.sortByDate(data);
         const scrollArea = this.createScrollArea();
-        const noteList = this.createElement('ul', ['titleList']);
+        const noteList = this.createElement('ul', ['noteList']);
         for(const item of list) {
-            const noteTitle = this.createElement('li', ['titleItem']);
-            const titleEl = this.createElement('div', ['itemTitle']);
+            const noteTitle = this.createElement('li', ['noteCard']);
+            const titleEl = this.createElement('div', ['noteTitle']);
             titleEl.textContent = item.title;
             noteTitle.appendChild(titleEl);
-            const dateEl = this.createElement('small', ['itemDate']);
-            dateEl.textContent = OSDate.formatDate(item.updateDate || item.createDate, this.device.timeZone, true);
+
+            const contactEl = this.createElement('div', ['noteContact']);
+            contactEl.textContent = item.body[1]?.data[0] ?? '';
+            noteTitle.appendChild(contactEl);
+
+            const dateEl = this.createElement('small', ['noteDate']);
+            dateEl.textContent = OSDate.formatDate(item.updateDate || item.createDate, { 
+                year: 'numeric',
+                month: 'long', 
+                day: '2-digit',
+                weekday: 'long' 
+            }, this.device.timeZone);
             noteTitle.appendChild(dateEl);
             this.addEventListener('click', () => {
                 this.history.pushState('/notes/detail', item.id);

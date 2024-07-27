@@ -13,7 +13,6 @@ export class PhoneService {
     ) {}
 
     async makeACall(number: string) {
-        console.log('SERVICE:::MAKE_A_CALL', history);
         if (this.phone.isBlock(number)) return;
         let contact = this.phone.contactsStore.findContactByNumber(number);
         const isBlock = this.phone.isBlock(number);
@@ -30,7 +29,6 @@ export class PhoneService {
             }
         }
         const result = await this.device.outgoingCall.open('Calling', { contact, number });
-        console.log("CONTACT", contact, number);
         if (result && typeof result === 'object') {
             const history: Omit<History, 'id'> = {
                 type: 'outgoing_call',

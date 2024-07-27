@@ -21,6 +21,7 @@ export class HistoryPage extends Page {
         private phone: PhoneController
     ) {
         super(history, { btnStart: 'phone', btnEnd: 'chat_bubble' });
+        this.component.classList.add('historyPage');
         this.phoneService = new PhoneService(this.device, this.phone);
         this.init();
     }
@@ -105,7 +106,12 @@ export class HistoryPage extends Page {
         orderedList.forEach(item => {
             const chatItem = this.createElement('div', ['chatItem', this.getClass(item.type)]);
             const dateTime = this.createElement('div', ['dateTime']);
-            dateTime.innerText = `${OSDate.formatDate(item.date, this.device.timeZone)} ${OSDate.formatTime(item.date, this.device.hour12, this.device.timeZone)}`;
+            dateTime.innerText = `
+                ${OSDate.formatDate(item.date, {
+                    month: 'short',
+                    day: "2-digit"
+                }, this.device.timeZone)} ${OSDate.formatTime(item.date, this.device.hour12, this.device.timeZone)}
+            `;
             const message = this.createElement('div', ['message']);
             message.innerText = this.getText(item);
             chatItem.appendChild(dateTime);

@@ -19,7 +19,7 @@ export abstract class BaseSystem<T> extends BaseComponent {
 
     constructor(
         actions: SystemActions,
-        private device: DeviceController
+        protected device: DeviceController
     ) {
         super(actions.template || 'appTemplate');
         this.systemAlert = this.getElement('.systemAlert', this.device.component);

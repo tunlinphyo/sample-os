@@ -94,6 +94,8 @@ export abstract class Popup extends BaseComponent {
             if (position === 'start') this.btnStart = button;
             if (position === 'center') this.btnCenter = button;
             if (position === 'end') this.btnEnd = button;
+        } else {
+            
         }
     }
 

@@ -1,4 +1,32 @@
 @layer component {
+    .historiesPage {
+        .titleList {
+            .titleItem {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                gap: var(--half);
+                padding-block: 8px;
+
+                --size: calc(var(--grid) * 1.25);
+
+                .iconContainer {
+                    width: var(--size);
+                    height: var(--size);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border: 2px solid var(--black);
+                    border-radius: 100%;
+
+                    .material-symbols-outlined {
+                        font-size: 28px;
+                    }
+                }
+            }
+        }
+    }
+
     .chatHistoryList {
         padding-inline: var(--padding);
         .chatItem {
@@ -78,7 +106,7 @@
 
         .keypadContainer {
             width: calc(var(--grid) * 10);
-            height: calc(var(--grid) * 8);
+            height: calc(var(--grid) * 7.5);
 
             display: grid;
             grid-template-columns: repeat(3, var(--button));
@@ -87,9 +115,11 @@
             justify-content: center;
             align-items: center;
 
+            /* background-color: #f00; */
+
             .key {
                 width: var(--button);
-                height: var(--button);
+                height: calc(var(--grid) * 1.5);
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -119,13 +149,7 @@
     }
 
     .contactList {
-        /* padding: var(--half); */
         .titleItem {
-            /* border: 1px solid var(--black);
-            margin-bottom: 5px;
-            border-radius: 15px;
-            padding: var(--half); */
-
             display: flex;
             justify-content: flex-start;
             align-items: center;
@@ -144,6 +168,152 @@
                 justify-content: center;
                 align-items: center;
                 overflow: hidden;
+            }
+        }
+    }
+
+    .contactPage {
+        .contactCard {
+            padding: var(--half);
+            position: sticky;
+            z-index: 0;
+            top: 0;
+
+            .profile {
+                width: 100%;
+                padding-block-end: var(--padding);
+
+                display: grid;
+                place-content: center;
+                /* aspect-ratio: 2 / 1; */
+                /* background-color: #f00; */
+                
+                .avatar {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: calc(var(--grid) * 2);
+                    font-weight: 300;
+                    width: calc(var(--grid) * 4.5);
+                    height: calc(var(--grid) * 4.5);
+                    border: 2px solid var(--black);
+                    border-radius: 100%;
+                }
+            }
+
+            .title {
+                font-size: var(--grid);
+                font-weight: 400;
+                text-align: center;
+            }
+        }
+
+        .selectList {
+            width: calc(100% - 10px);
+            min-height: 0;
+            padding: var(--grid) 0 var(--padding);
+
+            position: relative;
+            z-index: 1;
+            background-color: var(--white);
+            border-radius: var(--grid);
+            border: 2px solid var(--black);
+            margin-inline: 5px;
+            margin-block-start: var(--half);
+
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            gap: var(--padding);
+
+            &::before {
+                content: '';
+                width: calc(var(--grid) * 2.5);
+                height: 6px;
+                border-radius: 4px;
+                background-color: var(--black);
+                position: absolute;
+                top: 10px;
+                left: 50%;
+                translate: -50% 0;
+            }
+
+            .selectItem {
+                width: calc((var(--grid) * 10) - (var(--padding) * 2));
+                min-height: var(--grid);
+                /* font-weight: 600; */
+                font-size: 18px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                text-align: left;
+                font-size: 20px;
+    
+                &.withIcon {
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: center;
+                    gap: calc(var(--grid) * 0.5);
+                }
+    
+                &.blockedNumber {
+                    pointer-events: none;
+    
+                    .number {
+                        text-decoration: line-through;
+                    }
+                }
+    
+                &.title {
+                    font-size: var(--grid);
+                    font-weight: 400;
+                    text-align: left;
+                }
+            }
+        }
+
+        .mainArea {
+            height: calc(var(--grid) * 14);
+            .scrollArea {
+                height: calc(var(--grid) * 14);
+                padding-bottom: calc(var(--grid) * 3.5);
+            }
+        }
+        .actionBar {
+            width: auto;
+            position: absolute;
+            z-index: 2;
+            bottom: var(--grid);
+            left: 50%;
+            transform: translateX(-50%) translateZ(0);
+
+            border-radius: var(--grid);
+            background-color: var(--white);
+            border: 2px solid var(--black);
+            justify-content: center;
+            /* gap: 8px; */
+            .actionButton {
+                &:has(span) {
+                    pointer-events: auto;
+                    border-radius: calc(var(--grid) * 1.5);
+                    position: relative;
+                    z-index: 0;
+
+                    .icon {
+                        font-size: 28px;
+                    }
+
+                    &::before {
+                        content: '';
+                        inset: 8px;
+                        display: block;
+                        position: absolute;
+                        z-index: -1;
+                        border-radius: 50%;
+                        background-color: var(--white);
+                        border: 2px solid var(--black);
+                    }
+                }
             }
         }
     }

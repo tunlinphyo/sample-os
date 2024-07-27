@@ -15,6 +15,7 @@ export class EventPage extends Page {
         private calendar: CalendarController
     ) {
         super(history, { btnStart: 'delete', btnEnd: 'edit' });
+        this.component.classList.add('eventPage');
         this.init();
     }
 
