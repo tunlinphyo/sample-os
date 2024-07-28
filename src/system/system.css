@@ -148,9 +148,9 @@
 
                 .material-symbols-outlined {
                     font-size: 28px;
+                    display: none;
                 }
             }
-
             .actionButton.end {
                 display: none;
             }

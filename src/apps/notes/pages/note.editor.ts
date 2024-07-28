@@ -61,6 +61,7 @@ export class NoteEditorPage extends Modal {
         else {
             this.note = {
                 id: '',
+                type: 'note',
                 title: '',
                 body: [
                     { type: 'title', data: [] }
@@ -76,8 +77,10 @@ export class NoteEditorPage extends Modal {
     update() {}
 
     private renderInitData() {
-        for (const note of this.note!.body) {
-            this.renderElement(note);
+        if (this.note?.type === 'note') {
+            for (const note of this.note!.body) {
+                this.renderElement(note);
+            }
         }
     }
 

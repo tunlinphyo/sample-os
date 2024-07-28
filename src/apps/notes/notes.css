@@ -242,6 +242,45 @@
         }
     }
 
+    .recoderButton {
+        width: calc(var(--grid) * 2.5);
+        height: calc(var(--grid) * 2.5);
+        /* border: 2px solid var(--black); */
+        border-radius: 100%;
+
+        display: grid;
+        place-content: center;
+        position: relative;
+
+        outline: 2px solid var(--black);
+
+        &::before,
+        &::after {
+            content: '';
+            inset: 0;
+            display: block;
+            position: absolute;
+
+            outline: 2px solid var(--black);
+            border-radius: 100%;
+        }
+
+        &.recording {
+            animation: pulse1 2s infinite;
+
+            &::before {
+                animation: pulse2 2s infinite;
+            }
+            &::after {
+                animation: pulse3 2s infinite;
+            }
+        }
+
+        .material-symbols-outlined {
+            font-size: calc(var(--grid) * 1.5);
+        }
+    }
+
     .notePage {
         .statusBar,
         .actionBar {
@@ -284,5 +323,39 @@
                 }
             }
         }
+    }
+}
+
+@keyframes pulse1 {
+    0% {
+        outline-offset: 0px;
+    }
+    50% {
+        outline-offset: 6px;
+    }
+    100% {
+        outline-offset: 0px;
+    }
+}
+@keyframes pulse2 {
+    0% {
+        outline-offset: 0px;
+    }
+    50% {
+        outline-offset: 12px;
+    }
+    100% {
+        outline-offset: 0px;
+    }
+}
+@keyframes pulse3 {
+    0% {
+        outline-offset: 0px;
+    }
+    50% {
+        outline-offset: 18px;
+    }
+    100% {
+        outline-offset: 0px;
     }
 }

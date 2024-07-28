@@ -1,6 +1,7 @@
 import { DeviceController } from "../../device/device";
 import { HistoryState, HistoryStateManager } from "../../device/history.manager";
 import { NotesController } from "./notes.controller";
+import { AudioRecoder } from "./pages/audio.recoder";
 import { NoteEditorPage } from "./pages/note.editor";
 import { NotePage } from "./pages/note.page";
 
@@ -11,7 +12,8 @@ export class NoteAppController {
         private device: DeviceController,
         private notes: NotesController,
         private notePage: NotePage,
-        private noteEditor: NoteEditorPage
+        private noteEditor: NoteEditorPage,
+        private audioRecoder: AudioRecoder
     ) {
         this.renderListeners();
     }
@@ -30,7 +32,12 @@ export class NoteAppController {
                     callback: () => {
                         this.noteEditor.openPage('New Note', state);
                     }
-                },  {
+                }, {
+                    pattern: '/notes/audio',
+                    callback: () => {
+                        this.audioRecoder.openPage('Audio Note', state);
+                    }
+                }, {
                     pattern: '/notes/edit',
                     callback: () => {
                         this.noteEditor.openPage('Edit Note', state);

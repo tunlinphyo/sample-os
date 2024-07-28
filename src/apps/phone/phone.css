@@ -17,7 +17,7 @@
                     justify-content: center;
                     align-items: center;
                     border: 2px solid var(--black);
-                    border-radius: 100%;
+                    border-radius: 50%;
 
                     .material-symbols-outlined {
                         font-size: 28px;
@@ -148,6 +148,105 @@
         }
     }
 
+    .historiesPage {
+        .mainArea {
+            height: calc(var(--grid) * 14);
+            .scrollArea {
+                height: calc(var(--grid) * 14);
+                padding-block-end: calc(var(--grid) * 2.5);
+            }
+        }
+        .actionBar {
+            position: absolute;
+            z-index: 1;
+            background-color: transparent;
+            bottom: var(--grid);
+            justify-content: center;
+
+            .actionButton {
+                &.center {
+                    display: none;
+                }
+
+                &:has(span) {
+                    pointer-events: auto;
+                    border-radius: calc(var(--grid) * 1.5);
+                    position: relative;
+                    z-index: 0;
+
+                    .icon {
+                        color: var(--white);
+                        font-size: 28px;
+                    }
+
+                    &::before {
+                        content: '';
+                        inset: 8px;
+                        display: block;
+                        position: absolute;
+                        z-index: -1;
+                        border-radius: var(--grid);
+                        background-color: var(--black);
+                        /* border: 2px solid var(--black); */
+                    }
+                }
+            }
+        }
+    }
+
+    .contactsPage,
+    .historyPage,
+    .dialpadPage {
+        .actionBar {
+            width: auto;
+            position: absolute;
+            z-index: 2;
+            bottom: var(--grid);
+            left: 50%;
+            transform: translateX(-50%) translateZ(0);
+
+            border-radius: var(--grid);
+            background-color: var(--white);
+            border: 2px solid var(--black);
+            justify-content: center;
+
+            .actionButton {
+                &:has(span) {
+                    pointer-events: auto;
+                    border-radius: calc(var(--grid) * 1.5);
+                    position: relative;
+                    z-index: 0;
+
+                    .icon {
+                        font-size: 28px;
+                    }
+
+                    &::before {
+                        content: '';
+                        inset: 8px;
+                        display: block;
+                        position: absolute;
+                        z-index: -1;
+                        border-radius: var(--grid);
+                        background-color: var(--white);
+                        border: 2px solid var(--black);
+                    }
+                }
+            }
+        }
+    }
+
+    .contactsPage,
+    .historyPage {
+        .mainArea {
+            height: calc(var(--grid) * 14);
+            .scrollArea {
+                height: calc(var(--grid) * 14);
+                padding-bottom: calc(var(--grid) * 3);
+            }
+        }
+    }
+
     .contactList {
         .titleItem {
             display: flex;
@@ -171,6 +270,49 @@
             }
         }
     }
+
+    /* .contactEditPage, */
+    /* .contactsPage {
+        .mainArea {
+            height: calc(var(--grid) * 14);
+            .scrollArea {
+                height: calc(var(--grid) * 14);
+                padding-block-end: calc(var(--grid) * 2.5);
+            }
+        }
+        .actionBar {
+            position: absolute;
+            z-index: 1;
+            transform: translateZ(0);
+            background-color: transparent;
+            bottom: var(--grid);
+            justify-content: center;
+
+            .actionButton {
+                &:has(span) {
+                    pointer-events: auto;
+                    border-radius: calc(var(--grid) * 1.5);
+                    position: relative;
+                    z-index: 0;
+
+                    .icon {
+                        font-size: 28px;
+                    }
+
+                    &::before {
+                        content: '';
+                        inset: 8px;
+                        display: block;
+                        position: absolute;
+                        z-index: -1;
+                        border-radius: var(--grid);
+                        background-color: var(--white);
+                        border: 2px solid var(--black);
+                    }
+                }
+            }
+        }
+    } */
 
     .contactPage {
         .contactCard {

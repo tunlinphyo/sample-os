@@ -8,19 +8,25 @@ export interface NoteData {
     data: string[];
 }
 
-export interface Note {
+export interface NoteBase {
     id: string;
     title: string;
-    body: Array<NoteData>;
     createDate: Date;
     updateDate?: Date;
     deleted: boolean;
+  }
+  
+export interface TextNote extends NoteBase {
+    type: 'note';
+    body: Array<NoteData>;
 }
-
-export interface GroupedNote {
-    date: string;
-    notes: Note[];
+  
+export interface AudioNote extends NoteBase {
+    type: 'audio';
+    body: string;
 }
+  
+export type Note = TextNote | AudioNote;
 
 export class NotesStore extends BaseManager<Note> {
     private db: DB<Note>;

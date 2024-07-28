@@ -11,7 +11,7 @@ export class ContactsPage extends Page {
         private device: DeviceController,
         private phone: PhoneController,
     ) {
-        super(history, { btnEnd: 'add' });
+        super(history, { btnStart: 'search', btnEnd: 'add' });
         this.component.classList.add('contactsPage');
         this.init();
     }

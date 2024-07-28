@@ -46,27 +46,15 @@ export class NotePage extends Page {
         this.note = note;
         this.mainArea.scrollTo(0, 0);
 
-        const noteArea = this.createElement('div', ['noteViewArea']);
-
-        for(const item of note.body) {
-            if (item.type === 'title') {
-                this.renderTitle(noteArea, item);
+        if (note.type === 'note') {
+            const noteArea = this.createElement('div', ['noteViewArea']);
+            for(const item of note.body) {
+                this.renderTextNote(noteArea, item);
             }
-            if (item.type === 'paragraph') {
-                this.renderParagraph(noteArea, item);
-            }
-            if (item.type === 'quote') {
-                this.renderQuote(noteArea, item);
-            }
-            if (item.type === 'order-list') {
-                this.renderOrderList(noteArea, item);
-            }
-            if (item.type === 'unorder-list') {
-                this.renderUnorderList(noteArea, item);
-            }
+            this.mainArea.appendChild(noteArea);
+        } else {
+            // render AudioNote
         }
-
-        this.mainArea.appendChild(noteArea);
     }
 
     update(_: string, data: Note) {
@@ -74,6 +62,24 @@ export class NotePage extends Page {
         this.removeAllEventListeners();
         this.mainArea.innerHTML = '';
         this.render(data);
+    }
+
+    private renderTextNote(noteArea: HTMLElement, item: NoteData) {
+        if (item.type === 'title') {
+            this.renderTitle(noteArea, item);
+        }
+        if (item.type === 'paragraph') {
+            this.renderParagraph(noteArea, item);
+        }
+        if (item.type === 'quote') {
+            this.renderQuote(noteArea, item);
+        }
+        if (item.type === 'order-list') {
+            this.renderOrderList(noteArea, item);
+        }
+        if (item.type === 'unorder-list') {
+            this.renderUnorderList(noteArea, item);
+        }
     }
 
     private renderTitle(parentEl: HTMLElement, note: NoteData) {

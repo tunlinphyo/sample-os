@@ -24,8 +24,7 @@ export class NotesApp extends App {
 
 
         this.addEventListener('click', () => {
-            // this.history.pushState('/notes/new', null);
-            this.device.alertPopup.openPage('Alert', 'Coming Soon..');
+            this.history.pushState('/notes/audio', null);
         }, this.btnEnd, false);
 
         this.notes.addChangeListener((status: string, data: any) => {
@@ -42,7 +41,24 @@ export class NotesApp extends App {
         const scrollArea = this.createScrollArea();
         const noteList = this.createElement('ul', ['noteList']);
         for(const item of list) {
-            const noteTitle = this.createElement('li', ['noteCard']);
+            if (item.type === 'note') {
+                this.renderTextNote(noteList, item);
+            }
+        }
+        scrollArea.appendChild(noteList);
+        this.mainArea.appendChild(scrollArea);
+    }
+
+    update(_: string, data: Note[]) {
+        this.mainArea.innerHTML = ''
+        this.removeAllEventListeners()
+        this.render(data)
+    }
+
+    private renderTextNote(noteList: HTMLElement, item: Note) {
+        if (item.type == 'audio') return;
+
+        const noteTitle = this.createElement('li', ['noteCard']);
             const titleEl = this.createElement('div', ['noteTitle']);
             titleEl.textContent = item.title;
             noteTitle.appendChild(titleEl);
@@ -63,15 +79,6 @@ export class NotesApp extends App {
                 this.history.pushState('/notes/detail', item.id);
             }, noteTitle)
             noteList.appendChild(noteTitle);
-        }
-        scrollArea.appendChild(noteList);
-        this.mainArea.appendChild(scrollArea);
-    }
-
-    update(_: string, data: Note[]) {
-        this.mainArea.innerHTML = ''
-        this.removeAllEventListeners()
-        this.render(data)
     }
 
     private sortByDate(notes: Note[]): Note[] {

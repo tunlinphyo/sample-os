@@ -25,7 +25,7 @@ export class CalendarApp extends App {
         private calendar: CalendarController
     ) {
         super(history, { template: 'calendarTemplate', btnStart: 'today', btnEnd: 'add' });
-
+        this.component.classList.add('calendarPage');
         this.dateMonthEl = this.getElement('#dateMonth');
         this.prevButton = this.getElement(".prevButton");
         this.nextButton = this.getElement(".nextButton");

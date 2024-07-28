@@ -203,4 +203,39 @@
             }
         }
     }
+
+    /* .calendarPage {
+        .actionBar {
+            justify-content: center;
+            padding-inline: 10px;
+
+            .actionButton {
+                &.center {
+                    display: none;
+                }
+
+                &:has(span) {
+                    pointer-events: auto;
+                    border-radius: calc(var(--grid) * 1.5);
+                    position: relative;
+                    z-index: 0;
+
+                    .icon {
+                        color: var(--white);
+                        font-size: 28px;
+                    }
+
+                    &::before {
+                        content: '';
+                        inset: 8px;
+                        display: block;
+                        position: absolute;
+                        z-index: -1;
+                        border-radius: var(--grid);
+                        background-color: var(--black);
+                    }
+                }
+            }
+        }
+    } */
 }

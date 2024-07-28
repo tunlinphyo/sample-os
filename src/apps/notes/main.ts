@@ -8,6 +8,7 @@ import { NotesController } from './notes.controller';
 import { NotePage } from './pages/note.page';
 import { NoteEditorPage } from './pages/note.editor';
 import { NoteAppController } from './app.controller';
+import { AudioRecoder } from './pages/audio.recoder';
 
 document.body.dataset.schema = parent.device.theme;
 
@@ -19,12 +20,14 @@ document.addEventListener('DOMContentLoaded', () => {
     new NotesApp(historyManager, parent.device, notesController);
     const notePage = new NotePage(historyManager, parent.device, notesController);
     const noteEditor = new NoteEditorPage(historyManager, parent.device, notesController);
+    const audioRecoder = new AudioRecoder(historyManager, parent.device, notesController);
 
     new NoteAppController(
         historyManager,
         parent.device,
         notesController,
         notePage,
-        noteEditor
+        noteEditor,
+        audioRecoder
     );
 });
