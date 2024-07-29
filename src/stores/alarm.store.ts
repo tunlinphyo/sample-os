@@ -9,6 +9,8 @@ export interface Alarm {
     label: string;
     repeat: RepeatOption[];
     active: boolean;
+    snoozeTime?: Date;
+    snoozeActive?: boolean;
 }
 
 export class ClockAlarmStore extends BaseManager<Alarm> {

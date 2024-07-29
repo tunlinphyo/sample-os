@@ -11,7 +11,7 @@ export class OutgoingCall extends BaseSystem<OutgoingData> {
     private timeout: number | null = null;
 
     constructor(device: DeviceController) {
-        super({ btnCenter: 'close' }, device);
+        super({ btnCenter: 'close' }, device, 'phone');
     }
 
     render(data: OutgoingData): Promise<OutgoingData | boolean> {

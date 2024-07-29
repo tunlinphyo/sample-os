@@ -61,7 +61,7 @@ export class GestureService {
     }
 
     private moving(y: number) {
-        if (this.device.systemOpen) return;
+        if (this.device.system.isSystem) return;
         const domRect: DOMRect = this.device.component.getBoundingClientRect();
         const max = domRect.height * -1;
         const startPos = domRect.top + domRect.height - 60;
@@ -77,7 +77,7 @@ export class GestureService {
     }
 
     private moveEnd(y: number) {
-        if (this.device.systemOpen) return;
+        if (this.device.system.isSystem) return;
         const domRect: DOMRect = this.device.component.getBoundingClientRect();
         const startPos = domRect.top + domRect.height - 60;
         if (this.device.lockedDevice) {

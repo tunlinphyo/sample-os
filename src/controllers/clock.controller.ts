@@ -189,4 +189,10 @@ export class ClockController extends BaseController {
         this.timerWorker.postMessage({ command: 'reset', data: duration });
     }
 
+    public snoozeAlarm(id: string) {
+        this.alarmWorker.postMessage({
+            command: 'snooze',
+            data: id
+        })
+    }
 }

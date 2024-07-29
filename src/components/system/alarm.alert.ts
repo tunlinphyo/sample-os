@@ -8,7 +8,7 @@ export class AlarmAlert extends BaseSystem<Alarm> {
     private timeout: number | null = null;
 
     constructor(device: DeviceController) {
-        super({ btnCenter: 'close', btnStart: 'snooze' }, device);
+        super({ btnCenter: 'close', btnStart: 'snooze' }, device, 'alarm');
     }
 
     render(data: Alarm): Promise<Alarm | false> {
@@ -39,7 +39,7 @@ export class AlarmAlert extends BaseSystem<Alarm> {
         const flexCenter = this.createFlexCenter();
 
         const alarmContainer = this.createElement('div', ['alarmContainer']);
-        
+
         const snoozeIcon = this.createElement('div', ['snoozeIcon']);
         const iconEl = this.createElement('span', ['material-symbols-outlined', 'fill-icon']);
         iconEl.innerText = 'snooze';

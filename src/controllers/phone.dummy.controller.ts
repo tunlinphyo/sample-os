@@ -1,4 +1,5 @@
 import { DeviceController } from "../device/device";
+import { Contact } from "../stores/contact.store";
 import { History, randomMessages } from "../stores/history.store";
 import { OSArray } from "../utils/arrays";
 import { PhoneController } from "./phone.controller";
@@ -16,6 +17,9 @@ export class PhoneDummyController {
             const number = this.phone.historyStore.getRandomNumber();
             if (this.phone.isBlock(number)) return;
             let contact = this.phone.contactsStore.findContactByNumber(number);
+            if (this.device.system.isPhone) {
+                return this.addHistory(number, contact);
+            }
             const result = await this.device.incomingCall.open('Phone', { contact, number });
             if (result && typeof result === 'object') {
                 const data: Omit<History, 'id'> = {
@@ -28,13 +32,7 @@ export class PhoneDummyController {
                 const history = await this.device.callScreen.open('Phone', data);
                 if (history && typeof history !== 'boolean') this.phone.addHistory(history);
             } else {
-                let history: Omit<History, 'id'>;
-                if (contact) {
-                    history = this.phone.historyStore.generateMissCall(number, contact);
-                } else {
-                    history = this.phone.historyStore.generateMissCall(number);
-                }
-                this.phone.addHistory(history);
+                this.addHistory(number, contact);
             }
         });
 
@@ -42,6 +40,9 @@ export class PhoneDummyController {
             let contact = this.phone.contactsStore.getRandomContact();
             const number = OSArray.getRandomElement(contact.phones.map(i => i.number));
             if (this.phone.isBlock(number)) return;
+            if (this.device.system.isPhone) {
+                return this.addHistory(number, contact);
+            }
             const result = await this.device.incomingCall.open('Phone', { contact, number });
             if (result && typeof result === 'object') {
                 const data: Omit<History, 'id'> = {
@@ -54,13 +55,7 @@ export class PhoneDummyController {
                 const history = await this.device.callScreen.open('Phone', data);
                 if (history && typeof history !== 'boolean') this.phone.addHistory(history);
             } else {
-                let history: Omit<History, 'id'>;
-                if (contact) {
-                    history = this.phone.historyStore.generateMissCall(number, contact);
-                } else {
-                    history = this.phone.historyStore.generateMissCall(number);
-                }
-                this.phone.addHistory(history);
+                this.addHistory(number, contact);
             }
         });
 
@@ -92,5 +87,15 @@ export class PhoneDummyController {
             };
             this.phone.addHistory(newHistory);
         });
+    }
+
+    private addHistory(number: string, contact?: Contact | null) {
+        let history: Omit<History, 'id'>;
+        if (contact) {
+            history = this.phone.historyStore.generateMissCall(number, contact);
+        } else {
+            history = this.phone.historyStore.generateMissCall(number);
+        }
+        this.phone.addHistory(history);
     }
 }

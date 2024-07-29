@@ -12,7 +12,7 @@ export class TimerAlert extends BaseSystem<TimerData> {
         device: DeviceController,
         private clock: ClockController,
     ) {
-        super({ btnCenter: 'close', btnStart: 'timer_play' }, device);
+        super({ btnCenter: 'close', btnStart: 'timer_play' }, device, 'timer');
     }
 
     render(_: TimerData): Promise<boolean> {
@@ -43,7 +43,7 @@ export class TimerAlert extends BaseSystem<TimerData> {
         const flexCenter = this.createFlexCenter();
 
         const alarmContainer = this.createElement('div', ['alarmContainer']);
-        
+
         const snoozeIcon = this.createElement('div', ['snoozeIcon']);
         const iconEl = this.createElement('span', ['material-symbols-outlined', 'fill-icon']);
         iconEl.innerText = 'timer';

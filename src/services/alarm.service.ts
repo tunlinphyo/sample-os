@@ -44,10 +44,28 @@ export class AlarmService {
     private checkAlarms() {
         const now = new Date();
         this.items.forEach(alarm => {
-            if (alarm.active && this.isAlarmTime(alarm, now)) {
-                this.alert(alarm);
-                if (alarm.repeat.length === 0) {
-                    this.deactivateAlarm(alarm.id);
+            // if (alarm.active && this.isAlarmTime(alarm, now)) {
+            //     this.alert(alarm);
+            //     if (alarm.repeat.length === 0) {
+            //         this.deactivateAlarm(alarm.id);
+            //     }
+            // }
+            if (alarm.active) {
+                if (alarm.snoozeActive) {
+                    const snoozeTime = new Date(alarm.snoozeTime!);
+                    if (now >= snoozeTime) {
+                        this.alert(alarm);
+                        alarm.snoozeActive = false;
+                        alarm.snoozeTime = undefined;
+                        if (alarm.repeat.length === 0) {
+                            this.deactivateAlarm(alarm.id);
+                        }
+                    }
+                } else if (this.isAlarmTime(alarm, now)) {
+                    this.alert(alarm);
+                    if (alarm.repeat.length === 0) {
+                        this.deactivateAlarm(alarm.id);
+                    }
                 }
             }
         });
@@ -74,6 +92,17 @@ export class AlarmService {
         const alarm = this.items.find(alarm => alarm.id === id);
         if (alarm) {
             alarm.active = false;
+            postMessage({ status: 'updateAlarm', data: alarm });
+        }
+    }
+
+    snooze(alarmId: string, minutes: number) {
+        const alarm = this.items.find(alarm => alarm.id === alarmId);
+        if (alarm) {
+            const now = new Date();
+            alarm.snoozeTime = new Date(now.getTime() + minutes * 60000);
+            alarm.active = true;
+            alarm.snoozeActive = true;
             postMessage({ status: 'updateAlarm', data: alarm });
         }
     }

@@ -163,7 +163,7 @@ export class OSDate {
 
     public static getFormatTime(date: Date, hour12: boolean, timeZone?: string): string {
         const options: Intl.DateTimeFormatOptions = {
-            hour: '2-digit',
+            hour: 'numeric',
             minute: '2-digit',
             hour12,
         };

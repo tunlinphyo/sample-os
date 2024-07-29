@@ -1,6 +1,5 @@
 import './style.css';
 
-import { SystemUpdate } from './components/system/update';
 import { CalendarController } from './controllers/calendar.controller';
 import { ClockController } from './controllers/clock.controller';
 import { PhoneController } from './controllers/phone.controller';
@@ -22,7 +21,8 @@ import { GestureService } from './services/gesture.service';
 import { LockedScreenPage } from './components/system/locked.screen';
 import { AlarmAlert } from './components/system/alarm.alert';
 import { TimerAlert } from './components/system/timer.alert';
-// import { NotificationController } from './controllers/notification.controller';
+import { NotificationController } from './controllers/notification.controller';
+import { SystemUpdate } from './components/system/system.update';
 // import { FullscreenController } from './controllers/fullscreen.controller';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -56,31 +56,32 @@ document.addEventListener('DOMContentLoaded', async () => {
     const timerAlert = new TimerAlert(window.device, window.clock);
     new PhoneDummyController(window.device, window.phone);
     new GestureService(historyManager, window.device, lockedScreen);
-    // new NotificationController(historyManager, window.device, window.phone, window.clock, window.weather);
+    new NotificationController(historyManager, window.device, window.phone, window.clock, window.weather);
     // new Battery();
     // const fullScreen = new FullscreenController();
 
     // window.weather.fetchWeather();
 
     window.clock.addChangeListener(async (status: string, data: any) => {
-        if (status === 'UPDATE_CLOCK') {
-            window.device.updateClock(window.clock.timerRunning, window.clock.stopwatchRunning);
-        }
+        // if (status === 'UPDATE_CLOCK') {
+        //     window.device.updateClock(window.clock.timerRunning, window.clock.stopwatchRunning);
+        // }
         if (status === 'SHOW_ALARM') {
             const alarm = await alarmAlert.open('Alarm', data);
             if (alarm && typeof alarm !== 'boolean') {
                 console.log('SNOOZE', alarm);
+                window.clock.snoozeAlarm(alarm.id);
             }
         }
-        if (status === 'TIMER_UPDATE') {
-            window.device.updateCountDown(
-                window.clock.remaining,
-                window.clock.timerRunning ? 'timer_pause' : 'timer_play'
-            );
-        }
+        // if (status === 'TIMER_UPDATE') {
+        //     window.device.updateCountDown(
+        //         window.clock.remaining,
+        //         window.clock.timerRunning ? 'timer_pause' : 'timer_play'
+        //     );
+        // }
         if (status === 'TIMER_ALERT') {
             timerAlert.open("Timer", data);
-            window.device.updateClock(window.clock.timerRunning, window.clock.stopwatchRunning);
+            // window.device.updateClock(window.clock.timerRunning, window.clock.stopwatchRunning);
         }
     });
 
@@ -92,19 +93,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     //     }
     // });
 
-    let systemUpdate: SystemUpdate | undefined;
+    const systemUpdate = new SystemUpdate(window.device);
     window.setting.addChangeListener((status: string, data: any) => {
         if (status === 'UPDATE_THEME') {
             window.device.theme = data.value;
         }
         if (status === 'OS_UPDATE_START') {
-            systemUpdate = new SystemUpdate();
-            systemUpdate.openPage();
+            systemUpdate.open('', undefined);
             window.device.resetDevice();
         }
         if (status === 'OS_UPDATE_END' && systemUpdate) {
-            systemUpdate.closePage();
-            systemUpdate = undefined;
+            systemUpdate.close();
         }
         if (status === 'UPDATE_TIMEZONE' || status == 'UPDATE_HOUR12') {
             const info = data.data as DateTimeInfo;

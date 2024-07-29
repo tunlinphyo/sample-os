@@ -230,6 +230,7 @@ body {
             display: flex;
             justify-content: center;
             align-items: flex-end;
+            pointer-events: none;
 
             .island {
                 width: calc(var(--grid) * 2.2);
@@ -244,6 +245,27 @@ body {
                 justify-content: flex-end;
                 align-items: center;
                 padding-inline: 10px;
+                position: relative;
+
+                .noti {
+                    width: 5px;
+                    height: 5px;
+                    border-radius: 100%;
+
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    translate: -50% -50%;
+
+                    &.yellowOn {
+                        background-color: #f1c40f;
+                    }
+
+                    &.greenGlow {
+                        background-color: #2ecc71;
+                        animation: glow 3s infinite ease-in-out;
+                    }
+                }
 
                 .camera {
                     --size: calc(var(--grid) * 0.5);
@@ -2285,5 +2307,17 @@ body {
 
     100% {
         background-position: 100% 0, 100% 100%, 0 100%, 0 0
+    }
+}
+
+@keyframes glow {
+    0%, 10% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    90%, 100% {
+        opacity: 0;
     }
 }

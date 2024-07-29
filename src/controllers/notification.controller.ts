@@ -2,7 +2,7 @@ import { DeviceController } from "../device/device";
 import { HistoryState, HistoryStateManager } from "../device/history.manager";
 import { OSDate } from "../utils/date";
 import { BaseController } from "./base.controller";
-import { ClockController } from "./clock.controller";
+import { ClockController, TimerData } from "./clock.controller";
 import { PhoneController } from "./phone.controller";
 import { WeatherController } from "./weather.controller";
 
@@ -15,6 +15,9 @@ export interface NotiType {
 export class NotificationController extends BaseController {
     private notification: Record<string, NotiType> = {};
     private statusContainer: HTMLElement;
+    private clockElement: HTMLElement;
+
+    private readonly appHierarchy: string[] = ['timer', 'phone', 'message', 'alarm', 'stopwatch'];
 
     constructor(
         private history: HistoryStateManager,
@@ -26,39 +29,97 @@ export class NotificationController extends BaseController {
         super();
         this.statusContainer = this.getElement('.statusContainer')!;
         console.log(this.statusContainer);
+        this.clockElement = this.getElement('#dateTime');
         this.setupListeners();
+    }
+
+    get noti(): string | undefined {
+        for(const key of this.appHierarchy) {
+            if (this.notification[key]) {
+                return key;
+            }
+        }
+        return;
     }
 
     get stopwatch(): NotiType | undefined {
         return this.notification.stopwatch;
     }
-    set stopwatch(state: any) {
-        this.notification.stopwatch = {
-            app: 'clock',
-            history: [{ state, url:"/stopwatch" }],
-            data: null
+    set stopwatch(isDelete: boolean) {
+        if (isDelete) {
+            delete this.notification.stopwatch
+        } else {
+            this.notification.stopwatch = {
+                app: 'clock',
+                history: [{ state: null, url:"/stopwatch" }],
+                data: null
+            }
         }
     }
 
-    // private openNoti(key: string) {
-    //     const noti = this.notification[key];
-    //     if (noti) {
-    //         this.device.setHistory(noti.app, noti.history);
-    //         this.history.replaceState(`/${noti.app}`, noti.data);
-    //     }
-    // }
+    get timer(): NotiType | undefined {
+        return this.notification.timer;
+    }
+    set timer(isDelete: boolean) {
+        if (isDelete) {
+            delete this.notification.timer;
+        } else {
+            this.notification.timer = {
+                app: 'clock',
+                history: [{ state: null, url:"/timer" }],
+                data: null
+            }
+        }
+    }
+
+    private openNoti(key?: string) {
+        if (!key) return;
+        const noti = this.notification[key];
+        if (noti) {
+            console.log('NOTI', noti);
+            this.device.setHistory(noti.app, noti.history);
+            this.history.replaceState(`/${noti.app}`, noti.data);
+        }
+    }
 
     private setupListeners() {
-        console.log(this.history, this.phone);
-        this.clock.addChangeListener(async (status: string, data: any) => {
+        this.updateClock();
+
+        this.clock.addChangeListener(async (status: string) => {
             if (status === 'UPDATE_CLOCK') {
-                // UPDATE CLOCK
-                console.log(data);
+                this.stopwatch = !this.clock.stopwatchRunning;
+                this.updateClock();
             }
             if (status === 'TIMER_UPDATE') {
-                // UPDATE TIMER
+                this.timer = !(this.clock.timerRunning && this.clock.remaining);
+                this.updateClock();
             }
         });
+
+        this.clockElement.addEventListener('click', () => {
+            if (this.device.appOpened && this.noti) {
+                this.history.replaceState('/', null);
+
+                const listener = () => {
+                    setTimeout(() => {
+                        this.openNoti(this.noti);
+                    }, 0);
+                    this.device.removeEventListener('closeAppFinished', listener);
+                }
+
+                this.device.addEventListener('closeAppFinished', listener);
+            } else {
+                this.openNoti(this.noti);
+            }
+        });
+
+        this.device.addEventListener('updateClock', () => {
+            this.updateClock();
+        });
+
+        this.phone.addChangeListener((status: string, data: any) => {
+            console.log(status, data);
+        })
 
         this.weather.addChangeListener((status: string, data: any) => {
             if (status === 'WEATHER_NOTIFIGATION') {
@@ -67,19 +128,14 @@ export class NotificationController extends BaseController {
         });
     }
 
-    public updateClock(timer: boolean, stopwatch: boolean) {
-        const clockElement = this.getElement('#dateTime');
+    public updateClock() {
+        console.log(this.clock.timerRunning, this.clock.stopwatchRunning, this.clock.remaining, this.noti);
 
-        if (!timer) {
-            const hourString = OSDate.getCustomTime(new Date(), this.device.hour12, this.device.timeZone);
-            if (stopwatch) {
-                clockElement.innerHTML = `
-                    ${hourString}}
-                    <span class="material-symbols-outlined fill-icon" style="font-size: 20px; translate: 0 -2px; margin-left: 2px">timer</span>
-                `;
-            } else {
-                clockElement.textContent = hourString;
-            }
+        if (this.clock.remaining && this.clock.timerRunning) {
+            this.updateCountDown(this.clock.remaining, 'timer')
+        } else {
+            const hourString = OSDate.getFormatTime(new Date(), this.device.hour12, this.device.timeZone);
+            this.clockElement.innerHTML = `${hourString} ${this.getIcon(this.noti)}`;
         }
     }
 
@@ -88,19 +144,40 @@ export class NotificationController extends BaseController {
         return element;
     }
 
-    // private createElement<T extends HTMLElement>(elementName: string, classes: string[] = [], attributes: { [key: string]: string } = {}): T {
-    //     const element = document.createElement(elementName) as T;
+    public updateCountDown(remainingTime: number, icon: string) {
+        const clockElement = this.getElement('#dateTime');
+        const result = this.convertMilliseconds(remainingTime);
+        let time = "";
+        if (result.hours) {
+            time = `${this.pad(result.hours)}:${this.pad(result.minutes)}:${this.pad(result.seconds)}`;
+        } else {
+            time = `${this.pad(result.minutes)}:${this.pad(result.seconds)}`;
+        }
+        clockElement.innerHTML = `
+            <span class="material-symbols-outlined fill-icon" style="font-size: 20px; translate: 0 -1px;">${icon}</span>
+            ${time}
+        `;
+    }
 
-    //     if (classes.length > 0) {
-    //         element.classList.add(...classes);
-    //     }
+    private getIcon(noti?: string) {
+        switch (noti) {
+            case 'stopwatch':
+                return '<span class="material-symbols-outlined fill-icon" style="font-size: 20px; margin-left: 2px;">pace</span>'
+            default:
+                return '';
+        }
+    }
 
-    //     for (const key in attributes) {
-    //         if (attributes.hasOwnProperty(key)) {
-    //             element.setAttribute(key, attributes[key]);
-    //         }
-    //     }
+    private convertMilliseconds(totalMilliseconds: number) {
+        const totalSeconds = Math.round(totalMilliseconds / 1000);
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
 
-    //     return element;
-    // }
+        return { hours, minutes, seconds };
+    }
+
+    private pad(num: number): string {
+        return num.toString().padStart(2, '0');
+    }
 }

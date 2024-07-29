@@ -43,6 +43,8 @@ export class NotesApp extends App {
         for(const item of list) {
             if (item.type === 'note') {
                 this.renderTextNote(noteList, item);
+            } else {
+                this.renderAudioNote(noteList, item);
             }
         }
         scrollArea.appendChild(noteList);
@@ -55,30 +57,56 @@ export class NotesApp extends App {
         this.render(data)
     }
 
+    private renderAudioNote(noteList: HTMLElement, item: Note) {
+        if (item.type == 'note') return;
+
+        const noteTitle = this.createElement('li', ['noteCard']);
+        const titleEl = this.createElement('div', ['noteTitle']);
+        titleEl.textContent = item.title || 'Untitled note';
+        noteTitle.appendChild(titleEl);
+
+        // const contactEl = this.createElement('div', ['noteContact']);
+        // contactEl.textContent = item.body[1]?.data[0] ?? '';
+        // noteTitle.appendChild(contactEl);
+
+        const dateEl = this.createElement('small', ['noteDate']);
+        dateEl.textContent = OSDate.formatDate(item.updateDate || item.createDate, {
+            year: 'numeric',
+            month: 'long',
+            day: '2-digit',
+            weekday: 'long'
+        }, this.device.timeZone);
+        noteTitle.appendChild(dateEl);
+        this.addEventListener('click', () => {
+            this.history.pushState('/notes/audio/player', item.id);
+        }, noteTitle)
+        noteList.appendChild(noteTitle);
+    }
+
     private renderTextNote(noteList: HTMLElement, item: Note) {
         if (item.type == 'audio') return;
 
         const noteTitle = this.createElement('li', ['noteCard']);
-            const titleEl = this.createElement('div', ['noteTitle']);
-            titleEl.textContent = item.title;
-            noteTitle.appendChild(titleEl);
+        const titleEl = this.createElement('div', ['noteTitle']);
+        titleEl.textContent = item.title;
+        noteTitle.appendChild(titleEl);
 
-            const contactEl = this.createElement('div', ['noteContact']);
-            contactEl.textContent = item.body[1]?.data[0] ?? '';
-            noteTitle.appendChild(contactEl);
+        const contactEl = this.createElement('div', ['noteContact']);
+        contactEl.textContent = item.body[1]?.data[0] ?? '';
+        noteTitle.appendChild(contactEl);
 
-            const dateEl = this.createElement('small', ['noteDate']);
-            dateEl.textContent = OSDate.formatDate(item.updateDate || item.createDate, { 
-                year: 'numeric',
-                month: 'long', 
-                day: '2-digit',
-                weekday: 'long' 
-            }, this.device.timeZone);
-            noteTitle.appendChild(dateEl);
-            this.addEventListener('click', () => {
-                this.history.pushState('/notes/detail', item.id);
-            }, noteTitle)
-            noteList.appendChild(noteTitle);
+        const dateEl = this.createElement('small', ['noteDate']);
+        dateEl.textContent = OSDate.formatDate(item.updateDate || item.createDate, {
+            year: 'numeric',
+            month: 'long',
+            day: '2-digit',
+            weekday: 'long'
+        }, this.device.timeZone);
+        noteTitle.appendChild(dateEl);
+        this.addEventListener('click', () => {
+            this.history.pushState('/notes/detail', item.id);
+        }, noteTitle)
+        noteList.appendChild(noteTitle);
     }
 
     private sortByDate(notes: Note[]): Note[] {

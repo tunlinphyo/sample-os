@@ -77,7 +77,7 @@ export abstract class Modal extends BaseComponent {
 
     protected setupActionButton(icon: string | undefined, position: 'start' | 'end' | 'center') {
         if (icon) {
-            const button = this.createElement<HTMLButtonElement>('button', ['actionButton'], { type: 'button' })
+            const button = this.createElement<HTMLButtonElement>('button', ['actionButton', position], { type: 'button' })
             button.innerHTML = `<span class="material-symbols-outlined icon">${icon}</span>`;
             const target = this.getElement(`.actionButton.${position}`);
             this.replaceElement(target, button);

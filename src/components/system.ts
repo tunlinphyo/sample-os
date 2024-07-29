@@ -1,4 +1,5 @@
 import { DeviceController } from "../device/device";
+import { SystemName } from "../services/system.service";
 import { BaseComponent } from "./base";
 
 export interface SystemActions {
@@ -19,7 +20,8 @@ export abstract class BaseSystem<T> extends BaseComponent {
 
     constructor(
         actions: SystemActions,
-        protected device: DeviceController
+        protected device: DeviceController,
+        protected systemName: SystemName
     ) {
         super(actions.template || 'appTemplate');
         this.systemAlert = this.getElement('.systemAlert', this.device.component);
@@ -36,6 +38,7 @@ export abstract class BaseSystem<T> extends BaseComponent {
 
     open(title: string, data: T, ): Promise<T | boolean> {
         return new Promise(async (resolve) => {
+            if (this.device.system.isUpdate) return false;
             if (!this.iframeEl.contentDocument) return false;
 
             const titleEl = this.getElement('.statusBar-title')
@@ -52,7 +55,7 @@ export abstract class BaseSystem<T> extends BaseComponent {
                 }, this.btnCenter);
             }
 
-            this.device.systemOpen = true;
+            this.device.system.system = { name: this.systemName, status: true };
 
             const result = await this.render(data);
             this.close();
@@ -61,9 +64,11 @@ export abstract class BaseSystem<T> extends BaseComponent {
     }
 
     close() {
-        this.device.systemOpen = false;
+        this.device.system.system = { name: this.systemName, status: false };
         this.dispatchCustomEvent('pageClose');
-        this.systemAlert.style.display = 'none';
+        if (!this.device.system.isSystem) {
+            this.systemAlert.style.display = 'none';
+        }
         this.component.remove();
     }
 

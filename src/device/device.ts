@@ -13,6 +13,7 @@ import { IncomingCall } from "../components/system/incoming.call";
 import { OutgoingCall } from "../components/system/outgoing.call";
 // import { OSBrowser } from "../utils/browser";
 import { SelectPopup } from "../components/popups/select.popup";
+import { SystemService } from "../services/system.service";
 
 export type DeviceTheme = 'auto' | 'light' | 'dark';
 
@@ -27,13 +28,14 @@ export class DeviceController extends BaseComponent {
     private _theme: DeviceTheme = 'auto';
     private _timeZone: string = Intl.DateTimeFormat().resolvedOptions().timeZone;
     private _hour12: boolean = true;
-    private _systemOpen: boolean = false;
-    private _appOpen: boolean = false;
+    private _appOpen: string | null = null;
     private _animating: boolean = false;
 
     private _appHistory: Record<string, HistoryState[]> = {};
 
+
     public lockedDevice: boolean = true;
+    public system: SystemService;
 
     public outgoingCall: OutgoingCall;
     public incomingCall: IncomingCall;
@@ -76,6 +78,8 @@ export class DeviceController extends BaseComponent {
         this.yearPicker = new YearPicker(this.appFrame);
         this.choosePicker = new ChoosePicker(this.appFrame);
 
+        this.system = new SystemService();
+
         this.init();
     }
 
@@ -92,7 +96,8 @@ export class DeviceController extends BaseComponent {
     }
     set timeZone(timeZone: string) {
         this._timeZone = timeZone;
-        this.updateClock(false, false);
+        this.dispatchCustomEvent('updateClock');
+        // this.updateClock(false, false);
     }
 
     get hour12() {
@@ -100,16 +105,10 @@ export class DeviceController extends BaseComponent {
     }
     set hour12(hour12: boolean) {
         this._hour12 = hour12;
-        this.updateClock(false, false);
+        this.dispatchCustomEvent('updateClock');
+        // this.updateClock(false, false);
     }
 
-    get systemOpen() {
-        return this._systemOpen;
-    }
-    set systemOpen(isOpen: boolean) {
-        this.dispatchCustomEvent('systemOpenStatus', isOpen);
-        this._systemOpen = isOpen;
-    }
     get appOpened() {
         return this._appOpen;
     }
@@ -148,9 +147,16 @@ export class DeviceController extends BaseComponent {
         this._appHistory = {};
     }
 
-    private init() {
-        this.updateClock(false, false);
+    public micNoti(on: boolean) {
+        const noti = this.getElement("#notiLight");
+        if (on) {
+            noti.classList.add('yellowOn');
+        } else {
+            noti.classList.remove('yellowOn');
+        }
+    }
 
+    private init() {
         setTimeout(() => {
             const path = window.location.pathname;
             this.history.pushState(path, null);
@@ -181,12 +187,12 @@ export class DeviceController extends BaseComponent {
             this.closeApp();
         } else {
             const pathes = url.split('/');
-            this.openApp(`/src/apps/${pathes[1]}/index.html`);
+            this.openApp(`/src/apps/${pathes[1]}/index.html`, pathes[1]);
         }
     }
 
-    private openApp(src: string) {
-        this._appOpen = true;
+    private openApp(src: string, app: string) {
+        this._appOpen = app;
         this._animating = true;
         this.appFrame.src = src;
 
@@ -212,7 +218,7 @@ export class DeviceController extends BaseComponent {
     }
 
     private closeApp() {
-        this._appOpen = false;
+        this._appOpen = null;
         this._animating = true;
         this.appContainer.classList.add('hide');
 

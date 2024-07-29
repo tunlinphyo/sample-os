@@ -19,5 +19,8 @@ addEventListener('message', (event) => {
         case 'edit':
             alarmService.update(data);
             break;
+        case 'snooze':
+            alarmService.snooze(data, 4);
+            break;
     }
 });

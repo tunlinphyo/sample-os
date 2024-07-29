@@ -125,12 +125,12 @@
                         animation: shake 0.5s infinite;
                     }
                 }
-    
+
                 .alarmLabel {
                     font-size: 24px;
                     text-align: center;
                 }
-    
+
                 .alarmTime {
                     font-size: 16px;
                 }
@@ -150,6 +150,10 @@
                     font-size: 28px;
                     display: none;
                 }
+
+                /* &::before {
+                    background-color: var(--black);
+                } */
             }
             .actionButton.end {
                 display: none;

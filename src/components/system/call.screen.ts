@@ -14,7 +14,7 @@ export class CallScreen extends BaseSystem<Omit<History, 'id'>> {
     private stopwatch: CallTime;
 
     constructor(device: DeviceController) {
-        super({ template: 'callScreenTemplate', btnEnd: 'call_end' }, device);
+        super({ template: 'callScreenTemplate', btnEnd: 'call_end' }, device, 'phone');
         this.stopwatch = new CallTime();
     }
 
