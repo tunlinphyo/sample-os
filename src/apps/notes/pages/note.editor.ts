@@ -18,7 +18,7 @@ export class NoteEditorPage extends Modal {
         private notes: NotesController
     ) {
         super(history, { template: 'editorTemplate', btnStart: 'match_case', btnEnd: 'check' });
-
+        this.component.classList.add('noteEditorPage');
         this.mainArea = this.getElement('.keyboardTextArea');
         this.keysArea = this.getElement('.keyboardKeysArea');
         this.keyboard = new EnTextKeyboard(this.keysArea);

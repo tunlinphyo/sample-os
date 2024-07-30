@@ -21,7 +21,7 @@ export class MediaRecorderService {
                     };
 
                     this.mediaRecorder.onstop = () => {
-                        this.audioBlob = new Blob(this.audioChunks, { type: 'audio/wav' });
+                        this.audioBlob = new Blob(this.audioChunks, { type: 'audio/mp3' });
                         this.audioChunks = [];
                         this.stopMediaTracks();
                     };

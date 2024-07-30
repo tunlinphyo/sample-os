@@ -1,3 +1,5 @@
+import { Keyboard } from "../../../components/keyboard";
+import { noteTitles } from "../../../components/keyboard/consts";
 import { Modal } from "../../../components/modal";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
@@ -63,6 +65,20 @@ export class AudioRecoder extends Modal {
         // this.recordButton.addEventListener('mousemove', this.stopRecording);
 
         this.recordButton.addEventListener('pointercancel', this.stopRecording);
+
+        this.notes.addChangeListener((status: string) => {
+            if (status === "NOTE_SAVED") {
+                this.closePage();
+            }
+        });
+
+        this.device.addEventListener('closeApp', () => {
+            if (this.note) {
+                // if (this.note.id) this.history.updateState(`/notes/edit`, this.note);
+                // else
+                this.history.updateState(`/notes/audio`, this.note);
+            }
+        });
     }
 
     render(data?: Note) {
@@ -80,7 +96,10 @@ export class AudioRecoder extends Modal {
 
         if (!this.note.body) {
             this.createRecoder();
-            // this.createAudioPlayer('');
+        } else {
+            if (typeof this.note.body === 'string') {
+                this.createAudioPlayer(this.note.body);
+            }
         }
     }
 
@@ -127,6 +146,27 @@ export class AudioRecoder extends Modal {
         this.removeAllEventListeners();
         this.mainArea.innerHTML = "";
         const flexCenter = this.createFlexCenter();
+
+        const titleButton = this.createElement('button', ['titleInput']);
+        titleButton.textContent = this.note?.title || 'Untitle note';
+
+        this.addEventListener('click', () => {
+            if (!this.note) return;
+            const keyboardConfig: Keyboard = {
+                label: 'Title',
+                defaultValue: this.note?.title ?? '',
+                type: 'text',
+                keys: noteTitles,
+                btnEnd: 'check',
+            };
+            this.device.keyboard.open(keyboardConfig).then(data => {
+                if (data && this.note) {
+                    this.note.title = data;
+                    titleButton.textContent = data || 'Untitle note';
+                }
+            });
+        }, titleButton);
+        flexCenter.appendChild(titleButton);
 
         new AudioButton(data, flexCenter);
 

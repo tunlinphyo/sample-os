@@ -25,6 +25,7 @@ export class AlarmService {
     }
 
     update(data: Alarm) {
+        console.log('UPDATE', data);
         this._items = this._items.map(item => item.id === data.id ? data : item);
     }
 
@@ -52,13 +53,15 @@ export class AlarmService {
             // }
             if (alarm.active) {
                 if (alarm.snoozeActive) {
+                    console.log('SNOOZE', alarm)
                     const snoozeTime = new Date(alarm.snoozeTime!);
+                    console.log('SNOOZE_TIME', snoozeTime);
                     if (now >= snoozeTime) {
                         this.alert(alarm);
-                        alarm.snoozeActive = false;
-                        alarm.snoozeTime = undefined;
                         if (alarm.repeat.length === 0) {
                             this.deactivateAlarm(alarm.id);
+                        } else {
+                            this.stopSnoozeAlarm(alarm.id);
                         }
                     }
                 } else if (this.isAlarmTime(alarm, now)) {
@@ -92,6 +95,17 @@ export class AlarmService {
         const alarm = this.items.find(alarm => alarm.id === id);
         if (alarm) {
             alarm.active = false;
+            alarm.snoozeActive = false;
+            alarm.snoozeTime = undefined;
+            postMessage({ status: 'updateAlarm', data: alarm });
+        }
+    }
+
+    private async stopSnoozeAlarm(id: string) {
+        const alarm = this.items.find(alarm => alarm.id === id);
+        if (alarm) {
+            alarm.snoozeActive = false;
+            alarm.snoozeTime = undefined;
             postMessage({ status: 'updateAlarm', data: alarm });
         }
     }

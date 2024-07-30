@@ -161,7 +161,7 @@
             z-index: 1;
             background-color: transparent;
             bottom: var(--grid);
-            justify-content: center;
+            /* justify-content: center; */
 
             .actionButton {
                 &.center {
@@ -329,7 +329,7 @@
                 place-content: center;
                 /* aspect-ratio: 2 / 1; */
                 /* background-color: #f00; */
-                
+
                 .avatar {
                     display: flex;
                     justify-content: center;
@@ -390,22 +390,22 @@
                 text-overflow: ellipsis;
                 text-align: left;
                 font-size: 20px;
-    
+
                 &.withIcon {
                     display: flex;
                     justify-content: flex-start;
                     align-items: center;
                     gap: calc(var(--grid) * 0.5);
                 }
-    
+
                 &.blockedNumber {
                     pointer-events: none;
-    
+
                     .number {
                         text-decoration: line-through;
                     }
                 }
-    
+
                 &.title {
                     font-size: var(--grid);
                     font-weight: 400;

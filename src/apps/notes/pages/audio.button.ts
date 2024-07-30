@@ -53,8 +53,8 @@ export class AudioButton {
         // this.audio.controls = true;
 
         this.parentEl.appendChild(this.audio);
-        this.parentEl.appendChild(timeData);
         this.parentEl.appendChild(this.audioButton);
+        this.parentEl.appendChild(timeData);
     }
 
     private playAudio() {
@@ -70,7 +70,6 @@ export class AudioButton {
     }
 
     private updateTimeData(elem: HTMLElement) {
-        console.log(this.duration, this.time);
         if (this.duration) {
             elem.textContent = `${this.renderTime(this.time)}/${this.renderTime(this.duration)}`;
         } else {

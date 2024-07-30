@@ -65,9 +65,9 @@ export class NotesApp extends App {
         titleEl.textContent = item.title || 'Untitled note';
         noteTitle.appendChild(titleEl);
 
-        // const contactEl = this.createElement('div', ['noteContact']);
-        // contactEl.textContent = item.body[1]?.data[0] ?? '';
-        // noteTitle.appendChild(contactEl);
+        const contactEl = this.createElement('div', ['noteContact']);
+        contactEl.innerHTML = '<span class="material-symbols-outlined">graphic_eq</span>';
+        noteTitle.appendChild(contactEl);
 
         const dateEl = this.createElement('small', ['noteDate']);
         dateEl.textContent = OSDate.formatDate(item.updateDate || item.createDate, {
@@ -78,7 +78,7 @@ export class NotesApp extends App {
         }, this.device.timeZone);
         noteTitle.appendChild(dateEl);
         this.addEventListener('click', () => {
-            this.history.pushState('/notes/audio/player', item.id);
+            this.history.pushState('/notes/audio', item);
         }, noteTitle)
         noteList.appendChild(noteTitle);
     }
