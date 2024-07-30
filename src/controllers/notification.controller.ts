@@ -2,7 +2,7 @@ import { DeviceController } from "../device/device";
 import { HistoryState, HistoryStateManager } from "../device/history.manager";
 import { OSDate } from "../utils/date";
 import { BaseController } from "./base.controller";
-import { ClockController, TimerData } from "./clock.controller";
+import { ClockController } from "./clock.controller";
 import { PhoneController } from "./phone.controller";
 import { WeatherController } from "./weather.controller";
 
