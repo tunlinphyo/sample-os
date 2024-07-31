@@ -103,6 +103,10 @@ export class PhoneController extends BaseController {
         this.tryThis(async () => {
             await this.historyStore.add(data);
             this.notifyListeners('HISTORY_ADDED', data.number);
+            if (!data.isViewed) {
+                const status = data.type === 'from_message' ? 'MESSAGE_NOTI' : 'PHONE_NOTI';
+                this.notifyListeners(status, data.number);
+            }
         })
     }
 

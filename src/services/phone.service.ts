@@ -35,12 +35,13 @@ export class PhoneService {
                 date: new Date(),
                 contact: contact ?? undefined,
                 number: number,
-                data: 0
+                data: 0,
+                isViewed: true,
             }
             const data = await this.device.callScreen.open('Phone', history);
             if (data && typeof data !== 'boolean') this.phone.addHistory(data);
         } else {
-            let history = this.generateMissCall(number, true, (contact || undefined));
+            let history = PhoneService.generateMissCall(number, true, (contact || undefined));
             this.phone.addHistory(history);
         }
     }
@@ -75,20 +76,22 @@ export class PhoneService {
                     date: new Date(),
                     contact: contact || undefined,
                     number: number,
-                    data: data
+                    data: data,
+                    isViewed: true,
                 };
                 this.phone.addHistory(newHistory);
             }
         });
     }
 
-    private generateMissCall(number: string, to: boolean, contact?: Contact) {
+    public static generateMissCall(number: string, to: boolean, contact?: Contact) {
         const history: Omit<History, 'id'> = {
             type: to ? 'to_miss_call' : 'from_miss_call',
             date: new Date(),
             contact,
             number,
             data: '',
+            isViewed: to ? true : false,
         }
 
         return history;

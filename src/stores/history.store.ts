@@ -146,6 +146,7 @@ export interface History {
     contact?: Contact;
     number: string;
     data: number | string;
+    isViewed: boolean;
 }
 
 export interface GroupedHistory {
@@ -193,6 +194,8 @@ export class HistoryStore extends BaseManager<History> {
             }
         });
 
+        this.editView(chatHistory);
+
         return chatHistory.sort((a, b) => {
             const dateA = new Date(a.date);
             const dateB = new Date(b.date);
@@ -218,6 +221,12 @@ export class HistoryStore extends BaseManager<History> {
         await this.db.put(id, item)
         this.editItem(id, item)
         return id
+    }
+
+    async editView(histories: History[]) {
+        const edited = histories.map(item => ({ ...item, isViewed: true }));
+        await this.db.postMany(edited);
+        this.updateMany(edited);
     }
 
     async del(id: string): Promise<string> {
@@ -253,7 +262,8 @@ export class HistoryStore extends BaseManager<History> {
             date: new Date(),
             contact,
             number: contact.phones[0].number,
-            data: type === 'from_message' ? randomMessages[OSArray.getRandomElement(aToZ)] : '00:00:32'
+            data: type === 'from_message' ? randomMessages[OSArray.getRandomElement(aToZ)] : '00:00:32',
+            isViewed: false,
         }
 
         return history
@@ -267,7 +277,8 @@ export class HistoryStore extends BaseManager<History> {
             date: new Date(),
             contact: undefined,
             number,
-            data: type === 'from_message' ? randomMessages[OSArray.getRandomElement(aToZ)] : '00:00:32'
+            data: type === 'from_message' ? randomMessages[OSArray.getRandomElement(aToZ)] : '00:00:32',
+            isViewed: false,
         }
 
         return history
@@ -284,6 +295,7 @@ export class HistoryStore extends BaseManager<History> {
             contact,
             number,
             data: '',
+            isViewed: false,
         }
 
         return history;

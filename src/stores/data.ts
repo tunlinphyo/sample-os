@@ -50,6 +50,16 @@ export abstract class BaseManager<T extends { id: string; }> {
         }
     }
 
+    protected updateMany(edited: T[]) {
+        for (const data of edited) {
+            const itemIndex = this.items.findIndex(item => this.getId(item) === this.getId(data));
+            if (itemIndex !== -1) {
+                this.items[itemIndex] = { ...this.items[itemIndex], ...data };
+            }
+        }
+        this.notifyListeners(null, 'edit');
+    }
+
     protected deleteItem(id: string): void {
         const itemIndex = this.items.findIndex(item => this.getId(item) === id);
         if (itemIndex !== -1) {

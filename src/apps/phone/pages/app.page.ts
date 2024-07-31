@@ -67,10 +67,16 @@ export class PhoneApp extends App {
                 <span class="iconContainer">
                     <span class="material-symbols-outlined">${this.getIcon(item.type)}</span>
                 </span>
-                <span>${item.contact ? `${item.contact.firstName} ${item.contact.lastName}` : item.number}</span>
+                <span class="contactName">${item.contact ? `${item.contact.firstName} ${item.contact.lastName}` : item.number}${item.isViewed ? "" : '*'}</span>
             `;
             this.addEventListener('click', () => {
                 this.history.pushState('/history', item.number);
+                noteTitle.innerHTML = `
+                    <span class="iconContainer">
+                        <span class="material-symbols-outlined">${this.getIcon(item.type)}</span>
+                    </span>
+                    <span class="contactName">${item.contact ? `${item.contact.firstName} ${item.contact.lastName}` : item.number}</span>
+                `;
             }, noteTitle);
             noteList.appendChild(noteTitle);
         });

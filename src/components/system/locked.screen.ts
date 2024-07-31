@@ -1,7 +1,7 @@
 import { DeviceController } from "../../device/device";
 import { HistoryStateManager } from "../../device/history.manager";
 import { WeatherService } from "../../services/weather.service";
-// import { OSBrowser } from "../../utils/browser";
+import { OSBrowser } from "../../utils/browser";
 import { OSDate } from "../../utils/date";
 import { App } from "../app";
 
@@ -77,11 +77,11 @@ export class LockedScreenPage extends App {
         const navButton = this.createElement('button', ['navButton']);
 
         navButton.addEventListener('click', () => {
-            this.lockedAnimate();
-            // if (OSBrowser.isTouchSupport()) {
-            // } else {
-            //     this.openLocked();
-            // }
+            if (OSBrowser.isTouchSupport()) {
+                this.lockedAnimate();
+            } else {
+                this.openLocked();
+            }
         });
         homeNavigation.appendChild(navButton);
 

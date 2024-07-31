@@ -43,6 +43,14 @@ export interface DateTimeInfo {
     hour12: boolean;
 }
 
+export interface Volume {
+    isMuted: boolean;
+    mediaVolume: number;
+    ringVolume: number;
+    notiVolume: number;
+    alarmVolume: number;
+}
+
 const appList: HomeApp[] = [
     {
         id: 'phone',
@@ -274,6 +282,20 @@ const defaultSettings: Setting[] = [
             autoTimeZone: true,
             timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
             hour12: true
+        }
+    },
+    {
+        id: 'volumes',
+        title: 'Volume',
+        order: 10,
+        value: '',
+        inList: false,
+        data: {
+            isMuted: false,
+            mediaVolume: 1,
+            ringVolume: 1,
+            notiVolume: 1,
+            alarmVolume: 1
         }
     },
 ]

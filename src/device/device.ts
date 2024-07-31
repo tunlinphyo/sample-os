@@ -14,6 +14,7 @@ import { OutgoingCall } from "../components/system/outgoing.call";
 // import { OSBrowser } from "../utils/browser";
 import { SelectPopup } from "../components/popups/select.popup";
 import { SystemService } from "../services/system.service";
+import { OSBrowser } from "../utils/browser";
 
 export type DeviceTheme = 'auto' | 'light' | 'dark';
 
@@ -32,7 +33,6 @@ export class DeviceController extends BaseComponent {
     private _animating: boolean = false;
 
     private _appHistory: Record<string, HistoryState[]> = {};
-
 
     public lockedDevice: boolean = true;
     public system: SystemService;
@@ -117,7 +117,6 @@ export class DeviceController extends BaseComponent {
     }
 
     // public
-
     public getHistory(app: string) {
         return this._appHistory[app];
     }
@@ -156,6 +155,15 @@ export class DeviceController extends BaseComponent {
         }
     }
 
+    public phoneNoti(on: boolean) {
+        const noti = this.getElement("#notiLight");
+        if (on) {
+            noti.classList.add('greenGlow');
+        } else {
+            noti.classList.remove('greenGlow');
+        }
+    }
+
     private init() {
         setTimeout(() => {
             const path = window.location.pathname;
@@ -164,21 +172,21 @@ export class DeviceController extends BaseComponent {
 
         this.navEl.addEventListener('click', () => {
             if (!this.appOpened) return;
-            // if (!OSBrowser.isTouchSupport()) {
-            //     this.history.replaceState('/', null);
-            // } else {
-            // }
-            this.navEl.animate([
-                { transform: 'translateY(0)' },
-                { transform: 'translateY(-4px)', offset: 0.3 },
-                { transform: 'translateY(0)', offset: 0.6 },
-                { transform: 'translateY(-2px)', offset: 0.8 },
-                { transform: 'translateY(0)' }
-            ], {
-                duration: 1000,
-                easing: 'ease-in-out',
-                iterations: 1
-            });
+            if (!OSBrowser.isTouchSupport()) {
+                this.history.replaceState('/', null);
+            } else {
+                this.navEl.animate([
+                    { transform: 'translateY(0)' },
+                    { transform: 'translateY(-4px)', offset: 0.3 },
+                    { transform: 'translateY(0)', offset: 0.6 },
+                    { transform: 'translateY(-2px)', offset: 0.8 },
+                    { transform: 'translateY(0)' }
+                ], {
+                    duration: 1000,
+                    easing: 'ease-in-out',
+                    iterations: 1
+                });
+            }
         });
     }
 
@@ -218,6 +226,7 @@ export class DeviceController extends BaseComponent {
     }
 
     private closeApp() {
+        if (!this._appOpen) return;
         this._appOpen = null;
         this._animating = true;
         this.appContainer.classList.add('hide');

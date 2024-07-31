@@ -20,7 +20,7 @@ export class HistoryPage extends Page {
         private device: DeviceController,
         private phone: PhoneController
     ) {
-        super(history, { btnStart: 'phone', btnEnd: 'chat_bubble' });
+        super(history, { btnStart: 'phone', btnEnd: 'mode_comment' });
         this.component.classList.add('historyPage');
         this.phoneService = new PhoneService(this.device, this.phone);
         this.init();
@@ -287,14 +287,14 @@ export class HistoryPage extends Page {
                         list = phones.map(phone => ({
                            title: phone.number,
                            value: phone.number,
-                           icon: 'chat_bubble'
+                           icon: 'mode_comment'
                         }));
                     } else {
                         list = [
                             {
                                 title: history.number,
                                 value: history.number,
-                                icon: 'chat_bubble'
+                                icon: 'mode_comment'
                             }
                         ]
                     }

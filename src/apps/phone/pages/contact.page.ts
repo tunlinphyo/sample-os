@@ -100,8 +100,8 @@ export class ContactPage extends Page {
 
         const blockEl = this.createElement('button', ['selectItem', 'withIcon']);
         blockEl.innerHTML = `
-            <span class="material-symbols-outlined">block</span> 
-            ${this.contact?.isBlocked ? 'Unblock' : 'Block'} Contact    
+            <span class="material-symbols-outlined">block</span>
+            ${this.contact?.isBlocked ? 'Unblock' : 'Block'} Contact
         `;
         this.addEventListener('click', () => {
             if (!this.contact) return;
@@ -162,7 +162,7 @@ export class ContactPage extends Page {
     private async callOrMessage(number: string) {
         const list: SelectItem[] = [
             { title: 'Call', value: 'call', icon: 'phone' },
-            { title: 'Message', value: 'message', icon: 'chat_bubble' }
+            { title: 'Message', value: 'message', icon: 'mode_comment' }
         ];
         const selected = await this.device.selectList.openPage(number, list);
         if (selected === 'call') {

@@ -20,7 +20,7 @@ export class DialpadPage extends Page {
         private device: DeviceController,
         private phone: PhoneController
     ) {
-        super(history, { btnStart: 'phone', btnEnd: 'chat_bubble' });
+        super(history, { btnStart: 'phone', btnEnd: 'mode_comment' });
         this.component.classList.add('dialpadPage');
         this.phoneService = new PhoneService(this.device, this.phone);
 

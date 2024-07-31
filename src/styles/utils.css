@@ -250,7 +250,7 @@ body {
                 .noti {
                     width: 5px;
                     height: 5px;
-                    border-radius: 100%;
+                    border-radius: 5px;
 
                     position: absolute;
                     top: 50%;
@@ -476,6 +476,7 @@ body {
         &.screen--ai,
         &.screen--keyboard,
         &.screen--system,
+        &.volumeControls,
         .screen--vertical {
             position: absolute;
             z-index: 1;
@@ -537,6 +538,12 @@ body {
             opacity: 0;
             scale: 1.5;
             transition: opacity .3s ease-out, scale .3s ease-out;
+        }
+
+        .volumeControls {
+            z-index: 96;
+            translate: 0 100%;
+            transition: translate .3s ease-out;
         }
 
         &.screen--show {

@@ -72,6 +72,36 @@ export class NotificationController extends BaseController {
         }
     }
 
+    get call(): NotiType | undefined {
+        return this.notification.phone;
+    }
+    set call(number: string | boolean) {
+        if (typeof number === 'string') {
+            this.notification.phone = {
+                app: 'phone',
+                history: [{ state: number, url:"/history" }],
+                data: null
+            }
+        } else {
+            delete this.notification.phone;
+        }
+    }
+
+    get message(): NotiType | undefined {
+        return this.notification.message;
+    }
+    set message(number: string | boolean) {
+        if (typeof number === 'string') {
+            this.notification.message = {
+                app: 'phone',
+                history: [{ state: number, url:"/history" }],
+                data: null
+            }
+        } else {
+            delete this.notification.message;
+        }
+    }
+
     private openNoti(key?: string) {
         if (!key) return;
         const noti = this.notification[key];
@@ -98,6 +128,9 @@ export class NotificationController extends BaseController {
 
         this.clockElement.addEventListener('click', () => {
             if (this.device.appOpened && this.noti) {
+                if (this.device.appOpened == this.notification[this.noti].app) {
+                    return;
+                }
                 this.history.replaceState('/', null);
 
                 const listener = () => {
@@ -117,9 +150,32 @@ export class NotificationController extends BaseController {
             this.updateClock();
         });
 
+        this.device.addEventListener('openAppFinished', () => {
+            console.log('APP_OPENRD', this.device.appOpened);
+            if (this.device.appOpened === 'phone') {
+                this.device.phoneNoti(false);
+                this.call = false;
+                this.message = false;
+                this.updateClock();
+            }
+        });
+
+        this.device.addEventListener('closeAppFinished', () => {
+            console.log('APP_CLOSED', this.device.appOpened);
+        });
+
         this.phone.addChangeListener((status: string, data: any) => {
             console.log(status, data);
-        })
+            if (status === 'PHONE_NOTI' || status === 'MESSAGE_NOTI') {
+                this.device.phoneNoti(true);
+                if (status === 'PHONE_NOTI') {
+                    this.call = data;
+                } else {
+                    this.message = data;
+                }
+                this.updateClock();
+            }
+        });
 
         this.weather.addChangeListener((status: string, data: any) => {
             if (status === 'WEATHER_NOTIFIGATION') {
@@ -162,7 +218,11 @@ export class NotificationController extends BaseController {
     private getIcon(noti?: string) {
         switch (noti) {
             case 'stopwatch':
-                return '<span class="material-symbols-outlined fill-icon" style="font-size: 20px; margin-left: 2px;">pace</span>'
+                return '<span class="material-symbols-outlined" style="font-size: 20px; margin-left: 2px;">pace</span>';
+            case 'phone':
+                return '<span class="material-symbols-outlined" style="font-size: 20px; margin-left: 2px;">phone_missed</span>';
+            case 'message':
+                return '<span class="material-symbols-outlined" style="font-size: 20px; margin-left: 2px;">chat_bubble</span>';
             default:
                 return '';
         }

@@ -23,6 +23,7 @@ import { AlarmAlert } from './components/system/alarm.alert';
 import { TimerAlert } from './components/system/timer.alert';
 import { NotificationController } from './controllers/notification.controller';
 import { SystemUpdate } from './components/system/system.update';
+import { VolumeControls } from './components/system/volume.controls';
 // import { FullscreenController } from './controllers/fullscreen.controller';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -57,6 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     new PhoneDummyController(window.device, window.phone);
     new GestureService(historyManager, window.device, lockedScreen);
     new NotificationController(historyManager, window.device, window.phone, window.clock, window.weather);
+    new VolumeControls(window.device, window.setting);
     // new Battery();
     // const fullScreen = new FullscreenController();
 
