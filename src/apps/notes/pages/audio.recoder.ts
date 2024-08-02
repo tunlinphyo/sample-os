@@ -1,9 +1,10 @@
 import { Keyboard } from "../../../components/keyboard";
 import { noteTitles } from "../../../components/keyboard/consts";
 import { Modal } from "../../../components/modal";
+import { SettingsController } from "../../../controllers/settings.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
-import { Note } from "../../../stores/notes.store";
+import { AudioData, Note } from "../../../stores/notes.store";
 import { NotesController } from "../notes.controller";
 import { MediaRecorderService } from "../services/media.recorder";
 import { AudioButton } from "./audio.button";
@@ -15,13 +16,15 @@ export class AudioRecoder extends Modal {
 
     private pressTimer: number | undefined;
     private recording: boolean = false;
+    private audio?: AudioButton;
 
     constructor(
         history: HistoryStateManager,
         private device: DeviceController,
+        private setting: SettingsController,
         private notes: NotesController
     ) {
-        super(history, { btnStart: 'restart_alt', btnEnd: 'check' });
+        super(history, { btnStart: 'mic', btnEnd: 'check' });
         this.component.classList.add('audioRecoderPage');
         this.startRecording = this.startRecording.bind(this);
         this.stopRecording = this.stopRecording.bind(this);
@@ -43,7 +46,10 @@ export class AudioRecoder extends Modal {
             if (this.note) {
                 const result = await this.device.confirmPopup.openPage('Restart', 'Are you sure to clear current record!');
                 if (result) {
-                    this.note.body = '';
+                    this.note.body = {
+                        audio: '',
+                        currentTime: 0
+                    };
                     this.createRecoder();
                 }
             }
@@ -74,8 +80,10 @@ export class AudioRecoder extends Modal {
 
         this.device.addEventListener('closeApp', () => {
             if (this.note) {
-                // if (this.note.id) this.history.updateState(`/notes/edit`, this.note);
-                // else
+                if (this.audio) {
+                    (this.note.body as AudioData).currentTime = this.audio.currentTime;
+                    this.audio.pauseAudio();
+                }
                 this.history.updateState(`/notes/audio`, this.note);
             }
         });
@@ -88,18 +96,19 @@ export class AudioRecoder extends Modal {
                 id: '',
                 type: 'audio',
                 title: '',
-                body: '',
+                body: {
+                    audio: '',
+                    currentTime: 0
+                },
                 createDate: new Date(),
                 deleted: false,
             }
         }
 
-        if (!this.note.body) {
+        if (!(this.note.body as AudioData).audio) {
             this.createRecoder();
         } else {
-            if (typeof this.note.body === 'string') {
-                this.createAudioPlayer(this.note.body);
-            }
+            this.createAudioPlayer(this.note.body as AudioData);
         }
     }
 
@@ -133,8 +142,12 @@ export class AudioRecoder extends Modal {
                 setTimeout(async () => {
                     const result = await this.mediaService.saveRecording();
                     if (result && this.note) {
-                        this.note.body = result;
-                        this.createAudioPlayer(result);
+                        const audioData = {
+                            audio: result,
+                            currentTime: 0,
+                        };
+                        this.note.body = audioData
+                        this.createAudioPlayer(audioData);
                     }
                 },300);
             }
@@ -142,7 +155,7 @@ export class AudioRecoder extends Modal {
         }
     }
 
-    private createAudioPlayer(data: string) {
+    private createAudioPlayer(data: AudioData) {
         this.removeAllEventListeners();
         this.mainArea.innerHTML = "";
         const flexCenter = this.createFlexCenter();
@@ -168,7 +181,8 @@ export class AudioRecoder extends Modal {
         }, titleButton);
         flexCenter.appendChild(titleButton);
 
-        new AudioButton(data, flexCenter);
+        this.audio = new AudioButton(data.audio, flexCenter, this.setting);
+        this.audio.currentTime = data.currentTime;
 
         this.mainArea.appendChild(flexCenter);
         this.toggleActions(false);

@@ -11,6 +11,8 @@ import { SoftwareUpdatePage } from './pages/system/update.pages';
 import { StoragePage } from './pages/storage.page';
 import { BatteryPage } from './pages/battery.page';
 import { DateTimePage } from './pages/system/date-time.page';
+import { DisplayPage } from './pages/display.page';
+import { SoundsPage } from './pages/sounds.page';
 
 document.body.dataset.schema = parent.device.theme;
 
@@ -19,6 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     new SettingApp(historyManager, parent.device, parent.setting);
     const togglePage = new TogglePage(historyManager, parent.device, parent.setting);
+    const displayPage = new DisplayPage(historyManager, parent.device, parent.setting);
+    const soundsPage = new SoundsPage(historyManager, parent.device, parent.setting);
     const appsPage = new ApplicationsPage(historyManager, parent.device, parent.setting);
     const systemPage = new SystemPage(historyManager);
     const softwareUpdatePage = new SoftwareUpdatePage(historyManager, parent.device, parent.setting);
@@ -31,6 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
         parent.device,
         parent.setting,
         togglePage,
+        displayPage,
+        soundsPage,
         appsPage,
         systemPage,
         softwareUpdatePage,

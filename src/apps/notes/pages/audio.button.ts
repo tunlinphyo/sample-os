@@ -1,3 +1,5 @@
+import { SettingsController } from "../../../controllers/settings.controller";
+
 export class AudioButton {
     private audio: HTMLAudioElement;
     private audioButton: HTMLButtonElement;
@@ -5,11 +7,21 @@ export class AudioButton {
 
     constructor(
         private data: string,
-        private parentEl: HTMLElement
+        private parentEl: HTMLElement,
+        private setting: SettingsController
     ) {
         this.audio = new Audio(this.data);
         this.audioButton = document.createElement("button");
         this.render();
+        this.init();
+    }
+
+    private init() {
+        this.setting.addChangeListener((status: string) => {
+            if (status === 'UPDATE_VOLUMES') {
+                this.audio.volume = this.setting.volumes.mediaVolume || 1
+            }
+        });
     }
 
     get duration() {
@@ -25,12 +37,20 @@ export class AudioButton {
         return { minutes, seconds };
     }
 
+    get currentTime() {
+        return this.audio.currentTime
+    }
+    set currentTime(time: number) {
+        this.audio.currentTime = time;
+    }
+
     private render() {
         this.audioButton.classList.add('audioPlayer');
 
         this.audioButton.innerHTML = '<span class="material-symbols-outlined fill-icon">play_arrow</span>';
 
         this.audioButton.addEventListener('click', () => {
+            this.audio.volume = this.setting.volumes.mediaVolume || 1;
             if (this.playing) {
                 this.pauseAudio();
             } else {
@@ -50,8 +70,6 @@ export class AudioButton {
             this.updateTimeData(timeData);
         });
 
-        // this.audio.controls = true;
-
         this.parentEl.appendChild(this.audio);
         this.parentEl.appendChild(this.audioButton);
         this.parentEl.appendChild(timeData);
@@ -63,7 +81,7 @@ export class AudioButton {
         this.audioButton.innerHTML = '<span class="material-symbols-outlined fill-icon">pause</span>'
     }
 
-    private pauseAudio() {
+    public pauseAudio() {
         this.audio.pause();
         this.playing = false;
         this.audioButton.innerHTML = '<span class="material-symbols-outlined fill-icon">play_arrow</span>';
@@ -80,7 +98,7 @@ export class AudioButton {
         }
     }
 
-    private stopAudio() {
+    public stopAudio() {
         this.audio.pause();
         this.audio.currentTime = 0;
         this.playing = false;

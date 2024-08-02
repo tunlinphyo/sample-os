@@ -70,7 +70,7 @@ export class BatteryPage extends Page {
         const flexCenter = this.createFlexCenter();
 
         const messageEl = this.createElement('div', ['message']);
-        messageEl.innerHTML = 'Battery Status API is not supported on this browser. Try on Chrome desktop browser.';
+        messageEl.innerHTML = 'The Battery Status API is not supported in this browser. Please try using the Chrome desktop browser.';
         flexCenter.appendChild(messageEl);
 
         this.mainArea.appendChild(flexCenter);

@@ -238,4 +238,173 @@
         align-items: center;
         gap: 8px;
     }
+
+    .displayContainer {
+        padding: var(--padding) var(--half) var(--half);
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+
+        .deviceContainer {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            gap: var(--half);
+
+            .miniDevice {
+                --bg: var(--white);
+                --fg: var(--black);
+                width: calc(var(--grid) * 3);
+                height: calc(var(--grid) * 5);
+                border-radius: var(--padding);
+                background-color: var(--bg);
+                border: 2px solid var(--black);
+
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: center;
+                padding: 6px;
+
+                .deviceIsland {
+                    width: 28px;
+                    height: 12px;
+                    border-radius: 12px;
+                    background-color: var(--fg);
+                }
+
+                .deviceMain {
+                    color: var(--fg);
+                    font-weight: 600;
+                }
+
+                .deviceBar {
+                    width: 32px;
+                    height: 4px;
+                    border-radius: 4px;
+                    background-color: var(--fg);
+                }
+
+                &.light {
+                    --bg: var(--one-bit);
+                    --fg: var(--zero-bit);
+
+                }
+                &.dark {
+                    --bg: var(--zero-bit);
+                    --fg: var(--one-bit);
+                }
+            }
+
+            .material-symbols-outlined {
+                font-size: 32px;
+            }
+        }
+    }
+
+    .groupContiner {
+        padding: var(--half);
+
+        .toggleGroup {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 2px solid var(--black);
+            border-radius: 10px;
+            padding: 6px 8px;
+
+            font-size: 18px;
+        }
+    }
+
+    .formLabel {
+        font-size: 18px;
+        padding-left: 1px;
+        margin-bottom: -24px;
+    }
+
+    .ringToneSlider {
+        padding-inline: 4px;
+
+        .volumeGroup {
+            width: 100%;
+            position: relative;
+
+            --size: 42px;
+
+            &:not(:last-child) {
+                border-bottom: 2px solid var(--black);
+            }
+
+
+            .volumeRange {
+                width: 100%;
+                height: var(--size);
+
+                border-radius: var(--grid);
+                overflow: hidden;
+
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+                align-items: stretch;
+
+                outline: 2px solid var(--white);
+                box-shadow: 0 0 0 4px var(--black);
+
+                background-color: var(--white);
+                position: relative;
+
+                .rangeBackground {
+                    position: absolute;
+                    inset: 0;
+
+                    display: flex;
+                    justify-content: flex-end;
+                    align-items: center;
+                    color: var(--black);
+                    padding-inline: var(--half);
+                }
+
+                .currentVolume {
+                    width: 100%;
+                    height: var(--size);
+                    background-color: var(--black);
+                    border-radius: var(--grid);
+
+                    transform: translate(-50%, 0);
+                    transition: transform .5s ease;
+
+                    display: flex;
+                    justify-content: flex-end;
+                    align-items: center;
+                    color: var(--white);
+                    padding-inline: var(--half);
+                }
+            }
+
+            .volumeIcon {
+                width: var(--size);
+                height: var(--size);
+                border-radius: 100%;
+
+                position: absolute;
+                z-index: 1;
+                left: 0;
+                bottom: 0;
+
+                display: grid;
+                place-content: center;
+                pointer-events: none;
+
+                background-color: var(--black);
+
+                .material-symbols-outlined {
+                    color: var(--white);
+                    font-size: 28px;
+                }
+            }
+        }
+    }
 }

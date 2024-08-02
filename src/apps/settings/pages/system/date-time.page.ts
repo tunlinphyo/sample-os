@@ -119,6 +119,4 @@ export class DateTimePage extends Page {
         this.mainArea.innerHTML = '';
         this.render(data);
     }
-
-
 }

@@ -18,7 +18,7 @@ export class ExplorePage extends Modal {
         private maps: MapsController,
         private device: DeviceController
     ) {
-        super(history, {});
+        super(history, { template: 'actionTemplate' });
         this.init = this.init.bind(this);
         this.init();
     }
@@ -71,7 +71,7 @@ export class ExplorePage extends Modal {
         this.places.forEach(place => {
             const placeEl = this.createElement('button', ['place']);
             placeEl.innerHTML = `
-                <span class="material-symbols-outlined">distance</span>
+                <span class="material-symbols-outlined placeIcon">distance</span>
                 <span class="detail">
                     ${place.structured_formatting.main_text}
                     <small>${place.structured_formatting.secondary_text || ''}</small>

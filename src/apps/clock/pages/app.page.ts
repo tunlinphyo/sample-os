@@ -17,7 +17,7 @@ export class ClockApp extends App {
         private device: DeviceController,
         private clock: ClockController
     ) {
-        super(history, { btnStart: 'timer', btnEnd: 'pace' })
+        super(history, { btnStart: 'timer_play', btnEnd: 'timer' })
         this.init();
 
         this.component.classList.add('clockPage');

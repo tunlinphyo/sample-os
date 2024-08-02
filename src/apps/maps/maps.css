@@ -112,13 +112,13 @@
         display: flex;
         flex-direction: column;
         padding: calc(var(--grid) * 0.5);
-        padding-bottom: calc(var(--grid) * 3);
+        /* padding-bottom: calc(var(--grid) * 3); */
 
         .place {
             width: 100%;
             padding-block: 8px;
             display: grid;
-            grid-template-columns: 24px 1fr;
+            grid-template-columns: 28px 1fr;
             justify-content: flex-start;
             align-items: baseline;
             gap: 8px;
@@ -126,12 +126,21 @@
 
             .material-symbols-outlined {
                 translate: 0 8px;
+                font-size: 28px;
+
+                &.placeIcon {
+                    translate: 0 10px;
+                }
             }
 
             .detail {
+                font-size: 18px;
+
                 small {
+                    font-size: 16px;
                     width: 100%;
                     display: block;
+                    line-clamp: 1;
                     -webkit-line-clamp: 1;
                     text-overflow: ellipsis;
                     overflow: hidden;

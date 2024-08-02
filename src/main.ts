@@ -24,11 +24,13 @@ import { TimerAlert } from './components/system/timer.alert';
 import { NotificationController } from './controllers/notification.controller';
 import { SystemUpdate } from './components/system/system.update';
 import { VolumeControls } from './components/system/volume.controls';
+import { NotificationStore } from './stores/noti.store';
 // import { FullscreenController } from './controllers/fullscreen.controller';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const historyManager = new HistoryStateManager();
 
+    const notiStore = new NotificationStore();
     const settingStore = new SettingStore();
     const clockStore = new ClockStore();
     const alarmStore = new ClockAlarmStore();
@@ -57,12 +59,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const timerAlert = new TimerAlert(window.device, window.clock);
     new PhoneDummyController(window.device, window.phone);
     new GestureService(historyManager, window.device, lockedScreen);
-    new NotificationController(historyManager, window.device, window.phone, window.clock, window.weather);
+    new NotificationController(historyManager, notiStore, window.device, window.phone, window.clock, window.weather, window.setting);
     new VolumeControls(window.device, window.setting);
     // new Battery();
     // const fullScreen = new FullscreenController();
 
-    // window.weather.fetchWeather();
+    window.weather.fetchWeather();
 
     window.clock.addChangeListener(async (status: string, data: any) => {
         // if (status === 'UPDATE_CLOCK') {
@@ -106,6 +108,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         if (status === 'OS_UPDATE_END' && systemUpdate) {
             systemUpdate.close();
+            window.location.reload();
         }
         if (status === 'UPDATE_TIMEZONE' || status == 'UPDATE_HOUR12') {
             const info = data.data as DateTimeInfo;
@@ -116,9 +119,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     window.weather.addChangeListener((status: string, data: any) => {
-        if (status === 'WEATHER_NOTIFIGATION') {
-            console.log('WEATHER::::::::::', data);
-        }
         if (status === 'MY_WEATHER_FETCH') {
             console.log('MY_WEATHER_FETCH', data);
             lockedScreen.update(status, data);

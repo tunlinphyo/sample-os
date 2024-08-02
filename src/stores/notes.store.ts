@@ -8,6 +8,11 @@ export interface NoteData {
     data: string[];
 }
 
+export interface AudioData {
+    audio: string;
+    currentTime: number;
+}
+
 export interface NoteBase {
     id: string;
     title: string;
@@ -15,17 +20,17 @@ export interface NoteBase {
     updateDate?: Date;
     deleted: boolean;
   }
-  
+
 export interface TextNote extends NoteBase {
     type: 'note';
     body: Array<NoteData>;
 }
-  
+
 export interface AudioNote extends NoteBase {
     type: 'audio';
-    body: string;
+    body: AudioData;
 }
-  
+
 export type Note = TextNote | AudioNote;
 
 export class NotesStore extends BaseManager<Note> {

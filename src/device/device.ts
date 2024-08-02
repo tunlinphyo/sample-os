@@ -15,6 +15,7 @@ import { OutgoingCall } from "../components/system/outgoing.call";
 import { SelectPopup } from "../components/popups/select.popup";
 import { SystemService } from "../services/system.service";
 import { OSBrowser } from "../utils/browser";
+import { Volume } from "../stores/settings.store";
 
 export type DeviceTheme = 'auto' | 'light' | 'dark';
 
@@ -161,6 +162,15 @@ export class DeviceController extends BaseComponent {
             noti.classList.add('greenGlow');
         } else {
             noti.classList.remove('greenGlow');
+        }
+    }
+
+    public messageNoti(on: boolean) {
+        const noti = this.getElement("#notiLight");
+        if (on) {
+            noti.classList.add('purpleGlow');
+        } else {
+            noti.classList.remove('purpleGlow');
         }
     }
 

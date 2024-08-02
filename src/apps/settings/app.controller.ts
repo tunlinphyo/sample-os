@@ -3,11 +3,13 @@ import { DeviceController } from "../../device/device";
 import { HistoryState, HistoryStateManager } from "../../device/history.manager";
 import { ApplicationsPage } from "./pages/applications.page";
 import { BatteryPage } from "./pages/battery.page";
+import { DisplayPage } from "./pages/display.page";
 import { StoragePage } from "./pages/storage.page";
 import { DateTimePage } from "./pages/system/date-time.page";
 import { SystemPage } from "./pages/system/index.page";
 import { SoftwareUpdatePage } from "./pages/system/update.pages";
 import { TogglePage } from "./pages/toggle.page";
+import { SoundsPage } from './pages/sounds.page';
 
 
 export class SettingAppController {
@@ -16,6 +18,8 @@ export class SettingAppController {
         private device: DeviceController,
         private setting: SettingsController,
         private togglePage: TogglePage,
+        private displayPage: DisplayPage,
+        private soundsPage: SoundsPage,
         private appsPage: ApplicationsPage,
         private systemPage: SystemPage,
         private softwareUpdatePage: SoftwareUpdatePage,
@@ -35,6 +39,20 @@ export class SettingAppController {
                     callback: () => {
                         const setting = this.setting.getSettingItem(state);
                         this.togglePage.openPage(setting?.title, setting);
+                    }
+                },
+                {
+                    pattern: '/sounds',
+                    callback: () => {
+                        const setting = this.setting.getSettingItem(state);
+                        this.soundsPage.openPage(setting?.title, setting);
+                    }
+                },
+                {
+                    pattern: '/display',
+                    callback: () => {
+                        const setting = this.setting.getSettingItem(state);
+                        this.displayPage.openPage(setting?.title, setting);
                     }
                 }, {
                     pattern: '/applications',
@@ -84,7 +102,7 @@ export class SettingAppController {
         })
 
         this.device.addEventListener('closeApp', () => {
-            // // console.log('CLOSE_PAGE', JSON.stringify(this.history.history));
+            console.log('CLOSE_PAGE', JSON.stringify(this.history.history));
             this.device.setHistory('settings', this.history.history);
         });
     }

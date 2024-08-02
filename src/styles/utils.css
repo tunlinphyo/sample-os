@@ -1,6 +1,7 @@
 html,
 body {
     margin: 0;
+    touch-action: manipulation;
 }
 
 :not(:root):fullscreen {
@@ -257,13 +258,19 @@ body {
                     left: 50%;
                     translate: -50% -50%;
 
-                    &.yellowOn {
-                        background-color: #f1c40f;
+                    &.purpleGlow {
+                        background-color: #9b59b6;
+                        animation: glow 3s infinite ease-in-out;
                     }
 
                     &.greenGlow {
                         background-color: #2ecc71;
                         animation: glow 3s infinite ease-in-out;
+                    }
+
+                    &.yellowOn {
+                        background-color: #f1c40f;
+                        animation: none;
                     }
                 }
 
@@ -301,9 +308,11 @@ body {
                 align-items: center;
 
                 .time {
+                    height: 25px;
                     background-color: var(--white);
-                    padding: 4px 6px;
+                    padding: 0 6px;
                     border-radius: 10px;
+                    font-size: 17px;
                     font-weight: 500;
 
                     display: inline-flex;
@@ -314,9 +323,10 @@ body {
                 }
 
                 .icons {
+                    height: 25px;
                     max-width: calc(var(--grid) * 3.5);
                     background-color: var(--white);
-                    padding: 2px 4px;
+                    padding: 0 6px;
                     border-radius: 10px;
                     display: inline-flex;
                     justify-content: center;
@@ -476,7 +486,6 @@ body {
         &.screen--ai,
         &.screen--keyboard,
         &.screen--system,
-        &.volumeControls,
         .screen--vertical {
             position: absolute;
             z-index: 1;
@@ -538,12 +547,6 @@ body {
             opacity: 0;
             scale: 1.5;
             transition: opacity .3s ease-out, scale .3s ease-out;
-        }
-
-        .volumeControls {
-            z-index: 96;
-            translate: 0 100%;
-            transition: translate .3s ease-out;
         }
 
         &.screen--show {
@@ -1147,7 +1150,7 @@ body {
 
                     .toggleGroup {
                         width: 100%;
-                        min-height: 40px;
+                        min-height: 48px;
 
                         display: flex;
                         justify-content: space-between;
@@ -1166,6 +1169,7 @@ body {
                             display: flex;
                             justify-content: center;
                             align-items: center;
+                            font-size: 18px;
                         }
                     }
 
@@ -1235,7 +1239,7 @@ body {
                             align-items: center;
                             gap: calc(var(--grid) * 0.5);
                             border-bottom: 2px solid var(--black);
-                            padding: 0 8px;
+                            padding: 3px 8px;
                         }
 
                         .removeButton {
@@ -1269,7 +1273,7 @@ body {
 
                         .addNew {
                             width: 100%;
-                            min-height: 42px;
+                            min-height: 46px;
                             display: flex;
                             justify-content: flex-start;
                             align-items: center;
@@ -1324,7 +1328,7 @@ body {
 
                         .toggleGroup,
                         .dateTimeGroup {
-                            padding: 0 8px;
+                            padding: 4px 8px;
                         }
                     }
                 }
@@ -2278,6 +2282,117 @@ body {
                 font-family: "Noto Sans Symbols 2", sans-serif;
                 font-weight: 400;
                 font-style: normal;
+            }
+        }
+    }
+
+    .volumeControls {
+        position: absolute;
+        z-index: 96;
+        width: var(--button);
+        height: auto;
+        top: calc(var(--grid) * 2);
+        left: 0;
+        scale: .5;
+        translate: -100% 0;
+        transition: all .5s ease;
+        width: var(--button);
+        pointer-events: none;
+        transform-origin: top left;
+
+        &.screen--show {
+            scale: 1;
+            translate: 8px 0;
+            pointer-events: auto;
+        }
+
+        &.mainArea {
+            width: var(--button);
+            height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .volumeGroup {
+                pointer-events: auto;
+
+                width: var(--button);
+                height: calc(var(--grid) * 9);
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                position: relative;
+
+                --size: calc(var(--button) - 16px);
+
+                .volumeRange {
+                    width: var(--size);
+                    height: calc(var(--grid) * 8);
+
+                    border-radius: var(--grid);
+                    overflow: hidden;
+
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-end;
+                    align-items: stretch;
+
+                    outline: 2px solid var(--white);
+                    box-shadow: 0 0 0 5px var(--black);
+
+                    background-color: var(--white);
+                    position: relative;
+
+                    .rangeBackground {
+                        position: absolute;
+                        inset: 0;
+
+                        display: flex;
+                        justify-content: center;
+                        align-items: flex-start;
+                        color: var(--black);
+                        padding-block: var(--half);
+                    }
+
+                    .currentVolume {
+                        width: var(--size);
+                        height: calc(var(--grid) * 8);
+                        background-color: var(--black);
+                        border-radius: var(--grid);
+
+                        transform: translate(0, 50%);
+                        transition: transform .2s ease;
+
+                        display: flex;
+                        justify-content: center;
+                        align-items: flex-start;
+                        color: var(--white);
+                        padding-block: var(--half);
+                    }
+                }
+
+                .volumeIcon {
+                    width: var(--size);
+                    height: var(--size);
+                    border-radius: 100%;
+
+                    position: absolute;
+                    z-index: 1;
+                    left: 8px;
+                    bottom: 17px;
+
+                    display: grid;
+                    place-content: center;
+                    pointer-events: none;
+
+                    background-color: var(--black);
+
+                    .material-symbols-outlined {
+                        color: var(--white);
+                        font-size: 28px;
+                    }
+                }
             }
         }
     }

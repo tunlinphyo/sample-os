@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     new NotesApp(historyManager, parent.device, notesController);
     const notePage = new NotePage(historyManager, parent.device, notesController);
     const noteEditor = new NoteEditorPage(historyManager, parent.device, notesController);
-    const audioRecoder = new AudioRecoder(historyManager, parent.device, notesController);
+    const audioRecoder = new AudioRecoder(historyManager, parent.device, parent.setting, notesController);
 
     new NoteAppController(
         historyManager,

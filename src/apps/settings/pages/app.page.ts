@@ -3,7 +3,8 @@ import { SelectItem } from "../../../components/select";
 import { SettingsController } from "../../../controllers/settings.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
-import { Setting } from "../../../stores/settings.store";
+import { Setting, Volume } from "../../../stores/settings.store";
+import { OSBrowser } from "../../../utils/browser";
 
 export class SettingApp extends App {
 
@@ -23,6 +24,7 @@ export class SettingApp extends App {
             switch (status) {
                 case 'UPDATE_THEME':
                 case 'TOGGLE_VALUE':
+                case 'UPDATE_SOUNDS':
                     this.update('update', this.setting.settings);
                     break;
             }
@@ -91,7 +93,18 @@ export class SettingApp extends App {
 
         switch(data.id) {
             case 'display':
-                this.changeDisplay(data);
+                if (type === 'main') {
+                    this.history.pushState('/display', data.id);
+                } else {
+                    this.changeDisplay(data);
+                }
+                break;
+            case 'sounds':
+                if (type === 'main') {
+                    this.history.pushState('/sounds', data.id);
+                } else {
+                    this.toggleMute(data.data);
+                }
                 break;
             case 'wifi':
             case 'bluetooth':
@@ -148,7 +161,31 @@ export class SettingApp extends App {
             const item = list.find(item => item.value === selected);
             if (!item) return;
             data.value = item.value;
+            data.data = item.value === 'auto' ? OSBrowser.getPreferredColorScheme() : item.value;
             this.setting.updateTheme(data);
+        }
+    }
+
+    private async toggleMute(data: Volume) {
+        const list: SelectItem[] = [
+            {
+                title: 'Noti',
+                value: 'noti',
+                icon: 'notifications'
+            },
+            {
+                title: 'Mute',
+                value: 'mute',
+                icon: 'notifications_off'
+            },
+        ];
+        const selected = await this.device.selectList.openPage<string>('Notifigation', list);
+        if (selected && typeof selected === 'string') {
+            if (selected === 'mute' && data.notiVolume === 0) return;
+            if (selected === 'noti' && data.notiVolume !== 0) return;
+            data.notiVolume = selected === 'noti' ? 0.5 : 0;
+            data.isMuted = data.notiVolume == 0;
+            this.setting.volumes = data;
         }
     }
 }

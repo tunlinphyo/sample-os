@@ -108,13 +108,13 @@ const appList: HomeApp[] = [
         isShow: false,
         isSystem: false,
     },
-    {
-        id: 'journal',
-        name: 'Journal',
-        order: 8,
-        isShow: false,
-        isSystem: false,
-    },
+    // {
+    //     id: 'journal',
+    //     name: 'Journal',
+    //     order: 8,
+    //     isShow: false,
+    //     isSystem: false,
+    // },
     {
         id: 'settings',
         name: 'Settings',
@@ -201,7 +201,7 @@ const defaultSettings: Setting[] = [
         title: 'Connection',
         order: 1,
         value: 'on',
-        inList: true,
+        inList: false,
         data: [
             {
                 id: 'wifi',
@@ -226,9 +226,24 @@ const defaultSettings: Setting[] = [
     {
         id: 'display',
         title: 'Display',
-        order: 4,
+        order: 2,
         value: 'auto',
         inList: true,
+        data: 'light',
+    },
+    {
+        id: 'sounds',
+        title: 'Sounds',
+        order: 3,
+        value: '',
+        inList: true,
+        data: {
+            isMuted: false,
+            mediaVolume: 1,
+            ringVolume: 1,
+            notiVolume: 1,
+            alarmVolume: 1
+        }
     },
     {
         id: 'storage',
@@ -264,7 +279,7 @@ const defaultSettings: Setting[] = [
             {
                 id: 'software-update',
                 title: 'Software Update',
-                version: 0.15
+                version: 0.25
             },
             {
                 id: 'date-time',
@@ -284,26 +299,12 @@ const defaultSettings: Setting[] = [
             hour12: true
         }
     },
-    {
-        id: 'volumes',
-        title: 'Volume',
-        order: 10,
-        value: '',
-        inList: false,
-        data: {
-            isMuted: false,
-            mediaVolume: 1,
-            ringVolume: 1,
-            notiVolume: 1,
-            alarmVolume: 1
-        }
-    },
 ]
 
 export class SettingStore extends BaseManager<Setting> {
     private db: DB<Setting>;
-    public version: number = 0.15;
-    public message: string = 'Group connections.';
+    public version: number = 0.25;
+    public message: string = 'Added notifigation.';
 
     constructor() {
         super([]);
@@ -394,5 +395,14 @@ export class SettingStore extends BaseManager<Setting> {
                 return item
             }
         });
+    }
+
+    updateData(system: Setting) {
+        const softwareUpdate = system.data.find((item: any) => item.id === 'software-update');
+        if (!softwareUpdate) return true;
+        return {
+            isUpdate: softwareUpdate.version != this.version,
+            version: softwareUpdate.version
+        };
     }
 }

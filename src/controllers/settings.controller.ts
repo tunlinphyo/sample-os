@@ -1,5 +1,6 @@
 import { HistoryStateManager } from "../device/history.manager";
-import { DateTimeInfo, HomeApp, Setting, SettingStore } from "../stores/settings.store";
+import { DateTimeInfo, HomeApp, Setting, SettingStore, Volume } from "../stores/settings.store";
+import { debounce } from "../utils/debounce";
 import { BaseController } from "./base.controller";
 
 
@@ -7,12 +8,16 @@ export class SettingsController extends BaseController {
     private _apps: HomeApp[] = [];
     public settings: Setting[] = [];
 
+    private _volumes?: Volume;
+    private volumeDebounce: (data: Volume) => void;
+
     constructor(
         public history: HistoryStateManager,
         private settingsStore: SettingStore
     ) {
         super();
         this.setupListeners();
+        this.volumeDebounce = debounce(this.updateVolumes.bind(this), 300);
     }
 
     get apps() {
@@ -22,6 +27,14 @@ export class SettingsController extends BaseController {
     set apps(apps: HomeApp[]) {
         this._apps = apps;
         this.notifyListeners('APPLOADED', apps)
+    }
+
+    get volumes() {
+        return this._volumes || this.getSettingItem('sounds')?.data;
+    }
+    set volumes(data: Volume) {
+        this._volumes = data;
+        this.volumeDebounce(data);
     }
 
     get version() {
@@ -93,6 +106,17 @@ export class SettingsController extends BaseController {
                 const display = this.settingsStore.get('display');
                 console.log("DISPLAY", display);
                 this.notifyListeners('UPDATE_THEME', display);
+
+                const system = this.settingsStore.get('system');
+                if (system) {
+                    const result = this.settingsStore.updateData(system);
+                    this.notifyListeners('UPDATE_SYSTEM', result);
+                }
+
+                const volumes = this.getSettingItem('sounds');
+                if (volumes) {
+                    this._volumes = volumes.data;
+                }
             }
             if (item && item.id === 'apps') {
                 this.apps = item.data || [];
@@ -112,6 +136,20 @@ export class SettingsController extends BaseController {
 
     public appsReady() {
         this.notifyListeners('APPLOADED', this.apps);
+    }
+
+    public updateVolumes(data: Volume) {
+        this.tryThis(async () => {
+            const sounds = this.getSettingItem('sounds');
+            if (!sounds) return;
+            const muted = data.notiVolume === 0 ? 'Muted' : 'Noti';
+            if (sounds.value !== muted) {
+                sounds.value = muted;
+                this.notifyListeners('UPDATE_SOUNDS', data);
+            }
+            await this.settingsStore.update('sounds', { ...sounds, data });
+            this.notifyListeners('UPDATE_VOLUMES', data);
+        });
     }
 
     public updateTheme(data: Setting) {

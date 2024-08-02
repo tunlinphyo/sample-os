@@ -1,9 +1,12 @@
 import { DeviceController } from "../device/device";
 import { HistoryState, HistoryStateManager } from "../device/history.manager";
+import { WeatherService } from "../services/weather.service";
+import { Noti, NotificationStore } from "../stores/noti.store";
 import { OSDate } from "../utils/date";
 import { BaseController } from "./base.controller";
 import { ClockController } from "./clock.controller";
 import { PhoneController } from "./phone.controller";
+import { SettingsController } from "./settings.controller";
 import { WeatherController } from "./weather.controller";
 
 export interface NotiType {
@@ -14,22 +17,24 @@ export interface NotiType {
 
 export class NotificationController extends BaseController {
     private notification: Record<string, NotiType> = {};
-    private statusContainer: HTMLElement;
+    // private statusContainer: HTMLElement;
     private clockElement: HTMLElement;
 
-    private readonly appHierarchy: string[] = ['timer', 'phone', 'message', 'alarm', 'stopwatch'];
+    private readonly appHierarchy: string[] = ['phone', 'message', 'alarm', 'stopwatch', 'timer', 'settings', 'weather'];
 
     constructor(
         private history: HistoryStateManager,
+        private notiStore: NotificationStore,
         private device: DeviceController,
         private phone: PhoneController,
         private clock: ClockController,
-        private weather: WeatherController
+        private weather: WeatherController,
+        private setting: SettingsController
     ) {
         super();
-        this.statusContainer = this.getElement('.statusContainer')!;
-        console.log(this.statusContainer);
+        // this.statusContainer = this.getElement('.statusContainer')!;
         this.clockElement = this.getElement('#dateTime');
+        this.updateClock = this.updateClock.bind(this);
         this.setupListeners();
     }
 
@@ -47,13 +52,14 @@ export class NotificationController extends BaseController {
     }
     set stopwatch(isDelete: boolean) {
         if (isDelete) {
-            delete this.notification.stopwatch
+            this.notiStore.del('stopwatch');
         } else {
-            this.notification.stopwatch = {
+            const data = {
                 app: 'clock',
                 history: [{ state: null, url:"/stopwatch" }],
                 data: null
             }
+            this.notiStore.addNoti('stopwatch', data);
         }
     }
 
@@ -62,13 +68,14 @@ export class NotificationController extends BaseController {
     }
     set timer(isDelete: boolean) {
         if (isDelete) {
-            delete this.notification.timer;
+            this.notiStore.del('timer');
         } else {
-            this.notification.timer = {
+            const data = {
                 app: 'clock',
                 history: [{ state: null, url:"/timer" }],
                 data: null
             }
+            this.notiStore.addNoti('timer', data);
         }
     }
 
@@ -77,13 +84,14 @@ export class NotificationController extends BaseController {
     }
     set call(number: string | boolean) {
         if (typeof number === 'string') {
-            this.notification.phone = {
+            const data = {
                 app: 'phone',
                 history: [{ state: number, url:"/history" }],
                 data: null
             }
+            this.notiStore.addNoti('phone', data);
         } else {
-            delete this.notification.phone;
+            this.notiStore.del('phone');
         }
     }
 
@@ -92,28 +100,92 @@ export class NotificationController extends BaseController {
     }
     set message(number: string | boolean) {
         if (typeof number === 'string') {
-            this.notification.message = {
+            const data = {
                 app: 'phone',
                 history: [{ state: number, url:"/history" }],
                 data: null
             }
+            this.notiStore.addNoti('message', data);
         } else {
-            delete this.notification.message;
+            this.notiStore.del('message');
+        }
+    }
+
+    get settings(): NotiType | undefined {
+        return this.notification.settings;
+    }
+    set settings(version: number | null) {
+        if (version) {
+            const data = {
+                app: 'settings',
+                history: [{"state":"system","url":"/system"},{"state":{"id":"software-update","title":"Software Update","version":version},"url":"/system/update"}],
+                data: null,
+            }
+            this.notiStore.addNoti('settings', data);
+        } else {
+            this.notiStore.del('settings');
+        }
+    }
+
+    get climate(): NotiType | undefined {
+        return this.notification.weather;
+    }
+    set climate(weather: any) {
+        if (weather) {
+            const data = {
+                app: 'weather',
+                history: [],
+                data: weather,
+            }
+            this.notiStore.addNoti('weather', data);
+        } else {
+            this.notiStore.del('weather');
         }
     }
 
     private openNoti(key?: string) {
         if (!key) return;
         const noti = this.notification[key];
+        if (key !== 'settings') this.notiStore.del(key);
         if (noti) {
-            console.log('NOTI', noti);
-            this.device.setHistory(noti.app, noti.history);
+            this.device.setHistory(noti.app, [...noti.history]);
             this.history.replaceState(`/${noti.app}`, noti.data);
         }
     }
 
+    private initNotis(list: Noti[]) {
+        for(const noti of list) {
+            this.notification[noti.id] = noti;
+            if (noti.id === 'message') {
+                this.device.messageNoti(true);
+            }
+            if (noti.id === 'phone') {
+                this.device.phoneNoti(true);
+            }
+        }
+        setTimeout(this.updateClock, 10);
+    }
+
     private setupListeners() {
         this.updateClock();
+
+        this.notiStore.listen((list, item, operation) => {
+            console.log("NOTI_STORE", list, item, operation);
+            this.initNotis(list);
+            if (item) {
+                if (operation === 'delete') {
+                    if (item.id === 'phone') {
+                        this.device.phoneNoti(false);
+                    }
+                    if (item.id === 'message') {
+                        this.device.messageNoti(false);
+                    }
+                    delete this.notification[item.id];
+                } else {
+                    this.notification[item.id] = item;
+                }
+            };
+        });
 
         this.clock.addChangeListener(async (status: string) => {
             if (status === 'UPDATE_CLOCK') {
@@ -153,10 +225,8 @@ export class NotificationController extends BaseController {
         this.device.addEventListener('openAppFinished', () => {
             console.log('APP_OPENRD', this.device.appOpened);
             if (this.device.appOpened === 'phone') {
-                this.device.phoneNoti(false);
                 this.call = false;
                 this.message = false;
-                this.updateClock();
             }
         });
 
@@ -166,31 +236,42 @@ export class NotificationController extends BaseController {
 
         this.phone.addChangeListener((status: string, data: any) => {
             console.log(status, data);
-            if (status === 'PHONE_NOTI' || status === 'MESSAGE_NOTI') {
-                this.device.phoneNoti(true);
+            if ((status === 'PHONE_NOTI' || status === 'MESSAGE_NOTI') && this.device.appOpened !== 'phone') {
                 if (status === 'PHONE_NOTI') {
+                    this.device.phoneNoti(true);
                     this.call = data;
                 } else {
+                    this.device.messageNoti(true);
                     this.message = data;
                 }
-                this.updateClock();
             }
         });
 
         this.weather.addChangeListener((status: string, data: any) => {
-            if (status === 'WEATHER_NOTIFIGATION') {
-                console.log('WEATHER::::::::::', data);
+            // if (status === 'WEATHER_NOTIFIGATION') {
+            //     console.log('WEATHER::::::::::', data);
+            //     this.climate = data;
+            // }
+            if (status === 'MY_WEATHER_FETCH') {
+                this.climate = data;
             }
         });
+
+        this.setting.addChangeListener((status: string, data: any) => {
+            if (status === 'UPDATE_SYSTEM') {
+                console.log(data)
+                this.settings = data.isUpdate ? data.version : null;
+            }
+        })
     }
 
     public updateClock() {
         console.log(this.clock.timerRunning, this.clock.stopwatchRunning, this.clock.remaining, this.noti);
-
+        this.timer = !(this.clock.timerRunning && this.clock.remaining);
         if (this.clock.remaining && this.clock.timerRunning) {
-            this.updateCountDown(this.clock.remaining, 'timer')
+            this.updateCountDown(this.clock.remaining)
         } else {
-            const hourString = OSDate.getFormatTime(new Date(), this.device.hour12, this.device.timeZone);
+            const hourString = OSDate.getCustomTime(new Date(), this.device.hour12, this.device.timeZone);
             this.clockElement.innerHTML = `${hourString} ${this.getIcon(this.noti)}`;
         }
     }
@@ -200,7 +281,7 @@ export class NotificationController extends BaseController {
         return element;
     }
 
-    public updateCountDown(remainingTime: number, icon: string) {
+    public updateCountDown(remainingTime: number) {
         const clockElement = this.getElement('#dateTime');
         const result = this.convertMilliseconds(remainingTime);
         let time = "";
@@ -210,19 +291,29 @@ export class NotificationController extends BaseController {
             time = `${this.pad(result.minutes)}:${this.pad(result.seconds)}`;
         }
         clockElement.innerHTML = `
-            <span class="material-symbols-outlined fill-icon" style="font-size: 20px; translate: 0 -1px;">${icon}</span>
+            <span class="material-symbols-outlined fill-icon" style="font-size: 20px; translate: 0 -1px; margin-right: 3px;">timer_pause</span>
             ${time}
         `;
     }
 
     private getIcon(noti?: string) {
+        console.log("NOTI", noti);
         switch (noti) {
             case 'stopwatch':
-                return '<span class="material-symbols-outlined" style="font-size: 20px; margin-left: 2px;">pace</span>';
+                return '<span class="material-symbols-outlined fill-icon" style="font-size: 20px; margin-left: 3px; translate: 0 -2px;">timer</span>';
             case 'phone':
-                return '<span class="material-symbols-outlined" style="font-size: 20px; margin-left: 2px;">phone_missed</span>';
+                return '<span class="material-symbols-outlined fill-icon" style="font-size: 20px; margin-left: 3px; translate: 0 -2px;">phone_missed</span>';
             case 'message':
-                return '<span class="material-symbols-outlined" style="font-size: 20px; margin-left: 2px;">chat_bubble</span>';
+                return '<span class="material-symbols-outlined fill-icon" style="font-size: 18px; margin-left: 3px;">chat_bubble</span>';
+            case 'settings':
+                return '<span class="material-symbols-outlined fill-icon" style="font-size: 20px; margin-left: 3px; translate: 0 -1px;">settings</span>';
+            case 'weather':
+                const weather = this.climate?.data;
+                if (weather) {
+                    return `<span class="material-symbols-outlined fill-icon" style="font-size: 20px; margin-left: 3px; translate: 0 -2px;">${WeatherService.getIcon(weather.weather[0].icon)}</span>`;
+                } else {
+                    return '';
+                }
             default:
                 return '';
         }

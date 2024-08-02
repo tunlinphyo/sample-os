@@ -39,19 +39,20 @@ export class MapsController extends BaseController {
     }
 
     public initMap(mapEl: HTMLElement) {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (data) => {
-                    this.service.init(mapEl, data)
-                },
-                () => {
-                    this.service.init(mapEl, { coords: { latitude: 35.6895, longitude: 139.6917 }});
-                }
-            );
-        } else {
-            this.service.init(mapEl, { coords: { latitude: 35.6895, longitude: 139.6917 }});
-            console.error('Geolocation not supported');
-        }
+        this.service.init(mapEl, { coords: { latitude: 35.6895, longitude: 139.6917 }});
+        // if (navigator.geolocation) {
+        //     navigator.geolocation.getCurrentPosition(
+        //         (data) => {
+        //             this.service.init(mapEl, data)
+        //         },
+        //         () => {
+        //             this.service.init(mapEl, { coords: { latitude: 35.6895, longitude: 139.6917 }});
+        //         }
+        //     );
+        // } else {
+        //     this.service.init(mapEl, { coords: { latitude: 35.6895, longitude: 139.6917 }});
+        //     console.error('Geolocation not supported');
+        // }
     }
 
     public async fetchPlace(placeId: string) {
