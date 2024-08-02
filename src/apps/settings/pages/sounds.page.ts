@@ -1,5 +1,5 @@
 import { FormComponent } from "../../../components/form";
-import { CustomSelectForm, CustomToggleForm } from "../../../components/form/form-elem";
+import { CustomSelectForm } from "../../../components/form/form-elem";
 import { Page } from "../../../components/page";
 import { SelectItem } from "../../../components/select";
 import { SettingsController } from "../../../controllers/settings.controller";
@@ -69,17 +69,29 @@ class SoundsForm extends FormComponent {
             list: this.ringTones
         }, toneGroup);
 
-        this.ringTone = this.select({
+        this.textTone = this.select({
             label: 'Text Tone',
             defautValue: 'daybreak',
             list: this.ringTones
         }, toneGroup);
 
-        this.ringTone = this.select({
+        this.defaultAlert = this.select({
             label: 'Default Alerts',
             defautValue: 'canopy',
             list: this.ringTones
         }, toneGroup);
+
+        this.ringTone.addEventListener('change', (data: string) => {
+            console.log(data);
+        });
+
+        this.textTone.addEventListener('change', (data: string) => {
+            console.log(data);
+        });
+
+        this.defaultAlert.addEventListener('change', (data: string) => {
+            console.log(data);
+        });
 
         this.appendElement(volumeGroup);
         this.appendElement(toneGroup);

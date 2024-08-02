@@ -15,7 +15,6 @@ import { OutgoingCall } from "../components/system/outgoing.call";
 import { SelectPopup } from "../components/popups/select.popup";
 import { SystemService } from "../services/system.service";
 import { OSBrowser } from "../utils/browser";
-import { Volume } from "../stores/settings.store";
 
 export type DeviceTheme = 'auto' | 'light' | 'dark';
 
