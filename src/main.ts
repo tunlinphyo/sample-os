@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // new Battery();
     // const fullScreen = new FullscreenController();
 
-    window.weather.fetchWeather();
+    // window.weather.fetchWeather();
 
     window.clock.addChangeListener(async (status: string, data: any) => {
         // if (status === 'UPDATE_CLOCK') {

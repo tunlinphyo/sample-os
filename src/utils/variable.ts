@@ -5,3 +5,7 @@ export function getCSSVariable(name: string): string {
 export function setCSSVariable(name: string, value: string): void {
     document.documentElement.style.setProperty(name, value);
 }
+
+export function getSchema() {
+    return document.body.dataset.schema || 'auto';
+}

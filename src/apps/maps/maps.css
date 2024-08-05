@@ -179,6 +179,49 @@
     .cursorPointer {
         cursor: pointer;
     }
+
+    .placePage {
+        .mainArea {
+            height: calc(var(--grid) * 14);
+            .scrollArea {
+                height: calc(var(--grid) * 14);
+                padding-bottom: calc(var(--grid) * 2.5);
+            }
+        }
+        .actionBar {
+            position: absolute;
+            z-index: 2;
+            bottom: var(--grid);
+            left: 50%;
+            transform: translateX(-50%) translateZ(0);
+            justify-content: center;
+
+            .actionButton {
+                &:has(span) {
+                    pointer-events: auto;
+                    border-radius: calc(var(--grid) * 1.5);
+                    position: relative;
+                    z-index: 0;
+
+                    .icon {
+                        color: var(--white);
+                        font-size: 28px;
+                    }
+
+                    &::before {
+                        content: '';
+                        inset: 8px;
+                        display: block;
+                        position: absolute;
+                        z-index: -1;
+                        border-radius: var(--grid);
+                        background-color: var(--black);
+                        /* border: 2px solid var(--black); */
+                    }
+                }
+            }
+        }
+    }
 }
 
 @keyframes l1 {to{clip-path: inset(0 -34% 0 0)}}

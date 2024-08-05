@@ -215,8 +215,8 @@
                     display: block;
                     position: absolute;
                     z-index: -1;
-                    background-color: var(--black);
                     border-radius: 50%;
+                    background-color: var(--black);
                     /* border: 2px solid var(--black); */
                 }
             }

@@ -8,6 +8,11 @@
             z-index: 0;
             top: 0;
         }
+        .mainArea {
+            .scrollArea {
+                overscroll-behavior: none;
+            }
+        }
 
         .alarmList,
         .timeLaps,
@@ -24,7 +29,7 @@
 
                 &::before {
                     content: '';
-                    width: calc(var(--grid) * 2.5);
+                    width: calc(var(--grid) * 2);
                     height: 6px;
                     border-radius: 4px;
                     background-color: var(--black);
@@ -35,9 +40,157 @@
                 }
             }
         }
+    }
+
+    .clockPage {
+        .mainArea {
+            height: calc(var(--grid) * 12);
+            .scrollArea {
+                height: calc(var(--grid) * 12);
+                padding-bottom: 0;
+                overscroll-behavior: none;
+            }
+        }
+        .alarmList {
+            border-radius: var(--grid) var(--grid) 0 0;
+
+            &.bordered {
+                border-bottom: none;
+            }
+        }
 
         .actionBar {
-            border-top: 2px solid var(--black);
+            position: absolute;
+            z-index: 1;
+            bottom: var(--grid);
+            left: 50%;
+            transform: translateX(-50%) translateZ(0);
+
+            border-radius: var(--grid);
+            background-color: var(--white);
+            border: 2px solid var(--black);
+            width: calc(100% - 10px);
+            border-radius: 0 0 var(--grid) var(--grid);
+            border: 2px solid var(--black);
+            border-top: none;
+            padding-bottom: 5px;
+        }
+    }
+
+    /* .clockPage {
+        .mainArea {
+            height: calc(var(--grid) * 14);
+            .scrollArea {
+                height: calc(var(--grid) * 14);
+                padding-bottom: calc(var(--grid) * 3);
+            }
+        }
+
+        .actionBar {
+            width: auto;
+            position: absolute;
+            z-index: 1;
+            bottom: var(--grid);
+            left: 50%;
+            transform: translateX(-50%) translateZ(0);
+
+            border-radius: var(--grid);
+            background-color: var(--white);
+            border: 2px solid var(--black);
+            justify-content: center;
+
+            .actionButton {
+                &:has(span) {
+                    pointer-events: auto;
+                    border-radius: calc(var(--grid) * 1.5);
+                    position: relative;
+                    z-index: 0;
+
+                    .icon {
+                        font-size: 28px;
+                    }
+
+                    &::before {
+                        content: '';
+                        inset: 8px;
+                        display: block;
+                        position: absolute;
+                        z-index: -1;
+                        border-radius: var(--grid);
+                        background-color: var(--white);
+                        border: 2px solid var(--black);
+                    }
+                }
+
+                &.center {
+                    width: calc(var(--button) * 2);
+                }
+            }
+        }
+    } */
+
+    .stopwatchPage,
+    .timerPage {
+        .mainArea {
+            height: calc(var(--grid) * 12);
+            .scrollArea {
+                height: calc(var(--grid) * 12);
+                padding-bottom: calc(var(--grid) * 1);
+            }
+        }
+        .actionBar {
+            width: calc(100% - 10px);
+            position: absolute;
+            z-index: 2;
+            bottom: var(--grid);
+            left: 50%;
+            transform: translateX(-50%) translateZ(0);
+
+            border-radius: var(--grid);
+            background-color: var(--white);
+            border: 2px solid var(--black);
+            /* justify-content: center; */
+
+            .actionButton {
+                &:has(span) {
+                    pointer-events: auto;
+                    border-radius: calc(var(--grid) * 1.5);
+                    position: relative;
+                    z-index: 0;
+
+                    .icon {
+                        font-size: 28px;
+                    }
+
+                    &::before {
+                        content: '';
+                        inset: 8px;
+                        display: block;
+                        position: absolute;
+                        z-index: -1;
+                        border-radius: var(--grid);
+                        background-color: var(--white);
+                        border: 2px solid var(--black);
+                    }
+                }
+
+                &.start,
+                &.end {
+                    width: calc(var(--button) * 1.5);
+                    position: relative;
+
+                    &::before {
+                        content: '';
+                        inset: 8px;
+                        display: block;
+                        position: absolute;
+                        z-index: -1;
+                        border-radius: var(--grid);
+                        /* background-color: var(--black); */
+                        /* border: 2px solid var(--black); */
+                    }
+                }
+            }
         }
     }
 
@@ -83,8 +236,8 @@
     }
 
     .alarmList {
-        margin-block: calc(var(--grid) * 2) 5px;
-        padding-block: var(--half);
+        margin-block: calc(var(--grid) * 1.8) 0;
+        padding-block: var(--half) calc(var(--grid) * 1.5);
 
         .dateContainer {
             text-align: center;

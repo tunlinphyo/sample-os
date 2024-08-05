@@ -194,7 +194,7 @@ export class HistoryStore extends BaseManager<History> {
             }
         });
 
-        this.editView(chatHistory);
+        this.editView(chatHistory.filter(item => !item.isViewed));
 
         return chatHistory.sort((a, b) => {
             const dateA = new Date(a.date);

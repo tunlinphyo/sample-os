@@ -1,4 +1,4 @@
-import { getCSSVariable } from "../../../utils/variable";
+import { getCSSVariable, getSchema } from "../../../utils/variable";
 
 export function getStyles() {
     const color = {
@@ -6,7 +6,17 @@ export function getStyles() {
         WHITE: getCSSVariable('--white'),
     };
 
-    console.log(color);
+    const schema = getSchema();
+
+    if (schema === 'light') {
+        color.WHITE = getCSSVariable('--one-bit');
+        color.BLACK = getCSSVariable('--zero-bit');
+    } else if (schema === 'dark') {
+        color.WHITE = getCSSVariable('--zero-bit');
+        color.BLACK = getCSSVariable('--one-bit');
+    }
+
+    console.log(color, schema);
 
     return [
         {

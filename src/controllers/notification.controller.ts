@@ -193,7 +193,7 @@ export class NotificationController extends BaseController {
                 this.updateClock();
             }
             if (status === 'TIMER_UPDATE') {
-                this.timer = !(this.clock.timerRunning && this.clock.remaining);
+                this.timer = !(this.clock.timerRunning && this.clock.remaining && !this.device.isTimer);
                 this.updateClock();
             }
         });
@@ -249,7 +249,6 @@ export class NotificationController extends BaseController {
 
         this.weather.addChangeListener((status: string, data: any) => {
             if (status === 'WEATHER_NOTIFIGATION') {
-                console.log('WEATHER::::::::::', data);
                 this.climate = data;
             }
             // if (status === 'MY_WEATHER_FETCH') {
@@ -266,9 +265,8 @@ export class NotificationController extends BaseController {
     }
 
     public updateClock() {
-        console.log(this.clock.timerRunning, this.clock.stopwatchRunning, this.clock.remaining, this.noti);
-        this.timer = !(this.clock.timerRunning && this.clock.remaining);
-        if (this.clock.remaining && this.clock.timerRunning) {
+        // this.timer = !(this.clock.timerRunning && this.clock.remaining && !this.device.isTimer);
+        if (this.clock.remaining && this.clock.timerRunning && !this.device.isTimer) {
             this.updateCountDown(this.clock.remaining)
         } else {
             const hourString = OSDate.getCustomTime(new Date(), this.device.hour12, this.device.timeZone);

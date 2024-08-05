@@ -18,6 +18,7 @@ export class PlacePage extends Modal {
         private maps: MapsController
     ) {
         super(history, { btnStart: 'bookmark', btnEnd: 'favorite' });
+        this.component.classList.add("placePage");
         this.init();
     }
 

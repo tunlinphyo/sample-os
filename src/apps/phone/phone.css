@@ -66,9 +66,10 @@
 
         .phoneDispaly {
             width: calc(var(--grid) * 10);
+            --width: calc(var(--grid) * 2.25);
 
             display: grid;
-            grid-template-columns: var(--button) 1fr var(--button);
+            grid-template-columns: var(--width) 1fr var(--width);
             grid-template-rows: calc(var(--grid) * 3);
             align-items: flex-end;
 
@@ -95,7 +96,7 @@
 
             .addEdit,
             .backSpace {
-                width: var(--button);
+                width: var(--width);
                 height: var(--button);
 
                 display: flex;
@@ -231,6 +232,10 @@
                         background-color: var(--white);
                         border: 2px solid var(--black);
                     }
+                }
+
+                &.center {
+                    width: calc(var(--button) * 2);
                 }
             }
         }
@@ -371,7 +376,7 @@
 
             &::before {
                 content: '';
-                width: calc(var(--grid) * 2.5);
+                width: calc(var(--grid) * 2);
                 height: 6px;
                 border-radius: 4px;
                 background-color: var(--black);
@@ -451,7 +456,7 @@
                         display: block;
                         position: absolute;
                         z-index: -1;
-                        border-radius: 50%;
+                        border-radius: var(--grid);
                         background-color: var(--white);
                         border: 2px solid var(--black);
                     }

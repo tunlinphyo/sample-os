@@ -240,7 +240,7 @@
     }
 
     .displayContainer {
-        padding: var(--padding) 0 var(--half);
+        padding: var(--half) 0;
         display: flex;
         justify-content: space-evenly;
         align-items: center;
@@ -250,7 +250,7 @@
             flex-direction: column;
             justify-content: flex-start;
             align-items: center;
-            gap: 10px;
+            gap: 5px;
 
             cursor: pointer;
 
@@ -258,7 +258,7 @@
                 --bg: var(--white);
                 --fg: var(--black);
                 width: calc(var(--grid) * 3);
-                height: calc(var(--grid) * 5);
+                height: calc(var(--grid) * 4.8);
                 border-radius: var(--padding);
                 background-color: var(--bg);
                 border: 2px solid var(--black);
@@ -267,12 +267,12 @@
                 flex-direction: column;
                 justify-content: space-between;
                 align-items: center;
-                padding: 6px;
+                padding: 4px;
 
                 .deviceIsland {
                     width: 28px;
-                    height: 12px;
-                    border-radius: 12px;
+                    height: 14px;
+                    border-radius: 14px;
                     background-color: var(--fg);
                 }
 
@@ -283,8 +283,8 @@
 
                 .deviceBar {
                     width: 32px;
-                    height: 4px;
-                    border-radius: 4px;
+                    height: 3px;
+                    border-radius: 3px;
                     background-color: var(--fg);
                 }
 
@@ -308,12 +308,18 @@
     .groupContiner {
         padding: var(--half);
 
+        .displayContainer {
+            border: 2px solid var(--black);
+            border-radius: 10px 10px 0 0;
+        }
+
         .toggleGroup {
             display: flex;
             justify-content: space-between;
             align-items: center;
             border: 2px solid var(--black);
-            border-radius: 10px;
+            border-top: none;
+            border-radius: 0 0 10px 10px;
             padding: 6px 8px;
 
             font-size: 18px;
@@ -322,9 +328,13 @@
 
     .formLabel {
         font-size: 24px;
-        margin-bottom: 10px;
 
         &.marginBottom {
+            margin-bottom: -20px;
+        }
+
+        &.labelPadding {
+            padding: var(--half);
             margin-bottom: -20px;
         }
     }

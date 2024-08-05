@@ -806,6 +806,7 @@ body {
                 bottom: 0;
                 background-color: var(--white);
                 transition: translate .4s ease;
+                transform: translateZ(0);
             }
 
             &.hidden {
@@ -846,8 +847,9 @@ body {
                 height: calc(var(--grid) * 3);
                 padding-bottom: var(--grid);
                 position: absolute;
-                z-index: 0;
+                z-index: 1;
                 bottom: 0;
+                transform: translateZ(0);
 
                 .actionButton {
                     pointer-events: none;
@@ -1357,7 +1359,7 @@ body {
                             display: flex;
                             justify-content: flex-start;
                             align-items: center;
-                            gap: calc(var(--grid) * 0.5);
+                            gap: var(--half);
                         }
 
                         &.blockedNumber {
@@ -1384,23 +1386,21 @@ body {
                     }
 
                     &.chapters {
-                        gap: calc(var(--grid) * 0.5);
-                        justify-content: flex-start;
                         counter-reset: index;
 
                         .selectItem {
                             text-align: left;
-                            font-size: 16px;
+                            font-size: 18px;
                             counter-increment: index;
 
                             display: grid;
-                            grid-template-columns: 16px 1fr;
-                            gap: 8px;
+                            grid-template-columns: 20px 1fr;
+                            gap: 12px;
 
                             &::before {
-                                content: counter(index);
+                                content: counter(index)".";
                                 text-align: right;
-                                font-family: var(--number-fonts);
+                                /* font-family: var(--number-fonts); */
                                 translate: 0 -1px;
                             }
                         }
@@ -1408,7 +1408,7 @@ body {
 
                     &.bookmarks {
                         .selectItem {
-                            font-size: 16px;
+                            font-size: 18px;
                         }
                     }
                 }
@@ -1600,7 +1600,7 @@ body {
                 padding-inline: calc(var(--grid) * 0.5);
 
                 &.title {
-                    height: calc(var(--grid) * 1.2);
+                    height: calc(var(--grid) * 1.3);
                     /* margin-top: calc(var(--grid) * 0.25); */
                 }
 
@@ -2039,9 +2039,9 @@ body {
                 pointer-events: auto;
 
                 &.textIcon {
-                    width: calc(var(--grid) * 3);
                     font-weight: 600;
                     font-size: 16px;
+                    /* width: calc(var(--grid) * 3);
 
                     &.start {
                         justify-content: flex-start;
@@ -2051,7 +2051,7 @@ body {
                     &.end {
                         justify-content: flex-end;
                         padding-inline-end: var(--padding);
-                    }
+                    } */
                 }
 
                 &.hide {

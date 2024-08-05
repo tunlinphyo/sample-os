@@ -8,6 +8,9 @@
     --zero-bit: #212121;
     --one-bit: #cdcdcd;
 
+    --zero-bit: #2d3436;
+    --one-bit: #bdc3c7;
+
     --white: var(--one-bit);
     --black: var(--zero-bit);
 

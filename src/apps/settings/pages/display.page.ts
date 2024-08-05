@@ -80,10 +80,8 @@ export class DisplayPage extends Page {
 
         const groupContiner = this.createElement('div', ['groupContiner']);
 
-        const labelEl = this.createElement('div', ['formLabel']);
+        const labelEl = this.createElement('div', ['formLabel', 'labelPadding']);
         labelEl.textContent = 'Appearence';
-        groupContiner.appendChild(labelEl);
-
 
         const toggleGroup = this.createElement('div', ['toggleGroup']);
         const labelEL = this.createElement('div', ['inputLabel']);
@@ -103,10 +101,12 @@ export class DisplayPage extends Page {
 
         toggleGroup.appendChild(labelEL);
         toggleGroup.appendChild(toggleButton);
+
+        groupContiner.appendChild(displayContainer);
         groupContiner.appendChild(toggleGroup);
 
+        scrollArea.appendChild(labelEl);
         scrollArea.appendChild(groupContiner);
-        scrollArea.appendChild(displayContainer);
 
         this.mainArea.appendChild(scrollArea);
     }

@@ -116,6 +116,14 @@ export class DeviceController extends BaseComponent {
         return this._animating;
     }
 
+    get isTimer() {
+        const histories = this._appHistory['clock'];
+        if (!histories) return false;
+        const lastHistory = histories[histories.length - 1];
+        if (!lastHistory) return false;
+        return this.appOpened === 'clock' && lastHistory.url === '/timer'
+    }
+
     // public
     public getHistory(app: string) {
         return this._appHistory[app];

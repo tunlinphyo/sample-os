@@ -119,13 +119,13 @@ export class ClockApp extends App {
 
             this.alarmList.appendChild(alarmItem);
         }
-        const addAlarm = this.createElement("button", ['addAlarm']);
-        addAlarm.innerHTML = `<span class="material-symbols-outlined icon">alarm_add</span> Add Alarm`;
-        this.addEventListener('click', () => {
-            this.history.pushState('/alarm', null);
-        }, addAlarm);
+        // const addAlarm = this.createElement("button", ['addAlarm']);
+        // addAlarm.innerHTML = `<span class="material-symbols-outlined icon">alarm_add</span> Add Alarm`;
+        // this.addEventListener('click', () => {
+        //     this.history.pushState('/alarm', null);
+        // }, addAlarm);
 
-        this.alarmList.appendChild(addAlarm);
+        // this.alarmList.appendChild(addAlarm);
     }
 
     update(_: string, alarms: Alarm[]) {
