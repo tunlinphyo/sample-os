@@ -44,3 +44,8 @@
         --black: var(--one-bit);
     }
 }
+
+/* .screen {
+    background-image: linear-gradient(#444cf722 1px, transparent 1px), linear-gradient(to right, #444cf722 1px, transparent 1px);
+    background-size: calc(var(--grid) - .1px) calc(var(--grid) - .05px);
+} */

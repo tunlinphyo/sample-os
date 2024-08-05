@@ -3,6 +3,7 @@
     .stopwatchPage,
     .timerPage {
         .clockArea {
+            height: calc(var(--grid) * 8.2);
             position: sticky;
             z-index: 0;
             top: 0;
@@ -34,64 +35,14 @@
                 }
             }
         }
-    }
 
-    .clockPage {
-        .mainArea {
-            height: calc(var(--grid) * 14);
-            .scrollArea {
-                height: calc(var(--grid) * 14);
-                padding-block-end: calc(var(--grid) * 3);
-            }
-        }
         .actionBar {
-            /* width: auto; */
-            height: calc(var(--grid) * 3);
-            padding-bottom: var(--grid);
-            position: absolute;
-            z-index: 1;
-            bottom: 0;
-            /* left: 50%;
-            transform: translateX(-50%) translateZ(0); */
-
-            border-radius: var(--grid);
-            background-color: var(--white);
-            /* border: 2px solid var(--black); */
-            border-bottom: none;
-            justify-content: space-between;
-
-            /* .actionButton {
-                &.center {
-                    display: none;
-                }
-
-                &:has(span) {
-                    pointer-events: auto;
-                    border-radius: calc(var(--grid) * 1.5);
-                    position: relative;
-                    z-index: 0;
-
-                    .icon {
-                        font-size: 28px;
-                    }
-
-                    &::before {
-                        content: '';
-                        inset: 8px;
-                        display: block;
-                        position: absolute;
-                        z-index: -1;
-                        border-radius: var(--grid);
-                        background-color: var(--white);
-                        border: 2px solid var(--black);
-                    }
-                }
-            } */
+            border-top: 2px solid var(--black);
         }
     }
 
     .timeLaps {
-        margin-block-start: var(--grid);
+        margin-block: calc(var(--grid) * 2) 5px;
         padding: var(--half) var(--padding);
 
         .timeLap {
@@ -116,7 +67,7 @@
     }
 
     .timerList {
-        margin-block-start: var(--grid);
+        margin-block: calc(var(--grid) * 2) 5px;
         padding-inline: var(--padding);
         padding-block: var(--grid) var(--padding);
 
@@ -132,7 +83,7 @@
     }
 
     .alarmList {
-        margin-block-start: var(--grid);
+        margin-block: calc(var(--grid) * 2) 5px;
         padding-block: var(--half);
 
         .dateContainer {

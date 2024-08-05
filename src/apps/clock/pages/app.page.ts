@@ -17,7 +17,7 @@ export class ClockApp extends App {
         private device: DeviceController,
         private clock: ClockController
     ) {
-        super(history, { btnStart: 'timer_play', btnEnd: 'timer' })
+        super(history, { btnStart: 'timer_play', btnCenter: 'alarm_add', btnEnd: 'timer' })
         this.init();
 
         this.component.classList.add('clockPage');
@@ -57,9 +57,9 @@ export class ClockApp extends App {
             this.history.pushState('/timer', this.clock.timer);
         }, this.btnStart, false);
 
-        // this.addEventListener('click', () => {
-        //     this.history.pushState('/alarm', null);
-        // }, this.btnCenter, false);
+        this.addEventListener('click', () => {
+            this.history.pushState('/alarm', null);
+        }, this.btnCenter, false);
 
         this.addEventListener('click', () => {
             this.history.pushState('/stopwatch', this.clock.stopwatch);

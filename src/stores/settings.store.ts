@@ -105,7 +105,7 @@ const appList: HomeApp[] = [
         id: 'maps',
         name: 'Maps',
         order: 7,
-        isShow: false,
+        isShow: true,
         isSystem: false,
     },
     // {
@@ -235,14 +235,14 @@ const defaultSettings: Setting[] = [
         id: 'sounds',
         title: 'Sounds',
         order: 3,
-        value: '',
+        value: 'Noti',
         inList: true,
         data: {
             isMuted: false,
             mediaVolume: 1,
-            ringVolume: 1,
-            notiVolume: 1,
-            alarmVolume: 1
+            ringVolume: 0.5,
+            notiVolume: 0.5,
+            alarmVolume: 0.5
         }
     },
     {
@@ -279,7 +279,7 @@ const defaultSettings: Setting[] = [
             {
                 id: 'software-update',
                 title: 'Software Update',
-                version: 0.25
+                version: 0.3
             },
             {
                 id: 'date-time',
@@ -303,7 +303,7 @@ const defaultSettings: Setting[] = [
 
 export class SettingStore extends BaseManager<Setting> {
     private db: DB<Setting>;
-    public version: number = 0.25;
+    public version: number = 0.3;
     public message: string = 'Added notifigation.';
 
     constructor() {

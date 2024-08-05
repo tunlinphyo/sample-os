@@ -248,13 +248,13 @@ export class NotificationController extends BaseController {
         });
 
         this.weather.addChangeListener((status: string, data: any) => {
-            // if (status === 'WEATHER_NOTIFIGATION') {
-            //     console.log('WEATHER::::::::::', data);
-            //     this.climate = data;
-            // }
-            if (status === 'MY_WEATHER_FETCH') {
+            if (status === 'WEATHER_NOTIFIGATION') {
+                console.log('WEATHER::::::::::', data);
                 this.climate = data;
             }
+            // if (status === 'MY_WEATHER_FETCH') {
+            //     this.climate = data;
+            // }
         });
 
         this.setting.addChangeListener((status: string, data: any) => {
@@ -291,7 +291,7 @@ export class NotificationController extends BaseController {
             time = `${this.pad(result.minutes)}:${this.pad(result.seconds)}`;
         }
         clockElement.innerHTML = `
-            <span class="material-symbols-outlined fill-icon" style="font-size: 20px; translate: 0 -1px; margin-right: 3px;">timer_pause</span>
+            <span class="material-symbols-outlined fill-icon" style="font-size: 20px; translate: 0 -1px; margin-right: 2px;">timer_pause</span>
             ${time}
         `;
     }
@@ -300,17 +300,17 @@ export class NotificationController extends BaseController {
         console.log("NOTI", noti);
         switch (noti) {
             case 'stopwatch':
-                return '<span class="material-symbols-outlined fill-icon" style="font-size: 20px; margin-left: 3px; translate: 0 -2px;">timer</span>';
+                return '<span class="material-symbols-outlined fill-icon" style="font-size: 20px; margin-left: 2px; translate: 0 -2px;">timer</span>';
             case 'phone':
-                return '<span class="material-symbols-outlined fill-icon" style="font-size: 20px; margin-left: 3px; translate: 0 -2px;">phone_missed</span>';
+                return '<span class="material-symbols-outlined fill-icon" style="font-size: 20px; margin-left: 2px; translate: 0 -2px;">phone_missed</span>';
             case 'message':
-                return '<span class="material-symbols-outlined fill-icon" style="font-size: 18px; margin-left: 3px;">chat_bubble</span>';
+                return '<span class="material-symbols-outlined fill-icon" style="font-size: 18px; margin-left: 2px;">chat_bubble</span>';
             case 'settings':
-                return '<span class="material-symbols-outlined fill-icon" style="font-size: 20px; margin-left: 3px; translate: 0 -1px;">settings</span>';
+                return '<span class="material-symbols-outlined fill-icon" style="font-size: 20px; margin-left: 2px; translate: 0 -1px;">settings</span>';
             case 'weather':
                 const weather = this.climate?.data;
                 if (weather) {
-                    return `<span class="material-symbols-outlined fill-icon" style="font-size: 20px; margin-left: 3px; translate: 0 -2px;">${WeatherService.getIcon(weather.weather[0].icon)}</span>`;
+                    return `<span class="material-symbols-outlined fill-icon" style="font-size: 20px; margin-left: 2px; translate: 0 -1px;">${WeatherService.getIcon(weather.weather[0].icon)}</span>`;
                 } else {
                     return '';
                 }

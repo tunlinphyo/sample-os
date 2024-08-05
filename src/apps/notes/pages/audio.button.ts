@@ -19,7 +19,7 @@ export class AudioButton {
     private init() {
         this.setting.addChangeListener((status: string) => {
             if (status === 'UPDATE_VOLUMES') {
-                this.audio.volume = this.setting.volumes.mediaVolume || 1
+                this.audio.volume = this.setting.volumes.mediaVolume || 0
             }
         });
     }
@@ -50,7 +50,7 @@ export class AudioButton {
         this.audioButton.innerHTML = '<span class="material-symbols-outlined fill-icon">play_arrow</span>';
 
         this.audioButton.addEventListener('click', () => {
-            this.audio.volume = this.setting.volumes.mediaVolume || 1;
+            this.audio.volume = this.setting.volumes.mediaVolume || 0;
             if (this.playing) {
                 this.pauseAudio();
             } else {

@@ -141,11 +141,11 @@
         flex-direction: column;
         justify-content: flex-start;
         align-items: stretch;
-        gap: 12px;
+        gap: 10px;
         padding: var(--padding);
 
         > h3 {
-            font-size: 20px;
+            font-size: 24px;
             font-weight: 500;
         }
 
@@ -240,7 +240,7 @@
     }
 
     .displayContainer {
-        padding: var(--padding) var(--half) var(--half);
+        padding: var(--padding) 0 var(--half);
         display: flex;
         justify-content: space-evenly;
         align-items: center;
@@ -250,7 +250,9 @@
             flex-direction: column;
             justify-content: flex-start;
             align-items: center;
-            gap: var(--half);
+            gap: 10px;
+
+            cursor: pointer;
 
             .miniDevice {
                 --bg: var(--white);
@@ -319,9 +321,12 @@
     }
 
     .formLabel {
-        font-size: 18px;
-        padding-left: 1px;
-        margin-bottom: -24px;
+        font-size: 24px;
+        margin-bottom: 10px;
+
+        &.marginBottom {
+            margin-bottom: -20px;
+        }
     }
 
     .ringToneSlider {
@@ -355,6 +360,8 @@
 
                 background-color: var(--white);
                 position: relative;
+
+                cursor: grab;
 
                 .rangeBackground {
                     position: absolute;

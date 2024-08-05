@@ -46,7 +46,7 @@ class SoundsForm extends FormComponent {
 
     render(data?: Setting) {
 
-        const labelEl = this.createElement('div', ['formLabel']);
+        const labelEl = this.createElement('div', ['formLabel', 'marginBottom']);
         labelEl.textContent = 'Rington and Alerts';
         this.appendElement(labelEl);
 
