@@ -40,14 +40,10 @@ export class HomePages extends App {
 
         this.addEventListener('scroll', event => {
             const target = event.target as HTMLDivElement;
-            const scrollX = target.scrollLeft;
-            const activeIndex = Math.round(scrollX / target.clientWidth);
-            const pageIndicators = this.getAllElement('.pageIndicator .page')
-            Array.from(pageIndicators).forEach((elem, index) => {
-                if (activeIndex === index) elem.classList.add('active');
-                else elem.classList.remove('active');
-            });
+            this.getActiveIndex(target);
         }, this.mainArea);
+
+        this.getActiveIndex(this.mainArea);
     }
 
     update(_: string, list: HomeApp[]) {
@@ -55,6 +51,16 @@ export class HomePages extends App {
         this.mainArea.innerHTML = '';
         this.pageIndicator.innerHTML = '';
         this.render(list);
+    }
+
+    private getActiveIndex(target: HTMLElement) {
+        const scrollX = target.scrollLeft;
+        const activeIndex = Math.round(scrollX / target.clientWidth);
+        const pageIndicators = this.getAllElement('.pageIndicator .page')
+        Array.from(pageIndicators).forEach((elem, index) => {
+            if (activeIndex === index) elem.classList.add('active');
+            else elem.classList.remove('active');
+        });
     }
 
     private getHomePages(array: HomeApp[], chunkSize: number): HomeApp[][] {

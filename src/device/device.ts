@@ -25,6 +25,7 @@ export class DeviceController extends BaseComponent {
     public homeFrame: HTMLIFrameElement;
     public systemFrame: HTMLIFrameElement;
     public navEl: HTMLButtonElement;
+    public statusEl: HTMLElement;
 
     private _theme: DeviceTheme = 'auto';
     private _timeZone: string = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -63,6 +64,7 @@ export class DeviceController extends BaseComponent {
         this.homeFrame = this.getElement<HTMLIFrameElement>('#homeFrame');
         this.systemFrame = this.getElement<HTMLIFrameElement>('#systemFrame');
         this.navEl = this.getElement('.navigationBar-btn');
+        this.statusEl = this.getElement(".statusContainer");
 
         this.outgoingCall = new OutgoingCall(this);
         this.incomingCall = new IncomingCall(this);
@@ -88,6 +90,10 @@ export class DeviceController extends BaseComponent {
     }
     set theme(theme: DeviceTheme) {
         this._theme = theme;
+        this.setTheme(theme);
+    }
+
+    set tempTheme(theme: DeviceTheme) {
         this.setTheme(theme);
     }
 
@@ -258,6 +264,7 @@ export class DeviceController extends BaseComponent {
         this.navEl.style.opacity = '0';
 
         this.dispatchCustomEvent('closeApp');
+        this.showStatus();
 
         const transitionEndHandler = () => {
             this._animating = false;
@@ -319,5 +326,17 @@ export class DeviceController extends BaseComponent {
 
     public pad(num: number): string {
         return num.toString().padStart(2, '0');
+    }
+
+    public showStatus() {
+        if (this.statusEl) {
+            this.statusEl.classList.remove("hide");
+        }
+    }
+
+    public hideStatus() {
+        if (this.statusEl) {
+            this.statusEl.classList.add("hide");
+        }
     }
 }

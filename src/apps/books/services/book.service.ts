@@ -254,6 +254,9 @@ export class BookService {
 
         const topEl = document.createElement("div");
         topEl.classList.add("page-header");
+        topEl.innerHTML = `
+            <div class="bookTitle"></div>
+        `;
         pageEl.appendChild(topEl);
 
         const textEl = document.createElement("div");
@@ -317,7 +320,7 @@ export class BookService {
             <div class="cover">
                 <h2>About the Author</h2>
                 <h4>${this.book?.author}</h4>
-                <p>
+                <p class="index">
                     Aliquam nulla facilisi cras odio eu feugiat pretium nibh. Blandit cursus risus at ultrices. Et netus et malesuada fames ac
                     turpis egestas sed tempus. Suspendisse in est ante in nibh.
                 </p>
@@ -330,7 +333,7 @@ export class BookService {
             <div class="chapter">
                 <h2>Chapter ${chapter.index}</h2>
                 <h3>${chapter.title}</h3>
-                <p>
+                <p class="index">
                     Aliquam nulla facilisi cras odio eu feugiat pretium nibh. Blandit cursus risus at ultrices. Et netus et malesuada fames ac
                     turpis egestas sed tempus. Suspendisse in est ante in nibh. Felis eget nunc lobortis mattis aliquam faucibu. Sapien nec sagittis
                     aliquam males uada biben dum arcu vitae aute irure sint
@@ -355,12 +358,13 @@ export class BookService {
                     Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
                     dolor in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non.
                 </p>
-                <p>
+                <p class="index">
                     Sapien nec sagittis aliquam malesuada bibendum arcu vitae elementum curabitur. Nunc eget lorem dolor sed viverra ipsum nunc.
                 </p>
-                <p>
+                <p class="index">
                     Aliquam nulla facilisi cras odio eu feugiat pretium nibh. Blandit cursus risus at ultrices. Et netus et malesuada fames ac
                     turpis egestas sed tempus. Suspendisse in est ante in nibh. Felis eget nunc lobortis mattis aliquam faucibu. aliquip cras
+                    enim facilisis gravida neque con id
                 </p>
             `,
             `
@@ -368,12 +372,12 @@ export class BookService {
                     Pellentesque id nibh tortor id. Morbi blandit cursus risus at ultrices mi tempus. Turpis egestas maecenas pharetra convallis
                     posuere morbi leo. Sed augue lacus viverra vitae congue eu.
                 </p>
-                <p>
+                <p class="index">
                     Ac orci phasellus egestas tellus rutrum. Rhoncus urna neque viverra justo nec ultrices dui. Viverra vitae congue eu consequat ac felis donec.
                 </p>
-                <p>
+                <p class="index">
                     Risus in hendrerit gravida rutrum quisque non tellus orci. Et malesuada fames ac turpis egestas sed tempus. Sed odio morbi quis
-                    commodo odio aenean sed. Eget aliquet nibh praesent tristique magna.
+                    commodo odio aenean sed. Eget aliquet nibh praesent tristique magna. neque convallis a adipisc gravida neque convallis a cras
                 </p>
             `,
             `
@@ -381,11 +385,11 @@ export class BookService {
                     Sit amet porttitor eget dolor morbi non arcu risus quis. Leo vel orci porta non pulvinar. Pharetra convallis posuere morbi leo
                     urna molestie at elementum eu. Pellentesque adipiscing commodo elit at imperdiet.
                 </p>
-                <p>
+                <p class="index">
                     Est placerat in egestas erat imperdiet sed euismod nisi. Risus ultricies tristique nulla aliquet enim. Faucibus nisl tincidunt
                     eget nullam non nisi est sit. Sed adipiscing diam donec adipiscing tristique risus nec feugiat in. Tincidunt augue interdum velit
                     euismod in. Bibendum enim facilisis gravida neque convallis a cras. Aenean et tortor at risus viverra adipiscing. Magnis dis
-                    part
+                    part nulla aliquet enim nisl sed euismod
                 </p>
             `,
             `
@@ -394,7 +398,7 @@ export class BookService {
                     tempor orci dapibus ultrices. Auctor elit sed vulputate mi sit amet mauris. Nunc scelerisque viverra mauris in aliquam sem
                     fringilla. Tristique risus nec feugiat in fermentum posuere urna nec tincidunt.
                 </p>
-                <p>
+                <p class="index">
                     Sapien nec sagittis aliquam malesuada bibendum arcu vitae elementum curabitur. Aliquam nulla facilisi cras odio eu feugiat
                     pretium nibh. Blandit cursus risus at ultrices. Et netus et malesuada fames ac
                     turpis egestas sed tempus. Suspendisse in est ante in nibh. Felis eget nunc lobortis mattis aliquam
@@ -405,13 +409,13 @@ export class BookService {
                     Lectus quam id leo in. Enim sed faucibus turpis in eu mi bibendum. Pharetra pharetra massa massa ultricies mi quis. Sed risus
                     pretium quam vulputate. Commodo elit at imperdiet dui accumsan sit.
                 </p>
-                <p>
+                <p class="index">
                     Odio aenean sed adipiscing diam donec adipiscing tristique. Semper quis lectus nulla at volutpat diam. Condimentum id venenatis
                     a condimentum vitae sapien pellentesque habitant morbi.
                 </p>
-                <p>
+                <p class="index">
                     Aliquam purus sit amet luctus venenatis lectus magna fringilla urna. Posuere lorem ipsum dolor sit amet consectetur.
-                    Sapien nec sagittis aliquam malesuada bibendum arcu vitae amet mauris.
+                    Sapien nec sagittis aliquam malesuada bibendum arcu vitae amet mauris. egestas tellus rutrum tellus morbi
                 </p>
             `,
             `

@@ -40,6 +40,11 @@ export class NotePage extends Page {
                 if (note) this.update("update", note);
             }
         });
+
+        this.listen("hidden", value => {
+            if (value) this.device.hideStatus();
+            else this.device.showStatus();
+        })
     }
 
     render(note: Note) {

@@ -23,7 +23,7 @@ export abstract class BaseComponent {
             const fullScrollArea = this.getElement('.fullScrollArea');
             if (fullScrollArea) {
                 const scrollElem = this.getElement('.mainArea');
-                let lastScrollTop = 0;
+                let lastScrollTop = 0, isNavHidden: boolean = false;
 
                 this.addEventListener('scroll', () => {
                     const scrollView = this.getElement('.mainArea > *');
@@ -32,10 +32,22 @@ export abstract class BaseComponent {
 
                     if (scrollTop <= 0 || scrollTop >= maxScroll) {
                         fullScrollArea.classList.remove('hidden');
+                        if (isNavHidden) {
+                            isNavHidden = false;
+                            this.dispatchCustomEvent('hidden', isNavHidden)
+                        }
                     } else if (scrollTop > lastScrollTop) {
                         fullScrollArea.classList.add('hidden');
+                        if (!isNavHidden) {
+                            isNavHidden = true;
+                            this.dispatchCustomEvent('hidden', isNavHidden);
+                        }
                     } else {
                         fullScrollArea.classList.remove('hidden');
+                        if (isNavHidden) {
+                            isNavHidden = false;
+                            this.dispatchCustomEvent('hidden', isNavHidden)
+                        }
                     }
 
                     lastScrollTop = scrollTop;
