@@ -29,11 +29,6 @@
     .mainArea {
         overflow: hidden;
 
-        &.dark {
-            --white: var(--zero-bit);
-            --black: var(--one-bit);
-        }
-
         .bookmark {
             position: absolute;
             z-index: 9;

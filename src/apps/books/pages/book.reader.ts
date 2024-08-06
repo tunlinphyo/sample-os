@@ -64,9 +64,10 @@ export class BookReader extends Modal {
                     icon: 'dark_mode'
                 },
             ];
-            const selected = await this.device.selectList.openPage('Appearence', list);
+            const selected = await this.device.selectList.openPage<DeviceTheme>('Appearence', list);
             if (selected && typeof selected === 'string') {
-                this.device.tempTheme = selected as DeviceTheme;
+                this.bookService.theme = selected;
+                this.device.tempTheme = selected;
                 if (selected === 'auto') {
                     document.body.dataset.schema = this.device.theme;
                 } else {
@@ -161,6 +162,11 @@ export class BookReader extends Modal {
         this.mainArea.appendChild(bookmarkEl);
 
         this.bookService.init(book);
+
+        if (this.bookService.theme) {
+            this.device.tempTheme = this.bookService.theme;
+            document.body.dataset.schema = this.bookService.theme;
+        }
     }
 
     update() {}

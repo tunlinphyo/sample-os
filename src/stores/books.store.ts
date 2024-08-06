@@ -1,6 +1,7 @@
 import { DB } from "./db";
 import { BaseManager, ChangeListener } from "./data";
 import { BOOKS } from "../apps/books/services/books";
+import { DeviceTheme } from "../device/device";
 
 export interface Chapter {
     index: number;
@@ -17,6 +18,7 @@ export interface Book {
     bookmarks: number[];
     currantPage: number;
     lastReadDate?: Date;
+    theme?: DeviceTheme;
 }
 
 export class BooksStore extends BaseManager<Book> {

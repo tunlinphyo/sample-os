@@ -1,4 +1,5 @@
 import { SelectItem } from "../../../components/select";
+import { DeviceTheme } from "../../../device/device";
 import { Book, Chapter } from "../../../stores/books.store";
 import { OSArray } from "../../../utils/arrays";
 
@@ -58,6 +59,16 @@ export class BookService {
     get isBookmarked() {
         if (!this.book) return false;
         return this.book.bookmarks.includes(this._page);
+    }
+
+    get theme(): DeviceTheme | null {
+        return this.book?.theme || null;
+    }
+    set theme(theme: DeviceTheme) {
+        if (this.book) {
+            this.book.theme = theme;
+
+        }
     }
 
     init(book: Book) {
