@@ -28,6 +28,7 @@ export class DisplayPage extends Page {
         private setting: SettingsController
     ) {
         super(history, {});
+        this.component.classList.add('fullBottom');
         this.init();
     }
 

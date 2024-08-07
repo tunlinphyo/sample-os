@@ -290,6 +290,9 @@
                 translate: 0 calc(var(--grid) * -5.25);
                 color: var(--white);
             }
+            &.bookmark {
+                color: var(--white);
+            }
             &:has(span) {
                 pointer-events: auto;
                 border-radius: calc(var(--grid) * 1.5);

@@ -9,6 +9,7 @@ import { BookService } from "../services/book.service";
 export class BookReader extends Modal {
     private bookService: BookService;
     private bookThemeEl: HTMLButtonElement;
+    private bookmarkEl: HTMLButtonElement;
 
     private startX: number = 0;
     private startY: number = 0;
@@ -23,6 +24,7 @@ export class BookReader extends Modal {
 
         this.bookService = new BookService(this.mainArea);
         this.bookThemeEl = this.getElement(".bookTheme");
+        this.bookmarkEl = this.getElement(".bookmark");
         this.touchEventListeners = this.touchEventListeners.bind(this);
         this.init();
         this.touchEventListeners();
@@ -44,6 +46,11 @@ export class BookReader extends Modal {
                 this.hideMenu();
             }
         }, this.btnEnd, false);
+
+        this.addEventListener('click', () => {
+            this.bookService.toggleBookmark();
+            this.hideMenu();
+        }, this.bookmarkEl, false);
 
 
         this.addEventListener('click', async () => {
@@ -182,6 +189,7 @@ export class BookReader extends Modal {
         const parentEl = this.mainArea.parentElement!;
         if (!parentEl) return;
         parentEl.classList.remove('hidden');
+        this.bookmarkEl.classList.toggle('fill-icon', this.bookService.isBookmarked);
     }
 
     private hideMenu(toggle: boolean = true) {

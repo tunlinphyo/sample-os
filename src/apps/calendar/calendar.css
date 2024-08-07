@@ -69,10 +69,6 @@
     }
 
     .scrollArea {
-        &.paddingBlock {
-            padding-block: var(--half);
-        }
-
         .stickyTop {
             position: sticky;
             top: 0;
@@ -166,16 +162,16 @@
         }
     }
 
-    .title {
-        width: min-content;
-    }
-
     .eventPage {
         .mainArea {
             height: calc(var(--grid) * 14);
             .scrollArea {
                 height: calc(var(--grid) * 14);
-                padding-block-end: calc(var(--grid) * 2.5);
+                padding-block: var(--grid) calc(var(--grid) * 2.5);
+
+                .title {
+                    width: min-content;
+                }
             }
         }
         .actionBar {

@@ -83,6 +83,7 @@
 
     .cityList {
         padding-inline: var(--padding);
+        padding-block-start: var(--grid);
 
         .city {
             width: 100%;

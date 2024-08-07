@@ -50,7 +50,7 @@
     .settingList {
         list-style: none;
         margin: 0;
-        padding: var(--half) var(--padding);
+        padding: var(--grid) var(--padding);
         padding-block-end: calc(var(--grid) * 1.5);
 
         .settingItem {
@@ -91,7 +91,7 @@
 
     .appList {
         margin: 0;
-        padding: var(--half) var(--padding);
+        padding: var(--padding);
         list-style: none;
         --toggle: calc(var(--grid)* 1.7);
 
@@ -147,10 +147,12 @@
         align-items: stretch;
         gap: 10px;
         padding: var(--padding);
+        padding-block-start: calc(var(--grid) - 6px);
 
         > h3 {
             font-size: 24px;
             font-weight: 500;
+            margin-block: 15px 20px;
         }
 
         .progress {
@@ -202,6 +204,7 @@
         align-items: stretch;
         gap: 0;
         padding: var(--padding);
+        padding-block-start: var(--grid);
 
         .batteryPercentage {
             > span {
@@ -261,8 +264,8 @@
             .miniDevice {
                 --bg: var(--white);
                 --fg: var(--black);
-                width: calc(var(--grid) * 3);
-                height: calc(var(--grid) * 4.8);
+                width: calc(var(--grid) * 2.5);
+                height: calc(var(--grid) * 4.2);
                 border-radius: var(--padding);
                 background-color: var(--bg);
                 border: 2px solid var(--black);
@@ -332,19 +335,18 @@
 
     .formLabel {
         font-size: 24px;
-
-        &.marginBottom {
-            margin-bottom: -20px;
-        }
+        margin-top: calc(var(--grid) - 6px);
 
         &.labelPadding {
             padding: var(--half) var(--padding);
-            margin-bottom: -20px;
         }
 
         &.padding {
             padding: var(--half) var(--padding) 0;
-            margin-bottom: -5px;
+        }
+
+        &.marginBottom {
+            margin-top: 0;
         }
     }
 

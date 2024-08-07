@@ -1,6 +1,7 @@
 @layer component {
     .historiesPage {
         .titleList {
+            padding-block-start: var(--grid);
             .titleItem {
                 display: flex;
                 justify-content: flex-start;
@@ -253,6 +254,7 @@
     }
 
     .contactList {
+        padding-block-start: var(--grid);
         .titleItem {
             display: flex;
             justify-content: flex-start;
