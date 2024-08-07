@@ -1,4 +1,5 @@
 import { Modal } from "../../../components/modal";
+import { ScrollBar } from "../../../components/scroll-bar";
 import { HistoryStateManager } from "../../../device/history.manager";
 import { Place } from "../../../stores/maps.store";
 import { MapsController } from "../maps.controller";
@@ -9,6 +10,7 @@ export interface Schedule {
 }
 
 export class PlacePage extends Modal {
+    private scrollBar?: ScrollBar;
     private place: google.maps.places.PlaceResult | undefined;
     private isSaved: boolean = false;
     private isFavourite: boolean = false;
@@ -133,6 +135,14 @@ export class PlacePage extends Modal {
 
         scrollArea.appendChild(contantArea);
         this.mainArea.appendChild(scrollArea);
+
+        setTimeout(() => {
+            if (!this.scrollBar) {
+                this.scrollBar = new ScrollBar(this.component);
+            } else {
+                this.scrollBar?.reCalculate();
+            }
+        }, 100)
     }
 
     update(_: string, data: google.maps.places.PlaceResult | null, place?: Place | null) {

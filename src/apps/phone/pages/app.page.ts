@@ -1,4 +1,5 @@
 import { App } from "../../../components/app";
+import { ScrollBar } from "../../../components/scroll-bar";
 import { PhoneController } from "../../../controllers/phone.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
@@ -15,6 +16,8 @@ export interface PhoneAppData {
 type HistoryWithBlock = History & { isBlocked: boolean; };
 
 export class PhoneApp extends App {
+    private scrollBar: ScrollBar;
+
     constructor(
         history: HistoryStateManager,
         private device: DeviceController,
@@ -28,6 +31,8 @@ export class PhoneApp extends App {
             histories: this.phone.histories,
             blockeds: this.phone.blockeds,
         });
+
+        this.scrollBar = new ScrollBar(this.component);
     }
 
     private init() {
@@ -82,6 +87,7 @@ export class PhoneApp extends App {
         });
         scrollArea.appendChild(noteList);
         this.mainArea.appendChild(scrollArea);
+        this.scrollBar?.reCalculate();
     }
 
     update(_: string, data: PhoneAppData) {

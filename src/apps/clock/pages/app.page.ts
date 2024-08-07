@@ -1,4 +1,5 @@
 import { App } from "../../../components/app";
+import { ScrollBar } from "../../../components/scroll-bar";
 import { ClockController } from "../../../controllers/clock.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
@@ -11,6 +12,7 @@ export class ClockApp extends App {
     private minuteHand: HTMLElement;
     private secondHand: HTMLElement;
     private alarmList: HTMLElement;
+    private scrollBar?: ScrollBar;
 
     constructor(
         history: HistoryStateManager,
@@ -118,6 +120,11 @@ export class ClockApp extends App {
             }, toggleBtn)
 
             this.alarmList.appendChild(alarmItem);
+        }
+        if (!this.scrollBar) {
+            this.scrollBar = new ScrollBar(this.component);
+        } else {
+            this.scrollBar?.reCalculate();
         }
         // const addAlarm = this.createElement("button", ['addAlarm']);
         // addAlarm.innerHTML = `<span class="material-symbols-outlined icon">alarm_add</span> Add Alarm`;

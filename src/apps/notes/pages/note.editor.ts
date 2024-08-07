@@ -1,6 +1,7 @@
 import { EnTextKeyboard } from "../../../components/keyboard";
 import { anotherNoteSentences, noteSentences, noteTitles } from "../../../components/keyboard/consts";
 import { Modal } from "../../../components/modal";
+import { ScrollBar } from "../../../components/scroll-bar";
 import { SelectItem } from "../../../components/select";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
@@ -11,6 +12,7 @@ export class NoteEditorPage extends Modal {
     private keyboard: EnTextKeyboard;
     private note: Note | undefined;
     private keysArea: HTMLElement;
+    private scrollBar: ScrollBar;
 
     constructor(
         history: HistoryStateManager,
@@ -24,6 +26,7 @@ export class NoteEditorPage extends Modal {
         this.keyboard = new EnTextKeyboard(this.keysArea);
 
         this.init();
+        this.scrollBar = new ScrollBar(this.component);
     }
 
     private init() {
@@ -72,6 +75,7 @@ export class NoteEditorPage extends Modal {
         }
         this.renderInitData();
         this.keyEventListeners();
+        this.scrollBar.reCalculate();
     }
 
     update() {}
@@ -156,6 +160,7 @@ export class NoteEditorPage extends Modal {
                     this.handleKeyText(text);
                     break;
             }
+            this.scrollBar.reCalculate();
         });
     }
 

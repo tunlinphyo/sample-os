@@ -1,4 +1,5 @@
 import { Page } from "../../../components/page";
+import { ScrollBar } from "../../../components/scroll-bar";
 import { SelectItem } from "../../../components/select";
 import { PhoneController } from "../../../controllers/phone.controller";
 import { DeviceController } from "../../../device/device";
@@ -9,8 +10,9 @@ import { ContactWithBlock } from "../../../stores/contact.store";
 
 
 export class ContactPage extends Page {
-    private contact: ContactWithBlock | undefined;
+    private contact?: ContactWithBlock;
     private phoneService: PhoneService;
+    private scrollBar?: ScrollBar;
 
     constructor(
         history: HistoryStateManager,
@@ -118,6 +120,12 @@ export class ContactPage extends Page {
         scrollArea.appendChild(contactCard);
         scrollArea.appendChild(selectList);
         this.mainArea.appendChild(scrollArea);
+
+        if (!this.scrollBar) {
+            this.scrollBar = new ScrollBar(this.component);
+        } else {
+            this.scrollBar?.reCalculate();
+        }
     }
 
     update(operation: string, data: ContactWithBlock) {

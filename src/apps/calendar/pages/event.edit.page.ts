@@ -2,6 +2,7 @@ import { FormComponent } from "../../../components/form";
 import { CustomDateTimeForm, CustomInputForm, CustomSelectForm, CustomToggleForm } from "../../../components/form/form-elem";
 import { calendarEventDescriptions, calendarEvents } from "../../../components/keyboard/consts";
 import { Modal } from "../../../components/modal";
+import { ScrollBar } from "../../../components/scroll-bar";
 import { SelectItem } from "../../../components/select";
 import { CalendarController } from "../../../controllers/calendar.controller";
 import { DeviceController } from "../../../device/device";
@@ -10,7 +11,8 @@ import { CalendarEvent, EndRepeatType, RepeatType } from "../../../stores/event.
 import { OSDate } from "../../../utils/date";
 
 class EventForm extends FormComponent {
-    private event: CalendarEvent | undefined;
+    private event?: CalendarEvent;
+    private scrollBar?: ScrollBar;
 
     private frequency: SelectItem[] = [
         {
@@ -54,7 +56,7 @@ class EventForm extends FormComponent {
     private endRepeat: CustomSelectForm | undefined;
     private endDate: CustomDateTimeForm | undefined;
 
-    constructor(device: DeviceController, parent: HTMLElement) {
+    constructor(device: DeviceController, parent: HTMLElement, private parentComponent: HTMLElement) {
         super(device, 'eventForm', parent)
         this.init()
     }
@@ -152,6 +154,7 @@ class EventForm extends FormComponent {
         this.allDay.addEventListener<boolean>('change', (data) => {
             this.startTime?.toggleTime(!data)
             this.endTime?.toggle(!data)
+            this.scrollBar?.reCalculate();
         })
         this.startTime.addEventListener<Date>('change', (data) => {
             this.endTime!.value = OSDate.addHour(data)
@@ -159,11 +162,19 @@ class EventForm extends FormComponent {
         this.repeat.addEventListener<RepeatType>('change', (data) => {
             repeat = data
             renderRepeat(data, endRepeat)
+            this.scrollBar?.reCalculate();
         })
         this.endRepeat.addEventListener<EndRepeatType>('change', (data) => {
             endRepeat = data
             renderRepeat(repeat, data)
-        })
+            this.scrollBar?.reCalculate();
+        });
+
+        if (!this.scrollBar) {
+            this.scrollBar = new ScrollBar(this.parentComponent);
+        } else {
+            this.scrollBar.reCalculate();
+        }
     }
 
     getData(): CalendarEvent[] {
@@ -275,9 +286,9 @@ export class EventEditPage extends Modal {
     }
 
     render(data: CalendarEvent | Date) {
-        this.form = new EventForm(this.device, this.mainArea)
+        this.form = new EventForm(this.device, this.mainArea, this.component)
         if (data instanceof Date) this.form.render(undefined, data)
-        else this.form.render(data)
+        else this.form.render(data);
     }
 
     update() {}

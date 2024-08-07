@@ -95,6 +95,10 @@
         list-style: none;
         --toggle: calc(var(--grid)* 1.7);
 
+        &.storageList {
+            padding: 8px var(--padding) var(--half);
+        }
+
         .appItem {
             display: flex;
             justify-content: space-between;
@@ -306,7 +310,7 @@
     }
 
     .groupContiner {
-        padding: var(--half);
+        padding: var(--half) var(--padding);
 
         .displayContainer {
             border: 2px solid var(--black);
@@ -334,8 +338,13 @@
         }
 
         &.labelPadding {
-            padding: var(--half);
+            padding: var(--half) var(--padding);
             margin-bottom: -20px;
+        }
+
+        &.padding {
+            padding: var(--half) var(--padding) 0;
+            margin-bottom: -5px;
         }
     }
 

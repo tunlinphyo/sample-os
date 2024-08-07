@@ -1,3 +1,4 @@
+import { ScrollBar } from "../../../components/scroll-bar";
 import { BaseController } from "../../../controllers/base.controller";
 import { DeviceController } from "../../../device/device";
 import { CalendarEvent } from "../../../stores/event.store";
@@ -430,8 +431,8 @@ export class EventsService extends BaseController {
                 this.nextDateEl.scrollTo(0, this.scrollY);
                 // this.nextDateEl.scrollTop = this.scrollY;
             }
-        })
-
+        });
+        new ScrollBar(this.component);
         return scrollArea;
     }
 

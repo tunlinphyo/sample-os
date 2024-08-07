@@ -1,4 +1,5 @@
 import { Page } from "../../../components/page";
+import { ScrollBar } from "../../../components/scroll-bar";
 import { SettingsController } from "../../../controllers/settings.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
@@ -12,8 +13,10 @@ interface SortData {
 }
 
 export class ApplicationsPage extends Page {
+    private scrollBar?: ScrollBar;
     private appList: HTMLUListElement | undefined;
     private item: Setting | undefined;
+
     constructor(
         history: HistoryStateManager,
         private device: DeviceController,
@@ -51,6 +54,10 @@ export class ApplicationsPage extends Page {
     render(item: Setting) {
         this.item = item;
         const scrollArea = this.createScrollArea();
+
+        const labelEl = this.createElement('div', ['formLabel', 'padding']);
+        labelEl.textContent = 'Home Applications';
+        scrollArea.appendChild(labelEl);
 
         this.appList = this.createElement<HTMLUListElement>('ul', ['appList'], { id: 'sortable-list' });
         for(const app of this.orderApps(item.data)) {
@@ -92,6 +99,12 @@ export class ApplicationsPage extends Page {
 
         scrollArea.appendChild(this.appList);
         this.mainArea.appendChild(scrollArea);
+
+        if (!this.scrollBar) {
+            this.scrollBar = new ScrollBar(this.component);
+        } else {
+            this.scrollBar?.reCalculate();
+        }
 
         new SortableList('sortable-list');
     }

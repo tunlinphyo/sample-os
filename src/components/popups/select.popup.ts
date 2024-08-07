@@ -1,4 +1,5 @@
 import { Popup } from "../popup";
+import { ScrollBar } from "../scroll-bar";
 
 export interface SelectItem {
     title: string;
@@ -7,7 +8,8 @@ export interface SelectItem {
 }
 
 export class SelectPopup extends Popup {
-    public selectList: HTMLElement | undefined;
+    public selectList?: HTMLElement;
+    private scrollBar?: ScrollBar;
 
     constructor(iframeEl: HTMLIFrameElement) {
         super(iframeEl, { btnEnd: false }, 'actionTemplate');
@@ -31,6 +33,7 @@ export class SelectPopup extends Popup {
 
                 this.selectList?.appendChild(selectItem)
             });
+            this.scrollBar?.reCalculate();
         });
     }
 
@@ -42,6 +45,7 @@ export class SelectPopup extends Popup {
         scrollArea.appendChild(selectList)
         mainArea.appendChild(scrollArea)
 
+        this.scrollBar = new ScrollBar(this.component);
         return selectList
     }
 }

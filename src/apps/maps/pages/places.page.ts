@@ -1,9 +1,12 @@
 import { Modal } from "../../../components/modal";
+import { ScrollBar } from "../../../components/scroll-bar";
 import { HistoryStateManager } from "../../../device/history.manager";
 import { Place } from "../../../stores/maps.store";
 import { MapsController } from "../maps.controller";
 
 export class PlacesPage extends Modal {
+    private scrollBar?: ScrollBar;
+
     constructor(
         history: HistoryStateManager,
         private maps: MapsController
@@ -34,6 +37,11 @@ export class PlacesPage extends Modal {
         }
 
         this.mainArea.appendChild(placeList);
+        if (!this.scrollBar) {
+            this.scrollBar = new ScrollBar(this.component);
+        } else {
+            this.scrollBar?.reCalculate();
+        }
     }
 
     update(_: string, data: Place[]) {

@@ -2,19 +2,21 @@ import { FormComponent } from "../../../components/form";
 import { CustomInputForm, CustomPhoneForm } from "../../../components/form/form-elem";
 import { emailAddresses, englishNames } from "../../../components/keyboard/consts";
 import { Modal } from "../../../components/modal";
+import { ScrollBar } from "../../../components/scroll-bar";
 import { PhoneController } from "../../../controllers/phone.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
 import { Contact } from "../../../stores/contact.store";
 
 class ContactForm extends FormComponent {
-    private contact: Contact | undefined;
-    private firstName: CustomInputForm | undefined;
-    private lastName: CustomInputForm | undefined;
-    private email: CustomInputForm | undefined;
-    private phone: CustomPhoneForm | undefined;
+    private contact?: Contact;
+    private firstName?: CustomInputForm;
+    private lastName?: CustomInputForm;
+    private email?: CustomInputForm;
+    private phone?: CustomPhoneForm;
+    private scrollBar?: ScrollBar;
 
-    constructor(device: DeviceController, parent: HTMLElement) {
+    constructor(device: DeviceController, parent: HTMLElement, private parentComponent: HTMLElement) {
         super(device, 'contactForm', parent);
         this.init();
     }
@@ -59,6 +61,16 @@ class ContactForm extends FormComponent {
             defaultValue: this.contact.email || '',
             keys: emailAddresses
         });
+
+        this.phone.addEventListener('change', () => {
+            this.scrollBar?.reCalculate();
+        })
+
+        if (!this.scrollBar) {
+            this.scrollBar = new ScrollBar(this.parentComponent);
+        } else {
+            this.scrollBar.reCalculate();
+        }
     }
 
     getData() {
@@ -82,7 +94,7 @@ class ContactForm extends FormComponent {
 }
 
 export class ContactEditPage extends Modal {
-    private form: ContactForm | undefined;
+    private form?: ContactForm;
 
     constructor(
         history: HistoryStateManager,
@@ -126,7 +138,7 @@ export class ContactEditPage extends Modal {
     }
 
     render(data: Contact) {
-        this.form = new ContactForm(this.device, this.mainArea);
+        this.form = new ContactForm(this.device, this.mainArea, this.component);
         this.form.render(data);
     }
 

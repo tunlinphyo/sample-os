@@ -1,6 +1,6 @@
 :root {
     --grid: 34px;
-    --padding: calc(var(--grid) * 0.65);
+    --padding: calc(var(--grid) * 0.5);
     --half: calc(var(--grid) * 0.5);
     --button: calc(var(--grid) * 2);
     --zero-bit: rgb(55, 54, 44);

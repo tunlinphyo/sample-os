@@ -1,4 +1,5 @@
 import { Page } from "../../../components/page";
+import { ScrollBar } from "../../../components/scroll-bar";
 import { PhoneController } from "../../../controllers/phone.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
@@ -6,6 +7,8 @@ import { ContactWithBlock } from "../../../stores/contact.store";
 
 
 export class ContactsPage extends Page {
+    private scrollBar?: ScrollBar;
+
     constructor(
         history: HistoryStateManager,
         private device: DeviceController,
@@ -61,6 +64,12 @@ export class ContactsPage extends Page {
         });
         scrollArea.appendChild(noteList);
         this.mainArea.appendChild(scrollArea);
+
+        if (!this.scrollBar) {
+            this.scrollBar = new ScrollBar(this.component);
+        } else {
+            this.scrollBar?.reCalculate();
+        }
     }
 
     update(_: string, data: ContactWithBlock[]) {

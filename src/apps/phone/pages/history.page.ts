@@ -1,6 +1,7 @@
 import { PhoneLabelHandler } from "../../../components/form/form-elem";
 import { Keyboard } from "../../../components/keyboard";
 import { Page } from "../../../components/page";
+import { ScrollBar } from "../../../components/scroll-bar";
 import { SelectItem } from "../../../components/select";
 import { PhoneController } from "../../../controllers/phone.controller";
 import { DeviceController } from "../../../device/device";
@@ -12,8 +13,9 @@ import { OSDate } from "../../../utils/date";
 import { OSObject } from "../../../utils/object";
 
 export class HistoryPage extends Page {
-    private chatHistory: History | undefined;
+    private chatHistory?: History;
     private phoneService: PhoneService;
+    private scrollBar?: ScrollBar;
 
     constructor(
         history: HistoryStateManager,
@@ -121,6 +123,11 @@ export class HistoryPage extends Page {
         scrollArea.appendChild(chatHistoryList);
         this.mainArea.appendChild(scrollArea);
 
+        if (!this.scrollBar) {
+            this.scrollBar = new ScrollBar(this.component, true);
+        } else {
+            this.scrollBar?.reCalculate();
+        }
 
         const isBlock = this.phone.isBlock(this.number);
         this.toggleActions(isBlock);

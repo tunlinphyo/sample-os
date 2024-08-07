@@ -1,4 +1,5 @@
 import { Page } from "../../../components/page";
+import { ScrollBar } from "../../../components/scroll-bar";
 import { ClockController } from "../../../controllers/clock.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
@@ -12,6 +13,7 @@ interface TimerTask {
 
 export class TimerPage extends Page {
     private timerData?: TimerData;
+    private scrollBar?: ScrollBar;
 
     private clockRing?: HTMLElement;
     private timeDisplay?: HTMLElement;
@@ -101,6 +103,11 @@ export class TimerPage extends Page {
 
         ring.appendChild(this.timeDisplay);
         this.renderTimerList();
+        if (!this.scrollBar) {
+            this.scrollBar = new ScrollBar(this.component);
+        } else {
+            this.scrollBar?.reCalculate();
+        }
     }
 
     update(_: string, remainingTime: number, duration: number) {

@@ -1,5 +1,6 @@
 import { Keyboard } from "../../../components/keyboard";
 import { Modal } from "../../../components/modal";
+import { ScrollBar } from "../../../components/scroll-bar";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
 import { MapsController } from "../maps.controller";
@@ -10,6 +11,7 @@ export interface ExploreData {
 }
 
 export class ExplorePage extends Modal {
+    private scrollBar?: ScrollBar;
     private searchData: string = '';
     private places: google.maps.places.AutocompletePrediction[] = [];
 
@@ -89,6 +91,14 @@ export class ExplorePage extends Modal {
         scrollArea.appendChild(placeList);
 
         this.mainArea.appendChild(scrollArea);
+
+        setTimeout(() => {
+            if (!this.scrollBar) {
+                this.scrollBar = new ScrollBar(this.component);
+            } else {
+                this.scrollBar?.reCalculate();
+            }
+        }, 100)
     }
 
     update(_: string, data: ExploreData) {

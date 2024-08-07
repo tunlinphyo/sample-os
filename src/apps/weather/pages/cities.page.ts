@@ -1,4 +1,5 @@
 import { Page } from "../../../components/page";
+import { ScrollBar } from "../../../components/scroll-bar";
 import { SelectItem } from "../../../components/select";
 import { WeatherController } from "../../../controllers/weather.controller";
 import { DeviceController } from "../../../device/device";
@@ -7,6 +8,8 @@ import { MY_LOCATION_ID, Weather } from "../../../stores/weather.store";
 import { CITIES, LocationData } from "../../../utils/cities";
 
 export class CitiesPage extends Page {
+    private scrollBar?: ScrollBar;
+
     private cityList: SelectItem[] = CITIES.map(item => ({ title: item.city, value: item.timeZone })).sort((a, b) => {
         return a.title.localeCompare(b.title);
     });
@@ -60,6 +63,11 @@ export class CitiesPage extends Page {
 
         scrollArea.appendChild(cityList);
         this.mainArea.appendChild(scrollArea);
+        if (!this.scrollBar) {
+            this.scrollBar = new ScrollBar(this.component);
+        } else {
+            this.scrollBar?.reCalculate();
+        }
     }
 
     update(_: string, list: Weather[]) {

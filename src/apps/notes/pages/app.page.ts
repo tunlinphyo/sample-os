@@ -1,4 +1,5 @@
 import { App } from "../../../components/app";
+import { ScrollBar } from "../../../components/scroll-bar";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
 import { Note } from "../../../stores/notes.store";
@@ -7,6 +8,8 @@ import { NotesController } from "../notes.controller";
 
 
 export class NotesApp extends App {
+    private scrollBar?: ScrollBar;
+
     constructor(
         history: HistoryStateManager,
         private device: DeviceController,
@@ -49,6 +52,11 @@ export class NotesApp extends App {
         }
         scrollArea.appendChild(noteList);
         this.mainArea.appendChild(scrollArea);
+        if (!this.scrollBar) {
+            this.scrollBar = new ScrollBar(this.component);
+        } else {
+            this.scrollBar?.reCalculate();
+        }
     }
 
     update(_: string, data: Note[]) {

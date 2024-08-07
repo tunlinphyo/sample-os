@@ -739,7 +739,12 @@ body {
                 overflow-y: auto;
 
                 scrollbar-color: var(--black) var(--white);
-                scrollbar-width: thin;
+                scrollbar-width: none;
+                -webkit-overflow-scrolling: touch; /* Enables momentum scrolling on iOS */
+                -ms-overflow-style: none;
+                &::-webkit-scrollbar {
+                    display: none; /* Safari and Chrome */
+                }
 
                 >* {
                     padding-block: calc(var(--grid) * 3);
@@ -838,7 +843,12 @@ body {
                 overflow-y: auto;
 
                 scrollbar-color: var(--black) var(--white);
-                scrollbar-width: thin;
+                scrollbar-width: none;
+                -webkit-overflow-scrolling: touch; /* Enables momentum scrolling on iOS */
+                -ms-overflow-style: none;
+                &::-webkit-scrollbar {
+                    display: none; /* Safari and Chrome */
+                }
 
                 >* {
                     padding-block: 0 calc(var(--grid) * 2.5);
@@ -1034,7 +1044,12 @@ body {
                 overflow-y: auto;
 
                 scrollbar-color: var(--black) var(--white);
-                scrollbar-width: thin;
+                scrollbar-width: none;
+                -webkit-overflow-scrolling: touch; /* Enables momentum scrolling on iOS */
+                -ms-overflow-style: none;
+                &::-webkit-scrollbar {
+                    display: none; /* Safari and Chrome */
+                }
 
                 transition: height .3s ease;
 
@@ -1247,6 +1262,10 @@ body {
                             gap: calc(var(--grid) * 0.5);
                             border-bottom: 2px solid var(--black);
                             padding: 3px 8px;
+
+                            &:last-child {
+                                border-bottom: none;
+                            }
                         }
 
                         .removeButton {
@@ -1603,7 +1622,7 @@ body {
                 height: calc(var(--grid) * 7.8);
                 display: grid;
                 grid-template-columns: repeat(7, 1fr);
-                padding-inline: calc(var(--grid) * 0.5);
+                padding-inline: calc(var(--grid) * 0.3);
 
                 &.title {
                     height: calc(var(--grid) * 1.3);
@@ -1839,12 +1858,10 @@ body {
                         scroll-snap-type: y mandatory;
                         scrollbar-color: var(--white) var(--white);
                         scrollbar-width: none;
-
-                        -webkit-overflow-scrolling: touch;
-                        overflow: scroll;
-
+                        -webkit-overflow-scrolling: touch; /* Enables momentum scrolling on iOS */
+                        -ms-overflow-style: none;
                         &::-webkit-scrollbar {
-                            display: none;
+                            display: none; /* Safari and Chrome */
                         }
 
                         .number {
@@ -2081,7 +2098,12 @@ body {
 
             overflow-y: auto;
             scrollbar-color: var(--black) var(--white);
-            scrollbar-width: thin;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch; /* Enables momentum scrolling on iOS */
+            -ms-overflow-style: none;
+            &::-webkit-scrollbar {
+                display: none; /* Safari and Chrome */
+            }
 
             .textInput {
                 width: 100%;
@@ -2399,6 +2421,39 @@ body {
                     }
                 }
             }
+        }
+    }
+
+    .scrollBarContainer {
+        position: absolute;
+        z-index: 1;
+        top: calc(var(--grid) * 3.5);
+        right: 8px;
+
+        width: 10px;
+        border-radius: 5px;
+        height: calc(var(--grid) * 3.5);
+        background-color: var(--white);
+        outline: 2px solid var(--black);
+        /* outline-offset: 2px; */
+        overflow: hidden;
+        translate: 20px 0;
+        transition: translate .4s ease;
+        transform: translateZ(0);
+
+        &.show {
+            translate: 0 0;
+        }
+
+        .scrollBar {
+            width: 100%;
+            height: 20%;
+            border-radius: 4px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: var(--black);
+            transition: translate .01s ease;
         }
     }
 }

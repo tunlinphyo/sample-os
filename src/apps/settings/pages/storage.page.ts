@@ -1,4 +1,5 @@
 import { Page } from "../../../components/page";
+import { ScrollBar } from "../../../components/scroll-bar";
 import { SettingsController } from "../../../controllers/settings.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
@@ -6,6 +7,7 @@ import { Setting, StoreInfo } from "../../../stores/settings.store";
 import { IndexedDBUsage } from "../helpers/db-usage";
 
 export class StoragePage extends Page {
+    private scrollBar?: ScrollBar;
     private storage: IndexedDBUsage;
     private item: Setting | undefined;
 
@@ -61,6 +63,14 @@ export class StoragePage extends Page {
         this.renderApps(data.data || [], scrollArea);
 
         this.mainArea.appendChild(scrollArea);
+
+        setTimeout(() => {
+            if (!this.scrollBar) {
+                this.scrollBar = new ScrollBar(this.component);
+            } else {
+                this.scrollBar?.reCalculate();
+            }
+        }, 100)
     }
 
     update() {
@@ -78,7 +88,7 @@ export class StoragePage extends Page {
     // }
 
     private async renderApps(list: StoreInfo[], parentEl: HTMLElement) {
-        const listEl = this.createElement('ul', ['appList']);
+        const listEl = this.createElement('ul', ['appList', 'storageList']);
         for (const item of list) {
             const itemEl = this.createElement('li', ['appItem']);
             const labelEl = this.createElement('div', ['appName']);

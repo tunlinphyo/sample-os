@@ -1,4 +1,5 @@
 import { Page } from "../../../components/page";
+import { ScrollBar } from "../../../components/scroll-bar";
 import { CalendarController } from "../../../controllers/calendar.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
@@ -8,6 +9,7 @@ import { OSDate } from "../../../utils/date";
 
 export class EventPage extends Page {
     private event: CalendarEvent | undefined;
+    private scrollBar?: ScrollBar;
 
     constructor(
         history: HistoryStateManager,
@@ -95,6 +97,11 @@ export class EventPage extends Page {
 
         scrollArea.appendChild(contantArea)
         this.mainArea.appendChild(scrollArea)
+        if (!this.scrollBar) {
+            this.scrollBar = new ScrollBar(this.component);
+        } else {
+            this.scrollBar?.reCalculate();
+        }
     }
 
     update(operation: string, data: CalendarEvent, eventDay: Date) {

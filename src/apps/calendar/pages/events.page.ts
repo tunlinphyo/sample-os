@@ -22,9 +22,9 @@ export class EventsPage extends Modal {
         this.mainArea.classList.add('swipable');
 
         this.eventsService = new EventsService(
-            this.device, 
-            this.mainArea, 
-            (date) => this.calendar.getEvents(date), 
+            this.device,
+            this.mainArea,
+            (date) => this.calendar.getEvents(date),
             (date: Date) => {
                 this.history.updateState('/events', date);
                 this.calendar.eventDay = date;

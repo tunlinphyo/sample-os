@@ -69,18 +69,17 @@
         }
 
         .contantArea {
-            --margin: calc(var(--grid) * 0.5);
-            padding: var(--margin) var(--padding);
+            padding: var(--half) var(--padding);
 
             .openingStatus {
-                margin-block: var(--margin);
+                margin-block: var(--half);
             }
 
             .selectItem {
                 width: 100%;
                 height: var(--grid);
                 font-size: 18px;
-                margin-block: var(--margin);
+                margin-block: var(--half);
                 text-align: left;
                 display: flex;
                 justify-content: flex-start;
@@ -92,16 +91,17 @@
             }
 
             .dayTime {
-                margin-top: var(--margin);
+                margin-top: var(--half);
 
                 display: grid;
                 grid-template-columns: calc(var(--grid) * 3) 1fr;
                 font-size: 16px;
 
                 .day {
-                    text-transform: uppercase;
-                    font-family: var(--number-fonts);
-                    font-weight: 600;
+                    text-transform: capitalize;
+                    font-size: 18px;
+                    /* font-family: var(--number-fonts);
+                    font-weight: 600; */
                 }
             }
         }

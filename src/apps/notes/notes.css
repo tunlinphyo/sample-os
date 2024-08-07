@@ -154,7 +154,14 @@
 
                 overflow-y: auto;
                 scrollbar-color: var(--black) var(--white);
-                scrollbar-width: thin;
+
+                scrollbar-width: none;
+                -webkit-overflow-scrolling: touch; /* Enables momentum scrolling on iOS */
+                -ms-overflow-style: none;
+                &::-webkit-scrollbar {
+                    display: none; /* Safari and Chrome */
+                }
+
                 padding: calc(var(--grid) * 0.5);
 
                 .section {

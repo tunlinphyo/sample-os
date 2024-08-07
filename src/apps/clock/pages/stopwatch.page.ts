@@ -1,4 +1,5 @@
 import { Page } from "../../../components/page";
+import { ScrollBar } from "../../../components/scroll-bar";
 import { ClockController } from "../../../controllers/clock.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
@@ -11,16 +12,18 @@ interface ClockFormat {
 }
 
 export class StopwatchPage extends Page {
-    private id: string | undefined;
+    private id?: string;
     private startTime: number | null = null;
     private stopTime: number | null = null;
     private running: boolean = false;
     private laps: number[] = [];
     private timerInterval: number | null = null;
 
-    private hourHand: HTMLElement | undefined;
-    private minuteHand: HTMLElement | undefined;
-    private secondHand: HTMLElement | undefined;
+    private hourHand?: HTMLElement;
+    private minuteHand?: HTMLElement;
+    private secondHand?: HTMLElement;
+
+    private scrollBar?: ScrollBar;
 
     constructor(
         history: HistoryStateManager,
@@ -130,6 +133,12 @@ export class StopwatchPage extends Page {
 
         this.writeCurrentTimeToHtml('currentTime');
         this.renderLap();
+
+        if (!this.scrollBar) {
+            this.scrollBar = new ScrollBar(this.component);
+        } else {
+            this.scrollBar?.reCalculate();
+        }
     }
 
     renderLap() {
@@ -142,7 +151,7 @@ export class StopwatchPage extends Page {
         } else {
             timeLaps.classList.remove('bordered');
         }
-        
+
         for(const lap of laps) {
             const {hours, minutes, seconds, milliseconds} = this.getTimes(lap.time);
             const timelLap = this.createElement('div', ['timeLap'])
@@ -150,6 +159,7 @@ export class StopwatchPage extends Page {
 
             timeLaps.appendChild(timelLap);
         }
+        this.scrollBar?.reCalculate();
     }
 
     update() {

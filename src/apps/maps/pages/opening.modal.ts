@@ -1,9 +1,12 @@
 import { Modal } from "../../../components/modal";
+import { ScrollBar } from "../../../components/scroll-bar";
 import { HistoryStateManager } from "../../../device/history.manager";
 import { convertToAbbreviatedDay } from "../services/map.styles";
 import { Schedule } from "./place.page";
 
 export class OpeningHours extends Modal {
+    private scrollBar?: ScrollBar;
+
     constructor(
         history: HistoryStateManager
     ) {
@@ -25,6 +28,14 @@ export class OpeningHours extends Modal {
 
         scrollArea.appendChild(contantArea);
         this.mainArea.appendChild(scrollArea);
+
+        setTimeout(() => {
+            if (!this.scrollBar) {
+                this.scrollBar = new ScrollBar(this.component);
+            } else {
+                this.scrollBar?.reCalculate();
+            }
+        }, 100);
     }
 
     update() {}

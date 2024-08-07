@@ -1,4 +1,5 @@
 import { App } from "../../../components/app"
+import { ScrollBar } from "../../../components/scroll-bar";
 import { HistoryStateManager } from "../../../device/history.manager";
 import { Book } from "../../../stores/books.store";
 import { BooksController } from "../books.controller";
@@ -62,6 +63,7 @@ export class BooksApp extends App {
         }
         scrollArea.appendChild(bookList);
         this.mainArea.appendChild(scrollArea);
+        new ScrollBar(this.component);
     }
 
     update(_: string, books: Book[]) {

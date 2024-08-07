@@ -1,11 +1,13 @@
 import { Page } from "../../../components/page";
+import { ScrollBar } from "../../../components/scroll-bar";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
 import { Note, NoteData } from "../../../stores/notes.store";
 import { NotesController } from "../notes.controller";
 
 export class NotePage extends Page {
-    private note: Note | undefined;
+    private note?: Note;
+    private scrollBar: ScrollBar;
 
     constructor(
         history: HistoryStateManager,
@@ -15,6 +17,7 @@ export class NotePage extends Page {
         super(history, { template: 'scrollTemplate', btnStart: 'delete', btnEnd: 'edit' });
         this.component.classList.add('notePage');
         this.init();
+        this.scrollBar = new ScrollBar(this.component);
     }
 
     private init() {
@@ -57,9 +60,8 @@ export class NotePage extends Page {
                 this.renderTextNote(noteArea, item);
             }
             this.mainArea.appendChild(noteArea);
-        } else {
-            // render AudioNote
         }
+        this.scrollBar.reCalculate();
     }
 
     update(_: string, data: Note) {

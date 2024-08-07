@@ -19,4 +19,8 @@ export class OSNumber {
         const mappedValue = range1 + (proportion * (range2 - range1));
         return mappedValue;
     }
+
+    public static getPercentage(value: number, total: number) {
+        return Math.min(value / total * 100, 100);
+    }
 }
