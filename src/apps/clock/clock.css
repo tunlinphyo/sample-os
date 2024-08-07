@@ -8,11 +8,6 @@
             z-index: 0;
             top: 0;
         }
-        .mainArea {
-            .scrollArea {
-                overscroll-behavior: none;
-            }
-        }
 
         .alarmList,
         .timeLaps,
@@ -48,7 +43,7 @@
             .scrollArea {
                 height: calc(var(--grid) * 12);
                 padding-bottom: 0;
-                overscroll-behavior: none;
+                /* overscroll-behavior: none; */
             }
         }
         .alarmList {

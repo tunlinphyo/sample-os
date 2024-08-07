@@ -20,7 +20,10 @@ export class OSNumber {
         return mappedValue;
     }
 
-    public static getPercentage(value: number, total: number) {
-        return Math.min(value / total * 100, 100);
+    public static getPercentage(value: number, total: number, limit: boolean = true) {
+        if (limit) {
+            return Math.max(Math.min(value / total * 100, 100), 0);
+        }
+        return value / total * 100;
     }
 }

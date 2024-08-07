@@ -72,7 +72,7 @@ export class ScrollBar {
 
     private calcScroll(scrollTop: number) {
         const maxScroll = Math.abs(this.parentHeight - this.childHeight);
-        const scrollPercentage = OSNumber.getPercentage(scrollTop, maxScroll);
+        const scrollPercentage = OSNumber.getPercentage(scrollTop, maxScroll, false);
         this.updateScrollbar(scrollPercentage);
     }
 
