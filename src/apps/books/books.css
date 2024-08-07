@@ -277,6 +277,9 @@
             bottom: var(--grid);
             transition: translate .4s ease;
 
+            &.center {
+                translate: calc(var(--grid) * 3.75) 0;
+            }
             &.end {
                 translate: 0 calc(var(--grid) * -1.75);
             }
@@ -316,6 +319,9 @@
             .actionButton {
                 bottom: var(--grid);
                 translate: 0 0;
+                &.center {
+                    translate: calc(var(--grid) * 3.75) 0;
+                }
             }
         }
     }
