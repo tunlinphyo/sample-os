@@ -61,13 +61,12 @@ export class BookService {
         return this.book.bookmarks.includes(this._page);
     }
 
-    get theme(): DeviceTheme | null {
-        return this.book?.theme || null;
+    get theme(): DeviceTheme {
+        return this.book?.theme || 'auto';
     }
     set theme(theme: DeviceTheme) {
         if (this.book) {
             this.book.theme = theme;
-
         }
     }
 

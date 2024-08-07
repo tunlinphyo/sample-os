@@ -67,12 +67,14 @@ export class BookReader extends Modal {
             const selected = await this.device.selectList.openPage<DeviceTheme>('Appearence', list);
             if (selected && typeof selected === 'string') {
                 this.bookService.theme = selected;
-                this.device.tempTheme = selected;
                 if (selected === 'auto') {
+                    this.device.tempTheme = this.device.theme;
                     document.body.dataset.schema = this.device.theme;
                 } else {
+                    this.device.tempTheme = selected;
                     document.body.dataset.schema = selected;
                 }
+                this.updateIcon(this.bookService.theme);
             }
         }, this.bookThemeEl, false);
 
@@ -163,7 +165,11 @@ export class BookReader extends Modal {
 
         this.bookService.init(book);
 
-        if (this.bookService.theme) {
+        this.updateIcon(this.bookService.theme);
+        if (this.bookService.theme === 'auto') {
+            this.device.tempTheme = this.device.theme;
+            document.body.dataset.schema = this.device.theme;
+        } else {
             this.device.tempTheme = this.bookService.theme;
             document.body.dataset.schema = this.bookService.theme;
         }
@@ -176,7 +182,6 @@ export class BookReader extends Modal {
         const parentEl = this.mainArea.parentElement!;
         if (!parentEl) return;
         parentEl.classList.remove('hidden');
-        this.bookThemeEl.classList.add("show");
     }
 
     private hideMenu(toggle: boolean = true) {
@@ -186,7 +191,6 @@ export class BookReader extends Modal {
         const parentEl = this.mainArea.parentElement!;
         if (!parentEl) return;
         parentEl.classList.add('hidden');
-        this.bookThemeEl.classList.remove("show");
     }
 
     private toggleMenu() {
@@ -197,5 +201,15 @@ export class BookReader extends Modal {
         } else {
             this.hideMenu();
         }
+    }
+
+    updateIcon(theme: DeviceTheme) {
+        const icons = {
+            auto: 'contrast',
+            light: 'light_mode',
+            dark: 'dark_mode'
+        }
+        const icon = this.getElement('span', this.bookThemeEl);
+        icon.textContent = icons[theme];
     }
 }

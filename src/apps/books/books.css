@@ -268,7 +268,7 @@
         justify-content: center;
 
         width: calc(var(--grid) * 2.5);
-        right: 0;
+        left: 0;
 
         flex-direction: column;
 

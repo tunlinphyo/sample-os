@@ -1,6 +1,11 @@
 @layer component {
     .eventsPage {
 
+        /* .scrollBarContainer {
+            z-index: 2;
+            top: var(--half);
+        } */
+
         .actionBar {
             height: calc(var(--grid) * 3);
             padding-bottom: var(--grid);
@@ -159,6 +164,10 @@
                 }
             }
         }
+    }
+
+    .title {
+        width: min-content;
     }
 
     .eventPage {
