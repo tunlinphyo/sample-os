@@ -34,13 +34,13 @@
             position: absolute;
             z-index: 9;
             width: 24px;
-            height: 50px;
+            height: 60px;
             background-color: var(--black);
             /* clip-path: polygon(50% 16%, 100% 0, 100% 100%, 0 100%, 0 0); */
             clip-path: polygon(100% 0, 100% 100%, 50% 85%, 0 100%, 0 0);
 
             top: 0;
-            right: var(--padding);
+            left: var(--padding);
             translate: 0 -102%;
             transform: translateZ(0);
             transition: translate .7s ease;
@@ -59,7 +59,7 @@
 
             display: grid;
             grid-template-columns: 1fr;
-            grid-template-rows: calc(var(--grid) * 1.5) 1fr calc(var(--grid) * 1.4);
+            grid-template-rows: calc(var(--grid) * 1.5) 1fr calc(var(--grid) * 0.9);
 
             border-radius: calc(var(--grid) * 1.5);
             background-color: var(--white);
@@ -77,9 +77,12 @@
                 pointer-events: none;
 
                 color: var(--black);
+                padding-top: 3px;
+
+                /* background-color: hotpink; */
 
                 & p {
-                    line-height: 1.6;
+                    line-height: 1.65;
 
                     &.index {
                         text-indent: var(--grid);
@@ -91,7 +94,7 @@
                     height: 100%;
                     display: flex;
                     flex-direction: column;
-                    padding-bottom: 6px;
+                    /* padding-bottom: 12px; */
 
                     > h2 {
                         display: flex;
@@ -143,22 +146,29 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                padding-top: 14px;
-                padding-inline: var(--padding);
+                padding-top: 12px;
+                padding-inline: var(--half);
 
-                /* .bookTitle {
-                    width: var(--grid);
-                    height: var(--half);
-                    border-radius: var(--half);
+                .pageInfo {
+                    display: grid;
+                    grid-template-columns: calc(var(--grid) * 1.8) calc(var(--grid) * 2.2) calc(var(--grid) * 1.8);
+                    justify-content: center;
+                    align-items: center;
                     border: 2px solid var(--black);
-                } */
+                    border-radius: var(--half);
+                    font-size: 14px;
+                    line-height: 1.3;
+                    text-align: center;
+                    /* background-color: var(--black);
+                    color: var(--white); */
 
-                /* &:before {
-                    content: '';
-                    display: block;
-                    width: calc(var(--grid) * 5);
-                    border-top: 2px solid var(--black);
-                } */
+                    .percentage {
+                        padding-inline: 10px 5px;
+                    }
+                    .pageno {
+                        padding-inline: 5px 10px;
+                    }
+                }
             }
 
             .page-footer {
@@ -172,6 +182,7 @@
                     align-items: center;
                     font-size: 16px;
                     gap: 8px;
+                    display: none;
 
                     /* &:before,
                     &:after {
@@ -281,10 +292,10 @@
                 translate: calc(var(--grid) * 3.75) 0;
             }
             &.end {
-                translate: 0 calc(var(--grid) * -1.75);
+                translate: 0 calc(var(--grid) * -3.5);
             }
             &.start {
-                translate: 0 calc(var(--grid) * -3.5);
+                translate: 0 calc(var(--grid) * -1.75);
             }
             &.bookTheme {
                 translate: 0 calc(var(--grid) * -5.25);

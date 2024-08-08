@@ -140,7 +140,7 @@ export class BookReader extends Modal {
                 const moveX = this.currentX - this.startX;
                 if (moveX < 80 && moveX > -80) {
                     if (this.bookService.animating) return;
-                    if (this.startX > 240 && this.startY < 100) {
+                    if (this.startX < 100 && this.startY < 100) {
                         this.bookService.toggleBookmark();
                     } else if (this.startX < 100) {
                         this.bookService.prev();

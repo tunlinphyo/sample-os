@@ -51,7 +51,7 @@ export class CalendarEventStore extends BaseManager<CalendarEvent> {
         this.items.forEach(event => {
             let currentDate = new Date(event.startTime);
             const untilDate = event.until ? new Date(event.until) : null;
-            if (untilDate) untilDate.setDate(untilDate.getDate() + 1);
+            if (untilDate) untilDate.setDate(untilDate.getDate());
 
             while (true) {
                 if (event.endRepeat === 'date' && untilDate && currentDate > untilDate) break;

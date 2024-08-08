@@ -412,6 +412,7 @@ export class EventsService extends BaseController {
         this.updateEventList(scrollArea, date, events);
         this.component.appendChild(scrollArea);
 
+        new ScrollBar(this.component);
         scrollArea.addEventListener('scroll', (event) => {
             if (this.animating || scrollArea.id != this.currDateEl?.id) {
                 event.preventDefault();
@@ -432,7 +433,6 @@ export class EventsService extends BaseController {
                 // this.nextDateEl.scrollTop = this.scrollY;
             }
         });
-        new ScrollBar(this.component);
         return scrollArea;
     }
 

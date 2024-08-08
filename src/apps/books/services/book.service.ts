@@ -70,6 +70,11 @@ export class BookService {
         }
     }
 
+    private getPercentage(page: number) {
+        if (!this.book) return 0;
+        return (page / this.book.totalPages * 100).toFixed(1);
+    }
+
     init(book: Book) {
         this.book = book;
         this.page = book.currantPage;
@@ -265,7 +270,11 @@ export class BookService {
         const topEl = document.createElement("div");
         topEl.classList.add("page-header");
         topEl.innerHTML = `
-            <div class="bookTitle"></div>
+            <div class="pageInfo">
+                <div class="percentage">${this.getPercentage(pageNumber - 1)}%</div>
+                <div class="island"></div>
+                <div class="pageno">No.${pageNumber - 1}</div>
+            </div>
         `;
         pageEl.appendChild(topEl);
 
@@ -287,11 +296,11 @@ export class BookService {
 
         const footerEl = document.createElement("div");
         footerEl.classList.add("page-footer");
-        if (pageNumber > 1) {
-            footerEl.innerHTML = `
-                <div class="pageNumber">${pageNumber - 1}</div>
-            `;
-        }
+        // if (pageNumber > 1) {
+        //     footerEl.innerHTML = `
+        //         <div class="pageNumber">${pageNumber - 1}</div>
+        //     `;
+        // }
 
         pageEl.appendChild(topEl);
         pageEl.appendChild(textEl);
@@ -346,7 +355,7 @@ export class BookService {
                 <p class="index">
                     Aliquam nulla facilisi cras odio eu feugiat pretium nibh. Blandit cursus risus at ultrices. Et netus et malesuada fames ac
                     turpis egestas sed tempus. Suspendisse in est ante in nibh. Felis eget nunc lobortis mattis aliquam faucibu. Sapien nec sagittis
-                    aliquam males uada biben dum arcu vitae aute irure sint
+                    aliquam males uada biben dum arcu vitae aute irure sint nostrud ullamco
                 </p>
             </div>
         `;
@@ -374,7 +383,7 @@ export class BookService {
                 <p class="index">
                     Aliquam nulla facilisi cras odio eu feugiat pretium nibh. Blandit cursus risus at ultrices. Et netus et malesuada fames ac
                     turpis egestas sed tempus. Suspendisse in est ante in nibh. Felis eget nunc lobortis mattis aliquam faucibu. aliquip cras
-                    enim facilisis gravida neque con id
+                    enim facilisis gravida neque con id blandit
                 </p>
             `,
             `
@@ -388,18 +397,19 @@ export class BookService {
                 <p class="index">
                     Risus in hendrerit gravida rutrum quisque non tellus orci. Et malesuada fames ac turpis egestas sed tempus. Sed odio morbi quis
                     commodo odio aenean sed. Eget aliquet nibh praesent tristique magna. neque convallis a adipisc gravida neque convallis a cras
+                    eget dolor morbi non arcu risus quis. Leo vel orci porta non
                 </p>
             `,
             `
                 <p>
                     Sit amet porttitor eget dolor morbi non arcu risus quis. Leo vel orci porta non pulvinar. Pharetra convallis posuere morbi leo
-                    urna molestie at elementum eu. Pellentesque adipiscing commodo elit at imperdiet.
+                    urna molestie at elementum eu. Pellentesque adipiscing commodo elit at imperdiet. Sed donec adipiscing tristique risus nec feugiat in.
                 </p>
                 <p class="index">
                     Est placerat in egestas erat imperdiet sed euismod nisi. Risus ultricies tristique nulla aliquet enim. Faucibus nisl tincidunt
                     eget nullam non nisi est sit. Sed adipiscing diam donec adipiscing tristique risus nec feugiat in. Tincidunt augue interdum velit
                     euismod in. Bibendum enim facilisis gravida neque convallis a cras. Aenean et tortor at risus viverra adipiscing. Magnis dis
-                    part nulla aliquet enim nisl sed euismod
+                    part nulla
                 </p>
             `,
             `
@@ -410,8 +420,8 @@ export class BookService {
                 </p>
                 <p class="index">
                     Sapien nec sagittis aliquam malesuada bibendum arcu vitae elementum curabitur. Aliquam nulla facilisi cras odio eu feugiat
-                    pretium nibh. Blandit cursus risus at ultrices. Et netus et malesuada fames ac
-                    turpis egestas sed tempus. Suspendisse in est ante in nibh. Felis eget nunc lobortis mattis aliquam
+                    pretium nibh. Blandit cursus risus at ultrices. Et netus et malesuada fames ac pharetra massa massa ultricies mi quis sed risus
+                    turpis egestas sed tempus. Suspendisse in est ante int
                 </p>
             `,
             `
@@ -425,7 +435,7 @@ export class BookService {
                 </p>
                 <p class="index">
                     Aliquam purus sit amet luctus venenatis lectus magna fringilla urna. Posuere lorem ipsum dolor sit amet consectetur.
-                    Sapien nec sagittis aliquam malesuada bibendum arcu vitae amet mauris. egestas tellus rutrum tellus morbi
+                    Sapien nec sagittis aliquam malesuada bibendum arcu vitae amet mauris. egestas tellus rutrum tellus morbi auctor elit sed
                 </p>
             `,
             `

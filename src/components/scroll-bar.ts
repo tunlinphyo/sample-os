@@ -15,7 +15,7 @@ export class ScrollBar {
         this.scrollArea = component.querySelector('.scrollArea')!;
         [ this.scrollContainer, this.scrollBar ] = this.init();
         this.eventListener();
-        this.debouncedHandler = debounce(this.hideScrollbar.bind(this), 1000);
+        this.debouncedHandler = debounce(this.hideScrollbar.bind(this), 300);
     }
 
     public reCalculate() {

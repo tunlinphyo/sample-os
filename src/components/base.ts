@@ -36,13 +36,13 @@ export abstract class BaseComponent {
                             isNavHidden = false;
                             this.dispatchCustomEvent('hidden', isNavHidden)
                         }
-                    } else if (scrollTop > lastScrollTop) {
+                    } else if (scrollTop > lastScrollTop + 2) {
                         fullScrollArea.classList.add('hidden');
                         if (!isNavHidden) {
                             isNavHidden = true;
                             this.dispatchCustomEvent('hidden', isNavHidden);
                         }
-                    } else {
+                    } else if (scrollTop < lastScrollTop - 2) {
                         fullScrollArea.classList.remove('hidden');
                         if (isNavHidden) {
                             isNavHidden = false;
