@@ -21,6 +21,7 @@ export class ExplorePage extends Modal {
         private device: DeviceController
     ) {
         super(history, { template: 'actionTemplate' });
+        this.component.classList.add("explorePage");
         this.init = this.init.bind(this);
         this.init();
     }
@@ -33,7 +34,6 @@ export class ExplorePage extends Modal {
 
     render(data: ExploreData) {
         if (data.places) this.places = data.places;
-        const scrollArea = this.createScrollArea();
         const searchContainer = this.createElement('div', ['searchBarContainer']);
         const searchEl = this.createElement('div', ['searchBar']);
 
@@ -65,7 +65,7 @@ export class ExplorePage extends Modal {
         }, searchEl);
 
         searchContainer.appendChild(searchEl);
-        scrollArea.appendChild(searchContainer);
+        this.mainArea.appendChild(searchContainer);
 
         const placeList = this.createElement('div', ['placeList']);
 
@@ -88,9 +88,7 @@ export class ExplorePage extends Modal {
             }, placeEl);
         });
 
-        scrollArea.appendChild(placeList);
-
-        this.mainArea.appendChild(scrollArea);
+        this.mainArea.appendChild(placeList);
 
         setTimeout(() => {
             if (!this.scrollBar) {

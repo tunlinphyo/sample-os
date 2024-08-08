@@ -95,13 +95,16 @@
 
                 display: grid;
                 grid-template-columns: calc(var(--grid) * 3) 1fr;
-                font-size: 16px;
+                font-size: 18px;
 
                 .day {
                     text-transform: capitalize;
-                    font-size: 18px;
                     /* font-family: var(--number-fonts);
                     font-weight: 600; */
+                }
+
+                .time {
+                    text-align: right;
                 }
             }
         }
@@ -112,7 +115,7 @@
         display: flex;
         flex-direction: column;
         padding: calc(var(--grid) * 0.5);
-        /* padding-bottom: calc(var(--grid) * 3); */
+        padding-bottom: calc(var(--grid) * 3);
 
         .place {
             width: 100%;
@@ -140,8 +143,8 @@
                     font-size: 16px;
                     width: 100%;
                     display: block;
-                    line-clamp: 1;
-                    -webkit-line-clamp: 1;
+                    line-clamp: 2;
+                    -webkit-line-clamp: 2;
                     text-overflow: ellipsis;
                     overflow: hidden;
                     display: -webkit-box;
@@ -180,12 +183,21 @@
         cursor: pointer;
     }
 
+    .explorePage {
+        .mainArea {
+            .searchBarContainer {
+                padding-block: 0;
+            }
+        }
+    }
+
     .placePage {
         .mainArea {
             height: calc(var(--grid) * 14);
             .scrollArea {
                 height: calc(var(--grid) * 14);
                 padding-bottom: calc(var(--grid) * 2.5);
+                padding-block: var(--grid) calc(var(--grid) * 2.5);
             }
         }
         .actionBar {

@@ -21,6 +21,7 @@ export class ScrollBar {
     public reCalculate() {
         this.scrollArea = this.component.querySelector('.scrollArea')!;
         [this.parentHeight, this.childHeight] = this.getHeights();
+        console.log(this.scrollArea, this.parentHeight, this.childHeight);
         this.eventListener();
     }
 

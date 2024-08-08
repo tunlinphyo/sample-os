@@ -1572,7 +1572,7 @@ body {
                 height: calc(var(--grid) * 2);
 
                 display: grid;
-                grid-template-columns: 1fr calc(var(--grid) * 1.6) calc(var(--grid) * 1.8);
+                grid-template-columns: 1fr calc(var(--grid) * 1.6) calc(var(--grid) * 1.6);
                 align-items: center;
 
                 > button {
