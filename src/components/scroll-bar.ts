@@ -1,4 +1,5 @@
 import { debounce } from "../utils/debounce";
+import { Global } from "../utils/global";
 import { OSNumber } from "../utils/number";
 
 
@@ -92,7 +93,7 @@ export class ScrollBar {
     private updateScrollbar(scrollPercentage: number) {
         this.showScrollbar();
         this.debouncedHandler();
-        const maxMove = 118 - this.scrollBar.clientHeight;
+        const maxMove = (Global.GRID * 3.5) - this.scrollBar.clientHeight;
         let num = 0;
         if (this.reverse) {
             num = OSNumber.mapRange(scrollPercentage, 0, 100, maxMove, 0);

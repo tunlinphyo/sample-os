@@ -226,7 +226,7 @@ body {
             top: 0;
             left: 0;
             width: calc(var(--grid) * 10);
-            height: calc(var(--grid) * 1.4);
+            height: calc(var(--grid) * 1.5);
 
             display: flex;
             justify-content: center;
@@ -234,8 +234,8 @@ body {
             pointer-events: none;
 
             .island {
-                width: calc(var(--grid) * 2.2);
-                height: var(--grid);
+                width: calc(var(--grid) * 2.5);
+                height: calc(var(--grid) * 1.15);
 
                 border-radius: var(--grid);
                 background-color: #000;
@@ -275,7 +275,7 @@ body {
                 }
 
                 .camera {
-                    --size: calc(var(--grid) * 0.5);
+                    --size: calc(var(--grid) * 0.55);
                     width: var(--size);
                     height: var(--size);
                     border-radius: 50%;
@@ -294,10 +294,10 @@ body {
             top: 0;
             left: 0;
             width: calc(var(--grid) * 10);
-            height: calc(var(--grid) * 1.4);
+            height: calc(var(--grid) * 1.5);
 
             display: grid;
-            grid-template-columns: 1fr calc(var(--grid) * 2.2) 1fr;
+            grid-template-columns: 1fr calc(var(--grid) * 2.5) 1fr;
             align-items: flex-end;
             /* transition: transform .4s ease;
             transform: translateZ(0); */
@@ -308,7 +308,7 @@ body {
 
             .statusStart,
             .statusEnd {
-                height: var(--grid);
+                height: calc(var(--grid) * 1.15);
                 display: inline-flex;
                 justify-content: center;
                 align-items: center;
@@ -1211,8 +1211,9 @@ body {
                         width: 100%;
 
                         display: flex;
+                        flex-direction: column;
                         justify-content: space-between;
-                        align-items: center;
+                        align-items: stretch;
 
                         &.hide {
                             display: none;
@@ -1220,15 +1221,16 @@ body {
 
                         .inputLabel {
                             font-size: 18px;
-                            line-height: 1;
+                            line-height: 1.4;
                         }
 
                         .dateInputGroup {
                             display: flex;
                             justify-content: flex-end;
+                            gap: 8px;
 
                             .inputValue {
-                                min-height: 40px;
+                                min-height: 42px;
                                 font-size: 18px;
                                 line-height: 24px;
                                 padding: 6px 8px;

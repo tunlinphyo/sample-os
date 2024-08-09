@@ -370,7 +370,7 @@ export class BookService {
                 <p class="index">
                     Aliquam nulla facilisi cras odio eu feugiat pretium nibh. Blandit cursus risus at ultrices. Et netus et malesuada fames ac
                     turpis egestas sed tempus. Suspendisse in est ante in nibh. Felis eget nunc lobortis mattis aliquam faucibu. Sapien nec sagittis
-                    aliquam males uada biben dum arcu vitae aute irure sint nostrud ullamco
+                    aliquam males uada biben dum arcu vitae aute iu
                 </p>
             </div>
         `;

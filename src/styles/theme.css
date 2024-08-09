@@ -1,5 +1,5 @@
 :root {
-    --grid: 34px;
+    --grid: 32px;
     --padding: calc(var(--grid) * 0.5);
     --half: calc(var(--grid) * 0.5);
     --button: calc(var(--grid) * 2);

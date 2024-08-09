@@ -34,7 +34,7 @@
             position: absolute;
             z-index: 9;
             width: 24px;
-            height: 60px;
+            height: 56px;
             background-color: var(--black);
             /* clip-path: polygon(50% 16%, 100% 0, 100% 100%, 0 100%, 0 0); */
             clip-path: polygon(100% 0, 100% 100%, 50% 85%, 0 100%, 0 0);
@@ -79,9 +79,11 @@
                 padding-top: 3px;
 
                 /* background-color: hotpink; */
+                overflow: hidden;
 
                 & p {
                     line-height: 1.65;
+                    font-size: 16px;
 
                     &.index {
                         text-indent: var(--grid);
@@ -157,7 +159,7 @@
 
                 .pageInfo {
                     display: grid;
-                    grid-template-columns: calc(var(--grid) * 1.8) calc(var(--grid) * 2.2) calc(var(--grid) * 1.8);
+                    grid-template-columns: calc(var(--grid) * 2) calc(var(--grid) * 2.5) calc(var(--grid) * 2);
                     justify-content: center;
                     align-items: center;
                     border: 2px solid var(--black);
@@ -282,7 +284,7 @@
 
     .readerActions {
         background-color: transparent;
-        justify-content: center;
+        display: block;
 
         width: calc(var(--grid) * 2.5);
         left: 0;
@@ -295,7 +297,7 @@
             transition: translate .4s ease;
 
             &.center {
-                translate: calc(var(--grid) * 3.75) 0;
+                translate: calc(var(--grid) * 4) 0;
             }
             &.end {
                 translate: 0 calc(var(--grid) * -3.5);
@@ -304,15 +306,18 @@
                 translate: 0 calc(var(--grid) * -1.75);
             }
             &.bookTheme {
-                translate: 0 calc(var(--grid) * -5.25);
-                color: var(--white);
+                translate: calc(var(--grid) * 2) 0;
             }
             &.bookmark {
                 color: var(--white);
             }
+            &.start,
+            &.end {
+                width: calc(var(--grid) * 6);
+            }
             &:has(span) {
                 pointer-events: auto;
-                border-radius: calc(var(--grid) * 1.5);
+                border-radius: var(--grid);
                 z-index: 0;
 
                 .icon {
@@ -326,7 +331,7 @@
                     display: block;
                     position: absolute;
                     z-index: -1;
-                    border-radius: 50%;
+                    border-radius: var(--grid);
                     background-color: var(--black);
                     /* border: 2px solid var(--black); */
                 }
@@ -340,7 +345,10 @@
                 bottom: var(--grid);
                 translate: 0 0;
                 &.center {
-                    translate: calc(var(--grid) * 3.75) 0;
+                    translate: calc(var(--grid) * 4) 0;
+                }
+                &.bookTheme {
+                    translate: calc(var(--grid) * 2) 0;
                 }
             }
         }

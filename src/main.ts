@@ -27,6 +27,8 @@ import { VolumeControls } from './components/system/volume.controls';
 import { NotificationStore } from './stores/noti.store';
 // import { FullscreenController } from './controllers/fullscreen.controller';
 
+import './apps/books/services/ebook';
+
 document.addEventListener('DOMContentLoaded', async () => {
     const historyManager = new HistoryStateManager();
 
