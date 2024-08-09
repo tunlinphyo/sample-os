@@ -73,9 +73,7 @@ export class NotesApp extends App {
         titleEl.textContent = item.title || 'Untitled note';
         noteTitle.appendChild(titleEl);
 
-        const contactEl = this.createElement('div', ['noteContact']);
-        contactEl.innerHTML = '<span class="material-symbols-outlined">graphic_eq</span>';
-        noteTitle.appendChild(contactEl);
+        const nootFooter = this.createElement('div', ['noteFooter']);
 
         const dateEl = this.createElement('small', ['noteDate']);
         dateEl.textContent = OSDate.formatDate(item.updateDate || item.createDate, {
@@ -84,7 +82,14 @@ export class NotesApp extends App {
             day: '2-digit',
             weekday: 'long'
         }, this.device.timeZone);
-        noteTitle.appendChild(dateEl);
+        nootFooter.appendChild(dateEl);
+
+        const iconEl = this.createElement('span', ['material-symbols-outlined', 'icon']);
+        iconEl.textContent = 'graphic_eq';
+        nootFooter.appendChild(iconEl);
+
+        noteTitle.appendChild(nootFooter);
+
         this.addEventListener('click', () => {
             this.history.pushState('/notes/audio', item);
         }, noteTitle)
@@ -99,9 +104,7 @@ export class NotesApp extends App {
         titleEl.textContent = item.title;
         noteTitle.appendChild(titleEl);
 
-        const contactEl = this.createElement('div', ['noteContact']);
-        contactEl.textContent = item.body[1]?.data[0] ?? '';
-        noteTitle.appendChild(contactEl);
+        const nootFooter = this.createElement('div', ['noteFooter']);
 
         const dateEl = this.createElement('small', ['noteDate']);
         dateEl.textContent = OSDate.formatDate(item.updateDate || item.createDate, {
@@ -110,7 +113,14 @@ export class NotesApp extends App {
             day: '2-digit',
             weekday: 'long'
         }, this.device.timeZone);
-        noteTitle.appendChild(dateEl);
+        nootFooter.appendChild(dateEl);
+
+        const iconEl = this.createElement('span', ['material-symbols-outlined', 'icon']);
+        iconEl.textContent = 'sticky_note_2';
+        nootFooter.appendChild(iconEl);
+
+        noteTitle.appendChild(nootFooter);
+
         this.addEventListener('click', () => {
             this.history.pushState('/notes/detail', item.id);
         }, noteTitle)

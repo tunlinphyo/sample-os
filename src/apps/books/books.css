@@ -74,7 +74,6 @@
             .page-content {
                 padding-inline: var(--padding);
                 text-align: justify;
-                pointer-events: none;
 
                 color: var(--black);
                 padding-top: 3px;
@@ -87,6 +86,13 @@
                     &.index {
                         text-indent: var(--grid);
                     }
+                }
+
+                > * {
+                    -webkit-user-select: none;
+                    -moz-user-select: none;
+                    -ms-user-select: none;
+                    user-select: none;
                 }
 
 

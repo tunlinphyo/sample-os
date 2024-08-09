@@ -29,6 +29,7 @@ export class BookService {
         }
         this._page = page;
         this.toggleCurrPageBookmark();
+        // this.eventListeners();
     }
 
     get chapters(): number[] {
@@ -182,6 +183,20 @@ export class BookService {
             this.book.bookmarks.push(this._page);
             this.toggleCurrPageBookmark();
         }
+    }
+
+    protected eventListeners() {
+        document.addEventListener('selectionchange', (event) => {
+            event.preventDefault();
+            const selection = window.getSelection();
+            if (selection) {
+                const selectedText = selection.toString();
+
+                if (selectedText) {
+                    console.log(`Selected Text: "${selectedText}"`);
+                }
+            }
+        });
     }
 
     private renderPrev(page: number) {

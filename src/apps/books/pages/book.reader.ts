@@ -14,6 +14,7 @@ export class BookReader extends Modal {
     private startX: number = 0;
     private startY: number = 0;
     private currentX: number = 0;
+    private textSelected: boolean = false;
 
     constructor(
         history: HistoryStateManager,
@@ -116,14 +117,36 @@ export class BookReader extends Modal {
         this.mainArea.addEventListener('touchmove', (event) => {
             event.preventDefault();
             this.currentX = event.touches[0].clientX;
-            const moveX = this.currentX - this.startX;
-            this.bookService.moving(moveX);
+            if (!this.textSelected) {
+                const moveX = this.currentX - this.startX;
+                this.bookService.moving(moveX);
+            }
         }, false);
 
         this.mainArea.addEventListener('touchend', () => {
             const moveX = this.currentX - this.startX;
-            this.bookService.moveEnd(moveX);
+            if (!this.textSelected) {
+                this.bookService.moveEnd(moveX);
+            }
         }, false);
+
+        // document.addEventListener('contextmenu', (event) => {
+        //     event.preventDefault();
+        // });
+
+        // document.addEventListener('selectionchange', () => {
+        //     const selection = window.getSelection();
+        //     if (selection) {
+        //         const selectedText = selection.toString();
+
+        //         if (selectedText) {
+        //             this.textSelected = true;
+        //             console.log(`Selected Text: "${selectedText}"`);
+        //         } else {
+        //             this.textSelected = false;
+        //         }
+        //     }
+        // });
 
         this.mainArea.addEventListener('mousedown', (event) => {
             this.startX = event.clientX;
@@ -131,9 +154,10 @@ export class BookReader extends Modal {
             this.currentX = event.clientX;
 
             const onMouseMove = (moveEvent: MouseEvent) => {
+                event.preventDefault();
                 this.currentX = moveEvent.clientX;
-                const moveX = this.currentX - this.startX;
-                this.bookService.moving(moveX);
+                // const moveX = this.currentX - this.startX;
+                // this.bookService.moving(moveX);
             };
 
             const onMouseUp = () => {
