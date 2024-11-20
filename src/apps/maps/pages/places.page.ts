@@ -19,6 +19,7 @@ export class PlacesPage extends Modal {
         const placeList = this.createElement('div', ['placeList']);
 
         for(const item of this.sortByName(data)) {
+            console.log('PLACE::', item);
             const place = item.place as google.maps.places.PlaceResult;
             const placeEl = this.createElement('button', ['place']);
             const icon = item.isFavourate ? 'favorite' : 'bookmark';

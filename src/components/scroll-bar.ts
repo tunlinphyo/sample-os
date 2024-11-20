@@ -4,7 +4,7 @@ import { OSNumber } from "../utils/number";
 
 
 export class ScrollBar {
-    private scrollArea: HTMLElement;
+    private scrollArea?: HTMLElement;
     private scrollContainer: HTMLElement;
     private scrollBar: HTMLElement;
     private debouncedHandler: () => void;
@@ -22,7 +22,6 @@ export class ScrollBar {
     public reCalculate() {
         this.scrollArea = this.component.querySelector('.scrollArea')!;
         [this.parentHeight, this.childHeight] = this.getHeights();
-        console.log(this.scrollArea, this.parentHeight, this.childHeight);
         this.eventListener();
     }
 
@@ -44,10 +43,12 @@ export class ScrollBar {
 
     private eventListener() {
         this.setHeight();
-        this.addAutoUnsubscribeListener(this.scrollArea, 'scroll', () => {
-            const y = this.scrollArea.scrollTop * (this.reverse ? -1 : 1);
-            this.calcScroll(y);
-        });
+        if (this.scrollArea) {
+            this.addAutoUnsubscribeListener(this.scrollArea, 'scroll', () => {
+                const y = (this.scrollArea?.scrollTop || 0) * (this.reverse ? -1 : 1);
+                this.calcScroll(y);
+            });
+        }
     }
 
     private addAutoUnsubscribeListener<K extends keyof HTMLElementEventMap>(
@@ -79,8 +80,8 @@ export class ScrollBar {
     }
 
     private getHeights() {
-        const parentHeight = this.scrollArea.clientHeight;
-        const scrollHeight = this.scrollArea.scrollHeight;
+        const parentHeight = this.scrollArea?.clientHeight || 0;
+        const scrollHeight = this.scrollArea?.scrollHeight || 0;
 
         return [parentHeight, scrollHeight];
     }

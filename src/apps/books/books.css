@@ -76,13 +76,13 @@
                 text-align: justify;
 
                 color: var(--black);
-                padding-top: 3px;
+                padding-top: 4px;
 
                 /* background-color: hotpink; */
                 overflow: hidden;
 
                 & p {
-                    line-height: 1.65;
+                    line-height: 1.68;
                     font-size: 16px;
 
                     &.index {
@@ -299,10 +299,10 @@
             &.center {
                 translate: calc(var(--grid) * 4) 0;
             }
-            &.end {
+            &.contents {
                 translate: 0 calc(var(--grid) * -3.5);
             }
-            &.start {
+            &.bookmarks {
                 translate: 0 calc(var(--grid) * -1.75);
             }
             &.bookTheme {
@@ -310,10 +310,6 @@
             }
             &.bookmark {
                 color: var(--white);
-            }
-            &.start,
-            &.end {
-                width: calc(var(--grid) * 6);
             }
             &:has(span) {
                 pointer-events: auto;
@@ -330,10 +326,25 @@
                     inset: 8px;
                     display: block;
                     position: absolute;
-                    z-index: -1;
+                    z-index: -2;
                     border-radius: var(--grid);
                     background-color: var(--black);
                     /* border: 2px solid var(--black); */
+                }
+            }
+            &.bookmarks,
+            &.contents {
+                width: calc(var(--grid) * 6);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                color: var(--white);
+                padding-inline: 28px;
+                gap: 8px;
+                mix-blend-mode: difference;
+                
+                &::before {
+                    background-color: var(--black);
                 }
             }
         }

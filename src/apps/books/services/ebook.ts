@@ -21,6 +21,8 @@ class Ebook {
         this.viewWidth = viewWidth;
         this.viewHeight = viewHeight;
         this.fontSize = fontSize;
+
+        console.log(this.id, this.title, this.author);
     }
 
     paginateChapters(): { chapterIndex: number, pages: string[] }[] {

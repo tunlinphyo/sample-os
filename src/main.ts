@@ -27,7 +27,7 @@ import { VolumeControls } from './components/system/volume.controls';
 import { NotificationStore } from './stores/noti.store';
 // import { FullscreenController } from './controllers/fullscreen.controller';
 
-import './apps/books/services/ebook';
+// import './apps/books/services/ebook';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const historyManager = new HistoryStateManager();
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // new Battery();
     // const fullScreen = new FullscreenController();
 
-    // window.weather.fetchWeather();
+    window.weather.fetchWeather();
 
     window.clock.addChangeListener(async (status: string, data: any) => {
         // if (status === 'UPDATE_CLOCK') {

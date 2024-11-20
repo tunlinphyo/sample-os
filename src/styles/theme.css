@@ -3,13 +3,17 @@
     --padding: calc(var(--grid) * 0.5);
     --half: calc(var(--grid) * 0.5);
     --button: calc(var(--grid) * 2);
-    --zero-bit: rgb(55, 54, 44);
+
+    /* --zero-bit: rgb(55, 54, 44);
     --one-bit: rgb(186, 185, 177);
     --zero-bit: #212121;
-    --one-bit: #cdcdcd;
+    --one-bit: #cdcdcd; */
 
-    --zero-bit: #2d3436;
-    --one-bit: #bdc3c7;
+    /* --zero-bit: #2f3542;
+    --one-bit: #bdc3c7; */
+
+    --zero-bit: #312f2a;
+    --one-bit: #d7d4cd;
 
     --white: var(--one-bit);
     --black: var(--zero-bit);
@@ -19,10 +23,10 @@
 
     --device-button: var(--device-color);
 
-    /* @supports (color: color(display-p3 1 1 1 / 1)) {
+    @supports (color: color(display-p3 1 1 1 / 1)) {
         --device-color: color(display-p3 0.984 0.776 0.318);
         --ai-button: color(display-p3 0.424 0 1 / 1);
-    } */
+    }
 
     @media (prefers-color-scheme: dark) {
         --white: var(--zero-bit);

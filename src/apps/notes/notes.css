@@ -71,6 +71,8 @@
         padding-block-start: calc(var(--grid) * 3.5);
         /* min-block-size: calc(var(--grid) * 14); */
 
+        /* text-align: justify; */
+
         h2 {
             margin-block: 20px;
             font-size: var(--grid);

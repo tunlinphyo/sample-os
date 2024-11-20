@@ -3,6 +3,7 @@ import { BaseController } from "../../../controllers/base.controller";
 import { DeviceController } from "../../../device/device";
 import { CalendarEvent } from "../../../stores/event.store";
 import { OSDate } from "../../../utils/date";
+import { Global } from "../../../utils/global";
 import { OSNumber } from "../../../utils/number";
 
 export type EventsCallback = (date: Date) => CalendarEvent[];
@@ -681,7 +682,7 @@ export class EventsService extends BaseController {
 
     private getTop(date: Date) {
         const minutes = OSDate.getHMinM(new Date(date)) + 30;
-        const parentH = 1224;
+        const parentH = Global.GRID * 36;
         const minutesMax = 24 * 60;
 
         return OSNumber.mapRange(minutes, 0, minutesMax, 0, parentH);

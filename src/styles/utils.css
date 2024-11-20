@@ -220,6 +220,20 @@ body {
     .device {
         position: relative;
 
+        &::before {
+            content: "";
+            display: block;
+            position: absolute;
+            z-index: 99;
+            top: 0;
+            left: 50%;
+            width: calc(var(--grid) * 3);
+            height: 6px;
+            background-color: #151515;
+            translate: -50% -15px;
+            border-radius: 0 0 5px 5px;
+        }
+
         .islandContainer {
             position: absolute;
             z-index: 999;
@@ -481,9 +495,9 @@ body {
         &.screen--device {
             position: relative;
             outline: 15px solid #000;
-            box-shadow: 0 0 0 20px var(--device-color), 0 0 30px 0 #000;
+            box-shadow: 0 0 0 21px var(--device-color), 0 0 30px 0 #000;
             /* border-radius: var(--grid); */
-            border-radius: calc(var(--grid) * 1.65);
+            border-radius: calc(var(--grid) * 1.5);
         }
 
         &.lockedScreen,
@@ -1372,7 +1386,7 @@ body {
                     flex-direction: column;
                     justify-content: center;
                     align-items: center;
-                    gap: var(--padding);
+                    gap: calc(var(--grid) * 0.75);
 
                     .selectItem {
                         width: calc((var(--grid) * 10) - (var(--padding) * 2));
@@ -1623,7 +1637,7 @@ body {
 
             .calendar {
                 width: calc(var(--grid) * 10);
-                height: calc(var(--grid) * 7.8);
+                height: calc(var(--grid) * 7.7);
                 display: grid;
                 grid-template-columns: repeat(7, 1fr);
                 padding-inline: calc(var(--grid) * 0.3);

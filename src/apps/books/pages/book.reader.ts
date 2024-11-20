@@ -21,11 +21,13 @@ export class BookReader extends Modal {
         private book: BooksController,
         private device: DeviceController
     ) {
-        super(history, { template: 'readerTemplate', btnStart: 'bookmarks', btnEnd: 'list' });
+        super(history, { template: 'readerTemplate' });
 
         this.bookService = new BookService(this.mainArea);
         this.bookThemeEl = this.getElement(".bookTheme");
         this.bookmarkEl = this.getElement(".bookmark");
+        this.btnStart = this.getElement<HTMLButtonElement>(".bookmarks");
+        this.btnEnd = this.getElement<HTMLButtonElement>(".contents");
         this.touchEventListeners = this.touchEventListeners.bind(this);
         this.init();
         this.touchEventListeners();
@@ -156,8 +158,8 @@ export class BookReader extends Modal {
             const onMouseMove = (moveEvent: MouseEvent) => {
                 event.preventDefault();
                 this.currentX = moveEvent.clientX;
-                // const moveX = this.currentX - this.startX;
-                // this.bookService.moving(moveX);
+                const moveX = this.currentX - this.startX;
+                this.bookService.moving(moveX);
             };
 
             const onMouseUp = () => {
@@ -214,6 +216,10 @@ export class BookReader extends Modal {
         if (!parentEl) return;
         parentEl.classList.remove('hidden');
         this.bookmarkEl.classList.toggle('fill-icon', this.bookService.isBookmarked);
+        const bookmarkCount = this.getElement('#bookmarkCount', this.btnStart);
+        bookmarkCount.textContent = `${this.bookService.bookmarkCount}`;
+        const chaperCount = this.getElement('#chaperCount', this.btnEnd);
+        chaperCount.textContent = `${this.bookService.chapterCount}`;
     }
 
     private hideMenu(toggle: boolean = true) {

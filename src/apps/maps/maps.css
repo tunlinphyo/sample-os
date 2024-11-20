@@ -131,7 +131,7 @@
                 translate: 0 8px;
                 font-size: 28px;
 
-                &.placeIcon {
+                &.material-symbols-outlined {
                     translate: 0 10px;
                 }
             }
@@ -140,7 +140,7 @@
                 font-size: 18px;
 
                 small {
-                    font-size: 16px;
+                    font-size: 14px;
                     width: 100%;
                     display: block;
                     line-clamp: 2;

@@ -80,7 +80,7 @@ export class NotesApp extends App {
             year: 'numeric',
             month: 'long',
             day: '2-digit',
-            weekday: 'long'
+            weekday: 'short'
         }, this.device.timeZone);
         nootFooter.appendChild(dateEl);
 
@@ -111,7 +111,7 @@ export class NotesApp extends App {
             year: 'numeric',
             month: 'long',
             day: '2-digit',
-            weekday: 'long'
+            weekday: 'short'
         }, this.device.timeZone);
         nootFooter.appendChild(dateEl);
 

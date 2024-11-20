@@ -67,7 +67,7 @@
 
         .phoneDispaly {
             width: calc(var(--grid) * 10);
-            --width: calc(var(--grid) * 2.25);
+            --width: calc(var(--grid) * 2);
 
             display: grid;
             grid-template-columns: var(--width) 1fr var(--width);

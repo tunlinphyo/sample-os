@@ -64,13 +64,21 @@ export class DisplayPage extends Page {
             deviceSample.classList.add(display.value);
 
             const main = this.getElement(".deviceMain", deviceSample);
-            main.textContent = display.title;
+
+            const themeLabel = this.createElement('div', ['themeLabel']);
+            themeLabel.textContent = display.title;
 
             const checkBox = this.createElement('span', ['material-symbols-outlined']);
-            checkBox.textContent = data.data === display.value ? 'radio_button_checked' : 'radio_button_unchecked';
+            checkBox.textContent = data.data === display.value ? 'task_alt' : 'radio_button_unchecked';
+
+            // if (data.data !== display.value) {
+            //     checkBox.style.opacity = '0';
+            // }
+
+            main.appendChild(themeLabel);
+            main.appendChild(checkBox);
 
             deviceContainer.appendChild(deviceSample);
-            deviceContainer.appendChild(checkBox);
 
             this.addEventListener('click', () => {
                 this.setting.updateTheme({ ...data, value: display.value, data: display.value });

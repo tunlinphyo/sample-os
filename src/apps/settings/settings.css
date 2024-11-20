@@ -275,17 +275,26 @@
                 justify-content: space-between;
                 align-items: center;
                 padding: 4px;
+                gap: 10px;
 
                 .deviceIsland {
-                    width: 28px;
-                    height: 14px;
-                    border-radius: 14px;
+                    width: 24px;
+                    height: 12px;
+                    border-radius: 12px;
                     background-color: var(--fg);
                 }
 
                 .deviceMain {
+                    flex: 1;
                     color: var(--fg);
                     font-weight: 600;
+
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-end;
+                    align-items: center;
+                    gap: 6px;
+                    padding-bottom: 8px;
                 }
 
                 .deviceBar {
@@ -307,7 +316,7 @@
             }
 
             .material-symbols-outlined {
-                font-size: 32px;
+                font-size: 28px;
             }
         }
     }

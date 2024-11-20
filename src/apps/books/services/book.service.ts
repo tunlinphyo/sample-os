@@ -57,6 +57,16 @@ export class BookService {
         return Math.round(this.book.currantPage / this.book.totalPages * 100);
     }
 
+    get bookmarkCount() {
+        if (!this.book) return 0;
+        return this.book.bookmarks.length;
+    }
+
+    get chapterCount() {
+        if (!this.book) return 0;
+        return this.book.chapters.length;
+    }
+
     get isBookmarked() {
         if (!this.book) return false;
         return this.book.bookmarks.includes(this._page);
