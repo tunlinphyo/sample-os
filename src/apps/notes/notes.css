@@ -355,6 +355,10 @@
             }
         }
     }
+
+    .actionBar.reverse {
+        flex-direction: row-reverse;
+    }
 }
 
 @keyframes pulse1 {

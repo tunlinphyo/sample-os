@@ -116,6 +116,7 @@ export class SettingsController extends BaseController {
                 const volumes = this.getSettingItem('sounds');
                 if (volumes) {
                     this._volumes = volumes.data;
+                    if (volumes.data) this.notifyListeners('UPDATE_VOLUMES', volumes.data);
                 }
             }
             if (item && item.id === 'apps') {

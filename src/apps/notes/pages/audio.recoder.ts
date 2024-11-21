@@ -49,7 +49,7 @@ export class AudioRecoder extends Modal {
 
         this.addEventListener('click', async () => {
             if (this.note) {
-                const result = await this.device.confirmPopup.openPage('Restart', 'Are you sure to clear current record!');
+                const result = await this.device.confirmPopup.openPage('Rerecord', 'Are you sure to clear current record!');
                 if (result) {
                     this.note.body = {
                         id: uuidv4(),
@@ -61,9 +61,18 @@ export class AudioRecoder extends Modal {
             }
         }, this.btnStart, false);
 
-        this.addEventListener('click', () => {
+        this.addEventListener('click', async () => {
             if (this.note && this.note.body) {
-                this.notes.saveNote(this.note);
+                const type = this.btnEnd?.dataset.type;
+                if (type == "delete") {
+                    const result = await this.device.confirmPopup.openPage(
+                        'Delete Note',
+                        `Are you sure to delete <br/> ${this.note.title || 'Untitle note'}?`
+                    );
+                    if (result) this.notes.deleteNote(this.note.id);
+                } else {
+                    this.notes.saveNote(this.note);
+                }
             }
         }, this.btnEnd, false);
 
@@ -79,7 +88,7 @@ export class AudioRecoder extends Modal {
         this.recordButton.addEventListener('pointercancel', this.stopRecording);
 
         this.notes.addChangeListener((status: string) => {
-            if (status === "NOTE_SAVED") {
+            if (status === "NOTE_SAVED" || status === "NOTE_DELETED") {
                 this.closePage();
             }
         });
@@ -156,7 +165,7 @@ export class AudioRecoder extends Modal {
                             currentTime: 0,
                         };
                         this.note.body = audioData
-                        this.createAudioPlayer(audioData);
+                        this.createAudioPlayer(audioData, false);
                     }
                 },300);
             }
@@ -164,7 +173,7 @@ export class AudioRecoder extends Modal {
         }
     }
 
-    private createAudioPlayer(data: AudioData) {
+    private createAudioPlayer(data: AudioData, saved: boolean = true) {
         this.removeAllEventListeners();
         this.mainArea.innerHTML = "";
         const flexCenter = this.createFlexCenter();
@@ -198,7 +207,7 @@ export class AudioRecoder extends Modal {
         }, flexCenter, this.osaudio);
 
         this.mainArea.appendChild(flexCenter);
-        this.toggleActions(false);
+        this.toggleActions(false, saved);
     }
 
     private createRecoder() {
@@ -217,7 +226,7 @@ export class AudioRecoder extends Modal {
         this.toggleActions(true);
     }
 
-    private toggleActions(hide: boolean = false) {
+    private toggleActions(hide: boolean, saved: boolean = false) {
         try {
             const btnStart = this.getElement('.actionButton.start', this.component);
             const btnEnd = this.getElement('.actionButton.end', this.component);
@@ -225,6 +234,17 @@ export class AudioRecoder extends Modal {
                 btnStart.classList.add('hide');
                 btnEnd.classList.add('hide');
             } else {
+                if (saved) {
+                    btnEnd.parentElement?.classList.add("reverse");
+                    // btnStart.innerHTML = `<span class="material-symbols-outlined icon">edit</span>`;
+                    btnEnd.innerHTML = `<span class="material-symbols-outlined icon">delete</span>`;
+                    btnEnd.dataset.type = "delete";
+                } else {
+                    btnEnd.parentElement?.classList.remove("reverse");
+                    // btnStart.innerHTML = `<span class="material-symbols-outlined icon">mic</span>`;
+                    btnEnd.innerHTML = `<span class="material-symbols-outlined icon">check</span>`;
+                    btnEnd.dataset.type = "save";
+                }
                 btnStart.classList.remove('hide');
                 btnEnd.classList.remove('hide');
             }
