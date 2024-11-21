@@ -25,6 +25,7 @@ import { NotificationController } from './controllers/notification.controller';
 import { SystemUpdate } from './components/system/system.update';
 import { VolumeControls } from './components/system/volume.controls';
 import { NotificationStore } from './stores/noti.store';
+import { AudioController } from './controllers/audio.controller';
 // import { FullscreenController } from './controllers/fullscreen.controller';
 
 // import './apps/books/services/ebook';
@@ -48,6 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const phone = new PhoneController(historyStore, contactsStore, blocksStore);
     const calendar = new CalendarController(eventStore);
     const weather = new WeatherController(weatherStore);
+    const osaudio = new AudioController();
 
     window.device = device;
     window.setting = settings;
@@ -55,6 +57,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.phone = phone;
     window.calendar = calendar;
     window.weather = weather;
+    window.osaudio = osaudio;
 
     const lockedScreen = new LockedScreenPage(historyManager, window.device);
     const alarmAlert = new AlarmAlert(window.device);
@@ -117,6 +120,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             // console.log('UPDATE_TIMEZONE', info);
             window.device.timeZone = info.timeZone;
             window.device.hour12 = info.hour12;
+        }
+        if (status === 'UPDATE_VOLUMES') {
+            window.osaudio.setVolume(data)
         }
     });
 

@@ -204,7 +204,7 @@
         }
 
         .titleList {
-            padding-block: calc(var(--grid) * 2) calc(var(--grid) * 1.5);
+            padding-block: calc(var(--grid) * 1) calc(var(--grid) * 1.5);
             padding-inline: 10px;
 
             .bookItem {
@@ -342,7 +342,7 @@
                 padding-inline: 28px;
                 gap: 8px;
                 mix-blend-mode: difference;
-                
+
                 &::before {
                     background-color: var(--black);
                 }

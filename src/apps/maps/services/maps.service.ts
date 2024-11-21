@@ -30,7 +30,9 @@ export class MapsService {
         const { latitude, longitude } = position.coords;
         this.currentLatLng = { lat: latitude, lng: longitude };
 
+        console.log('MAP_INIT')
         const maps = await this.loader.importLibrary('maps')
+        console.log('MAPS', maps)
         this.map = new maps.Map(mapEl, {
             zoom: this.zoom,
             center: this.currentLatLng,

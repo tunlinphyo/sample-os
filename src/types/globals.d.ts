@@ -1,3 +1,4 @@
+import { AudioController } from "../controllers/audio.controller";
 import { CalendarController } from "../controllers/calendar.controller";
 import { ClockController } from "../controllers/clock.controller";
 import { PhoneController } from "../controllers/phone.controller";
@@ -13,6 +14,7 @@ declare global {
         phone: PhoneController;
         calendar: CalendarController;
         weather: WeatherController;
+        osaudio: AudioController;
     }
 }
 

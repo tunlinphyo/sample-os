@@ -11,7 +11,7 @@
 
             list-style: none;
             margin: 0;
-            padding: calc(var(--grid) * 1.5) 10px 15px;
+            padding: 15px 10px 15px;
 
             .noteCard {
                 padding: var(--half);
@@ -68,7 +68,7 @@
 
     .noteViewArea {
         padding-inline: calc(var(--grid) * 0.5);
-        padding-block-start: calc(var(--grid) * 3.5);
+        padding-block-start: calc(var(--grid) * 3);
         /* min-block-size: calc(var(--grid) * 14); */
 
         /* text-align: justify; */

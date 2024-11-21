@@ -1125,7 +1125,7 @@ body {
                 .formGroup {
                     width: calc(var(--grid) * 10);
                     padding: calc(var(--grid) * 0.5);
-                    padding-block-start: calc(var(--grid) * 1.5);
+                    /* padding-block-start: calc(var(--grid) * 1.5); */
 
                     display: flex;
                     flex-direction: column;

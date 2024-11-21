@@ -9,6 +9,7 @@ export interface NoteData {
 }
 
 export interface AudioData {
+    id: string;
     audio: string;
     currentTime: number;
 }
@@ -65,6 +66,12 @@ export class NotesStore extends BaseManager<Note> {
 
     async update(id: string, item: Note): Promise<string> {
         item.updateDate = new Date();
+        await this.db.put(id, item)
+        this.editItem(id, item)
+        return id
+    }
+
+    async setTime(id: string, item: Note): Promise<string> {
         await this.db.put(id, item)
         this.editItem(id, item)
         return id

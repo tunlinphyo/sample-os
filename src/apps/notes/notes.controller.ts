@@ -28,6 +28,16 @@ export class NotesController extends BaseController {
         });
     }
 
+    public updateTime(id: string, time: number) {
+        this.tryThis(async () => {
+            const note = await this.store.get(id)
+            if (note && !Array.isArray(note.body)) {
+                note.body.currentTime = time
+                await this.store.setTime(note.id, note);
+            }
+        });
+    }
+
     public deleteNote(id: string) {
         this.tryThis(async() => {
             await this.store.del(id);

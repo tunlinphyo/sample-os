@@ -1,13 +1,14 @@
 import { Keyboard } from "../../../components/keyboard";
 import { noteTitles } from "../../../components/keyboard/consts";
 import { Modal } from "../../../components/modal";
-import { SettingsController } from "../../../controllers/settings.controller";
+import { AudioController } from "../../../controllers/audio.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
 import { AudioData, Note } from "../../../stores/notes.store";
 import { NotesController } from "../notes.controller";
 import { MediaRecorderService } from "../services/media.recorder";
 import { AudioButton } from "./audio.button";
+import { v4 as uuidv4 } from 'uuid';
 
 export class AudioRecoder extends Modal {
     private mediaService: MediaRecorderService;
@@ -21,8 +22,8 @@ export class AudioRecoder extends Modal {
     constructor(
         history: HistoryStateManager,
         private device: DeviceController,
-        private setting: SettingsController,
-        private notes: NotesController
+        private osaudio: AudioController,
+        private notes: NotesController,
     ) {
         super(history, { btnStart: 'mic', btnEnd: 'check' });
         this.component.classList.add('audioRecoderPage');
@@ -39,6 +40,10 @@ export class AudioRecoder extends Modal {
         this.listen('pageClose', () => {
             if (this.mediaService) {
                 this.mediaService.stopMediaTracks();
+                if (this.audio) {
+                    this.audio.pauseAudio();
+                    if (this.note) this.notes.updateTime(this.note.id, this.audio.currentTime);
+                }
             }
         });
 
@@ -47,6 +52,7 @@ export class AudioRecoder extends Modal {
                 const result = await this.device.confirmPopup.openPage('Restart', 'Are you sure to clear current record!');
                 if (result) {
                     this.note.body = {
+                        id: uuidv4(),
                         audio: '',
                         currentTime: 0
                     };
@@ -82,6 +88,7 @@ export class AudioRecoder extends Modal {
             if (this.note) {
                 if (this.audio) {
                     (this.note.body as AudioData).currentTime = this.audio.currentTime;
+                    this.notes.updateTime(this.note.id, this.audio.currentTime);
                     this.audio.pauseAudio();
                 }
                 this.history.updateState(`/notes/audio`, this.note);
@@ -97,6 +104,7 @@ export class AudioRecoder extends Modal {
                 type: 'audio',
                 title: '',
                 body: {
+                    id: uuidv4(),
                     audio: '',
                     currentTime: 0
                 },
@@ -143,6 +151,7 @@ export class AudioRecoder extends Modal {
                     const result = await this.mediaService.saveRecording();
                     if (result && this.note) {
                         const audioData = {
+                            id: uuidv4(),
                             audio: result,
                             currentTime: 0,
                         };
@@ -181,8 +190,12 @@ export class AudioRecoder extends Modal {
         }, titleButton);
         flexCenter.appendChild(titleButton);
 
-        this.audio = new AudioButton(data.audio, flexCenter, this.setting);
-        this.audio.currentTime = data.currentTime;
+        const url = this.note?.title == 'Timeless Wisdom' ? '/music/Death Grips - Get Got.mp3' : '/music/Death Grips - Blackjack.mp3'
+        this.audio = new AudioButton({
+            id: data.id,
+            url, //: data.audio,
+            time: data.currentTime
+        }, flexCenter, this.osaudio);
 
         this.mainArea.appendChild(flexCenter);
         this.toggleActions(false);
