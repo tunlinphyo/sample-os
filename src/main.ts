@@ -26,6 +26,11 @@ import { SystemUpdate } from './components/system/system.update';
 import { VolumeControls } from './components/system/volume.controls';
 import { NotificationStore } from './stores/noti.store';
 import { AudioController } from './controllers/audio.controller';
+import { ArtistStore } from './stores/artist.store';
+import { AlbumStore } from './stores/album.store';
+import { MusicStore } from './stores/music.store';
+import { MusicController } from './controllers/music.controller';
+import { SongStore } from './stores/songs.store';
 // import { FullscreenController } from './controllers/fullscreen.controller';
 
 // import './apps/books/services/ebook';
@@ -42,6 +47,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const historyStore = new HistoryStore();
     const eventStore = new CalendarEventStore();
     const weatherStore = new WeatherStore();
+    // Music
+    const artistStore = new ArtistStore();
+    const albumStore = new AlbumStore();
+    const songStore = new SongStore();
+    const musicStore = new MusicStore();
 
     const device = new DeviceController(historyManager);
     const settings = new SettingsController(historyManager, settingStore);
@@ -50,6 +60,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const calendar = new CalendarController(eventStore);
     const weather = new WeatherController(weatherStore);
     const osaudio = new AudioController();
+    const music = new MusicController(artistStore, albumStore, songStore, musicStore, osaudio)
 
     window.device = device;
     window.setting = settings;
@@ -58,6 +69,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.calendar = calendar;
     window.weather = weather;
     window.osaudio = osaudio;
+    window.music = music;
 
     const lockedScreen = new LockedScreenPage(historyManager, window.device);
     const alarmAlert = new AlarmAlert(window.device);
@@ -69,7 +81,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // new Battery();
     // const fullScreen = new FullscreenController();
 
-    window.weather.fetchWeather();
+    // window.weather.fetchWeather();
 
     window.clock.addChangeListener(async (status: string, data: any) => {
         // if (status === 'UPDATE_CLOCK') {

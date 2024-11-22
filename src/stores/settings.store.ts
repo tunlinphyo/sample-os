@@ -80,13 +80,13 @@ const appList: HomeApp[] = [
         isShow: true,
         isSystem: false,
     },
-    // {
-    //     id: 'music',
-    //     name: 'Music',
-    //     order: 5,
-    //     isShow: false,
-    //     isSystem: false,
-    // },
+    {
+        id: 'music',
+        name: 'Music',
+        order: 5,
+        isShow: true,
+        isSystem: true,
+    },
     {
         id: 'books',
         name: 'Books',
@@ -156,6 +156,12 @@ const stores: StoreInfo[] = [
         name: 'Clock',
         order: 4,
         stores: ['clock', 'alarms'],
+    },
+    {
+        id: 'music',
+        name: 'Music',
+        order: 5,
+        stores: ['music', 'album', 'artist'],
     },
     {
         id: 'notes',
@@ -279,7 +285,7 @@ const defaultSettings: Setting[] = [
             {
                 id: 'software-update',
                 title: 'Software Update',
-                version: 0.3
+                version: 0.4
             },
             {
                 id: 'date-time',
@@ -303,8 +309,8 @@ const defaultSettings: Setting[] = [
 
 export class SettingStore extends BaseManager<Setting> {
     private db: DB<Setting>;
-    public version: number = 0.3;
-    public message: string = 'Added notifigation.';
+    public version: number = 0.4;
+    public message: string = 'Added Music app.';
 
     constructor() {
         super([]);

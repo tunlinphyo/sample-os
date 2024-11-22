@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Music</title>
+    <style>
+        .loadingScreen {
+            position: absolute;
+            z-index: 999;
+            top: 0;
+            left: 0;
+            width: calc(var(--grid) * 10);
+            height: calc(var(--grid) * 17);
+
+            background-color: var(--white);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: translate .3s ease-out;
+
+            &.remove {
+                translate: 0 -100%;
+            }
+        }
+    </style>
+</head>
+
+<body class="appBody">
+
+    <template id="scrollTemplate">
+        <div class="screen">
+            <div class="fullScrollArea">
+                <div class="statusBar">
+                    <div class="statusBar--container">
+                        <div></div>
+                        <div class="statusBar-title">Music</div>
+                        <div></div>
+                    </div>
+                </div>
+                <div class="mainArea scrollArea"></div>
+                <div class="actionBar">
+                    <div class="actionButton start"></div>
+                    <div class="actionButton center"></div>
+                    <div class="actionButton end"></div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="actionTemplate">
+        <div class="screen">
+            <div class="actionScrollArea">
+                <div class="statusBar">
+                    <div class="statusBar--container">
+                        <div></div>
+                        <div class="statusBar-title">Music</div>
+                        <div></div>
+                    </div>
+                </div>
+                <div class="mainArea"></div>
+                <div class="actionBar">
+                    <div class="actionButton start"></div>
+                    <div class="actionButton center"></div>
+                    <div class="actionButton end"></div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="appTemplate">
+        <div class="screen">
+            <div class="statusBar">
+                <div class="statusBar--container">
+                    <div class="statusBar-title">Music</div>
+                </div>
+            </div>
+            <div class="mainArea"></div>
+            <div class="actionBar">
+                <div class="actionButton start"></div>
+                <div class="actionButton center"></div>
+                <div class="actionButton end"></div>
+            </div>
+        </div>
+    </template>
+
+    <section class="loadingScreen">
+        <span class="material-symbols-outlined icon-xxxl">music_note</span>
+    </section>
+
+    <script type="module" src="./main.ts"></script>
+</body>
+
+</html>

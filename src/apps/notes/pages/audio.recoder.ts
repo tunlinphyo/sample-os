@@ -33,7 +33,6 @@ export class AudioRecoder extends Modal {
         this.recordButton = this.createElement('button', ['recoderButton']);
         this.mediaService = new MediaRecorderService();
         this.init();
-        console.log(this.notes);
     }
 
     private init() {

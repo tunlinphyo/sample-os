@@ -1,0 +1,188 @@
+@layer component {
+    .songList {
+        --album-size: 32px;
+
+        .titleItem {
+            display: grid;
+            grid-template-columns: var(--album-size) 1fr;
+            gap: var(--half);
+
+            .albumCover {
+                width: var(--album-size);
+                height: var(--album-size);
+                border: 2px solid var(--black);
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 2px;
+            }
+        }
+    }
+
+    .musicPlayerPage {
+        .playerContainer {
+            width: 100%;
+            height: 100%;
+            /* calc(var(--grid) * 11); */
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: calc(var(--grid) * 5) calc(var(--grid) * 3) calc(var(--grid) * 3);
+
+            .infoContainer {
+                /* background-color: hotpink; */
+            }
+
+            .controlContainer {
+                /* padding-inline: var(--half); */
+                display: flex;
+                justify-content: space-evenly;
+                align-items: center;
+
+                & button {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 100%;
+                }
+
+                .controlButton {
+                    width: calc(var(--grid) * 2);
+                    height: calc(var(--grid) * 2);
+
+                    .icon {
+                        font-size: 38px;
+                    }
+                }
+
+                .playButton {
+                    width: calc(var(--grid) * 2.2);
+                    height: calc(var(--grid) * 2.2);
+                    border: 3px solid var(--black);
+
+                    .icon {
+                        font-size: 52px;
+                    }
+                }
+            }
+
+            .timelineContiner {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding-inline: var(--half);
+
+                .trackSlider {
+                    width: 100%;
+                    padding-inline: 4px;
+
+                    .trackGroup {
+                        width: 100%;
+                        position: relative;
+
+                        --size: 32px;
+
+                        &:not(:last-child) {
+                            border-bottom: 2px solid var(--black);
+                        }
+
+
+                        .trackRange {
+                            width: 100%;
+                            height: var(--size);
+
+                            border-radius: var(--grid);
+                            overflow: hidden;
+
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: flex-end;
+                            align-items: stretch;
+
+                            outline: 2px solid var(--white);
+                            box-shadow: 0 0 0 4px var(--black);
+
+                            background-color: var(--white);
+                            position: relative;
+
+                            cursor: grab;
+
+                            .rangeBackground {
+                                position: absolute;
+                                inset: 0;
+
+                                display: flex;
+                                justify-content: flex-end;
+                                align-items: center;
+                                color: var(--black);
+                                padding-inline: 8px;
+                            }
+
+                            .totalTime {
+                                width: 100%;
+                                height: var(--size);
+                                background-color: var(--black);
+                                border-radius: var(--grid);
+
+                                transform: translate(-50%, 0);
+                                transition: transform .5s ease;
+
+                                display: flex;
+                                justify-content: flex-end;
+                                align-items: center;
+                                color: var(--white);
+                                padding-inline: 8px;
+                            }
+                        }
+
+                        .currentTime {
+                            width: var(--size);
+                            height: var(--size);
+                            border-radius: 100%;
+
+                            position: absolute;
+                            z-index: 1;
+                            left: 0;
+                            bottom: 0;
+
+                            display: grid;
+                            place-content: center;
+                            pointer-events: none;
+
+                            background-color: var(--black);
+
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+
+        .actionBar {
+            .actionButton {
+                &.center {
+                    pointer-events: auto;
+                    border-radius: calc(var(--grid) * 1.5);
+                    position: relative;
+                    z-index: 0;
+
+                    .icon {
+                        color: var(--white);
+                        font-size: 28px;
+                    }
+
+                    &::before {
+                        content: '';
+                        inset: 8px;
+                        display: block;
+                        position: absolute;
+                        z-index: -1;
+                        background-color: var(--black);
+                        border-radius: 50%;
+                        /* border: 2px solid var(--black); */
+                    }
+                }
+            }
+        }
+    }
+}

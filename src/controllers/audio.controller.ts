@@ -36,6 +36,11 @@ export class AudioController extends BaseController {
         if (!c) return 0;
         return c.service.audio.seek();
     }
+    getDuration(id: string) {
+        const c = this.audioObject[id];
+        if (!c) return 0;
+        return c.service.audio.duration();
+    }
 
     getStatus(id: string) {
         const c = this.audioObject[id];
@@ -82,8 +87,13 @@ export class AudioController extends BaseController {
         const c = this.audioObject[id];
         c.service.audio.stop();
     }
+    seek(id: string, time: number) {
+        const c = this.audioObject[id];
+        c.service.audio.seek(time);
+    }
     on(id: string, event: string, callback: () => void) {
         const c = this.audioObject[id];
+        console.log('ON*****', c);
         if (!c) return;
         c.service.audio.on(event, callback);
     }
