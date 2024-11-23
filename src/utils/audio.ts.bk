@@ -1,0 +1,113 @@
+
+export interface OSAudioData {
+    id: string;
+    src: string;
+}
+
+export class OSAudio {
+    private audio: HTMLAudioElement;
+    private _loading: boolean = true;
+    private playing: boolean = false;
+    private audioContext: AudioContext;
+    private gainNode: GainNode;
+
+    constructor(private audioId: string) {
+        this.audio = this.createAudio(audioId);
+        this.eventListeners();
+        document.body.appendChild(this.audio);
+
+        this.audioContext = new (window.AudioContext)();
+        const track = this.audioContext.createMediaElementSource(this.audio);
+        this.gainNode = this.audioContext.createGain();
+        track.connect(this.gainNode).connect(this.audioContext.destination);
+    }
+    get id() {
+        return this.audioId;
+    }
+    get e() {
+        return this.audio;
+    }
+    get loaded() {
+        return !this._loading;
+    }
+    set data(data: string) {
+        this.audio.src = data;
+    }
+    get currentTime() {
+        return this.audio.currentTime;
+    }
+    set currentTime(time: number) {
+        this.audio.currentTime = time;
+    }
+    get duration() {
+        return this.audio.duration;
+    }
+    get volume() {
+        return this.audio.volume;
+    }
+    set volume(volume: number) {
+        this.gainNode.gain.value = volume;
+        this.audio.volume = volume;
+    } 
+    get status() {
+        if (this.audio.ended) {
+            return "ended";
+        } else if (this.audio.paused) {
+            return "paused";
+        } else {
+            return "playing";
+        }
+    }
+
+    private eventListeners() {
+        this.audio.addEventListener('ended', () => {
+            this.playing = false;
+        });
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                if (this.playing) {
+                    this.audio.play().catch(error => {
+                        console.error('Playback error:', error);
+                    });
+                }
+            }
+        });
+
+        // window.addEventListener('focus', () => {
+        //     this.audio.load();
+        //     if (this.playing) {
+        //         this.audio.play().catch(error => {
+        //             console.error('Playback error:', error);
+        //         });
+        //     }
+        // });
+    }
+    private createAudio(id: string) {
+        const oldElem = document.getElementById(id) as HTMLAudioElement;
+        if (oldElem) {
+            return oldElem;
+        } else {
+            const newElem = new Audio();
+            newElem.id = id;
+            document.body.appendChild(newElem);
+            return newElem;
+        }
+    }
+
+    public play() {
+        this.playing = true;
+        this.audioContext.resume();
+        this.audio.play();
+    }
+    public pause() {
+        this.playing = false;
+        this.audio.pause();
+    }
+    public playSong(data: string, initTime: number = 0, volume?: number) {
+        this.data = data;
+        this.currentTime = initTime;
+        if (volume) this.volume = volume;
+        this.play();
+    }
+}

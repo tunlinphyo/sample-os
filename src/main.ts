@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             window.device.hour12 = info.hour12;
         }
         if (status === 'UPDATE_VOLUMES') {
-            window.osaudio.setVolume(data)
+            window.osaudio.volume = data;
         }
     });
 

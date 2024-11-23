@@ -34,6 +34,10 @@ export class MusicService {
         return this.songs.map(song => this.getSong(song.id)).filter(item => !!item);
     }
 
+    getAlbums() {
+        return this.albums;
+    }
+
     getArtist(id: string) {
         return this.artists.find(item => item.id === id);
     }

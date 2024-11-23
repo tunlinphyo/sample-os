@@ -2,11 +2,11 @@ import { Modal } from "../../../components/modal";
 import { MusicController } from "../../../controllers/music.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
-import { TrackSlider } from "../../notes/pages/track.slider";
+import { TrackSlider } from "./track.slider";
+import { debounce } from "../../../utils/debounce";
 
 export class MusicPlayer extends Modal {
     private playButton: HTMLButtonElement;
-    private interval: number = 0;
 
     constructor(
         history: HistoryStateManager,
@@ -26,15 +26,10 @@ export class MusicPlayer extends Modal {
                 this.update('update');
             }
             if (status === 'SONG_PLAY_STATUS') {
-                console.log('SONG_PLAY_STATUS', data);
                 this.renderPlayButton(data);
-                if (data === 'play') {
-                    this.interval = setInterval(() => {
-                        this.dispatchCustomEvent('updateTrack');
-                    }, 1000);
-                } else {
-                    clearInterval(this.interval);
-                }
+            }
+            if (status === 'SONG_TIMELINE_STATUS') {
+                this.dispatchCustomEvent('updateTrack');
             }
         };
 
@@ -46,9 +41,7 @@ export class MusicPlayer extends Modal {
     }
 
     render() {
-        console.log('PLAYING', this.music.currentSong);
         const playerEl = this.renderPlayer();
-
         this.mainArea.appendChild(playerEl);
     }
 
@@ -61,8 +54,11 @@ export class MusicPlayer extends Modal {
 
     private renderPlayer() {
         const container = this.createElement('div', ['playerContainer']);
+        if (!this.music.currentSong) {
+            container.classList.add('disabled')
+        }
 
-        const infoContiner = this.createElement('div', ['infoContainer']);
+        const infoContiner = this.renderInfo();
         const controlContiner = this.renderControl();
         const timelineContiner = this.renderTimelineControl();
 
@@ -73,20 +69,40 @@ export class MusicPlayer extends Modal {
         return container;
     }
 
+    private renderInfo() {
+        const infoContiner = this.createElement('div', ['infoContainer']);
+
+        const titleEl = this.createElement('h3', ['songTitle']);
+        titleEl.textContent = `${this.music.currentSong?.title || "No Song"}`;
+        const artistEl = this.createElement('div', ['articeName']);
+        const names = this.music.currentSong?.artists?.map(item => item.name) || [];
+        artistEl.textContent = `${names?.join(", ")}`;
+
+        infoContiner.appendChild(titleEl);
+        infoContiner.appendChild(artistEl);
+
+        return infoContiner;
+    }
+
     private renderControl() {
         const controlContiner = this.createElement('div', ['controlContainer']);
 
         const prevButton = this.createElement('button', ['controlButton', 'prev']);
         prevButton.innerHTML = `<span class="material-symbols-outlined icon">fast_rewind</span>`;
+        this.addEventListener('click', () => {
+            this.music.playPrevSong(true);
+        }, prevButton);
 
         const nextButton = this.createElement('button', ['controlButton', 'next']);
         nextButton.innerHTML = `<span class="material-symbols-outlined icon">fast_forward</span>`;
+        this.addEventListener('click', () => {
+            this.music.playNextSong(true);
+        }, nextButton);
 
         this.renderPlayButton(this.music.status);
 
         this.addEventListener('click', () => {
-            const status = this.playButton.dataset.status;
-            if (status == 'play') {
+            if (this.music.status == 'playing') {
                 this.music.pause();
             } else {
                 this.music.play();
@@ -104,14 +120,19 @@ export class MusicPlayer extends Modal {
         const timelineContiner = this.createElement('div', ['timelineContiner']);
 
         const volumeGroup = this.createElement('div', ['trackSlider']);
-        const notiVolume = new TrackSlider(volumeGroup, this.music.time, this.music.duration);
+        const notiVolume = new TrackSlider(volumeGroup, this.music.time || 0, this.music.duration || 3);
 
         this.listen('updateTrack', () => {
-            notiVolume.volume = this.music.time
+            notiVolume.max = this.music.duration || 3;
+            notiVolume.volume = this.music.time || 0;
         })
 
+        const seekDebounce = debounce((time: number) => {
+            this.music.seek(time);
+        }, 50);
+
         notiVolume.addEventListener<number>('change', (value) => {
-            console.log('SEEK', value)
+            seekDebounce(value);
         });
 
         timelineContiner.appendChild(volumeGroup);
@@ -119,11 +140,9 @@ export class MusicPlayer extends Modal {
     }
 
     private renderPlayButton(status: string) {
-        if (status == 'play') {
-            this.playButton.dataset.status = 'play';
+        if (status == 'playing') {
             this.playButton.innerHTML = `<span class="material-symbols-outlined icon fill-icon">pause</span>`;
         } else {
-            this.playButton.dataset.status = 'pause';
             this.playButton.innerHTML = `<span class="material-symbols-outlined icon fill-icon">play_arrow</span>`;
         }
     }

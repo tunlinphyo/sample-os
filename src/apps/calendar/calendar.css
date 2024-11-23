@@ -167,7 +167,7 @@
             height: calc(var(--grid) * 14);
             .scrollArea {
                 height: calc(var(--grid) * 14);
-                padding-block: var(--grid) calc(var(--grid) * 2.5);
+                padding-block: 0 calc(var(--grid) * 2.5);
 
                 .title {
                     width: min-content;

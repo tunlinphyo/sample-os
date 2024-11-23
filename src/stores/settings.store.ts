@@ -285,7 +285,7 @@ const defaultSettings: Setting[] = [
             {
                 id: 'software-update',
                 title: 'Software Update',
-                version: 0.4
+                version: 0.41
             },
             {
                 id: 'date-time',
@@ -309,7 +309,7 @@ const defaultSettings: Setting[] = [
 
 export class SettingStore extends BaseManager<Setting> {
     private db: DB<Setting>;
-    public version: number = 0.4;
+    public version: number = 0.41;
     public message: string = 'Added Music app.';
 
     constructor() {

@@ -13,6 +13,7 @@ export class PhoneService {
     ) {}
 
     async makeACall(number: string) {
+        if (!number || number.length < 6) return;
         if (this.phone.isBlock(number)) return;
         let contact = this.phone.contactsStore.findContactByNumber(number);
         const isBlock = this.phone.isBlock(number);

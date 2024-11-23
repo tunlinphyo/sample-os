@@ -1,13 +1,14 @@
 import { Keyboard } from "../../../components/keyboard";
 import { noteTitles } from "../../../components/keyboard/consts";
 import { Modal } from "../../../components/modal";
+// import { SettingsController } from "../../../controllers/settings.controller.ts";
 import { AudioController } from "../../../controllers/audio.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
 import { AudioData, Note } from "../../../stores/notes.store";
 import { NotesController } from "../notes.controller";
 import { MediaRecorderService } from "../services/media.recorder";
-import { AudioButton } from "./audio.button";
+import { AudioButton } from "./audio.button.ts";
 import { v4 as uuidv4 } from 'uuid';
 
 export class AudioRecoder extends Modal {
@@ -22,7 +23,8 @@ export class AudioRecoder extends Modal {
     constructor(
         history: HistoryStateManager,
         private device: DeviceController,
-        private osaudio: AudioController,
+        private audioController: AudioController,
+        // private setting: SettingsController,
         private notes: NotesController,
     ) {
         super(history, { btnStart: 'mic', btnEnd: 'check' });
@@ -199,11 +201,12 @@ export class AudioRecoder extends Modal {
         flexCenter.appendChild(titleButton);
 
         const url = this.note?.title == 'Timeless Wisdom' ? '/music/Death Grips - Get Got.mp3' : '/music/Death Grips - Blackjack.mp3'
-        this.audio = new AudioButton({
-            id: data.id,
-            url, //: data.audio,
-            time: data.currentTime
-        }, flexCenter, this.osaudio);
+        // this.audio = new AudioButton({
+        //     id: data.id,
+        //     url: data.audio,
+        //     time: data.currentTime
+        // }, flexCenter, this.osaudio);
+        this.audio = new AudioButton({ url: data.audio, time: data.currentTime }, flexCenter, this.audioController)
 
         this.mainArea.appendChild(flexCenter);
         this.toggleActions(false, saved);

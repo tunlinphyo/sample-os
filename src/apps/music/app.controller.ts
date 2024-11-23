@@ -1,6 +1,8 @@
 import { MusicController } from "../../controllers/music.controller";
 import { DeviceController } from "../../device/device";
 import { HistoryState, HistoryStateManager } from "../../device/history.manager";
+import { AlbumPage } from "./pages/album.page";
+import { AlbumsPage } from "./pages/albums.page";
 import { MusicPlayer } from "./pages/player.page";
 
 
@@ -10,6 +12,8 @@ export class MusicAppController {
         private device: DeviceController,
         private music: MusicController,
         private musicPlayer: MusicPlayer,
+        private albumsPage: AlbumsPage,
+        private albumPage: AlbumPage
     ) {
         this.renderListeners();
     }
@@ -20,7 +24,20 @@ export class MusicAppController {
                 {
                     pattern: '/player',
                     callback: () => {
-                        this.musicPlayer.openPage('Music', state);
+                        this.musicPlayer.openPage('Player', state);
+                    }
+                },
+                {
+                    pattern: '/albums',
+                    callback: () => {
+                        this.albumsPage.openPage('Albums', this.music.albumList);
+                    }
+                },
+                {
+                    pattern: '/albums/detail',
+                    callback: () => {
+                        const album = this.music.getAlbum(state, true);
+                        this.albumPage.openPage('Album', album);
                     }
                 },
             ]);

@@ -21,7 +21,7 @@ export default defineConfig({
                 settings: resolve(__dirname, '/src/apps/settings/index.html'),
                 weather: resolve(__dirname, '/src/apps/weather/index.html'),
                 maps: resolve(__dirname, '/src/apps/maps/index.html'),
-                music: resolve(__dirname, '/music/index.html'),
+                music: resolve(__dirname, '/src/apps/music/index.html'),
                 journal: resolve(__dirname, '/src/apps/journal/index.html'),
                 // wallet: resolve(__dirname, '/wallet/index.html'),
             },

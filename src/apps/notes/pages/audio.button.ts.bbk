@@ -1,41 +1,52 @@
-import { AudioController } from "../../../controllers/audio.controller";
-import { OSAudio } from "../../../utils/audio";
+import { SettingsController } from "../../../controllers/settings.controller";
+import { OSAudio, OSAudioData } from "../../../utils/audio";
 
 export class AudioButton {
+    private audio: OSAudio;
     private audioButton: HTMLButtonElement;
     private playing: boolean = false;
-    private audioId = 'note';
-    private audio: OSAudio;
 
     constructor(
-        private data: { url: string, time: number },
+        data: string,
+        initTime: number,
         private parentEl: HTMLElement,
-        audioController: AudioController
+        private setting: SettingsController
     ) {
-        this.audio = audioController.initAudio(this.audioId);
+        this.audio = new OSAudio('note');
+        this.audio.data = data;
+        this.audio.currentTime = initTime;
         this.audioButton = document.createElement("button");
         this.render();
         this.init();
     }
 
     private init() {
+        this.setting.addChangeListener((status: string) => {
+            if (status === 'UPDATE_VOLUMES') {
+                this.audio.volume = this.setting.volumes.mediaVolume || 0
+            }
+        });
     }
 
-    get currentTime() {
-        return this.audio.currentTime;
-    }
     get duration() {
+        if (this.audio.duration === Infinity) return null
         const minutes = Math.floor(this.audio.duration / 60);
         const seconds = Math.floor(this.audio.duration % 60);
         return { minutes, seconds };
     }
-    
+
     get time() {
         const minutes = Math.floor(this.audio.currentTime / 60);
         const seconds = Math.floor(this.audio.currentTime % 60);
         return { minutes, seconds };
     }
 
+    get currentTime() {
+        return this.audio.currentTime
+    }
+    set currentTime(time: number) {
+        this.audio.currentTime = time;
+    }
 
     private render() {
         this.audioButton.classList.add('audioPlayer');
@@ -43,6 +54,7 @@ export class AudioButton {
         this.audioButton.innerHTML = '<span class="material-symbols-outlined fill-icon">play_arrow</span>';
 
         this.audioButton.addEventListener('click', () => {
+            this.audio.volume = this.setting.volumes.mediaVolume || 0;
             if (this.playing) {
                 this.pauseAudio();
             } else {
@@ -52,20 +64,17 @@ export class AudioButton {
 
         const timeData = document.createElement('div');
         timeData.classList.add("timeData");
-
-        // this.audio.playSong(this.data.url, this.data.time);
-        this.audio.data = this.data.url;
-        this.audio.currentTime = this.data.time;
         this.updateTimeData(timeData);
+
+        this.audio.e.addEventListener('loadedmetadata', () => {
+            this.updateTimeData(timeData);
+        });
 
         this.audio.e.addEventListener('timeupdate', () => {
             this.updateTimeData(timeData);
         });
-        this.audio.e.addEventListener('ended', () => {
-            this.updateTimeData(timeData);
-            this.stopAudio();
-        });
 
+        // this.parentEl.appendChild(this.audio);
         this.parentEl.appendChild(this.audioButton);
         this.parentEl.appendChild(timeData);
     }
@@ -83,10 +92,19 @@ export class AudioButton {
     }
 
     private updateTimeData(elem: HTMLElement) {
-        elem.textContent = `${this.renderTime(this.time)}/${this.renderTime(this.duration)}`;
+        if (this.duration) {
+            elem.textContent = `${this.renderTime(this.time)}/${this.renderTime(this.duration)}`;
+        } else {
+            elem.textContent = this.renderTime(this.time);
+        }
+        if (this.duration && this.audio.currentTime === this.audio.duration) {
+            this.stopAudio();
+        }
     }
 
     public stopAudio() {
+        this.audio.pause();
+        this.audio.currentTime = 0;
         this.playing = false;
         this.audioButton.innerHTML = '<span class="material-symbols-outlined fill-icon">play_arrow</span>';
     }

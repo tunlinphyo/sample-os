@@ -2,6 +2,7 @@ import { DB } from "./db";
 import { BaseManager, ChangeListener } from "./data";
 import { ALBUMS } from "../apps/music/service/music";
 import { Artist } from "./artist.store";
+import { Song } from "./songs.store";
 
 export interface Album {
     id: string;
@@ -10,7 +11,9 @@ export interface Album {
     releaseDate: Date;
     artistIds: string[];
     artists?: Artist[];
+    songs?: Song[];
     isFavourite: boolean;
+    order: number;
 }
 
 export class AlbumStore extends BaseManager<Album> {

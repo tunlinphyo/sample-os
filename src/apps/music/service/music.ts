@@ -17,7 +17,8 @@ export const ALBUMS: Album[] = [
         cover: '/covers/1.webp',
         releaseDate: new Date("2012-04-19"),
         artistIds: ['97c9b3cb-c589-4fc6-8dc6-b5c8e74b5caa'],
-        isFavourite: false
+        isFavourite: false,
+        order: 0,
     },
     {
         id: 'f88d7181-8d26-4645-9801-2bdc8342abc3',
@@ -25,7 +26,8 @@ export const ALBUMS: Album[] = [
         cover: '/covers/2.webp',
         releaseDate: new Date("2013-04-04"),
         artistIds: ['97c9b3cb-c589-4fc6-8dc6-b5c8e74b5caa'],
-        isFavourite: false
+        isFavourite: false,
+        order: 1,
     }
 ];
 

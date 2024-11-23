@@ -7,14 +7,17 @@ import { Song } from "../../../stores/songs.store";
 
 export class MusicApp extends App {
     private scrollBar: ScrollBar;
+    private playerBtn: HTMLButtonElement;
 
     constructor(
         history: HistoryStateManager,
         private device: DeviceController,
         private music: MusicController,
     ) {
-        super(history, { btnStart: 'artist', btnCenter: 'genres', btnEnd: 'album' });
-        this.component.classList.add('historiesPage');
+        super(history, { btnStart: 'artist', btnEnd: 'library_music' });
+        this.component.classList.add('latestPage');
+        this.playerBtn = this.createPlayer();
+        this.component.appendChild(this.playerBtn);
         this.init();
         this.render(music.latest);
 
@@ -24,11 +27,11 @@ export class MusicApp extends App {
     private init() {
         this.addEventListener('click', () => {
             this.history.pushState('/player', null);
-        }, this.btnCenter, false);
+        }, this.playerBtn, false);
 
-        // this.addEventListener('click', () => {
-        //     this.history.pushState('/contacts', null);
-        // }, this.btnEnd, false);
+        this.addEventListener('click', () => {
+            this.history.pushState('/albums', null);
+        }, this.btnEnd, false);
 
         // this.addEventListener('click', () => {
         //     this.history.pushState('/dialpad', null);
@@ -38,7 +41,18 @@ export class MusicApp extends App {
             if (status === "LATEST_CHANGE") {
                 this.update('update', data);
             }
+            if (status === 'SONG_PLAY_STATUS') {
+                if (data === 'playing') {
+                    this.component.classList.add('playing');
+                } else {
+                    this.component.classList.remove('playing');
+                }
+            }
         };
+
+        if (this.music.status == 'playing') {
+            this.component.classList.add('playing');
+        }
 
         this.music.addChangeListener(musicListener);
 
@@ -50,7 +64,7 @@ export class MusicApp extends App {
     render(songs: Song[]) {
         const scrollArea = this.createScrollArea();
 
-        const noteList = this.createElement('ul', ['titleList', 'songList']);
+        const songList = this.createElement('ul', ['titleList', 'songList']);
 
         for (const song of songs) {
             const noteTitle = this.createElement('li', ['titleItem']);
@@ -64,10 +78,10 @@ export class MusicApp extends App {
                 this.music.playMusic(song, songs);
                 this.history.pushState('/player', null);
             }, noteTitle);
-            noteList.appendChild(noteTitle);
+            songList.appendChild(noteTitle);
         }
 
-        scrollArea.appendChild(noteList);
+        scrollArea.appendChild(songList);
         this.mainArea.appendChild(scrollArea);
         this.scrollBar?.reCalculate();
     }
@@ -76,5 +90,12 @@ export class MusicApp extends App {
         this.mainArea.innerHTML = '';
         this.removeAllEventListeners();
         this.render(data);
+    }
+
+    private createPlayer() {
+        const playerBtn = this.createElement<HTMLButtonElement>('button', ['playerButton']);
+        playerBtn.innerHTML = `<span class="material-symbols-outlined icon">genres</span>`;
+
+        return playerBtn;
     }
 }

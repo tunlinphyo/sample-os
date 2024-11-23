@@ -10,7 +10,7 @@ export class TrackSlider extends CustomForm {
     constructor(
         target: HTMLElement,
         private _volume: number,
-        private max: number
+        private _max: number
     ) {
         super(target);
 
@@ -23,7 +23,21 @@ export class TrackSlider extends CustomForm {
     set volume(data: number) {
         this._volume = data;
         this.renderRange(data);
+        // this.dispatchFormEvent('change', data);
+    }
+    set volumeInternal(data: number) {
+        this._volume = data;
+        this.renderRange(data);
         this.dispatchFormEvent('change', data);
+    }
+    get max() {
+        return this._max;
+    }
+    set max(max: number) {
+        this._max = max;
+        if (this.bgEl && this.bgEl.textContent != this.getTimeString(max)) {
+            this.bgEl.textContent = this.getTimeString(max);
+        }
     }
 
     private renderElem() {
@@ -51,10 +65,11 @@ export class TrackSlider extends CustomForm {
 
 
     private touchEventListeners(elem: HTMLElement) {
-        let startX = 0, currentX = 0;
+        // let startX = 0;
+        let currentX = 0;
         elem.addEventListener('touchstart', (event) => {
             event.preventDefault();
-            startX = event.touches[0].clientX;
+            // startX = event.touches[0].clientX;
             currentX = event.touches[0].clientX;
         }, false);
 
@@ -64,29 +79,29 @@ export class TrackSlider extends CustomForm {
             if (this.totalTime) {
                 this.totalTime.style.transition = `transform .1s ease`;
             }
-            this.volume = this.calcPosition(currentX, elem.getBoundingClientRect());
+            this.volumeInternal = this.calcPosition(currentX, elem.getBoundingClientRect());
         }, false);
 
         elem.addEventListener('touchend', () => {
-            this.volume = this.calcPosition(currentX, elem.getBoundingClientRect());
+            this.volumeInternal = this.calcPosition(currentX, elem.getBoundingClientRect());
             this.rangeEnd();
         }, false);
 
         elem.addEventListener('mousedown', (event: MouseEvent) => {
-            startX = event.clientX;
+            // startX = event.clientX;
             currentX = event.clientX;
-            this.volume = this.calcPosition(currentX, elem.getBoundingClientRect());
+            this.volumeInternal = this.calcPosition(currentX, elem.getBoundingClientRect());
 
             const onMouseMove = (moveEvent: MouseEvent) => {
                 currentX = moveEvent.clientX;
                 if (this.totalTime) {
                     this.totalTime.style.transition = `transform .1s ease`;
                 }
-                this.volume = this.calcPosition(currentX, elem.getBoundingClientRect());
+                this.volumeInternal = this.calcPosition(currentX, elem.getBoundingClientRect());
             };
 
             const onMouseUp = () => {
-                this.volume = this.calcPosition(currentX, elem.getBoundingClientRect());
+                this.volumeInternal = this.calcPosition(currentX, elem.getBoundingClientRect());
                 this.rangeEnd();
                 document.removeEventListener('mousemove', onMouseMove);
                 document.removeEventListener('mouseup', onMouseUp);
@@ -99,7 +114,7 @@ export class TrackSlider extends CustomForm {
 
     private renderRange(data: number) {
         if (this.totalTime) {
-            const volume = OSNumber.mapRange(data, 0, this.max, 100, 0);
+            const volume = OSNumber.mapRange(data, 0, this.max - 0.5, 100, 0);
             this.totalTime.style.transform = `translate(${volume * -1}%, 0)`;
             this.totalTime.textContent = this.getTimeString(this.volume);
         }
