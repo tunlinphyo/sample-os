@@ -128,6 +128,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             window.location.reload();
         }
         if (status === 'UPDATE_TIMEZONE' || status == 'UPDATE_HOUR12') {
+            if (!data) return;
             const info = data.data as DateTimeInfo;
             // console.log('UPDATE_TIMEZONE', info);
             window.device.timeZone = info.timeZone;

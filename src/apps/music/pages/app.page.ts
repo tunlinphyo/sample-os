@@ -3,7 +3,7 @@ import { ScrollBar } from "../../../components/scroll-bar";
 import { MusicController } from "../../../controllers/music.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
-import { Song } from "../../../stores/songs.store";
+import { Music } from "../../../stores/music.store";
 
 export class MusicApp extends App {
     private scrollBar: ScrollBar;
@@ -14,12 +14,12 @@ export class MusicApp extends App {
         private device: DeviceController,
         private music: MusicController,
     ) {
-        super(history, { btnStart: 'artist', btnEnd: 'library_music' });
+        super(history, { btnStart: 'queue_music', btnEnd: 'library_music' });
         this.component.classList.add('latestPage');
         this.playerBtn = this.createPlayer();
         this.component.appendChild(this.playerBtn);
         this.init();
-        this.render(music.latest);
+        this.render(music.list);
 
         this.scrollBar = new ScrollBar(this.component);
     }
@@ -30,7 +30,7 @@ export class MusicApp extends App {
         }, this.playerBtn, false);
 
         this.addEventListener('click', () => {
-            this.history.pushState('/albums', null);
+            this.history.pushState('/library', null);
         }, this.btnEnd, false);
 
         // this.addEventListener('click', () => {
@@ -61,32 +61,105 @@ export class MusicApp extends App {
         });
     }
 
-    render(songs: Song[]) {
+    render(list: Music[]) {
         const scrollArea = this.createScrollArea();
 
-        const songList = this.createElement('ul', ['titleList', 'songList']);
+        const musicList = this.createElement('ul', ['musicList']);
 
-        for (const song of songs) {
-            const noteTitle = this.createElement('li', ['titleItem']);
-            noteTitle.innerHTML = `
-                <span class="albumCover">
-                    <span class="material-symbols-outlined">music_note</span>
-                </span>
-                <span class="contactName">${song.title}</span>
+        for (const music of list) {
+            const musicCard = this.createElement('li', ['musicCard']);
+
+            const backgroundEl = this.createElement('div', ['backgroundEl']);
+            const albumEl = this.createElement('button', ['albumEl']);
+            albumEl.innerHTML = `
+                <h3 class="albumName">${music.name}</h3>
             `;
+
+            const playButton = this.createElement('button', ['playButton']);
+            playButton.innerHTML = `<span class="material-symbols-rounded icon">shuffle</span>`;
+
+            musicCard.appendChild(backgroundEl);
+            musicCard.appendChild(albumEl);
+            musicCard.appendChild(playButton);
+
             this.addEventListener('click', () => {
-                this.music.playMusic(song, songs);
+                this.history.pushState('/playlist', music.id);
+            }, albumEl);
+
+            this.addEventListener('click', () => {
+                const songs = this.music.getSongs(music.songIds);
+                if (songs.length) this.music.playAll(music.id, songs, true);
                 this.history.pushState('/player', null);
-            }, noteTitle);
-            songList.appendChild(noteTitle);
+            }, playButton);
+
+            musicList.appendChild(musicCard);
         }
 
-        scrollArea.appendChild(songList);
+        // const albumList = this.createElement('ul', ['musicList', 'albumList']);
+
+        // for (const album of this.music.albumList) {
+        //     const musicCard = this.createElement('li', ['musicCard', 'albumCard']);
+
+        //     const backgroundEl = this.createElement('div', ['backgroundEl']);
+        //     const albumEl = this.createElement('button', ['albumEl']);
+        //     albumEl.innerHTML = `
+        //         <h3 class="albumName">${album.name}</h3>
+        //     `;
+
+        //     const playButton = this.createElement('button', ['playButton']);
+        //     playButton.innerHTML = `<span class="material-symbols-outlined icon">play_circle</span>`;
+
+        //     musicCard.appendChild(backgroundEl);
+        //     musicCard.appendChild(albumEl);
+        //     musicCard.appendChild(playButton);
+
+        //     this.addEventListener('click', () => {
+        //         // this.music.playMusic(song, songs);
+        //         this.history.pushState('/albums/detail', album.id);
+        //     }, albumEl);
+
+        //     this.addEventListener('click', () => {
+        //         // this.music.playMusic(song, songs);
+        //         this.history.pushState('/player', null);
+        //     }, playButton);
+
+        //     albumList.appendChild(musicCard);
+        // }
+        const albumList = this.createElement('ul', ['titleList', 'albumList']);
+
+        for (const album of this.music.albumList) {
+            const albumEl = this.createElement('li', ['albumCard']);
+
+            const albumRecord = this.createElement('div', ['albumRecord']);
+            albumRecord.innerHTML = `
+                <span class="record">
+                    <span class="material-symbols-outlined">music_note</span>
+                </span>
+            `;
+
+            const albumBtn = this.createElement('button', ['albumButton']);
+            const artists = album.artists?.map(artist => artist.name) || [];
+            albumBtn.innerHTML = `
+                <div class="albumName">${album.name}</div>
+                <div class="artists">${artists.join(', ')}</div>
+            `;
+
+            this.addEventListener('click', () => {
+                this.history.pushState('/albums/detail', album.id);
+            }, albumBtn);
+
+            albumEl.appendChild(albumRecord);
+            albumEl.appendChild(albumBtn);
+            albumList.appendChild(albumEl);
+        }
+
+        scrollArea.appendChild(musicList);
+        scrollArea.appendChild(albumList);
         this.mainArea.appendChild(scrollArea);
         this.scrollBar?.reCalculate();
     }
 
-    update(_: string, data: Song[]) {
+    update(_: string, data: Music[]) {
         this.mainArea.innerHTML = '';
         this.removeAllEventListeners();
         this.render(data);
@@ -94,7 +167,7 @@ export class MusicApp extends App {
 
     private createPlayer() {
         const playerBtn = this.createElement<HTMLButtonElement>('button', ['playerButton']);
-        playerBtn.innerHTML = `<span class="material-symbols-outlined icon">genres</span>`;
+        playerBtn.innerHTML = `<span class="material-symbols-outlined icon">music_note</span>`;
 
         return playerBtn;
     }

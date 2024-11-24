@@ -35,7 +35,7 @@ export class OSAudio {
     }
 
     get currentTime() {
-        return this.audio.currentTime;
+        return this.audio.currentTime || 0;
     }
 
     set currentTime(time: number) {
@@ -43,7 +43,8 @@ export class OSAudio {
     }
 
     get duration() {
-        return this.audio.duration;
+        if (this.audio.duration == Infinity) return 0;
+        return this.audio.duration || 0;
     }
 
     get volume() {
@@ -64,6 +65,7 @@ export class OSAudio {
     private eventListeners() {
         this.audio.addEventListener('ended', () => {
             this.playing = false;
+            this.audio.currentTime = 0;
         });
 
         document.addEventListener('visibilitychange', () => {

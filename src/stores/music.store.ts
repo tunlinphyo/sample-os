@@ -1,34 +1,54 @@
 import { DB } from "./db";
 import { BaseManager, ChangeListener } from "./data";
 
-export type MusicType = 'player' | 'playing' | 'history' | 'favourite-songs' | 'favourite-artist' | 'favourite-album';
-export type PlayerMeta = 'default' | 'loop' | 'loop-1';
+export type MusicType = 'all' | 'favourite' | 'playlist';
+export type PlayType = 'normal' | 'repeat' | 'repeat-one';
 
 export interface Music {
     id: string;
     type: MusicType;
-    data: string[];
-    meta: any | PlayerMeta;
+    name: string;
+    currentSongId: string | null;
+    currentTime: number;
+    playType: PlayType;
+    songIds: string[];
+    order: number;
 }
 
 export class MusicStore extends BaseManager<Music> {
     private db: DB<Music>;
 
     constructor() {
-        super([])
-        this.db = new DB<Music>('music')
-        this.init()
+        super([]);
+        this.db = new DB<Music>('music');
+        this.init();
     }
 
     async init() {
         let items = await this.db.getAll();
         if (!items.length) {
-            items = await this.db.postMany([{
-                id: '672e6b33-d8e7-4c9f-ab3f-94da0307eed2',
-                type: 'player',
-                data: [],
-                meta: 'default'
-            }]);
+            items = await this.db.postMany([
+                {
+                    id: 'songs',
+                    type: 'all',
+                    name: 'All',
+                    currentSongId: null,
+                    currentTime: 0,
+                    playType: 'normal',
+                    songIds: [],
+                    order: 0,
+                },
+                {
+                    id: 'favourite',
+                    type: 'favourite',
+                    name: 'Favorite',
+                    currentSongId: null,
+                    currentTime: 0,
+                    playType: 'normal',
+                    songIds: [],
+                    order: 1,
+                },
+            ]);
         }
         this.setItems(items);
         this.notifyListeners(null, 'loaded');

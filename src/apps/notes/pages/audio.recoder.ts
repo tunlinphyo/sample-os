@@ -200,7 +200,7 @@ export class AudioRecoder extends Modal {
         }, titleButton);
         flexCenter.appendChild(titleButton);
 
-        const url = this.note?.title == 'Timeless Wisdom' ? '/music/Death Grips - Get Got.mp3' : '/music/Death Grips - Blackjack.mp3'
+        // const url = this.note?.title == 'Timeless Wisdom' ? '/music/Death Grips - Get Got.mp3' : '/music/Death Grips - Blackjack.mp3'
         // this.audio = new AudioButton({
         //     id: data.id,
         //     url: data.audio,

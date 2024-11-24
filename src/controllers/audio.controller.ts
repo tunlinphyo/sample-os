@@ -12,14 +12,30 @@ interface audioObject {
     [key: string]: Audio
 }
 
+interface AudioVolume {
+    media: number;
+    noti: number;
+}
+
 export class AudioController extends BaseController {
     private audioObject: audioObject = {};
+    private _volume: AudioVolume = {
+        media: 0,
+        noti: 0
+    };
 
     constructor() {
         super();
     }
 
+    get volume(): AudioVolume {
+        return this._volume;
+    }
     set volume(data: Volume) {
+        this._volume = {
+            media: data.mediaVolume,
+            noti: data.alarmVolume,
+        };
         Object.values(this.audioObject).forEach(c => {
             let volume = c.type === 'media' ? data.mediaVolume : data.alarmVolume;
             c.service.volume = volume;
@@ -37,6 +53,7 @@ export class AudioController extends BaseController {
                 type,
                 service: new OSAudio(id)
             }
+            newAudio.service.volume = this.volume[type];
             this.audioObject[id] = newAudio;
             return newAudio.service;
         }

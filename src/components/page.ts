@@ -119,9 +119,10 @@ export abstract class Page extends BaseComponent {
         return itemEl
     }
 
-    protected renderNoData(message: string) {
+    protected renderNoData(message: string, parentEl?: HTMLElement) {
         const msgEl = this.createElement('div', ['noData']);
         msgEl.textContent = message;
-        this.mainArea.appendChild(msgEl);
+        if (parentEl) parentEl.appendChild(msgEl);
+        else this.mainArea.appendChild(msgEl);
     }
 }

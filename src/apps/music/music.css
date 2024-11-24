@@ -1,4 +1,60 @@
 @layer component {
+    .musicList {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        padding: 10px;
+        gap: 10px;
+
+        &.albumList {
+            padding-block: var(--padding);
+        }
+
+        .musicCard {
+            display: grid;
+            grid-template-areas: "card";
+            aspect-ratio: 1/1;
+            text-align: left;
+
+            border: 3px solid var(--black);
+            border-radius: 5px;
+            position: relative;
+
+            .backgroundEl {
+                grid-area: card;
+            }
+
+            .albumEl {
+                grid-area: card;
+                padding: 8px 10px;
+                text-align: left;
+
+                display: flex;
+                justify-content: flex-start;
+                align-items: flex-start;
+
+                .albumName {
+                    font-size: 20px;
+                    font-weight: 500;
+                }
+            }
+
+            .playButton {
+                position: absolute;
+                z-index: 1;
+                bottom: 0;
+                right: 0;
+
+                width: calc(var(--grid) * 1.5);
+                height: calc(var(--grid) * 1.5);
+                border-radius: 50%;
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+    }
+
     .songList {
         --album-size: 32px;
 
@@ -25,18 +81,91 @@
         padding-inline: var(--padding);
 
         .albumName {
-            max-width: 90%;
+            padding-inline-end: var(--grid);
             font-size: var(--grid);
             line-height: 1.2;
             font-weight: normal;
         }
 
         .artists {
-            padding-block: var(--half);
+            padding-block-start: var(--half);
         }
     }
 
-    .albumsPage {
+    .albumList {
+        display: grid;
+        grid-template-columns: 1fr;
+        padding-inline: 10px;
+        gap: 10px;
+
+        .albumCard {  
+            aspect-ratio: 2/1;
+            display: grid;
+            grid-template-areas: "album";
+    
+            .albumRecord {
+                grid-area: album;
+    
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                overflow: hidden;
+                padding-inline: 2px;
+    
+                .record {
+                    width: calc(var(--grid) * 2);
+                    height: calc(var(--grid) * 2);
+                    border: 2px solid var(--black);
+                    border-radius: 100%;
+                    box-shadow: 
+                        0 0 0 4px var(--white),
+                        0 0 0 6px var(--black),
+                        0 0 0 10px var(--white),
+                        0 0 0 12px var(--black),
+                        0 0 0 16px var(--white),
+                        0 0 0 18px var(--black),
+                        0 0 0 22px var(--white),
+                        0 0 0 24px var(--black),
+                        0 0 0 28px var(--white),
+                        0 0 0 30px var(--black),
+                        0 0 0 34px var(--white),
+                        0 0 0 36px var(--black),
+                        0 0 0 40px var(--white),
+                        0 0 0 42px var(--black)
+                    ;
+    
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+            }
+            
+            .albumButton {
+                grid-area: album;
+                border: 3px solid var(--black);
+                border-radius: 5px;
+                padding: var(--padding);
+
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: flex-start;
+                text-align: left;
+
+                .albumName {
+                    font-size: 22px;
+                }
+
+                .artists {
+                    width: 100%;
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+
+    .albumsPage,
+    .latestPage {
         .mainArea {
             height: calc(var(--grid) * 14);
 
@@ -45,77 +174,30 @@
                 padding-block-end: calc(var(--grid) * 3);
             }
 
-            .albumList {
+            .playActions {
                 display: grid;
-                grid-template-columns: 1fr;
-                padding-inline: var(--half);
-                gap: var(--half);
-        
-                .albumCard {  
-                    aspect-ratio: 1.6/1;
-                    display: grid;
-                    grid-template-areas: "album";
-            
-                    .albumRecord {
-                        grid-area: album;
-            
-                        display: flex;
-                        justify-content: flex-end;
-                        align-items: center;
-                        overflow: hidden;
-            
-                        .record {
-                            width: calc(var(--grid) * 2.5);
-                            height: calc(var(--grid) * 2.5);
-                            border: 2px solid var(--black);
-                            border-radius: 100%;
-                            box-shadow: 
-                                0 0 0 4px var(--white),
-                                0 0 0 6px var(--black),
-                                0 0 0 10px var(--white),
-                                0 0 0 12px var(--black),
-                                0 0 0 16px var(--white),
-                                0 0 0 18px var(--black),
-                                0 0 0 22px var(--white),
-                                0 0 0 24px var(--black),
-                                0 0 0 28px var(--white),
-                                0 0 0 30px var(--black),
-                                0 0 0 34px var(--white),
-                                0 0 0 36px var(--black),
-                                0 0 0 40px var(--white),
-                                0 0 0 42px var(--black),
-                                0 0 0 46px var(--white),
-                                0 0 0 48px var(--black)
-                            ;
-            
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                        }
-                    }
-                    
-                    .albumButton {
-                        grid-area: album;
-                        border: 3px solid var(--black);
-                        border-radius: 5px;
-                        padding: var(--padding);
+                grid-template-columns: repeat(2, 1fr);
+                padding: var(--grid) var(--padding) 0;
+                gap: var(--padding);
 
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: space-between;
-                        align-items: flex-start;
-                        text-align: left;
+                & button {
+                    height: calc(var(--grid) * 1.4);
+                    border: 2px solid var(--black);
+                    border-radius: var(--grid);
 
-                        .albumName {
-                            font-size: var(--grid);
-                        }
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 8px;
 
-                        .artists {
-                            width: 100%;
-                            font-size: 16px;
-                        }
+                    .icon {
+                        font-size: 28px;
                     }
                 }
+            }
+
+            .noData {
+                height: calc(var(--grid) * 8);
             }
         }
         .actionBar {
@@ -144,17 +226,18 @@
             justify-content: center;
             align-items: center;
 
+            border: 3px solid var(--black);
             outline: 3px solid var(--black);
-            outline-offset: -5px;
+            outline-offset: -9px;
 
             .icon {
                 color: var(--white);
-                /* font-size: 32px; */
+                font-size: 22px;
             }
 
             &::before {
                 content: '';
-                inset: 8px;
+                inset: 9px;
                 display: block;
                 position: absolute;
                 z-index: -1;
@@ -167,6 +250,36 @@
         &.playing {
             .playerButton {
                 animation: rotate 10s linear infinite;
+            }
+        }
+
+        .actionBar {
+            z-index: 1;
+            justify-content: center;
+            gap: 4px;
+            .actionButton {
+                &:has(span) {
+                    pointer-events: auto;
+                    border-radius: calc(var(--grid) * 1.5);
+                    position: relative;
+                    z-index: 0;
+    
+                    .icon {
+                        /* color: var(--white); */
+                        font-size: 28px;
+                    }
+    
+                    &::before {
+                        content: '';
+                        inset: 8px;
+                        display: block;
+                        position: absolute;
+                        z-index: -1;
+                        border-radius: var(--grid);
+                        background-color: var(--white);
+                        border: 2px solid var(--black);
+                    }
+                }
             }
         }
     }
@@ -355,7 +468,6 @@
     }
 
     .albumsPage {
-        
         .actionBar {
             background-color: transparent;
             justify-content: center;
@@ -393,6 +505,30 @@
                         border: 2px solid var(--black);
                     }
                 }
+            }
+        }
+    }
+
+    .libraryList {
+        margin: 0;
+        padding: 0 var(--padding);
+
+        list-style: none;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+
+        .libraryItem {
+            .libraryButton {
+                width: 100%;
+                display: grid;
+                grid-template-columns: 42px 1fr 24px;
+                justify-content: flex-start;
+                align-items: center;
+                gap: 8px;
+                text-align: left;
+
+                height: calc(var(--grid) * 1.5);
             }
         }
     }
