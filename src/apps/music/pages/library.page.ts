@@ -25,7 +25,7 @@ export class LibraryPage extends Page {
         }, this.btnEnd, false);
 
         const musicListener = (status: string) => {
-            // console.log(status);
+            console.log(status);
         };
 
         this.music.addChangeListener(musicListener);
