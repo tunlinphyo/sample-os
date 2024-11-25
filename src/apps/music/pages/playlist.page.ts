@@ -27,17 +27,17 @@ export class PlaylistPage extends Page {
             this.history.pushState('/queue', null);
         }, this.btnEnd, false);
 
-        // const musicListener = (status: string) => {
-        //     if (status === 'UPDATE_FAVORITE' && this._music && this._music.id == 'favourite') {
-        //         this.update('update', this._music);
-        //     }
-        // };
+        const musicListener = (status: string) => {
+            if (status === 'UPDATE_FAVORITE') {
+                console.log("FVUD")
+            }
+        };
 
-        // this.music.addChangeListener(musicListener);
+        this.music.addChangeListener(musicListener);
 
-        // this.device.addEventListener('closeApp', () => {
-        //     this.music.removeChangeListener(musicListener);
-        // });
+        this.device.addEventListener('closeApp', () => {
+            this.music.removeChangeListener(musicListener);
+        });
     }
 
     render(music: Music) {

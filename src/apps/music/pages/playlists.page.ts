@@ -25,15 +25,17 @@ export class PlaylistsPage extends Page {
             this.history.pushState('/contacts/new', null);
         }, this.btnEnd, false);
 
-        // const musicListener = (status: string) => {
-        //     console.log(status);
-        // };
+        const musicListener = (status: string) => {
+            if (status) {
+                // DO SOMETHING
+            }
+        };
 
-        // this.music.addChangeListener(musicListener);
+        this.music.addChangeListener(musicListener);
 
-        // this.device.addEventListener('closeApp', () => {
-        //     this.music.removeChangeListener(musicListener);
-        // });
+        this.device.addEventListener('closeApp', () => {
+            this.music.removeChangeListener(musicListener);
+        });
     }
 
     render(list: Music[]) {

@@ -3,6 +3,7 @@ import { HistoryState, HistoryStateManager } from "../device/history.manager";
 import { WeatherService } from "../services/weather.service";
 import { Noti, NotificationStore } from "../stores/noti.store";
 import { OSDate } from "../utils/date";
+import { debounce } from "../utils/debounce";
 import { BaseController } from "./base.controller";
 import { ClockController } from "./clock.controller";
 import { MusicController } from "./music.controller";
@@ -164,7 +165,7 @@ export class NotificationController extends BaseController {
     private openNoti(key?: string) {
         if (!key) return;
         const noti = this.notification[key];
-        if (key !== 'settings') this.notiStore.del(key);
+        if (!['settings', 'music'].includes(key)) this.notiStore.del(key);
         if (noti) {
             this.device.setHistory(noti.app, [...noti.history]);
             this.history.replaceState(`/${noti.app}`, noti.data);
@@ -188,7 +189,6 @@ export class NotificationController extends BaseController {
         this.updateClock();
 
         this.notiStore.listen((list, item, operation) => {
-            console.log("NOTI_STORE", list, item, operation);
             this.initNotis(list);
             if (item) {
                 if (operation === 'delete') {
@@ -202,7 +202,9 @@ export class NotificationController extends BaseController {
                 } else {
                     this.notification[item.id] = item;
                 }
-            };
+            } else if (this.notification['music']) {
+                this.notiStore.del('music');
+            }
         });
 
         this.clock.addChangeListener(async (status: string) => {
@@ -235,9 +237,14 @@ export class NotificationController extends BaseController {
                 this.openNoti(this.noti);
             }
         });
-
-        this.musicController.addChangeListener((status: string, data: boolean) => {
-            // if (status == '')
+        
+        const musicDebounce = debounce((status: string) => {
+            this.music = status == 'playing' ? true : false;
+        }, 100);
+        this.musicController.addChangeListener((status: string, data: string) => {
+            if (status == 'SONG_PLAY_STATUS') {
+                musicDebounce(data);
+            }
         })
 
         this.device.addEventListener('updateClock', () => {
@@ -245,19 +252,17 @@ export class NotificationController extends BaseController {
         });
 
         this.device.addEventListener('openAppFinished', () => {
-            console.log('APP_OPENRD', this.device.appOpened);
             if (this.device.appOpened === 'phone') {
                 this.call = false;
                 this.message = false;
             }
         });
 
-        this.device.addEventListener('closeAppFinished', () => {
-            console.log('APP_CLOSED', this.device.appOpened);
-        });
+        // this.device.addEventListener('closeAppFinished', () => {
+        //     console.log('APP_CLOSED', this.device.appOpened);
+        // });
 
         this.phone.addChangeListener((status: string, data: any) => {
-            console.log(status, data);
             if ((status === 'PHONE_NOTI' || status === 'MESSAGE_NOTI') && this.device.appOpened !== 'phone') {
                 if (status === 'PHONE_NOTI') {
                     this.device.phoneNoti(true);
@@ -280,7 +285,6 @@ export class NotificationController extends BaseController {
 
         this.setting.addChangeListener((status: string, data: any) => {
             if (status === 'UPDATE_SYSTEM') {
-                console.log(data)
                 this.settings = data.isUpdate ? data.version : null;
             }
         })
@@ -317,7 +321,6 @@ export class NotificationController extends BaseController {
     }
 
     private getIcon(noti?: string) {
-        console.log("NOTI", noti);
         switch (noti) {
             case 'stopwatch':
                 return '<span class="material-symbols-outlined fill-icon" style="font-size: 20px; margin-left: 2px; translate: 0 -2px;">timer</span>';
@@ -334,6 +337,8 @@ export class NotificationController extends BaseController {
                 } else {
                     return '';
                 }
+            case 'music':
+                return '<span class="material-symbols-outlined fill-icon" style="font-size: 20px; margin-left: 2px; translate: 0 0;">music_note</span>';
             default:
                 return '';
         }

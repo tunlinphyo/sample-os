@@ -7,7 +7,6 @@ import { OSAudio } from "../utils/audio";
 import { AudioController } from "./audio.controller";
 import { BaseController } from "./base.controller";
 import { OSArray } from '../utils/arrays';
-import { v4 as uuidv4 } from 'uuid';
 
 export interface Library {
     id: string;

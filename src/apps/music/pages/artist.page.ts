@@ -1,18 +1,14 @@
 import { Page } from "../../../components/page";
 import { ScrollBar } from "../../../components/scroll-bar";
-import { SelectItem } from "../../../components/select";
 import { MusicController } from "../../../controllers/music.controller";
-import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
 import { Artist } from "../../../stores/artist.store";
-import { Song } from "../../../stores/songs.store";
 
 export class ArtistPage extends Page {
     private scrollBar?: ScrollBar;
 
     constructor(
         history: HistoryStateManager,
-        private device: DeviceController,
         private music: MusicController,
     ) {
         super(history, { btnEnd: 'queue_music' });
@@ -112,28 +108,5 @@ export class ArtistPage extends Page {
         this.mainArea.innerHTML = '';
         this.removeAllEventListeners();
         this.render(data);
-    }
-
-    private async openSongMenu(song: Song) {
-        let list: SelectItem[] = [
-            { title: 'Play', value: 'play', icon: 'play_circle' },
-            { title: 'Play After', value: 'play-next', icon: 'music_note_add' },
-            {
-                title: song.isFavourite ? 'Remove Favorite' : 'Favorite',
-                value: 'favorite',
-                icon: 'favorite'
-            },
-            { title: 'Playlist', value: 'add', icon: 'playlist_add' },
-        ];
-
-        const selected = await this.device.selectList.openPage('Contact', list);
-        console.log('SELECTED', selected, song);
-        if (selected == 'play') {
-            this.music.playMusic(song, [song]);
-        } else if (selected == 'play-next') {
-            this.music.addPlayNext(song);
-        } else if (selected == 'favorite') {
-            this.music.toggleSongFavorite(song.id);
-        }
     }
 }

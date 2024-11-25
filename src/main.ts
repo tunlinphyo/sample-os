@@ -90,7 +90,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (status === 'SHOW_ALARM') {
             const alarm = await alarmAlert.open('Alarm', data);
             if (alarm && typeof alarm !== 'boolean') {
-                console.log('SNOOZE', alarm);
                 window.clock.snoozeAlarm(alarm.id);
             }
         }
@@ -130,7 +129,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (status === 'UPDATE_TIMEZONE' || status == 'UPDATE_HOUR12') {
             if (!data) return;
             const info = data.data as DateTimeInfo;
-            // console.log('UPDATE_TIMEZONE', info);
             window.device.timeZone = info.timeZone;
             window.device.hour12 = info.hour12;
         }
@@ -141,7 +139,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     window.weather.addChangeListener((status: string, data: any) => {
         if (status === 'MY_WEATHER_FETCH') {
-            console.log('MY_WEATHER_FETCH', data);
             lockedScreen.update(status, data);
         }
     })

@@ -23,8 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
     new MusicApp(historyManager, parent.device, parent.music);
     const musicPlayer = new MusicPlayer(historyManager, parent.device, parent.music);
     const libraryPage = new LibraryPage(historyManager);
-    const artistsList = new ArtistsPage(historyManager, parent.device, parent.music);
-    const artistPage = new ArtistPage(historyManager, parent.device, parent.music);
+    const artistsList = new ArtistsPage(historyManager);
+    const artistPage = new ArtistPage(historyManager, parent.music);
     const albumsPage = new AlbumsPage(historyManager);
     const albumPage = new AlbumPage(historyManager, parent.device, parent.music);
     const songsPage = new SongsPage(historyManager, parent.device, parent.music);
