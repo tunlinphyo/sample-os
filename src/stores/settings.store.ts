@@ -161,7 +161,7 @@ const stores: StoreInfo[] = [
         id: 'music',
         name: 'Music',
         order: 5,
-        stores: ['music', 'album', 'artist'],
+        stores: ['music', 'album', 'artist', 'song'],
     },
     {
         id: 'notes',
@@ -285,7 +285,7 @@ const defaultSettings: Setting[] = [
             {
                 id: 'software-update',
                 title: 'Software Update',
-                version: 0.4
+                version: 0.5
             },
             {
                 id: 'date-time',
@@ -309,7 +309,7 @@ const defaultSettings: Setting[] = [
 
 export class SettingStore extends BaseManager<Setting> {
     private db: DB<Setting>;
-    public version: number = 0.4;
+    public version: number = 0.5;
     public message: string = 'Added Music app.';
 
     constructor() {
