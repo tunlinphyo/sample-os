@@ -1,18 +1,15 @@
 import { DB } from "./db";
 import { BaseManager, ChangeListener } from "./data";
 
-export type MusicType = 'all' | 'favourite' | 'playlist';
 export type PlayType = 'normal' | 'repeat' | 'repeat-one';
 
 export interface Music {
     id: string;
-    type: MusicType;
     name: string;
     currentSongId: string | null;
     currentTime: number;
     playType: PlayType;
     songIds: string[];
-    order: number;
 }
 
 export class MusicStore extends BaseManager<Music> {
@@ -26,30 +23,9 @@ export class MusicStore extends BaseManager<Music> {
 
     async init() {
         let items = await this.db.getAll();
-        if (!items.length) {
-            items = await this.db.postMany([
-                {
-                    id: 'songs',
-                    type: 'all',
-                    name: 'All',
-                    currentSongId: null,
-                    currentTime: 0,
-                    playType: 'normal',
-                    songIds: [],
-                    order: 0,
-                },
-                {
-                    id: 'favourite',
-                    type: 'favourite',
-                    name: 'Favorite',
-                    currentSongId: null,
-                    currentTime: 0,
-                    playType: 'normal',
-                    songIds: [],
-                    order: 1,
-                },
-            ]);
-        }
+        // if (!items.length) {
+        //     items = await this.db.postMany([]);
+        // }
         this.setItems(items);
         this.notifyListeners(null, 'loaded');
     }
@@ -60,10 +36,6 @@ export class MusicStore extends BaseManager<Music> {
 
     setId(contact: Music, id: string): Music {
         return { ...contact, id };
-    }
-
-    public getByType(type: MusicType): Music[] {
-        return this.items.filter(item => item.type === type)
     }
 
     async add(item: Music) {

@@ -1,5 +1,6 @@
 import { Page } from "../../../components/page";
 import { ScrollBar } from "../../../components/scroll-bar";
+import { SelectItem } from "../../../components/select";
 import { MusicController } from "../../../controllers/music.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
@@ -8,13 +9,14 @@ import { Song } from "../../../stores/songs.store";
 
 export class AlbumPage extends Page {
     private scrollBar?: ScrollBar;
+    private _album: Album | undefined;
 
     constructor(
         history: HistoryStateManager,
         private device: DeviceController,
         private music: MusicController,
     ) {
-        super(history, { btnEnd: 'more_horiz' });
+        super(history, { btnEnd: 'favorite' });
         this.component.classList.add('albumsPage');
         this.init();
 
@@ -23,11 +25,13 @@ export class AlbumPage extends Page {
 
     private init() {
         this.addEventListener('click', () => {
-            this.history.pushState('/contacts/new', null);
+            if (this._album) this.music.toggleAlbumFavorite(this._album.id);
         }, this.btnEnd, false);
 
-        const musicListener = (status: string) => {
-            console.log(status);
+        const musicListener = (status: string, data: any) => {
+            if (status === 'UPDATE_ALBUM_FAVORITE' && this._album && this._album.id == data) {
+                this.toggleFavorite(this._album.isFavourite);
+            }
         };
 
         this.music.addChangeListener(musicListener);
@@ -38,7 +42,7 @@ export class AlbumPage extends Page {
     }
 
     render(album: Album) {
-        console.log(album);
+        this._album = album;
         const scrollArea = this.createScrollArea();
 
         const albumBanner = this.createElement('div', ['albumBanner']);
@@ -78,6 +82,8 @@ export class AlbumPage extends Page {
             playActions.appendChild(shuffleAll);
 
             scrollArea.appendChild(playActions);
+        } else {
+            this.renderNoData('No Songs', scrollArea);
         }
 
         const songList = this.createElement('ul', ['titleList', 'songList']);
@@ -91,12 +97,15 @@ export class AlbumPage extends Page {
                     <span class="contactName">${song.title}</span>
                 `;
                 this.addEventListener('click', () => {
-                    this.music.playMusic(song, album.songs);
-                    this.history.pushState('/player', null);
+                    // this.music.playMusic(song, album.songs);
+                    // this.history.pushState('/player', null);
+                    this.openSongMenu(song);
                 }, noteTitle);
                 songList.appendChild(noteTitle);
             }
         }
+
+        this.toggleFavorite(album.isFavourite);
 
         scrollArea.appendChild(songList);
         this.mainArea.appendChild(scrollArea);
@@ -111,5 +120,36 @@ export class AlbumPage extends Page {
         this.mainArea.innerHTML = '';
         this.removeAllEventListeners();
         this.render(data);
+    }
+
+    private async openSongMenu(song: Song) {
+        let list: SelectItem[] = [
+            { title: 'Play', value: 'play', icon: 'play_circle' },
+            { title: 'Play After', value: 'play-next', icon: 'music_note_add' },
+            {
+                title: song.isFavourite ? 'Remove Favorite' : 'Favorite',
+                value: 'favorite',
+                icon: 'favorite'
+            },
+            { title: 'Playlist', value: 'add', icon: 'playlist_add' },
+        ];
+
+        const selected = await this.device.selectList.openPage('Contact', list);
+        console.log('SELECTED', selected, song);
+        if (selected == 'play') {
+            this.music.playMusic(song, [song]);
+            // this.history.pushState('/player', null);
+        } else if (selected == 'play-next') {
+            this.music.addPlayNext(song);
+        } else if (selected == 'favorite') {
+            this.music.toggleSongFavorite(song.id);
+        }
+    }
+
+    private toggleFavorite(isFvorite: boolean) {
+        if (!this.btnEnd) return;
+        const icon = this.btnEnd.querySelector('.icon');
+        if (isFvorite) icon?.classList.add('fill-icon');
+        else icon?.classList.remove('fill-icon');
     }
 }

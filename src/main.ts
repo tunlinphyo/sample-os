@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const timerAlert = new TimerAlert(window.device, window.clock);
     new PhoneDummyController(window.device, window.phone);
     new GestureService(historyManager, window.device, lockedScreen);
-    new NotificationController(historyManager, notiStore, window.device, window.phone, window.clock, window.weather, window.setting);
+    new NotificationController(historyManager, notiStore, window.device, window.phone, window.clock, window.weather, window.setting, window.music);
     new VolumeControls(window.device, window.setting);
     // new Battery();
     // const fullScreen = new FullscreenController();

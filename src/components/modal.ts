@@ -117,4 +117,10 @@ export abstract class Modal extends BaseComponent {
         return itemEl
     }
 
+    protected renderNoData(message: string, parentEl?: HTMLElement) {
+        const msgEl = this.createElement('div', ['noData']);
+        msgEl.textContent = message;
+        if (parentEl) parentEl.appendChild(msgEl);
+        else this.mainArea.appendChild(msgEl);
+    }
 }

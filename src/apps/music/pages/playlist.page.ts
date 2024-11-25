@@ -1,9 +1,11 @@
 import { Page } from "../../../components/page";
 import { ScrollBar } from "../../../components/scroll-bar";
+import { SelectItem } from "../../../components/select";
 import { MusicController } from "../../../controllers/music.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
 import { Music } from "../../../stores/music.store";
+import { Song } from "../../../stores/songs.store";
 
 export class PlaylistPage extends Page {
     private scrollBar?: ScrollBar;
@@ -13,7 +15,7 @@ export class PlaylistPage extends Page {
         private device: DeviceController,
         private music: MusicController,
     ) {
-        super(history, { btnEnd: 'more_horiz' });
+        super(history, { btnEnd: 'queue_music' });
         this.component.classList.add('albumsPage');
         this.init();
 
@@ -22,18 +24,20 @@ export class PlaylistPage extends Page {
 
     private init() {
         this.addEventListener('click', () => {
-            this.history.pushState('/contacts/new', null);
+            this.history.pushState('/queue', null);
         }, this.btnEnd, false);
 
-        const musicListener = (status: string) => {
-            console.log(status);
-        };
+        // const musicListener = (status: string) => {
+        //     if (status === 'UPDATE_FAVORITE' && this._music && this._music.id == 'favourite') {
+        //         this.update('update', this._music);
+        //     }
+        // };
 
-        this.music.addChangeListener(musicListener);
+        // this.music.addChangeListener(musicListener);
 
-        this.device.addEventListener('closeApp', () => {
-            this.music.removeChangeListener(musicListener);
-        });
+        // this.device.addEventListener('closeApp', () => {
+        //     this.music.removeChangeListener(musicListener);
+        // });
     }
 
     render(music: Music) {
@@ -88,21 +92,17 @@ export class PlaylistPage extends Page {
                     <span class="contactName">${song.title}</span>
                 `;
                 this.addEventListener('click', () => {
-                    this.music.playMusic(song, songs);
-                    this.history.pushState('/player', null);
+                    // this.music.playMusic(song, songs);
+                    // this.history.pushState('/player', null);
+                    this.openSongMenu(song);
                 }, noteTitle);
                 songList.appendChild(noteTitle);
             }
             scrollArea.appendChild(songList);
         } else {
-            this.renderNoData('Add songs', scrollArea);
+            this.renderNoData('No Songs', scrollArea);
         }
         this.mainArea.appendChild(scrollArea);
-        // if (!this.scrollBar) {
-        //     this.scrollBar = new ScrollBar(this.component);
-        // } else {
-        //     this.scrollBar?.reCalculate();
-        // }
         this.scrollBar?.reCalculate();
     }
 
@@ -110,5 +110,28 @@ export class PlaylistPage extends Page {
         this.mainArea.innerHTML = '';
         this.removeAllEventListeners();
         this.render(data);
+    }
+
+    private async openSongMenu(song: Song) {
+        let list: SelectItem[] = [
+            { title: 'Play', value: 'play', icon: 'play_circle' },
+            { title: 'Play After', value: 'play-next', icon: 'music_note_add' },
+            {
+                title: song.isFavourite ? 'Remove Favorite' : 'Favorite',
+                value: 'favorite',
+                icon: 'favorite'
+            },
+            { title: 'Playlist', value: 'add', icon: 'playlist_add' },
+        ];
+
+        const selected = await this.device.selectList.openPage('Contact', list);
+        console.log('SELECTED', selected, song);
+        if (selected == 'play') {
+            this.music.playMusic(song, [song]);
+        } else if (selected == 'play-next') {
+            this.music.addPlayNext(song);
+        } else if (selected == 'favorite') {
+            this.music.toggleSongFavorite(song.id);
+        }
     }
 }

@@ -5,6 +5,7 @@ import { Noti, NotificationStore } from "../stores/noti.store";
 import { OSDate } from "../utils/date";
 import { BaseController } from "./base.controller";
 import { ClockController } from "./clock.controller";
+import { MusicController } from "./music.controller";
 import { PhoneController } from "./phone.controller";
 import { SettingsController } from "./settings.controller";
 import { WeatherController } from "./weather.controller";
@@ -20,7 +21,7 @@ export class NotificationController extends BaseController {
     // private statusContainer: HTMLElement;
     private clockElement: HTMLElement;
 
-    private readonly appHierarchy: string[] = ['phone', 'message', 'alarm', 'stopwatch', 'timer', 'settings', 'weather'];
+    private readonly appHierarchy: string[] = ['phone', 'message', 'alarm', 'stopwatch', 'timer', 'settings', 'weather', 'music'];
 
     constructor(
         private history: HistoryStateManager,
@@ -29,7 +30,8 @@ export class NotificationController extends BaseController {
         private phone: PhoneController,
         private clock: ClockController,
         private weather: WeatherController,
-        private setting: SettingsController
+        private setting: SettingsController,
+        private musicController: MusicController,
     ) {
         super();
         // this.statusContainer = this.getElement('.statusContainer')!;
@@ -143,6 +145,22 @@ export class NotificationController extends BaseController {
         }
     }
 
+    get music(): NotiType | undefined {
+        return this.notification.message;
+    }
+    set music(playing: boolean) {
+        if (playing) {
+            const data = {
+                app: 'music',
+                history: [{ state: null, url:"/player" }],
+                data: null
+            }
+            this.notiStore.addNoti('music', data);
+        } else {
+            this.notiStore.del('music');
+        }
+    }
+
     private openNoti(key?: string) {
         if (!key) return;
         const noti = this.notification[key];
@@ -217,6 +235,10 @@ export class NotificationController extends BaseController {
                 this.openNoti(this.noti);
             }
         });
+
+        this.musicController.addChangeListener((status: string, data: boolean) => {
+            // if (status == '')
+        })
 
         this.device.addEventListener('updateClock', () => {
             this.updateClock();

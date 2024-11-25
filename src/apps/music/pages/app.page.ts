@@ -14,7 +14,7 @@ export class MusicApp extends App {
         private device: DeviceController,
         private music: MusicController,
     ) {
-        super(history, { btnStart: 'queue_music', btnEnd: 'library_music' });
+        super(history, { btnStart: 'library_music', btnEnd: 'queue_music' });
         this.component.classList.add('latestPage');
         this.playerBtn = this.createPlayer();
         this.component.appendChild(this.playerBtn);
@@ -30,12 +30,12 @@ export class MusicApp extends App {
         }, this.playerBtn, false);
 
         this.addEventListener('click', () => {
-            this.history.pushState('/library', null);
+            this.history.pushState('/queue', null);
         }, this.btnEnd, false);
 
-        // this.addEventListener('click', () => {
-        //     this.history.pushState('/dialpad', null);
-        // }, this.btnStart, false);
+        this.addEventListener('click', () => {
+            this.history.pushState('/library', null);
+        }, this.btnStart, false);
 
         const musicListener = (status: string, data: any) => {
             if (status === "LATEST_CHANGE") {
@@ -47,6 +47,9 @@ export class MusicApp extends App {
                 } else {
                     this.component.classList.remove('playing');
                 }
+            }
+            if (status === 'UPDATE_ALBUM_FAVORITE') {
+                this.update('update', this.music.list);
             }
         };
 
@@ -83,51 +86,23 @@ export class MusicApp extends App {
             musicCard.appendChild(playButton);
 
             this.addEventListener('click', () => {
-                this.history.pushState('/playlist', music.id);
+                this.history.pushState('/songs', music.id);
             }, albumEl);
 
             this.addEventListener('click', () => {
-                const songs = this.music.getSongs(music.songIds);
+                const musicSongs = this.music.getMusicSongs(music.id);
+                if (!musicSongs) return;
+                const songs = this.music.getSongs(musicSongs.songIds);
                 if (songs.length) this.music.playAll(music.id, songs, true);
-                this.history.pushState('/player', null);
+                // this.history.pushState('/player', null);
             }, playButton);
 
             musicList.appendChild(musicCard);
         }
 
-        // const albumList = this.createElement('ul', ['musicList', 'albumList']);
-
-        // for (const album of this.music.albumList) {
-        //     const musicCard = this.createElement('li', ['musicCard', 'albumCard']);
-
-        //     const backgroundEl = this.createElement('div', ['backgroundEl']);
-        //     const albumEl = this.createElement('button', ['albumEl']);
-        //     albumEl.innerHTML = `
-        //         <h3 class="albumName">${album.name}</h3>
-        //     `;
-
-        //     const playButton = this.createElement('button', ['playButton']);
-        //     playButton.innerHTML = `<span class="material-symbols-outlined icon">play_circle</span>`;
-
-        //     musicCard.appendChild(backgroundEl);
-        //     musicCard.appendChild(albumEl);
-        //     musicCard.appendChild(playButton);
-
-        //     this.addEventListener('click', () => {
-        //         // this.music.playMusic(song, songs);
-        //         this.history.pushState('/albums/detail', album.id);
-        //     }, albumEl);
-
-        //     this.addEventListener('click', () => {
-        //         // this.music.playMusic(song, songs);
-        //         this.history.pushState('/player', null);
-        //     }, playButton);
-
-        //     albumList.appendChild(musicCard);
-        // }
         const albumList = this.createElement('ul', ['titleList', 'albumList']);
 
-        for (const album of this.music.albumList) {
+        for (const album of this.music.fovoriteAlbums) {
             const albumEl = this.createElement('li', ['albumCard']);
 
             const albumRecord = this.createElement('div', ['albumRecord']);

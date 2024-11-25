@@ -21,6 +21,14 @@ export class MusicPlayer extends Modal {
     }
 
     init() {
+        this.addEventListener('click', () => {
+            this.music.updateRepeat();
+        }, this.btnStart, false);
+
+        this.addEventListener('click', () => {
+            if (this.music.currentSong) this.music.toggleSongFavorite(this.music.currentSong.id);
+        }, this.btnEnd, false);
+
         const musicListener = (status: string, data: any) => {
             if (status === "SONG_CHANGE") {
                 this.update('update');
@@ -30,6 +38,12 @@ export class MusicPlayer extends Modal {
             }
             if (status === 'SONG_TIMELINE_STATUS') {
                 this.dispatchCustomEvent('updateTrack');
+            }
+            if (status === 'REPEAT_STATUD') {
+                this.renderRepeat(data);
+            }
+            if (status === 'UPDATE_CURRENT_FAVORITE') {
+                this.renderFavorite(data);
             }
         };
 
@@ -42,6 +56,8 @@ export class MusicPlayer extends Modal {
 
     render() {
         const playerEl = this.renderPlayer();
+        this.renderRepeat(this.music.repeatOne);
+        if (this.music.currentSong) this.renderFavorite(this.music.currentSong.isFavourite);
         this.mainArea.appendChild(playerEl);
     }
 
@@ -76,7 +92,8 @@ export class MusicPlayer extends Modal {
         titleEl.textContent = `${this.music.currentSong?.title || "No Song"}`;
         const artistEl = this.createElement('div', ['articeName']);
         const names = this.music.currentSong?.artists?.map(item => item.name) || [];
-        artistEl.textContent = `${names?.join(", ")}`;
+        const album = this.music.currentSong?.album ? ` - ${this.music.currentSong.album.name}` : '';
+        artistEl.textContent = `${names?.join(", ")}${album}`;
 
         infoContiner.appendChild(titleEl);
         infoContiner.appendChild(artistEl);
@@ -90,13 +107,13 @@ export class MusicPlayer extends Modal {
         const prevButton = this.createElement('button', ['controlButton', 'prev']);
         prevButton.innerHTML = `<span class="material-symbols-outlined icon">fast_rewind</span>`;
         this.addEventListener('click', () => {
-            this.music.playPrevSong(true);
+            this.music.playPrevSong();
         }, prevButton);
 
         const nextButton = this.createElement('button', ['controlButton', 'next']);
         nextButton.innerHTML = `<span class="material-symbols-outlined icon">fast_forward</span>`;
         this.addEventListener('click', () => {
-            this.music.playNextSong(true);
+            this.music.playNextSong();
         }, nextButton);
 
         this.renderPlayButton(this.music.status);
@@ -145,5 +162,17 @@ export class MusicPlayer extends Modal {
         } else {
             this.playButton.innerHTML = `<span class="material-symbols-outlined icon fill-icon">play_arrow</span>`;
         }
+    }
+
+    private renderRepeat(repeatOne: boolean) {
+        if (!this.btnStart) return;
+        this.btnStart.innerHTML = `<span class="material-symbols-rounded icon">${repeatOne ? 'repeat_one' : 'repeat'}</span>`
+    }
+
+    private renderFavorite(isFvorite: boolean) {
+        if (!this.btnEnd) return;
+        const icon = this.btnEnd.querySelector('.icon');
+        if (isFvorite) icon?.classList.add('fill-icon');
+        else icon?.classList.remove('fill-icon');
     }
 }

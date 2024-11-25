@@ -13,6 +13,7 @@ export interface Song {
     albumId: string;
     album?: Album;
     isFavourite: boolean;
+    uuid?: string;
 }
 
 export class SongStore extends BaseManager<Song> {

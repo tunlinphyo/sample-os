@@ -1,4 +1,10 @@
 @layer component {
+    .scrollArea {
+        .noData {
+            height: calc(var(--grid) * 7);
+        }
+    }
+
     .musicList {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -55,8 +61,59 @@
         }
     }
 
+    .artistList {
+        --size: calc(var(--grid) * 1.2);
+
+        .titleItem {
+            display: grid;
+            grid-template-columns: var(--size) 1fr;
+            gap: 8px;
+            align-items: center;
+
+            .thumbnail {
+                width: var(--size);
+                height: var(--size);
+                border: 2px solid var(--black);
+                border-radius: 50%;
+                display: grid;
+                place-items: center;
+
+                .icon {
+                    font-size: 28px;
+                }
+            }
+        }
+    }
+    .playlistList {
+        --size: calc(var(--grid) * 1.2);
+
+        .titleItem {
+            display: grid;
+            grid-template-columns: var(--size) 1fr;
+            gap: 8px;
+            align-items: center;
+
+            .thumbnail {
+                width: var(--size);
+                height: var(--size);
+                border: 2px solid var(--black);
+                border-radius: 2px;
+                display: grid;
+                place-items: center;
+
+                .icon {
+                    font-size: 28px;
+                }
+            }
+        }
+    }
+
     .songList {
         --album-size: 32px;
+
+        &.noPadding {
+            padding-block: 0;
+        }
 
         .titleItem {
             display: grid;
@@ -73,6 +130,22 @@
 
                 border: 2px solid var(--black);
                 border-radius: 2px;
+            }
+        }
+
+        .spreadItem {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 8px var(--padding);
+
+            &::before {
+                content: '';
+                display: block;
+                width: 100%;
+                height: 0;
+                border-top: 2px solid var(--black);
             }
         }
     }
@@ -98,26 +171,25 @@
         padding-inline: 10px;
         gap: 10px;
 
-        .albumCard {  
-            aspect-ratio: 2/1;
+        .albumCard {
+            aspect-ratio: 2.1/1;
             display: grid;
             grid-template-areas: "album";
-    
+
             .albumRecord {
                 grid-area: album;
-    
+
                 display: flex;
                 justify-content: flex-end;
                 align-items: center;
                 overflow: hidden;
-                padding-inline: 2px;
-    
+
                 .record {
                     width: calc(var(--grid) * 2);
                     height: calc(var(--grid) * 2);
                     border: 2px solid var(--black);
                     border-radius: 100%;
-                    box-shadow: 
+                    box-shadow:
                         0 0 0 4px var(--white),
                         0 0 0 6px var(--black),
                         0 0 0 10px var(--white),
@@ -129,17 +201,15 @@
                         0 0 0 28px var(--white),
                         0 0 0 30px var(--black),
                         0 0 0 34px var(--white),
-                        0 0 0 36px var(--black),
-                        0 0 0 40px var(--white),
-                        0 0 0 42px var(--black)
+                        0 0 0 36px var(--black)
                     ;
-    
+
                     display: flex;
                     justify-content: center;
                     align-items: center;
                 }
             }
-            
+
             .albumButton {
                 grid-area: album;
                 border: 3px solid var(--black);
@@ -194,10 +264,6 @@
                         font-size: 28px;
                     }
                 }
-            }
-
-            .noData {
-                height: calc(var(--grid) * 8);
             }
         }
         .actionBar {
@@ -263,12 +329,12 @@
                     border-radius: calc(var(--grid) * 1.5);
                     position: relative;
                     z-index: 0;
-    
+
                     .icon {
                         /* color: var(--white); */
                         font-size: 28px;
                     }
-    
+
                     &::before {
                         content: '';
                         inset: 8px;

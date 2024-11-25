@@ -3,9 +3,14 @@ import { DeviceController } from "../../device/device";
 import { HistoryState, HistoryStateManager } from "../../device/history.manager";
 import { AlbumPage } from "./pages/album.page";
 import { AlbumsPage } from "./pages/albums.page";
+import { ArtistPage } from "./pages/artist.page";
+import { ArtistsPage } from "./pages/artists.page";
 import { LibraryPage } from "./pages/library.page";
 import { MusicPlayer } from "./pages/player.page";
 import { PlaylistPage } from "./pages/playlist.page";
+import { PlaylistsPage } from './pages/playlists.page';
+import { QueuePage } from "./pages/queue.page";
+import { SongsPage } from "./pages/songs.page";
 
 
 export class MusicAppController {
@@ -15,9 +20,14 @@ export class MusicAppController {
         private music: MusicController,
         private musicPlayer: MusicPlayer,
         private libraryPage: LibraryPage,
+        private artistsPage: ArtistsPage,
+        private artistPage: ArtistPage,
         private albumsPage: AlbumsPage,
         private albumPage: AlbumPage,
+        private songsPage: SongsPage,
+        private playlistsPage: PlaylistsPage,
         private playlistPage: PlaylistPage,
+        private queuePage: QueuePage
     ) {
         this.renderListeners();
     }
@@ -38,6 +48,19 @@ export class MusicAppController {
                     }
                 },
                 {
+                    pattern: '/artists',
+                    callback: () => {
+                        this.artistsPage.openPage('Artists', this.music.artistList);
+                    }
+                },
+                {
+                    pattern: '/artist',
+                    callback: () => {
+                        const artist = this.music.getArtist(state);
+                        this.artistPage.openPage('Artist', artist);
+                    }
+                },
+                {
                     pattern: '/albums',
                     callback: () => {
                         this.albumsPage.openPage('Albums', this.music.albumList);
@@ -51,10 +74,29 @@ export class MusicAppController {
                     }
                 },
                 {
+                    pattern: '/playlists',
+                    callback: () => {
+                        this.playlistsPage.openPage('Playlists', this.music.playlist);
+                    }
+                },
+                {
                     pattern: '/playlist',
                     callback: () => {
                         const playlist = this.music.getMusic(state);
                         this.playlistPage.openPage('Playlist', playlist);
+                    }
+                },
+                {
+                    pattern: '/songs',
+                    callback: () => {
+                        const music = this.music.getMusicSongs(state);
+                        this.songsPage.openPage('Songs', music);
+                    }
+                },
+                {
+                    pattern: '/queue',
+                    callback: () => {
+                        this.queuePage.openPage('Queue', this.music.queue);
                     }
                 },
             ]);

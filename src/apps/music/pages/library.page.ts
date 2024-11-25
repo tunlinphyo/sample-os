@@ -1,18 +1,15 @@
 import { Page } from "../../../components/page";
 import { ScrollBar } from "../../../components/scroll-bar";
-import { Library, MusicController } from "../../../controllers/music.controller";
-import { DeviceController } from "../../../device/device";
+import { Library } from "../../../controllers/music.controller";
 import { HistoryStateManager } from "../../../device/history.manager";
 
 export class LibraryPage extends Page {
     private scrollBar?: ScrollBar;
 
     constructor(
-        history: HistoryStateManager,
-        private device: DeviceController,
-        private music: MusicController,
+        history: HistoryStateManager
     ) {
-        super(history, { btnEnd: 'more_horiz' });
+        super(history, { btnEnd: 'queue_music' });
         this.component.classList.add('albumsPage');
         this.init();
 
@@ -21,18 +18,8 @@ export class LibraryPage extends Page {
 
     private init() {
         this.addEventListener('click', () => {
-            this.history.pushState('/contacts/new', null);
+            this.history.pushState('/queue', null);
         }, this.btnEnd, false);
-
-        const musicListener = (status: string) => {
-            console.log(status);
-        };
-
-        this.music.addChangeListener(musicListener);
-
-        this.device.addEventListener('closeApp', () => {
-            this.music.removeChangeListener(musicListener);
-        });
     }
 
     render(data: Library[]) {

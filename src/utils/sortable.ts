@@ -24,5 +24,20 @@ export class SortableList {
         listItems.forEach((item, index) => {
             item.setAttribute('data-index', index.toString());
         });
+
+        this.emitUpdateEvent();
+    }
+
+    private emitUpdateEvent(): void {
+        const listElement = document.getElementById(this.listId);
+        if (listElement) {
+            const event = new CustomEvent('dataIndexUpdated', {
+                detail: {
+                    listId: this.listId,
+                    timestamp: Date.now(),
+                },
+            });
+            listElement.dispatchEvent(event);
+        }
     }
 }
