@@ -102,11 +102,11 @@ export class SongsPage extends Page {
     private async openSongMenu(song: Song) {
         let list: SelectItem[] = [
             { title: 'Play', value: 'play', icon: 'play_circle' },
-            { title: 'Play After', value: 'play-next', icon: 'music_note_add' },
+            { title: 'Queue', value: 'play-next', icon: 'music_note_add' },
             {
-                title: song.isFavourite ? 'Remove Favorite' : 'Favorite',
+                title: 'Favorite',
                 value: 'favorite',
-                icon: 'favorite'
+                icon: song.isFavourite ? 'heart_minus' : 'heart_plus'
             },
             { title: 'Playlist', value: 'add', icon: 'playlist_add' },
         ];

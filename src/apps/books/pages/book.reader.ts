@@ -215,7 +215,8 @@ export class BookReader extends Modal {
         const parentEl = this.mainArea.parentElement!;
         if (!parentEl) return;
         parentEl.classList.remove('hidden');
-        this.bookmarkEl.classList.toggle('fill-icon', this.bookService.isBookmarked);
+        // this.bookmarkEl.classList.toggle('fill-icon', this.bookService.isBookmarked);
+        this.toggleBookmark(this.bookService.isBookmarked);
         const bookmarkCount = this.getElement('#bookmarkCount', this.btnStart);
         bookmarkCount.textContent = `${this.bookService.bookmarkCount}`;
         const chaperCount = this.getElement('#chaperCount', this.btnEnd);
@@ -249,5 +250,9 @@ export class BookReader extends Modal {
         }
         const icon = this.getElement('span', this.bookThemeEl);
         icon.textContent = icons[theme];
+    }
+
+    private toggleBookmark(isBookmarked: boolean) {
+        this.bookmarkEl.innerHTML = `<span class="material-symbols-outlined icon">${isBookmarked ? 'bookmark_remove' : 'bookmark_add'}</span>`
     }
 }
