@@ -25,6 +25,7 @@ export class WeatherApp extends App {
         this.weather.addChangeListener((status: string, data: any) => {
             if (status === 'WEATHER_FEACHED') {
                 this.update("update", data);
+                this.weather.closeNoti();
             }
             if (status === 'WEATHER_DELETED' && data === this.current?.id) {
                 this.weather.getFirstOne();

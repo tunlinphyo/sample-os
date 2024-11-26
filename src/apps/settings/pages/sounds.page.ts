@@ -2,6 +2,7 @@ import { FormComponent } from "../../../components/form";
 import { CustomSelectForm } from "../../../components/form/form-elem";
 import { Page } from "../../../components/page";
 import { SelectItem } from "../../../components/select";
+import { AudioController } from "../../../controllers/audio.controller";
 import { SettingsController } from "../../../controllers/settings.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
@@ -39,7 +40,8 @@ class SoundsForm extends FormComponent {
     constructor(
         device: DeviceController,
         parent: HTMLElement,
-        private setting: SettingsController
+        private setting: SettingsController,
+        private audio: AudioController
     ) {
         super(device, 'contactForm', parent);
     }
@@ -82,15 +84,15 @@ class SoundsForm extends FormComponent {
         }, toneGroup);
 
         this.ringTone.addEventListener('change', (data: string) => {
-            console.log(data);
+            this.playAudio(data);
         });
 
         this.textTone.addEventListener('change', (data: string) => {
-            console.log(data);
+            this.playAudio(data);
         });
 
         this.defaultAlert.addEventListener('change', (data: string) => {
-            console.log(data);
+            this.playAudio(data);
         });
 
         this.appendElement(volumeGroup);
@@ -98,6 +100,13 @@ class SoundsForm extends FormComponent {
     }
 
     getData() {}
+
+    private playAudio(data: string) {
+        const url = this.audio.notiFiles[data];
+        if (url) {
+            this.audio.noti.playSong(url, 0);
+        }
+    }
 }
 
 export class SoundsPage extends Page {
@@ -106,13 +115,14 @@ export class SoundsPage extends Page {
     constructor(
         history: HistoryStateManager,
         private device: DeviceController,
-        private setting: SettingsController
+        private setting: SettingsController,
+        private audio: AudioController
     ) {
         super(history, {});
     }
 
     render(data: Setting) {
-        this.form = new SoundsForm(this.device, this.mainArea, this.setting);
+        this.form = new SoundsForm(this.device, this.mainArea, this.setting, this.audio);
         this.form.render(data);
     }
 

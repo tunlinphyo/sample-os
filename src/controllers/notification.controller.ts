@@ -274,9 +274,13 @@ export class NotificationController extends BaseController {
             }
         });
 
+        const weatherDebounce = debounce((data: any) => {
+            this.climate = data;
+        }, 100);
         this.weather.addChangeListener((status: string, data: any) => {
             if (status === 'WEATHER_NOTIFIGATION') {
-                this.climate = data;
+                console.log('WEATHER_NOTIFIGATION', data);
+                weatherDebounce(data);
             }
             // if (status === 'MY_WEATHER_FETCH') {
             //     this.climate = data;

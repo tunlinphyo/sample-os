@@ -99,4 +99,8 @@ export class WeatherController extends BaseController {
         if (!location) location = this.currentLocation;
         this.weatherWorker.postMessage({ command: 'fetch', data: location });
     }
+
+    public closeNoti() {
+        this.notifyListeners('WEATHER_NOTIFIGATION', null);
+    }
 }

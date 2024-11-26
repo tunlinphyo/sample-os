@@ -136,11 +136,11 @@ export class ArtistPage extends Page {
         this.render(data);
     }
 
-    private createTitle(title: string, parentEl: HTMLElement) {
-        const titleEl = this.createElement('h2', ['musicTitle']);
-        titleEl.textContent = title;
-        parentEl.appendChild(titleEl);
-    }
+    // private createTitle(title: string, parentEl: HTMLElement) {
+    //     const titleEl = this.createElement('h2', ['musicTitle']);
+    //     titleEl.textContent = title;
+    //     parentEl.appendChild(titleEl);
+    // }
 
     async openSongMenu(song: Song) {
         let list: SelectItem[] = [

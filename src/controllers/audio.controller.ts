@@ -23,9 +23,20 @@ export class AudioController extends BaseController {
         media: 0,
         noti: 0
     };
+    private _notiAudio: OSAudio;
+
+    public notiFiles: { [key: string]: string } = {
+       'reflection': '/notifigations/1.mp3',
+       'arpeggio': '/notifigations/2.mp3',
+       'canopy': '/notifigations/3.mp3',
+       'chalet': '/notifigations/4.mp3',
+       'daybreak': '/notifigations/5.mp3', 
+    }
 
     constructor() {
         super();
+
+        this._notiAudio = this.initAudio('noti');
     }
 
     get volume(): AudioVolume {
@@ -40,6 +51,10 @@ export class AudioController extends BaseController {
             let volume = c.type === 'media' ? data.mediaVolume : data.alarmVolume;
             c.service.volume = volume;
         });
+    }
+
+    get noti() {
+        return this._notiAudio;
     }
 
     initAudio(id: string) {

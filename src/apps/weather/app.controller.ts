@@ -36,7 +36,7 @@ export class weatherAppController {
             // // console.log('OPEN_PAGE', JSON.stringify(history));
             history.forEach((item: HistoryState) => {
                 handleChange(item.state, item.url);
-            })
+            });
         })
 
         this.device.addEventListener('closeApp', () => {
