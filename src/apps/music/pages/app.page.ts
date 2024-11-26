@@ -73,13 +73,18 @@ export class MusicApp extends App {
             const musicCard = this.createElement('li', ['musicCard']);
 
             const backgroundEl = this.createElement('div', ['backgroundEl']);
+            backgroundEl.innerHTML = `
+                <div class="diamondCard">
+                    <span class="material-symbols-outlined icon">music_note</span>
+                </div>
+            `;
             const albumEl = this.createElement('button', ['albumEl']);
             albumEl.innerHTML = `
                 <h3 class="albumName">${music.name}</h3>
             `;
 
             const playButton = this.createElement('button', ['playButton']);
-            playButton.innerHTML = `<span class="material-symbols-rounded icon">shuffle</span>`;
+            playButton.innerHTML = `<span class="material-symbols-rounded icon--sm">play_arrow</span>`;
 
             musicCard.appendChild(backgroundEl);
             musicCard.appendChild(albumEl);
@@ -129,6 +134,7 @@ export class MusicApp extends App {
         }
 
         scrollArea.appendChild(musicList);
+        this.createTitle('Albums', scrollArea);
         scrollArea.appendChild(albumList);
         this.mainArea.appendChild(scrollArea);
         this.scrollBar?.reCalculate();
@@ -145,5 +151,11 @@ export class MusicApp extends App {
         playerBtn.innerHTML = `<span class="material-symbols-outlined icon">music_note</span>`;
 
         return playerBtn;
+    }
+
+    private createTitle(title: string, parentEl: HTMLElement) {
+        const titleEl = this.createElement('h2', ['musicTitle']);
+        titleEl.textContent = title;
+        parentEl.appendChild(titleEl);
     }
 }

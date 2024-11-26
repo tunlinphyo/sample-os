@@ -10,7 +10,7 @@ export class AlbumsPage extends Page {
         history: HistoryStateManager
     ) {
         super(history, { btnEnd: 'queue_music' });
-        this.component.classList.add('albumsPage');
+        this.component.classList.add('musicPage');
         this.init();
     }
 

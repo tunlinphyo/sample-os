@@ -17,7 +17,7 @@ export class AlbumPage extends Page {
         private music: MusicController,
     ) {
         super(history, { btnEnd: 'favorite' });
-        this.component.classList.add('albumsPage');
+        this.component.classList.add('musicPage');
         this.init();
 
         this.scrollBar = new ScrollBar(this.component);

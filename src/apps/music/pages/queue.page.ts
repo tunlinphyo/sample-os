@@ -15,7 +15,7 @@ export class QueuePage extends Modal {
         private music: MusicController,
     ) {
         super(history, { btnEnd: 'playlist_remove' });
-        this.component.classList.add('albumsPage');
+        this.component.classList.add('musicPage');
         this.init();
 
         this.scrollBar = new ScrollBar(this.component);

@@ -59,4 +59,8 @@ export class OSArray {
 
         return [lastElement, ...remainingElements];
     }
+
+    public static getFirstElements<T>(array: T[], max: number): T[] {
+        return array.slice(0, max); // Use slice to get up to the first 5 elements
+    }
 }

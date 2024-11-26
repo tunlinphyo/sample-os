@@ -31,6 +31,7 @@ export class OSAudio {
 
     set data(data: string) {
         this.audio.src = data;
+        this.audio.preload = 'metadata';
         this._loading = false;
     }
 
@@ -113,5 +114,36 @@ export class OSAudio {
         this.audioContext.close().catch((err) => console.error("AudioContext close error:", err));
         this.audio = null!;
         this.audioContext = null!;
+    }
+
+    public static base64ToBlob(base64: string, mimeType: string): Blob {
+        const byteCharacters = atob(base64.split(',')[1]);
+        const byteArrays = [];
+        for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+            const slice = byteCharacters.slice(offset, offset + 512);
+            const byteNumbers = new Array(slice.length).fill(0).map((_, i) => slice.charCodeAt(i));
+            byteArrays.push(new Uint8Array(byteNumbers));
+        }
+        return new Blob(byteArrays, { type: mimeType });
+    }
+
+    public static async getMp3Duration(base64Mp3: string): Promise<number> {
+        try {
+            const base64Data = base64Mp3.split(',')[1];
+            const binaryData = atob(base64Data);
+            const len = binaryData.length;
+            const uint8Array = new Uint8Array(len);
+
+            for (let i = 0; i < len; i++) {
+                uint8Array[i] = binaryData.charCodeAt(i);
+            }
+
+            const audioContext = new AudioContext();
+            const audioBuffer = await audioContext.decodeAudioData(uint8Array.buffer);
+            return audioBuffer.duration;
+        } catch (error) {
+            console.error('Error decoding MP3:', error);
+            return 0;
+        }
     }
 }
