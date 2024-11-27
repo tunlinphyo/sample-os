@@ -11,7 +11,7 @@ export class AudioButton {
     constructor(
         private data: { url: string, time: number },
         private parentEl: HTMLElement,
-        audioController: AudioController
+        private audioController: AudioController
     ) {
         this.audio = audioController.initAudio(this.audioId);
         this.audioButton = document.createElement("button");
@@ -73,11 +73,13 @@ export class AudioButton {
             this.playing = true;
             this.updateTimeData(timeData);
             this.updateButton();
+            this.audioController.pauseMusic();
         });
         this.audio.e.addEventListener('pause', () => {
             this.playing = false;
             this.updateTimeData(timeData);
             this.updateButton();
+            this.audioController.resumeMusic();
         });
         this.audio.e.addEventListener('timeupdate', () => {
             this.updateTimeData(timeData);
@@ -85,6 +87,7 @@ export class AudioButton {
         this.audio.e.addEventListener('ended', () => {
             this.updateTimeData(timeData);
             this.updateButton();
+            this.audioController.resumeMusic();
         });
 
         this.parentEl.appendChild(this.audioButton);

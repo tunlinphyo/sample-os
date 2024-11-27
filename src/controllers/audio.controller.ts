@@ -36,8 +36,8 @@ export class AudioController extends BaseController {
 
     constructor() {
         super();
-        this._alertAudio = this.initAudio("alert");
         this._textAudio = this.initAudio("text");
+        this._alertAudio = this.initAudio("default-alert");
         this._ringAudio = this.initAudio("ringtone");
         this.setupEventListeners();
     }
