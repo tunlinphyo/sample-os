@@ -53,13 +53,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     const songStore = new SongStore();
     const musicStore = new MusicStore();
 
+    const osaudio = new AudioController();
     const device = new DeviceController(historyManager);
     const settings = new SettingsController(historyManager, settingStore);
     const clock = new ClockController(clockStore, alarmStore);
     const phone = new PhoneController(historyStore, contactsStore, blocksStore);
     const calendar = new CalendarController(eventStore);
     const weather = new WeatherController(weatherStore);
-    const osaudio = new AudioController();
     const music = new MusicController(artistStore, albumStore, songStore, musicStore, osaudio)
 
     window.device = device;
@@ -72,36 +72,35 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.music = music;
 
     const lockedScreen = new LockedScreenPage(historyManager, window.device);
-    const alarmAlert = new AlarmAlert(window.device);
-    const timerAlert = new TimerAlert(window.device, window.clock);
-    new PhoneDummyController(window.device, window.phone);
+    const alarmAlert = new AlarmAlert(window.device, window.phone);
+    const timerAlert = new TimerAlert(window.device, window.phone);
+    new PhoneDummyController(window.device, window.phone, window.setting, window.osaudio);
     new GestureService(historyManager, window.device, lockedScreen);
     new NotificationController(historyManager, notiStore, window.device, window.phone, window.clock, window.weather, window.setting, window.music);
     new VolumeControls(window.device, window.setting);
     // new Battery();
     // const fullScreen = new FullscreenController();
 
-    // window.weather.fetchWeather();
+    window.weather.fetchWeather();
+
+    let inCall: boolean = false;
 
     window.clock.addChangeListener(async (status: string, data: any) => {
-        // if (status === 'UPDATE_CLOCK') {
-        //     window.device.updateClock(window.clock.timerRunning, window.clock.stopwatchRunning);
-        // }
-        if (status === 'SHOW_ALARM') {
+        if (status === 'SHOW_ALARM' && !inCall) {
+            const defaultAlert = window.setting.volumes.defaultAlert;
+            window.osaudio.playAlert(defaultAlert);
             const alarm = await alarmAlert.open('Alarm', data);
+            window.osaudio.stopAlert();
             if (alarm && typeof alarm !== 'boolean') {
                 window.clock.snoozeAlarm(alarm.id);
             }
         }
-        // if (status === 'TIMER_UPDATE') {
-        //     window.device.updateCountDown(
-        //         window.clock.remaining,
-        //         window.clock.timerRunning ? 'timer_pause' : 'timer_play'
-        //     );
-        // }
-        if (status === 'TIMER_ALERT') {
-            timerAlert.open("Timer", data);
-            // window.device.updateClock(window.clock.timerRunning, window.clock.stopwatchRunning);
+        if (status === 'TIMER_ALERT' && !inCall) {
+            const defaultAlert = window.setting.volumes.defaultAlert;
+            window.osaudio.playAlert(defaultAlert);
+            const timer = await timerAlert.open("Timer", data);
+            if (timer) window.clock.timerStart();
+            window.osaudio.stopAlert();
         }
     });
 
@@ -142,6 +141,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             lockedScreen.update(status, data);
         }
     })
+
+    window.phone.addChangeListener((status: string, data: any) => {
+        if (status === 'IN_CALL') {
+            inCall = data;
+            window.osaudio.inCall = data;
+        }
+    });
 
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     console.log('TimeZones', timeZone);

@@ -1,3 +1,4 @@
+import { PhoneController } from "../../controllers/phone.controller";
 import { DeviceController } from "../../device/device";
 import { Alarm } from "../../stores/alarm.store";
 import { OSDate } from "../../utils/date";
@@ -7,7 +8,10 @@ import { BaseSystem } from "../system";
 export class AlarmAlert extends BaseSystem<Alarm> {
     private timeout: number | null = null;
 
-    constructor(device: DeviceController) {
+    constructor(
+        device: DeviceController,
+        private phone: PhoneController,
+    ) {
         super({ btnCenter: 'close', btnStart: 'snooze' }, device, 'alarm');
     }
 
@@ -16,9 +20,9 @@ export class AlarmAlert extends BaseSystem<Alarm> {
             this.createUI(data);
 
             this.timeout = setTimeout(() => {
-                this.close()
-                resolve(false)
-            }, 2 * 60 * 1000);
+                this.close();
+                resolve(false);
+            }, 60 * 1000);
 
             this.addEventListener('click', async () => {
                 if (this.timeout) clearTimeout(this.timeout);
@@ -30,6 +34,14 @@ export class AlarmAlert extends BaseSystem<Alarm> {
                 resolve(data);
             }, this.btnStart);
 
+            this.phone.addChangeListener((status: string, data: any) => {
+                if (status === 'IN_CALL' && data) {
+                    console.log('IN_CALL::ALARM')
+                    if (this.timeout) clearTimeout(this.timeout);
+                    this.close();
+                    resolve(false);
+                }
+            });
         });
     }
 

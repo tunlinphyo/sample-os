@@ -123,6 +123,10 @@ export class PhoneController extends BaseController {
         })
     }
 
+    public inCall(number?: string) {
+        this.notifyListeners('IN_CALL', !!number);
+    }
+
     private getBlock(contact: Contact) {
         (contact as ContactWithBlock).isBlocked = this.blocksStore.isBlock(contact.phones.map(p => p.number));
         return contact as ContactWithBlock;

@@ -1,6 +1,7 @@
 import { PhoneLabelHandler } from "../../../components/form/form-elem";
 import { Page } from "../../../components/page";
 import { SelectItem } from "../../../components/select";
+import { AudioController } from "../../../controllers/audio.controller";
 import { PhoneController } from "../../../controllers/phone.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
@@ -18,11 +19,12 @@ export class DialpadPage extends Page {
     constructor(
         history: HistoryStateManager,
         private device: DeviceController,
-        private phone: PhoneController
+        private phone: PhoneController,
+        audio: AudioController
     ) {
         super(history, { btnStart: 'phone', btnEnd: 'mode_comment' });
         this.component.classList.add('dialpadPage');
-        this.phoneService = new PhoneService(this.device, this.phone);
+        this.phoneService = new PhoneService(this.device, this.phone, audio);
 
         this.init();
     }

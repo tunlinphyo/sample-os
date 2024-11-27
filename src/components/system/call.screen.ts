@@ -20,6 +20,7 @@ export class CallScreen extends BaseSystem<Omit<History, 'id'>> {
 
     render(data: Omit<History, 'id'>): Promise<Omit<History, 'id'>> {
         return new Promise((resolve) => {
+
             this.mainArea.innerHTML = "";
             const flexCenter = this.createFlexCenter()
             const callingStatus = this.createElement('div', ['callingStatus'])

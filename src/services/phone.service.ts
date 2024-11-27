@@ -1,4 +1,5 @@
 import { Keyboard } from "../components/keyboard";
+import { AudioController } from "../controllers/audio.controller";
 import { PhoneController } from "../controllers/phone.controller";
 import { DeviceController } from "../device/device";
 import { Contact } from "../stores/contact.store";
@@ -9,7 +10,8 @@ import { History, randomMessages } from "../stores/history.store";
 export class PhoneService {
     constructor(
         private device: DeviceController,
-        private phone: PhoneController
+        private phone: PhoneController,
+        private audio: AudioController
     ) {}
 
     async makeACall(number: string) {
@@ -29,6 +31,7 @@ export class PhoneService {
                 return;
             }
         }
+        this.audio.pauseMusic();
         const result = await this.device.outgoingCall.open('Calling', { contact, number });
         if (result && typeof result === 'object') {
             const history: Omit<History, 'id'> = {
@@ -40,8 +43,10 @@ export class PhoneService {
                 isViewed: true,
             }
             const data = await this.device.callScreen.open('Phone', history);
+            this.audio.resumeMusic();
             if (data && typeof data !== 'boolean') this.phone.addHistory(data);
         } else {
+            this.audio.resumeMusic();
             let history = PhoneService.generateMissCall(number, true, (contact || undefined));
             this.phone.addHistory(history);
         }

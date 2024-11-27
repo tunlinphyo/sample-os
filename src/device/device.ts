@@ -52,9 +52,7 @@ export class DeviceController extends BaseComponent {
     public yearPicker: YearPicker;
     public choosePicker: ChoosePicker;
 
-    constructor(
-        private history: HistoryStateManager
-    ) {
+    constructor(private history: HistoryStateManager) {
         super('deviceTemplate', document.body);
         this.history.onStateChange(this.onStateChange.bind(this));
 

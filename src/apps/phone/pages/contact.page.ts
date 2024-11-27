@@ -1,6 +1,7 @@
 import { Page } from "../../../components/page";
 import { ScrollBar } from "../../../components/scroll-bar";
 import { SelectItem } from "../../../components/select";
+import { AudioController } from "../../../controllers/audio.controller";
 import { PhoneController } from "../../../controllers/phone.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
@@ -18,9 +19,10 @@ export class ContactPage extends Page {
         history: HistoryStateManager,
         private device: DeviceController,
         private phone: PhoneController,
+        audio: AudioController
     ) {
         super(history, { btnStart: 'delete', btnEnd: 'edit' });
-        this.phoneService = new PhoneService(this.device, this.phone);
+        this.phoneService = new PhoneService(this.device, this.phone, audio);
         this.component.classList.add("contactPage");
         this.init();
     }

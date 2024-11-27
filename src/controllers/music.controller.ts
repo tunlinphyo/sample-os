@@ -96,6 +96,7 @@ export class MusicController extends BaseController {
 
     private addAudioListeners() {
         this.audio.e.addEventListener('play', () => {
+            console.log('SONG_PLAY_STATUS', 'playing');
             this.notifyListeners('SONG_PLAY_STATUS', 'playing');
         });
         this.audio.e.addEventListener('pause', () => {
@@ -105,9 +106,7 @@ export class MusicController extends BaseController {
             this.notifyListeners('SONG_TIMELINE_STATUS', 'timeupdate');
         });
         this.audio.e.addEventListener('ended', () => {
-            if (this.repeatOne) {
-                this.play();
-            } else {
+            if (!this.repeatOne) {
                 this.notifyListeners('SONG_PLAY_STATUS', 'ended');
                 this.playNextSong();
             }
@@ -235,6 +234,7 @@ export class MusicController extends BaseController {
 
     updateRepeat() {
         this.repeatOne = !this.repeatOne;
+        this.audio.loop = this.repeatOne;
         this.notifyListeners('REPEAT_STATUD', this.repeatOne);
     }
     toggleSongFavorite(songId: string) {

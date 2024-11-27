@@ -20,8 +20,8 @@ export class OutgoingCall extends BaseSystem<OutgoingData> {
 
             this.timeout = setTimeout(() => {
                 const isSuccess = Math.random() < 0.75;
-                this.close()
-                resolve(isSuccess ? data : false)
+                this.close();
+                resolve(isSuccess ? data : false);
             }, 3 * 1000);
 
             this.addEventListener('click', async () => {

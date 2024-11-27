@@ -1,4 +1,4 @@
-import { ClockController } from "../../controllers/clock.controller";
+import { PhoneController } from "../../controllers/phone.controller";
 import { DeviceController } from "../../device/device";
 import { TimerData } from "../../stores/clock.store";
 import { OSDate } from "../../utils/date";
@@ -10,7 +10,7 @@ export class TimerAlert extends BaseSystem<TimerData> {
 
     constructor(
         device: DeviceController,
-        private clock: ClockController,
+        private phone: PhoneController,
     ) {
         super({ btnCenter: 'close', btnStart: 'timer_play' }, device, 'timer');
     }
@@ -20,20 +20,30 @@ export class TimerAlert extends BaseSystem<TimerData> {
             this.createUI();
 
             this.timeout = setTimeout(() => {
-                this.close()
-                resolve(false)
-            }, 2 * 60 * 1000);
+                this.close();
+                resolve(false);
+            }, 30 * 1000);
 
             this.addEventListener('click', async () => {
                 if (this.timeout) clearTimeout(this.timeout);
+                this.close();
+                resolve(false);
             }, this.btnCenter);
 
             this.addEventListener('click', async () => {
                 if (this.timeout) clearTimeout(this.timeout);
                 this.close();
-                this.clock.timerStart();
                 resolve(true);
             }, this.btnStart);
+
+            this.phone.addChangeListener((status: string, data: any) => {
+                if (status === 'IN_CALL' && data) {
+                    console.log('IN_CALL::TIMER')
+                    if (this.timeout) clearTimeout(this.timeout);
+                    this.close();
+                    resolve(false);
+                }
+            });
         });
     }
 

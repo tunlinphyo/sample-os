@@ -7,14 +7,17 @@ import { SettingsController } from "../../../controllers/settings.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
 import { Setting } from "../../../stores/settings.store";
+import { OSAudio } from "../../../utils/audio";
 import { VolumeSlider } from "./volume.slider";
 
 class SoundsForm extends FormComponent {
     private ringTone?: CustomSelectForm;
     private textTone?: CustomSelectForm;
     private defaultAlert?: CustomSelectForm;
+    private callback: () => void;
+    private audio: OSAudio;
 
-    private ringTones: SelectItem[] = [
+    private textTones: SelectItem[] = [
         {
             title: 'Reflection',
             value: 'reflection'
@@ -37,13 +40,43 @@ class SoundsForm extends FormComponent {
         },
     ];
 
+    private ringTones: SelectItem[] = [
+        {
+            title: 'Buzz Symphony',
+            value: 'buzz'
+        },
+        {
+            title: 'Silent Beats',
+            value: 'beats'
+        },
+        {
+            title: 'Pulse Groove',
+            value: 'groove'
+        },
+        {
+            title: 'Haptic Rhythm',
+            value: 'rhythm'
+        },
+        {
+            title: 'Vibe Chime',
+            value: 'vibe'
+        },
+    ];
+
     constructor(
         device: DeviceController,
         parent: HTMLElement,
         private setting: SettingsController,
-        private audio: AudioController
+        private audioController: AudioController
     ) {
         super(device, 'contactForm', parent);
+        this.audio = audioController.initAudio('noti-song')
+        this.callback = () => {
+            console.log(this.audio.currentTime);
+            if (this.audio.currentTime > 3) {
+                this.stopAudio();
+            }
+        }
     }
 
     render(data?: Setting) {
@@ -63,36 +96,41 @@ class SoundsForm extends FormComponent {
             this.setting.volumes = volumes;
         });
 
+        console.log(this.setting.volumes);
+
         const toneGroup = this.createGroup();
 
         this.ringTone = this.select({
             label: 'Ringtone',
-            defautValue: 'reflection',
+            defautValue: this.setting.volumes.ringTone,
             list: this.ringTones
         }, toneGroup);
 
         this.textTone = this.select({
             label: 'Text Tone',
-            defautValue: 'daybreak',
-            list: this.ringTones
+            defautValue: this.setting.volumes.textTone,
+            list: this.textTones
         }, toneGroup);
 
         this.defaultAlert = this.select({
             label: 'Default Alerts',
-            defautValue: 'canopy',
+            defautValue: this.setting.volumes.defaultAlert,
             list: this.ringTones
         }, toneGroup);
 
         this.ringTone.addEventListener('change', (data: string) => {
             this.playAudio(data);
+            this.setting.volumes = { ...this.setting.volumes, ringTone: data };
         });
 
         this.textTone.addEventListener('change', (data: string) => {
             this.playAudio(data);
+            this.setting.volumes = { ...this.setting.volumes, textTone: data };
         });
 
         this.defaultAlert.addEventListener('change', (data: string) => {
             this.playAudio(data);
+            this.setting.volumes = { ...this.setting.volumes, defaultAlert: data };
         });
 
         this.appendElement(volumeGroup);
@@ -102,11 +140,20 @@ class SoundsForm extends FormComponent {
     getData() {}
 
     private playAudio(data: string) {
-        const url = this.audio.notiFiles[data];
+        const url = this.audioController.notiFiles[data];
         if (url) {
-            this.audio.noti.playSong(url, 0);
+            this.audio.e.addEventListener('timeupdate', this.callback);
+            this.audio.playSong(url, 0);
+            this.audio.loop = false;
         }
     }
+
+    private stopAudio() {
+        this.audio.pause();
+        this.audio.data = '';
+        this.audio.e.removeEventListener('timeupdate', this.callback);
+    }
+
 }
 
 export class SoundsPage extends Page {

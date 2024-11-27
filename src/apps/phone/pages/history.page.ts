@@ -3,6 +3,7 @@ import { Keyboard } from "../../../components/keyboard";
 import { Page } from "../../../components/page";
 import { ScrollBar } from "../../../components/scroll-bar";
 import { SelectItem } from "../../../components/select";
+import { AudioController } from "../../../controllers/audio.controller";
 import { PhoneController } from "../../../controllers/phone.controller";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
@@ -20,11 +21,12 @@ export class HistoryPage extends Page {
     constructor(
         history: HistoryStateManager,
         private device: DeviceController,
-        private phone: PhoneController
+        private phone: PhoneController,
+        audio: AudioController
     ) {
         super(history, { btnStart: 'phone', btnEnd: 'mode_comment' });
         this.component.classList.add('historyPage');
-        this.phoneService = new PhoneService(this.device, this.phone);
+        this.phoneService = new PhoneService(this.device, this.phone, audio);
         this.init();
     }
 

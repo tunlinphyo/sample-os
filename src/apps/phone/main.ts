@@ -16,10 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const historyManager = new HistoryStateManager();
 
     new PhoneApp(historyManager, parent.device, parent.phone);
-    const dialpadPage = new DialpadPage(historyManager, parent.device, parent.phone);
-    const historyPage = new HistoryPage(historyManager, parent.device, parent.phone);
+    const dialpadPage = new DialpadPage(historyManager, parent.device, parent.phone, parent.osaudio);
+    const historyPage = new HistoryPage(historyManager, parent.device, parent.phone, parent.osaudio);
     const contactsPage = new ContactsPage(historyManager, parent.device, parent.phone);
-    const contactPage = new ContactPage(historyManager, parent.device, parent.phone);
+    const contactPage = new ContactPage(historyManager, parent.device, parent.phone, parent.osaudio);
     const editPage = new ContactEditPage(historyManager, parent.device, parent.phone);
 
     new PhoneAppController(

@@ -51,7 +51,7 @@ export class WeatherController extends BaseController {
                     else await this.store.add({ location, weather }, location.timeZone);
                     this.notifyListeners('WEATHER_FEACHED', { id: location.timeZone, location, weather});
                     // if (this.myLocation.timeZone === location.timeZone) {
-                    //     this.notifyListeners('WEATHER_NOTIFIGATION', { location, weather});
+                    //     this.notifyListeners('WEATHER_NOTIFICATION', { location, weather});
                     // }
                 });
             }
@@ -66,9 +66,9 @@ export class WeatherController extends BaseController {
                     this.notifyListeners('MY_WEATHER_FETCH', weather);
                 }
                 if (WeatherService.getNotifigation(weather)) {
-                    this.notifyListeners('WEATHER_NOTIFIGATION', weather);
+                    this.notifyListeners('WEATHER_NOTIFICATION', weather);
                 } else {
-                    this.notifyListeners('WEATHER_NOTIFIGATION', null);
+                    this.notifyListeners('WEATHER_NOTIFICATION', null);
                 }
             }
         });
@@ -101,6 +101,6 @@ export class WeatherController extends BaseController {
     }
 
     public closeNoti() {
-        this.notifyListeners('WEATHER_NOTIFIGATION', null);
+        this.notifyListeners('WEATHER_NOTIFICATION', null);
     }
 }

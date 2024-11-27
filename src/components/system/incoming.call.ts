@@ -19,9 +19,9 @@ export class IncomingCall extends BaseSystem<IncomingData> {
             this.createUI(data);
 
             this.timeout = setTimeout(() => {
-                this.close()
-                resolve(false)
-            }, 5 * 1000);
+                this.close();
+                resolve(false);
+            }, 30 * 1000);
 
             this.addEventListener('click', async () => {
                 if (this.timeout) clearTimeout(this.timeout);

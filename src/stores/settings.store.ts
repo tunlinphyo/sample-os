@@ -46,9 +46,10 @@ export interface DateTimeInfo {
 export interface Volume {
     isMuted: boolean;
     mediaVolume: number;
-    ringVolume: number;
     notiVolume: number;
-    alarmVolume: number;
+    ringTone: string;
+    textTone: string;
+    defaultAlert: string;
 }
 
 const appList: HomeApp[] = [
@@ -245,10 +246,11 @@ const defaultSettings: Setting[] = [
         inList: true,
         data: {
             isMuted: false,
-            mediaVolume: 1,
-            ringVolume: 0.5,
+            mediaVolume: 0.5,
             notiVolume: 0.5,
-            alarmVolume: 0.5
+            ringTone: 'buzz',
+            textTone: 'canopy',
+            defaultAlert: 'rhythm',
         }
     },
     {

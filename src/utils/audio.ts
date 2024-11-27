@@ -1,9 +1,9 @@
 export class OSAudio {
     private audio: HTMLAudioElement;
     private _loading: boolean = true;
-    private playing: boolean = false;
     private audioContext: AudioContext;
     private gainNode: GainNode;
+    private _forcedPaused: boolean = false;
 
     constructor(private audioId: string) {
         this.audio = this.createAudio(audioId);
@@ -56,6 +56,10 @@ export class OSAudio {
         this.gainNode.gain.value = volume;
     }
 
+    set loop(data: boolean) {
+        this.audio.loop = data;
+    }
+
     get status() {
         if (this.audio.ended) return "ended";
         if (this.audio.paused) return "paused";
@@ -65,12 +69,11 @@ export class OSAudio {
     // Event Listeners
     private eventListeners() {
         this.audio.addEventListener('ended', () => {
-            this.playing = false;
             this.audio.currentTime = 0;
         });
 
         document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'visible' && this.playing) {
+            if (document.visibilityState === 'visible' && this.status == 'playing') {
                 this.audio.play().catch((error) => {
                     console.error('Playback error:', error);
                 });
@@ -88,14 +91,15 @@ export class OSAudio {
     }
 
     // Public Methods
-    public play() {
-        this.playing = true;
-        this.audioContext.resume().catch((err) => console.error("AudioContext resume error:", err));
-        this.audio.play().catch((err) => console.error("Audio play error:", err));
+    public play(forced: boolean = false) {
+        if (!forced || (forced && this._forcedPaused)) {
+            this.audioContext.resume().catch((err) => console.error("AudioContext resume error:", err));
+            this.audio.play().catch((err) => console.error("Audio play error:", err));
+        }
     }
 
-    public pause() {
-        this.playing = false;
+    public pause(forced: boolean = false) {
+        this._forcedPaused = forced;
         this.audio.pause();
     }
 
