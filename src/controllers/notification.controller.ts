@@ -141,12 +141,13 @@ export class NotificationController extends BaseController {
             this.updateClock();
         }
         if (status === "TIMER_UPDATE") {
-            this.timer = !(this.clock.timerRunning && this.clock.remaining && !this.device.isTimer);
+            this.timer = !!(this.clock.timerRunning && this.clock.remaining && !this.device.isTimer);
             this.updateClock();
         }
     }
 
     private handleMusicChange(status: string) {
+        console.log('MUSIC_CHANGE', status);
         this.music = status === "playing";
     }
 
@@ -251,8 +252,9 @@ export class NotificationController extends BaseController {
                 if (weatherData) {
                     const icon = WeatherService.getIcon(weatherData.weather[0].icon);
                     return `<span class="material-symbols-outlined fill-icon" style="font-size: 20px; margin-left: 2px; translate: 0 -1px;">${icon}</span>`;
+                } else {
+                    return "";
                 }
-                return "";
             case "music":
                 return '<span class="material-symbols-outlined fill-icon" style="font-size: 20px; margin-left: 2px;">music_note</span>';
             default:
