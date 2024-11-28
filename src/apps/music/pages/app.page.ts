@@ -107,7 +107,7 @@ export class MusicApp extends App {
 
         const albumList = this.createElement('ul', ['titleList', 'albumList']);
 
-        for (const album of this.music.fovoriteAlbums) {
+        for (const album of this.music.favoriteAlbums) {
             const albumEl = this.createElement('li', ['albumCard']);
 
             const albumRecord = this.createElement('div', ['albumRecord']);

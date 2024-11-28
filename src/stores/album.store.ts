@@ -51,12 +51,16 @@ export class AlbumStore extends BaseManager<Album> {
     }
 
     async add(item: Album) {
+        item.songs = [];
+        item.artists = [];
         const id = await this.db.post(item)
         this.addItem(id, item)
         return id
     }
 
     async update(id: string, item: Album): Promise<string> {
+        item.songs = [];
+        item.artists = [];
         await this.db.put(id, item)
         this.editItem(id, item)
         return id

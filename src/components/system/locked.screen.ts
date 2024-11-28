@@ -1,3 +1,4 @@
+import { SettingsController } from "../../controllers/settings.controller";
 import { DeviceController } from "../../device/device";
 import { HistoryStateManager } from "../../device/history.manager";
 import { WeatherService } from "../../services/weather.service";
@@ -11,12 +12,14 @@ export class LockedScreenPage extends App {
     // private minuteHand: HTMLElement;
     private lockedIcon: HTMLElement;
     private powerBtn: HTMLButtonElement;
+    private dateEl: HTMLElement | undefined;
     private weatherEl: HTMLElement | undefined;
     private clockEl: HTMLElement | undefined;
 
     constructor(
         history: HistoryStateManager,
-        private device: DeviceController
+        private device: DeviceController,
+        private setting: SettingsController
     ) {
         super(history, { template: "lockedTemplate", parentEl: device.deviceEl });
         this.component.classList.add("lockedScreen");
@@ -33,6 +36,7 @@ export class LockedScreenPage extends App {
         const delay = (60 - now.getSeconds()) * 1000;
         setTimeout(() => {
             this.setClock();
+            this.setDate();
             setInterval(() => this.setClock(), 60000);
         }, delay);
 
@@ -48,13 +52,23 @@ export class LockedScreenPage extends App {
             });
             this.closeLocked();
         });
+
+        this.setting.addChangeListener((status: string) => {
+            if (status == 'UPDATE_TIMEZONE') {
+                // wait DeviceController updated
+                setTimeout(() => {
+                    this.setDate();
+                    this.setClock();
+                }, 0);
+            }
+        })
     }
 
     render() {
         const safeArea = this.createElement('div', ['safeArea']);
 
-        const dateEl = this.createElement('div', ['dateContainer']);
-        dateEl.textContent = OSDate.customFormat(new Date(), {
+        this.dateEl = this.createElement('div', ['dateContainer']);
+        this.dateEl.textContent = OSDate.customFormat(new Date(), {
             month: 'long',
             day: 'numeric',
             weekday: 'long'
@@ -68,7 +82,7 @@ export class LockedScreenPage extends App {
         this.weatherEl = this.createElement('div', ['weatherContainer']);
         this.weatherEl.textContent = 'Weather';
 
-        safeArea.appendChild(dateEl);
+        safeArea.appendChild(this.dateEl);
         safeArea.appendChild(this.clockEl);
         safeArea.appendChild(lockContainer);
         safeArea.appendChild(this.weatherEl);
@@ -124,6 +138,15 @@ export class LockedScreenPage extends App {
     private setClock() {
         if (!this.clockEl) return;
         this.clockEl.textContent = OSDate.getCustomTime(new Date(), true, this.device.timeZone);
+    }
+
+    private setDate() {
+        if (!this.dateEl) return;
+        this.dateEl.textContent = OSDate.customFormat(new Date(), {
+            month: 'long',
+            day: 'numeric',
+            weekday: 'long'
+        }, this.device.timeZone);
     }
 
     private createLockIcon() {

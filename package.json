@@ -17,9 +17,11 @@
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.16.6",
+    "fast-xml-parser": "^4.5.0",
     "googleapis": "^140.0.1",
     "idb-keyval": "^6.2.1",
     "install": "^0.13.0",
+    "jszip": "^3.10.1",
     "npm": "^10.8.2",
     "openweathermap-ts": "^1.2.10",
     "save-dev": "^0.0.1-security",

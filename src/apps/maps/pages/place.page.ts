@@ -43,6 +43,7 @@ export class PlacePage extends Modal {
     private toggleSaved() {
         const icon = this.getElement('.icon', this.btnStart);
         if (!icon) return;
+        // icon.textContent = `${this.isSaved ? 'bookmark_remove' : 'bookmark_add'}`;
         if (this.isSaved) icon.classList.add('fill-icon');
         else icon.classList.remove('fill-icon');
     }

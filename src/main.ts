@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.osaudio = osaudio;
     window.music = music;
 
-    const lockedScreen = new LockedScreenPage(historyManager, window.device);
+    const lockedScreen = new LockedScreenPage(historyManager, window.device, window.setting);
     const alarmAlert = new AlarmAlert(window.device, window.phone);
     const timerAlert = new TimerAlert(window.device, window.phone);
     new PhoneDummyController(window.device, window.phone, window.setting, window.osaudio);
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // new Battery();
     // const fullScreen = new FullscreenController();
 
-    window.weather.fetchWeather();
+    // window.weather.fetchWeather();
 
     let inCall: boolean = false;
 

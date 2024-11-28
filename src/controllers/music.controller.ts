@@ -113,9 +113,6 @@ export class MusicController extends BaseController {
         });
     }
 
-    get latest() {
-        return this.songs.map(song => this.getSong(song.id)).filter(item => !!item);
-    }
     get list(): Music[] {
         return [
             {
@@ -155,7 +152,7 @@ export class MusicController extends BaseController {
             .map(album => this.getAlbum(album.id, true))
             .filter(item => !!item);
     }
-    get fovoriteAlbums() {
+    get favoriteAlbums() {
         return this.albums
             .filter(item => item.isFavourite)
             .sort((a, b) => a.order - b.order)
