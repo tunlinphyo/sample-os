@@ -78,7 +78,7 @@ export class NotesApp extends App {
         const dateEl = this.createElement('small', ['noteDate']);
         dateEl.textContent = OSDate.formatDate(item.updateDate || item.createDate, {
             year: 'numeric',
-            month: 'long',
+            month: 'short',
             day: '2-digit',
             weekday: 'short'
         }, this.device.timeZone);
@@ -109,7 +109,7 @@ export class NotesApp extends App {
         const dateEl = this.createElement('small', ['noteDate']);
         dateEl.textContent = OSDate.formatDate(item.updateDate || item.createDate, {
             year: 'numeric',
-            month: 'long',
+            month: 'short',
             day: '2-digit',
             weekday: 'short'
         }, this.device.timeZone);

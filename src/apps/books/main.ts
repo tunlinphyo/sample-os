@@ -8,6 +8,7 @@ import { BooksController } from './books.controller';
 import { BookReader } from './pages/book.reader';
 import { BooksAppController } from './app.controller';
 import { BookStorePage } from './pages/books.store';
+import { EBookReader } from './pages/ebook.reader';
 
 
 document.body.dataset.schema = parent.device.theme;
@@ -20,12 +21,14 @@ document.addEventListener('DOMContentLoaded', () => {
     new BooksApp(historyManager, booksController);
     const bookReader = new BookReader(historyManager, booksController, parent.device);
     const bookStorePage = new BookStorePage(historyManager);
+    const ebookReader = new EBookReader(historyManager, booksController, parent.device);
 
     new BooksAppController(
         historyManager,
         parent.device,
         booksController,
         bookReader,
-        bookStorePage
+        bookStorePage,
+        ebookReader,
     );
 });

@@ -80,14 +80,24 @@
 
                 /* background-color: hotpink; */
                 overflow: hidden;
+                line-height: 1.6;
 
                 & p {
-                    line-height: 1.68;
+                    line-height: 1.6;
                     font-size: 16px;
 
                     &.index {
                         text-indent: var(--grid);
                     }
+                }
+
+                & h1,
+                & h2,
+                & h3,
+                & h4,
+                & h5,
+                & h6 {
+                    text-align: left;
                 }
 
                 > * {
@@ -225,6 +235,14 @@
                 padding-inline: 16px;
                 position: relative;
 
+                &.no-wrap {
+                    display: -webkit-box;
+                    -webkit-line-clamp: 1;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
                 &:first-child {
                     transform-origin: bottom left;
                     translate: 2px 0;
@@ -249,14 +267,14 @@
                     z-index: 0;
                     top: 2px; bottom: 2px;
                     right: 12px;
-                    width: 3px;
+                    width: 2px;
                     background-color: var(--black);
 
-                    background-size: 6px 6px;
-                    background-image: repeating-linear-gradient(0deg, var(--black), var(--black) 3px, var(--white) 3px, var(--white));
+                    background-size: 4px 4px;
+                    background-image: repeating-linear-gradient(0deg, var(--black), var(--black) 2px, var(--white) 2px, var(--white));
 
                     .progress {
-                        width: 5px;
+                        width: 4px;
                         background-color: var(--black);
                         margin-inline-start: -1px;
                     }

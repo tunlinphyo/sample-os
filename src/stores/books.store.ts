@@ -1,10 +1,24 @@
 import { DB } from "./db";
 import { BaseManager, ChangeListener } from "./data";
-import { BOOKS } from "../apps/books/services/books";
+// import { BOOKS } from "../apps/books/services/books";
 import { DeviceTheme } from "../device/device";
+import { EBOOKS } from "../apps/books/services/book-list";
+
+// export interface Chapter {
+//     index: number;
+//     title: string;
+//     pageNumber: number;
+// }
+
+export interface Content {
+    id: string;
+    pages: string[],
+    startPage: number;
+    endPage: number;
+}
 
 export interface Chapter {
-    index: number;
+    idref: string;
     title: string;
     pageNumber: number;
 }
@@ -19,6 +33,7 @@ export interface Book {
     currantPage: number;
     lastReadDate?: Date;
     theme?: DeviceTheme;
+    contents: Content[];
 }
 
 export class BooksStore extends BaseManager<Book> {
@@ -33,7 +48,7 @@ export class BooksStore extends BaseManager<Book> {
     async init() {
         let items = await this.db.getAll();
         if (!items.length) {
-            items = await this.db.postMany(BOOKS);
+            items = await this.db.postMany(EBOOKS);
         }
         this.setItems(items);
         this.notifyListeners(null, 'loaded');

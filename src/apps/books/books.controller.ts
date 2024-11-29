@@ -29,6 +29,12 @@ export class BooksController extends BaseController {
         return this.store.get(id);
     }
 
+    addBook(data: Book) {
+        this.tryThis(async () => {
+            await this.store.add(data);
+        });
+    }
+
     updateBook(data: Book) {
         this.tryThis(async () => {
             await this.store.update(data.id, data);

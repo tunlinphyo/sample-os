@@ -2,6 +2,18 @@
 // npm install jszip
 
 import JSZip from 'jszip';
+import { Book, Chapter } from '../stores/books.store';
+import { v4 as uuidv4 } from 'uuid';
+import { OSString } from '../utils/string';
+import { EbookRender } from './ebook.render';
+
+interface NodeRepresentation {
+    type: 'element' | 'text';
+    tagName?: string;
+    attributes?: { [key: string]: string };
+    content?: string;
+    children?: NodeRepresentation[];
+}
 
 export class EPUBParser {
     private url: string;
@@ -129,6 +141,8 @@ export class EPUBParser {
                     const contentFile = zip.file(contentFilePath);
                     if (contentFile) {
                         const contentFileContent = await contentFile.async('text');
+                        const bodyContent = this.extractBodyInnerHTML(contentFileContent);
+                        console.log('contentFileContent', bodyContent);
                         const text = this.extractTextFromContentFile(contentFileContent);
                         contents.push({
                             id: idref,
@@ -178,5 +192,106 @@ export class EPUBParser {
             return filePath.substring(0, lastSlashIndex + 1);
         }
         return '';
+    }
+
+    public static getData(parentEl: HTMLElement, epubData: any): Book {
+        const removeIDs: string[] = [];
+
+        const contents = epubData.contents.filter((item: any) => !removeIDs.includes(item.id) && !item.id.includes('_fn')) as any[];
+        const render = new EbookRender(parentEl, contents);
+        const { list, total } = render.getContents();
+
+        const chapters = epubData.spine
+            .filter((item: any) => !removeIDs.includes(item.idref) && !item.idref.includes('_fn'))
+            .map((item: {idref:string}) => {
+                const content = list.find(c => c.id == item.idref)
+                return {
+                    idref: item.idref,
+                    title: "Chapter " + OSString.getBookTitle(item.idref),
+                    pageNumber: content?.startPage || 1,
+                }
+            })  as Chapter[];
+
+
+        return {
+            id: uuidv4(),
+            title: epubData.metadata.title,
+            author: epubData.metadata.creator,
+            chapters: chapters,
+            totalPages: total,
+            bookmarks: [],
+            currantPage: 1,
+            contents: list
+        }
+    }
+
+    extractBodyInnerHTML(htmlContent: string): string {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlContent, 'text/html');
+        const body = doc.body;
+        if (!body) {
+            throw new Error('No <body> tag found in the HTML content.');
+        }
+        return body.innerHTML.trim();
+    }
+
+    extractBodyContent(htmlContent: string): NodeRepresentation[] {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlContent, 'text/html');
+        const body = doc.body;
+        if (!body) {
+            throw new Error('No <body> tag found in the HTML content.');
+        }
+
+        function nodeToJSON(node: Node): NodeRepresentation {
+            if (node.nodeType === Node.ELEMENT_NODE) {
+                const element = node as Element;
+                const nodeRep: NodeRepresentation = {
+                    type: 'element',
+                    tagName: element.tagName.toLowerCase(),
+                    attributes: {},
+                    children: [],
+                };
+
+                // Extract attributes
+                for (let i = 0; i < element.attributes.length; i++) {
+                    const attr = element.attributes.item(i);
+                    if (attr) {
+                        nodeRep.attributes![attr.name] = attr.value;
+                    }
+                }
+
+                // Process child nodes recursively
+                element.childNodes.forEach((child) => {
+                    nodeRep.children!.push(nodeToJSON(child));
+                });
+
+                return nodeRep;
+            } else if (node.nodeType === Node.TEXT_NODE) {
+                const text = node.textContent?.trim();
+                if (text) {
+                    return {
+                        type: 'text',
+                        content: text,
+                    };
+                } else {
+                    // Ignore empty text nodes
+                    return null as any;
+                }
+            } else {
+                // Ignore other node types (comments, processing instructions, etc.)
+                return null as any;
+            }
+        }
+
+        const result: NodeRepresentation[] = [];
+        body.childNodes.forEach((child) => {
+            const nodeRep = nodeToJSON(child);
+            if (nodeRep) {
+                result.push(nodeRep);
+            }
+        });
+
+        return result;
     }
 }

@@ -29,7 +29,7 @@
             text-align: left;
 
             border: 3px solid var(--black);
-            border-radius: 5px;
+            border-radius: 10px;
             position: relative;
 
             .backgroundEl {
@@ -248,7 +248,7 @@
             .albumButton {
                 grid-area: album;
                 border: 3px solid var(--black);
-                border-radius: 5px;
+                border-radius: 10px;
                 padding: 8px;
 
                 display: flex;

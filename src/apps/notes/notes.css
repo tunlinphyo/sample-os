@@ -15,9 +15,20 @@
 
             .noteCard {
                 padding: var(--half);
+                padding-inline-start: var(--grid);
                 border: 2px solid var(--black);
-                border-radius: var(--padding);
+                border-radius: 15px;
                 background-color: var(--white);
+
+                /* background-image: radial-gradient(circle, var(--black) 40%, transparent 25%);
+                background-size: 15px 25px;
+                background-repeat: repeat-y;
+                background-position: 5px 5px; */
+
+                background-image: linear-gradient(to bottom, var(--black) 12%, transparent 12%), radial-gradient(circle, var(--black) 35%, transparent 25%);
+                background-size: 15px 25px;
+                background-repeat: repeat-y;
+                background-position: 0 16px, 4px 5px;
 
                 .noteTitle {
                     font-size: 22px;

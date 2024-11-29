@@ -3,6 +3,8 @@ import { HistoryState, HistoryStateManager } from "../../device/history.manager"
 import { BooksController } from "./books.controller";
 import { BookReader } from "./pages/book.reader";
 import { BookStorePage } from './pages/books.store';
+import { EBookReader } from "./pages/ebook.reader";
+import { EBOOKS } from "./services/book-list";
 
 export class BooksAppController {
     constructor(
@@ -10,7 +12,8 @@ export class BooksAppController {
         private device: DeviceController,
         private book: BooksController,
         private bookReader: BookReader,
-        private bookStorePage: BookStorePage
+        private bookStorePage: BookStorePage,
+        private ebookReader: EBookReader
     ) {
         this.renderListeners();
     }
@@ -23,13 +26,22 @@ export class BooksAppController {
                     callback: () => {
                         const book = this.book.getBook(state);
                         if (book) {
-                            this.bookReader.openPage(book.title, book);
+                            this.ebookReader.openPage(book.title, book);
                         }
                     }
                 }, {
                     pattern: '/books/store',
                     callback: () => {
                         this.bookStorePage.openPage('Book Store');
+                    }
+                },
+                {
+                    pattern: '/ebooks/reader',
+                    callback: () => {
+                        const book = EBOOKS[0];
+                        if (book) {
+                            this.ebookReader.openPage(book.title, book);
+                        }
                     }
                 }
             ]);
