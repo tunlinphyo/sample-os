@@ -1,7 +1,6 @@
 import { Page } from "../../../components/page";
 import { HistoryStateManager } from "../../../device/history.manager";
 import { EPUBParser } from "../../../services/epub.servide";
-import { myData } from "../services/book-list";
 
 
 export class BookStorePage extends Page {

@@ -1,8 +1,12 @@
 export class EpubUploader {
     private acceptedFileType: string = "application/epub+zip";
-    private maxFileSize: number = 2 * 1024 * 1024;
+    private maxFileSize: number = 10 * 1024 * 1024;
 
-    constructor(private inputElement: HTMLInputElement, private onUploadCallback?: (file: File) => void) {
+    constructor(
+        private inputElement: HTMLInputElement, 
+        private onErrorCallback: (error: Error) => void,
+        private onUploadCallback: (file: File) => void
+    ) {
         this.init();
     }
 
@@ -20,8 +24,10 @@ export class EpubUploader {
 
         const file = inputElement.files[0];
 
-        if (!this.validateFile(file)) {
-            return;
+        const error = this.validateFile(file);
+
+        if (error) {
+            return this.onErrorCallback(error);
         }
 
         if (this.onUploadCallback) {
@@ -31,17 +37,15 @@ export class EpubUploader {
         console.log("File uploaded successfully:", file.name);
     }
 
-    private validateFile(file: File): boolean {
+    private validateFile(file: File): Error | null {
         if (file.type !== this.acceptedFileType) {
-            console.error("Invalid file type. Please upload a .epub file.");
-            return false;
+            return new Error("Invalid file type. Please upload a .epub file.");
         }
 
         if (file.size > this.maxFileSize) {
-            console.error(`File size exceeds the limit of ${this.maxFileSize / 1024 / 1024}MB.`);
-            return false;
+            return new Error(`File size exceeds the limit of ${this.maxFileSize / 1024 / 1024}MB.`);
         }
 
-        return true;
+        return null;
     }
 }

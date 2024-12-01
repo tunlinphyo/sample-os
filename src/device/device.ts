@@ -15,6 +15,7 @@ import { OutgoingCall } from "../components/system/outgoing.call";
 import { SelectPopup } from "../components/popups/select.popup";
 import { SystemService } from "../services/system.service";
 import { OSBrowser } from "../utils/browser";
+import { AppLoading } from "../components/popups/loading.popup";
 
 export type DeviceTheme = 'auto' | 'light' | 'dark';
 
@@ -45,6 +46,7 @@ export class DeviceController extends BaseComponent {
     public keyboard: KeyboardPage;
     public alertPopup: AppAlert;
     public confirmPopup: AppAlert;
+    public loadingPopup: AppLoading;
     public selectList: SelectPopup;
     public datePicker: DatePicker;
     public timePicker: TimePicker;
@@ -71,6 +73,7 @@ export class DeviceController extends BaseComponent {
         this.keyboard = new KeyboardPage(this.appFrame);
         this.alertPopup = new AppAlert(this.appFrame);
         this.confirmPopup = new AppAlert(this.appFrame, true);
+        this.loadingPopup = new AppLoading(this.appFrame);
         this.selectList = new SelectPopup(this.appFrame);
         this.datePicker = new DatePicker(this.appFrame, this.timeZone);
         this.timePicker = new TimePicker(this.appFrame, this);

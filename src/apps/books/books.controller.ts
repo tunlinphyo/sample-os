@@ -29,9 +29,14 @@ export class BooksController extends BaseController {
         return this.store.get(id);
     }
 
-    addBook(data: Book) {
-        this.tryThis(async () => {
+    async addBook(data: Book) {
+        try {
             await this.store.add(data);
+            return true;
+        } catch(error) {
+            return false;
+        }
+        return this.tryThis(async () => {
         });
     }
 

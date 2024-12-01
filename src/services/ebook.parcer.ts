@@ -1,5 +1,5 @@
 import JSZip from 'jszip';
-import { Book, Chapter, Content } from '../stores/books.store';
+import { Book, Chapter } from '../stores/books.store';
 import { v4 as uuidv4 } from 'uuid';
 import { OSString } from '../utils/string';
 import { EbookRender } from './ebook.render';
@@ -40,11 +40,6 @@ export class EPUBParser {
         return extractedData;
     }
 
-    /**
-     * Reads a File as an ArrayBuffer.
-     * @param file - The File to read.
-     * @returns A Promise that resolves to the file's ArrayBuffer.
-     */
     private readFileAsArrayBuffer(file: File): Promise<ArrayBuffer> {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -54,11 +49,6 @@ export class EPUBParser {
         });
     }
 
-    /**
-     * Parses container.xml to find the OPF file path.
-     * @param containerXmlContent - The content of container.xml.
-     * @returns The OPF file path.
-     */
     private getOpfFilePath(containerXmlContent: string): string {
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(containerXmlContent, 'application/xml');
@@ -66,13 +56,6 @@ export class EPUBParser {
         return rootfileElement?.getAttribute('full-path') || '';
     }
 
-    /**
-     * Extracts data from the OPF file, including contents.
-     * @param opfFileContent - The content of the OPF file.
-     * @param zip - The JSZip instance containing the EPUB files.
-     * @param opfFilePath - The path to the OPF file within the EPUB.
-     * @returns An object containing metadata, manifest, spine, and contents.
-     */
     private async extractDataFromOpf(opfFileContent: string, zip: JSZip, opfFilePath: string): Promise<any> {
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(opfFileContent, 'application/xml');
@@ -125,7 +108,6 @@ export class EPUBParser {
                     if (contentFile) {
                         const contentFileContent = await contentFile.async('text');
                         // const text = this.extractTextFromContentFile(contentFileContent);
-                        console.log(contentFileContent);
                         const text = this.extractBodyInnerHTML(contentFileContent)
                         contents.push({
                             id: idref,
@@ -138,37 +120,77 @@ export class EPUBParser {
             }
         }
 
+        const chapters = await this.extractChapterTitles({ spine, manifest, opfFilePath }, zip);
+
         return {
             metadata,
             manifest,
             spine,
             contents,
+            chapters,
         };
     }
+    private async extractChapterTitles(epubData: any, zip: JSZip): Promise<Array<{ idref: string; title: string }>> {
+        const chapters: Array<{ idref: string; title: string }> = [];
+        const { spine, manifest, opfFilePath } = epubData;
+        const opfDir = this.getDirectoryPath(opfFilePath);
 
-    /**
-     * Extracts text content from an XHTML or HTML file content.
-     * @param contentFileContent - The content of the XHTML/HTML file.
-     * @returns The extracted text content.
-     */
-    private extractTextFromContentFile(contentFileContent: string): string {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(contentFileContent, 'application/xhtml+xml');
-        // Handle parsing errors
-        const parserError = doc.querySelector('parsererror');
-        if (parserError) {
-            console.warn('Error parsing content file:', parserError.textContent);
-            return '';
+        for (const spineItem of spine) {
+            const idref = spineItem.idref;
+            const manifestItem = manifest[idref];
+            if (manifestItem) {
+                const href = manifestItem.href;
+                const mediaType = manifestItem.mediaType;
+                if (mediaType === 'application/xhtml+xml' || mediaType === 'text/html' || mediaType === 'application/xml') {
+                    const contentFilePath = opfDir + href;
+                    const contentFile = zip.file(contentFilePath);
+                    if (contentFile) {
+                        const contentFileContent = await contentFile.async('text');
+                        const title = this.extractTitleFromContentFile(contentFileContent);
+                        chapters.push({
+                            idref: idref,
+                            title: title,
+                        });
+                    } else {
+                        console.warn(`Content file not found in ZIP: ${contentFilePath}`);
+                    }
+                }
+            }
         }
-        // Extract text content
-        return doc.body?.textContent?.trim() || '';
+        return chapters;
     }
 
-    /**
-     * Gets the directory path from a file path.
-     * @param filePath - The full file path.
-     * @returns The directory path.
-     */
+    private extractTitleFromContentFile(contentFileContent: string): string {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(contentFileContent, 'application/xhtml+xml');
+
+        // Check for parsing errors
+        const parserError = doc.getElementsByTagName('parsererror');
+        if (parserError.length > 0) {
+            console.warn('Error parsing content file:', parserError[0].textContent);
+            return '';
+        }
+
+        // Try to get the title from the <title> tag in the <head>
+        const titleElement = doc.getElementsByTagName('title')[0];
+        if (titleElement && titleElement.textContent) {
+            return titleElement.textContent.trim();
+        }
+
+        // If no title in <title> tag, try to get the first heading in the body
+        const body = doc.getElementsByTagName('body')[0];
+        if (body) {
+            for (let i = 1; i <= 6; i++) {
+                const heading = body.getElementsByTagName('h' + i)[0];
+                if (heading && heading.textContent) {
+                    return heading.textContent.trim();
+                }
+            }
+        }
+
+        return '';
+    }
+
     private getDirectoryPath(filePath: string): string {
         const lastSlashIndex = filePath.lastIndexOf('/');
         if (lastSlashIndex !== -1) {
@@ -180,26 +202,17 @@ export class EPUBParser {
     public static getData(parentEl: HTMLElement, epubData: any): Book {
         const removeIDs: string[] = [];
 
-        const getBookTitle = (id: string, contents: Content[]) => {
-            const content = [...contents].find(item => item.id == id);
-            if (!(content && content.pages[0])) return;
-            const first = content.pages[0].split(' <br><br> ');
-            const title = first[0];
-            if (title && title.length > 30) return '';
-            return title;
-        }
-
         const contents = epubData.contents.filter((item: any) => !removeIDs.includes(item.id) && !item.id.includes('_fn')) as any[];
         const render = new EbookRender(parentEl, contents);
         const { list, total } = render.getContents();
 
-        const chapters = epubData.spine
+        const chapters = epubData.chapters
             .filter((item: any) => !removeIDs.includes(item.idref))
-            .map((item: { idref: string }) => {
+            .map((item: { idref: string; title: string }) => {
                 const content = list.find(c => c.id == item.idref);
                 return {
                     idref: item.idref,
-                    title: OSString.getBookTitle(item.idref),
+                    title: item.title || OSString.getBookTitle(item.idref),
                     pageNumber: content?.startPage || 1,
                 };
             })

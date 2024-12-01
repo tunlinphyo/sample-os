@@ -1,5 +1,6 @@
 import { App } from "../../../components/app"
 import { ScrollBar } from "../../../components/scroll-bar";
+import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
 import { EPUBParser } from "../../../services/ebook.parcer";
 import { Book } from "../../../stores/books.store";
@@ -9,10 +10,11 @@ import { EpubUploader } from "../services/book.uploader";
 
 export class BooksApp extends App {
     private uploadEl: HTMLInputElement;
-
+    
     constructor(
         history: HistoryStateManager,
-        private book: BooksController
+        private book: BooksController,
+        private device: DeviceController
     ) {
         super(history, { template: 'actionTemplate', btnEnd: 'upload' });
         this.component.classList.add('booksPage');
@@ -24,12 +26,17 @@ export class BooksApp extends App {
     }
 
     private init() {
-        new EpubUploader(this.uploadEl, (file: File) => {
-            this.extractEpubFromUrl(file);
-        });
+        new EpubUploader(
+            this.uploadEl, 
+            (error: Error) => {
+                this.device.alertPopup.openPage('Error', error.message);
+            },
+            (file: File) => {
+                this.extractEpubFromUrl(file);
+            }
+        );
 
         this.addEventListener('click', () => {
-            // this.history.pushState('/books/store', null);
             this.uploadEl.click();
         }, this.btnEnd, false);
 
@@ -46,7 +53,6 @@ export class BooksApp extends App {
         for(const book of books) {
             // const bookHeight = Math.max(Math.round(book.totalPages / 200 * 100), 50);
             const minHeight = Math.max(Math.round(book.totalPages * 0.1), 40);
-            console.log('MIN_HEIGHT', minHeight);
             const bookHeight = Math.min(minHeight, 120);
             const bookTitle = this.createElement('li', ['bookItem'], { style: `height: ${bookHeight}px` });
             if (bookHeight < 60) {
@@ -90,19 +96,21 @@ export class BooksApp extends App {
     }
 
     public async extractEpubFromUrl(file: File) {
-        console.time('Book Loading');
+        const [ close, update ] = await this.device.loadingPopup.openPage('Loading', 'Uploading...');
         const parser = new EPUBParser(file);
-        parser.parse()
-            .then((epubData) => {
-                console.log(epubData);
-                const bookData = EPUBParser.getData(this.mainArea.parentElement as HTMLElement, epubData);
-                console.log(bookData);
-                console.timeEnd('Book Loading');
-                this.book.addBook(bookData);
-            })
-            .catch((error) => {
-                console.error('Error parsing EPUB file:', error);
-            });
+        const epubData = await parser.parse().catch((error: Error) => {
+            close();
+            this.device.alertPopup.openPage('Error', error.message);
+        });
+
+        await update('Processiong...');
+        console.log(epubData);
+        console.log(this.mainArea.parentElement);
+        const bookData = EPUBParser.getData(this.mainArea.parentElement as HTMLElement, epubData);
+        await update('Saving...');
+        console.log(bookData);
+        this.book.addBook(bookData);
+        close();
     }
 
 }

@@ -134,6 +134,7 @@ export class AudioRecoder extends Modal {
 
     private startRecording(event: Event) {
         event.preventDefault();
+        this.audioController.pauseMusic();
 
         this.pressTimer = setTimeout(async () => {
             const result = await this.mediaService.init();

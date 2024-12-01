@@ -1,7 +1,6 @@
 import { DeviceController } from "../../device/device";
 import { HistoryState, HistoryStateManager } from "../../device/history.manager";
 import { BooksController } from "./books.controller";
-import { BookReader } from "./pages/book.reader";
 import { BookStorePage } from './pages/books.store';
 import { EBookReader } from "./pages/ebook.reader";
 import { EBOOKS } from "./services/book-list";
@@ -11,7 +10,6 @@ export class BooksAppController {
         private history: HistoryStateManager,
         private device: DeviceController,
         private book: BooksController,
-        private bookReader: BookReader,
         private bookStorePage: BookStorePage,
         private ebookReader: EBookReader
     ) {
