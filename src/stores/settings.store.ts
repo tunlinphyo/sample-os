@@ -109,13 +109,13 @@ const appList: HomeApp[] = [
         isShow: true,
         isSystem: false,
     },
-    // {
-    //     id: 'journal',
-    //     name: 'Journal',
-    //     order: 8,
-    //     isShow: false,
-    //     isSystem: false,
-    // },
+    {
+        id: 'journal',
+        name: 'Journal',
+        order: 8,
+        isShow: false,
+        isSystem: false,
+    },
     {
         id: 'settings',
         name: 'Settings',
@@ -182,12 +182,12 @@ const stores: StoreInfo[] = [
         order: 8,
         stores: ['places'],
     },
-    {
-        id: 'journal',
-        name: 'Journal',
-        order: 9,
-        stores: ['journal']
-    },
+    // {
+    //     id: 'journal',
+    //     name: 'Journal',
+    //     order: 9,
+    //     stores: ['journal']
+    // },
     {
         id: 'weather',
         name: 'Weather',

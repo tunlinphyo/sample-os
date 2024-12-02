@@ -1429,23 +1429,11 @@ body {
                     }
 
                     &.chapters {
-                        counter-reset: index;
+                        gap: 12px;
 
                         .selectItem {
                             text-align: left;
                             font-size: 18px;
-                            counter-increment: index;
-
-                            display: grid;
-                            grid-template-columns: 20px 1fr;
-                            gap: 12px;
-
-                            &::before {
-                                content: counter(index)".";
-                                text-align: right;
-                                /* font-family: var(--number-fonts); */
-                                translate: 0 -1px;
-                            }
                         }
                     }
 
