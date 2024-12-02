@@ -1,9 +1,9 @@
 export class EpubUploader {
     private acceptedFileType: string = "application/epub+zip";
-    private maxFileSize: number = 10 * 1024 * 1024;
+    private maxFileSize: number = 5 * 1024 * 1024;
 
     constructor(
-        private inputElement: HTMLInputElement, 
+        private inputElement: HTMLInputElement,
         private onErrorCallback: (error: Error) => void,
         private onUploadCallback: (file: File) => void
     ) {

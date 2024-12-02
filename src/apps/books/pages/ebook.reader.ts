@@ -43,7 +43,7 @@ export class EBookReader extends Modal {
         }, this.btnStart, false);
 
         this.addEventListener('click', async () => {
-            const result = await this.device.selectList.openPage('Chapters', this.bookService.getChapters(), 'chapters');
+            const result = await this.device.selectList.openPage('Chapters', this.bookService.getChapters());
             if (result && typeof result === 'string') {
                 this.bookService.chapter = parseInt(result);
                 this.hideMenu();

@@ -2,15 +2,16 @@ import { App } from "../../../components/app"
 import { ScrollBar } from "../../../components/scroll-bar";
 import { DeviceController } from "../../../device/device";
 import { HistoryStateManager } from "../../../device/history.manager";
-import { EPUBParser } from "../../../services/ebook.parcer";
+import { EPUBParser } from "../../../services/ebook.parser";
 import { Book } from "../../../stores/books.store";
+import { OSNumber } from "../../../utils/number";
 import { BooksController } from "../books.controller";
 import { EpubUploader } from "../services/book.uploader";
 
 
 export class BooksApp extends App {
     private uploadEl: HTMLInputElement;
-    
+
     constructor(
         history: HistoryStateManager,
         private book: BooksController,
@@ -27,7 +28,7 @@ export class BooksApp extends App {
 
     private init() {
         new EpubUploader(
-            this.uploadEl, 
+            this.uploadEl,
             (error: Error) => {
                 this.device.alertPopup.openPage('Error', error.message);
             },
@@ -51,13 +52,8 @@ export class BooksApp extends App {
         const scrollArea = this.createScrollArea();
         const bookList = this.createElement('ul', ['titleList']);
         for(const book of books) {
-            // const bookHeight = Math.max(Math.round(book.totalPages / 200 * 100), 50);
-            const minHeight = Math.max(Math.round(book.totalPages * 0.1), 40);
-            const bookHeight = Math.min(minHeight, 120);
+            const bookHeight = OSNumber.clamp(Math.round(book.totalPages * 0.1), [40, 140]);
             const bookTitle = this.createElement('li', ['bookItem'], { style: `height: ${bookHeight}px` });
-            if (bookHeight < 60) {
-                bookTitle.classList.add('no-wrap');
-            }
 
             const titleEl = this.createElement('div', ['bookTitle']);
             if (bookHeight < 90) {
@@ -109,7 +105,7 @@ export class BooksApp extends App {
         const bookData = EPUBParser.getData(this.mainArea.parentElement as HTMLElement, epubData);
         await update('Saving...');
         console.log(bookData);
-        this.book.addBook(bookData);
+        await this.book.addBook(bookData);
         close();
     }
 

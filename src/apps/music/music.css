@@ -25,12 +25,19 @@
         .musicCard {
             display: grid;
             grid-template-areas: "card";
-            aspect-ratio: 1/1;
+            /* aspect-ratio: 1/1; */
             text-align: left;
 
             border: 3px solid var(--black);
             border-radius: 10px;
             position: relative;
+
+            &::before {
+                content: '';
+                display: block;
+                grid-area: card;
+                padding-top: 100%;
+            }
 
             .backgroundEl {
                 grid-area: card;
@@ -42,7 +49,7 @@
 
                 .diamondCard {
                     width: 86px;
-                    aspect-ratio: 1/1;
+                    height: 86px;
 
                     display: grid;
                     place-items: center;
@@ -204,9 +211,16 @@
         gap: 10px;
 
         .albumCard {
-            aspect-ratio: 1/1;
+            /* aspect-ratio: 1/1; */
             display: grid;
             grid-template-areas: "album";
+
+            &::before {
+                content: '';
+                display: block;
+                grid-area: album;
+                padding-top: 100%;
+            }
 
             .albumRecord {
                 grid-area: album;
@@ -220,7 +234,6 @@
                     height: calc(var(--grid) * 1.6);
                     border: 2px solid var(--black);
                     border-radius: 100%;
-                    /* margin-inline-end: -2px; */
                     margin-block-end: -75%;
                     box-shadow:
                         0 0 0 4px var(--white),

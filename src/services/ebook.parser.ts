@@ -1,7 +1,6 @@
 import JSZip from 'jszip';
 import { Book, Chapter } from '../stores/books.store';
 import { v4 as uuidv4 } from 'uuid';
-import { OSString } from '../utils/string';
 import { EbookRender } from './ebook.render';
 
 export class EPUBParser {
@@ -92,6 +91,7 @@ export class EPUBParser {
 
         // Extract contents
         const contents: Array<{ id: string; text: string }> = [];
+        const chapters: Array<{ idref: string; title: string }> = [];
         const opfDir = this.getDirectoryPath(opfFilePath);
 
         // Iterate over the spine items to extract content in order
@@ -107,46 +107,11 @@ export class EPUBParser {
                     const contentFile = zip.file(contentFilePath);
                     if (contentFile) {
                         const contentFileContent = await contentFile.async('text');
-                        // const text = this.extractTextFromContentFile(contentFileContent);
-                        const text = this.extractBodyInnerHTML(contentFileContent)
+                        const { title, bodyHTML } = this.extractBodyInnerHTML(contentFileContent);
                         contents.push({
                             id: idref,
-                            text: text,
+                            text: bodyHTML,
                         });
-                    } else {
-                        console.warn(`Content file not found in ZIP: ${contentFilePath}`);
-                    }
-                }
-            }
-        }
-
-        const chapters = await this.extractChapterTitles({ spine, manifest, opfFilePath }, zip);
-
-        return {
-            metadata,
-            manifest,
-            spine,
-            contents,
-            chapters,
-        };
-    }
-    private async extractChapterTitles(epubData: any, zip: JSZip): Promise<Array<{ idref: string; title: string }>> {
-        const chapters: Array<{ idref: string; title: string }> = [];
-        const { spine, manifest, opfFilePath } = epubData;
-        const opfDir = this.getDirectoryPath(opfFilePath);
-
-        for (const spineItem of spine) {
-            const idref = spineItem.idref;
-            const manifestItem = manifest[idref];
-            if (manifestItem) {
-                const href = manifestItem.href;
-                const mediaType = manifestItem.mediaType;
-                if (mediaType === 'application/xhtml+xml' || mediaType === 'text/html' || mediaType === 'application/xml') {
-                    const contentFilePath = opfDir + href;
-                    const contentFile = zip.file(contentFilePath);
-                    if (contentFile) {
-                        const contentFileContent = await contentFile.async('text');
-                        const title = this.extractTitleFromContentFile(contentFileContent);
                         chapters.push({
                             idref: idref,
                             title: title,
@@ -157,34 +122,57 @@ export class EPUBParser {
                 }
             }
         }
-        return chapters;
+
+        return {
+            metadata,
+            manifest,
+            spine,
+            contents,
+            chapters,
+        };
     }
 
-    private extractTitleFromContentFile(contentFileContent: string): string {
+    private extractBodyInnerHTML(xhtmlContent: string): { title: string; bodyHTML: string } {
         const parser = new DOMParser();
-        const doc = parser.parseFromString(contentFileContent, 'application/xhtml+xml');
+        const doc = parser.parseFromString(xhtmlContent, 'application/xhtml+xml');
 
         // Check for parsing errors
         const parserError = doc.getElementsByTagName('parsererror');
         if (parserError.length > 0) {
-            console.warn('Error parsing content file:', parserError[0].textContent);
-            return '';
+            throw new Error('Error parsing the XHTML content.');
         }
 
-        // Try to get the title from the <title> tag in the <head>
-        const titleElement = doc.getElementsByTagName('title')[0];
-        if (titleElement && titleElement.textContent) {
-            return titleElement.textContent.trim();
+        // Define the XHTML namespace
+        const XHTML_NS = 'http://www.w3.org/1999/xhtml';
+
+        // Access the <body> element using namespace-aware methods
+        const body = doc.getElementsByTagNameNS(XHTML_NS, 'body')[0];
+        if (!body) {
+            throw new Error('No <body> tag found in the XHTML content.');
         }
 
-        // If no title in <title> tag, try to get the first heading in the body
-        const body = doc.getElementsByTagName('body')[0];
+        // Return the inner HTML of the <body> element
+        const bodyHTML = body.innerHTML.trim();
+        const title = this.extractTitleFromHTML(body);
+
+        return { title, bodyHTML };
+    }
+
+    private extractTitleFromHTML(body: HTMLElement) {
         if (body) {
+            // Check for headings (h1 to h6)
             for (let i = 1; i <= 6; i++) {
                 const heading = body.getElementsByTagName('h' + i)[0];
                 if (heading && heading.textContent) {
                     return heading.textContent.trim();
                 }
+            }
+
+            // If no heading is found, get text from the first child element
+            const firstElement = body.firstElementChild;
+            if (firstElement && firstElement.textContent) {
+                const title = firstElement.textContent.trim();
+                if (title.length < 50) return title;
             }
         }
 
@@ -212,7 +200,7 @@ export class EPUBParser {
                 const content = list.find(c => c.id == item.idref);
                 return {
                     idref: item.idref,
-                    title: item.title || OSString.getBookTitle(item.idref),
+                    title: item.title || '',
                     pageNumber: content?.startPage || 1,
                 };
             })
@@ -230,28 +218,4 @@ export class EPUBParser {
             lastReadDate: new Date(),
         };
     }
-
-    extractBodyInnerHTML(xhtmlContent: string): string {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(xhtmlContent, 'application/xhtml+xml');
-
-        // Check for parsing errors
-        const parserError = doc.getElementsByTagName('parsererror');
-        if (parserError.length > 0) {
-            throw new Error('Error parsing the XHTML content.');
-        }
-
-        // Define the XHTML namespace
-        const XHTML_NS = 'http://www.w3.org/1999/xhtml';
-
-        // Access the <body> element using namespace-aware methods
-        const body = doc.getElementsByTagNameNS(XHTML_NS, 'body')[0];
-        if (!body) {
-            throw new Error('No <body> tag found in the XHTML content.');
-        }
-
-        // Return the inner HTML of the <body> element
-        return body.innerHTML.trim();
-    }
-
 }

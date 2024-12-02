@@ -113,7 +113,7 @@ export class EbookRender {
     }
 
     private processTag(tag: string): string | null {
-        if (/^<img\b[^>]*>/i.test(tag)) {
+        if (/^<img\b[^>]*>/i.test(tag) || /^<figure\b[^>]*>/i.test(tag) || /^<\/figure>/i.test(tag) || /^<figcaption\b[^>]*>/i.test(tag) || /^<\/figcaption>/i.test(tag)) {
             return null;
         }
 

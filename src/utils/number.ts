@@ -26,4 +26,8 @@ export class OSNumber {
         }
         return value / total * 100;
     }
+
+    public static clamp(value: number, minmax: [number, number]) {
+        return Math.min(Math.max(value, minmax[0]), minmax[1]);
+    }
 }

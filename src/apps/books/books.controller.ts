@@ -36,8 +36,6 @@ export class BooksController extends BaseController {
         } catch(error) {
             return false;
         }
-        return this.tryThis(async () => {
-        });
     }
 
     updateBook(data: Book) {
