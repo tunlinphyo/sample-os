@@ -331,7 +331,7 @@
             position: absolute;
             z-index: 6;
 
-            bottom: var(--grid);
+            bottom: calc(var(--grid) * 1);
             left: calc(var(--grid) * 4);
 
             width: var(--button);

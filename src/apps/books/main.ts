@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const booksController = new BooksController(bookStore);
 
     new BooksApp(historyManager, booksController, parent.device);
-    const bookStorePage = new BookStorePage(historyManager);
+    const bookStorePage = new BookStorePage(historyManager, booksController, parent.device);
     const ebookReader = new EBookReader(historyManager, booksController, parent.device);
 
     new BooksAppController(

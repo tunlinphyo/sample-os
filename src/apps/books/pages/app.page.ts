@@ -17,7 +17,7 @@ export class BooksApp extends App {
         private book: BooksController,
         private device: DeviceController
     ) {
-        super(history, { template: 'actionTemplate', btnEnd: 'upload' });
+        super(history, { template: 'actionTemplate', btnEnd: 'local_library' });
         this.component.classList.add('booksPage');
         this.uploadEl = this.createElement<HTMLInputElement>('input', [], {
             type: 'file',
@@ -38,7 +38,8 @@ export class BooksApp extends App {
         );
 
         this.addEventListener('click', () => {
-            this.uploadEl.click();
+            this.history.pushState('/books/store', null);
+            // this.uploadEl.click();
         }, this.btnEnd, false);
 
         this.book.addChangeListener((status: string) => {
@@ -52,14 +53,23 @@ export class BooksApp extends App {
         const scrollArea = this.createScrollArea();
         const bookList = this.createElement('ul', ['titleList']);
         for(const book of books) {
-            const bookHeight = OSNumber.clamp(Math.round(book.totalPages * 0.1), [40, 140]);
+            const bookHeight = OSNumber.clamp(Math.round(book.totalPages * 0.1), [32, 140]);
             const bookTitle = this.createElement('li', ['bookItem'], { style: `height: ${bookHeight}px` });
 
             const titleEl = this.createElement('div', ['bookTitle']);
+            if (bookHeight < 40) {
+                titleEl.classList.add('smallText');
+            }
             if (bookHeight < 90) {
                 titleEl.classList.add('oneLine');
             }
+
             titleEl.textContent = book.title;
+            titleEl.style.fontSize = `${OSNumber.mapRange(bookHeight, 50, 140, 18, 24)}px`;
+
+            const length = OSNumber.clamp(book.title.length, [10, 35]);
+            const width = OSNumber.mapRange(length, 10, 30, 80, 100);
+            bookTitle.style.width = `${OSNumber.clamp(width, [80, 100])}%`;
 
             // const authorEl = this.createElement('small', ['bookAuthor']);
             // authorEl.textContent = book.author;
@@ -108,5 +118,4 @@ export class BooksApp extends App {
         await this.book.addBook(bookData);
         close();
     }
-
 }

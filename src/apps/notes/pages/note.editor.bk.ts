@@ -139,14 +139,9 @@ export class NoteEditorPage extends Modal {
                 icon: 'format_quote',
             }
         ]
-        try {
-            const selected = await this.device.selectList.openPage<string>('Format', list);
-            if (selected && typeof selected === 'string') {
-                this.handleTypeChange(selected);
-            }
-        } catch (error) {
-            console.error('Error changing type:', error);
-            // Optionally, provide user feedback
+        const selected = await this.device.selectList.openPage<string>('Format', list);
+        if (selected && typeof selected === 'string') {
+            this.handleTypeChange(selected);
         }
     }
 
@@ -169,9 +164,9 @@ export class NoteEditorPage extends Modal {
     }
 
     private handleTypeChange(toType: string) {
-        const focused = this.getEl('.focus');
-        if (!focused) return;
-        const parentEl = focused.parentElement;
+        const foucsed = this.getEl('.focus');
+        if (!foucsed) return;
+        const parentEl = foucsed.parentElement;
         if(!parentEl) return;
 
         const type = parentEl.dataset.type as string;
@@ -202,18 +197,18 @@ export class NoteEditorPage extends Modal {
     }
 
     private handleEnter() {
-        const focused = this.getEl('.focus');
-        if (!focused) return;
-        const parentEl = focused.parentElement;
+        const foucsed = this.getEl('.focus');
+        if (!foucsed) return;
+        const parentEl = foucsed.parentElement;
         if (!parentEl) return;
 
         const type = parentEl.dataset.type as NoteType;
         if (this.isParagraph(type)) {
-            const nextDatas = this.getNextSiblingsData(focused);
+            const nextDatas = this.getNextSiblingsData(foucsed);
             const data = nextDatas.length ? ['', ...nextDatas] : [''];
             this.createSection(parentEl, { type: 'paragraph', data });
         } else {
-            this.createListItem(parentEl, focused);
+            this.createListItem(parentEl, foucsed);
         }
     }
 
@@ -236,17 +231,15 @@ export class NoteEditorPage extends Modal {
     }
 
     private renderSection(note: NoteData, prevEl?: HTMLElement) {
-        const fragment = document.createDocumentFragment();
         const newSection = this.createElement('div', ['section'], { 'data-type': note.type });
         const list = note.data.length ? note.data : [''];
         for (const text of list) {
             this.renderItem(newSection, text)
         }
-        fragment.appendChild(newSection);
         if (prevEl) {
             prevEl.insertAdjacentElement('afterend', newSection);
         } else {
-            this.mainArea.appendChild(fragment);
+            this.mainArea.appendChild(newSection);
         }
 
         this.addFocusListenerParent(newSection);
@@ -409,10 +402,7 @@ export class NoteEditorPage extends Modal {
                 if (focused) {
                     focused.classList.remove('focus');
                 }
-                const lastChild = targetEl.lastElementChild as HTMLElement;
-                if (lastChild) {
-                    this.focusElement(lastChild);
-                }
+                this.focusElement(targetEl.lastElementChild as HTMLElement);
             }
         }, elem);
     }
@@ -442,7 +432,7 @@ export class NoteEditorPage extends Modal {
 
         for (var i = 0; i < nodes.length; i++) {
             var node = nodes[i];
-            if (node.nodeType === Node.TEXT_NODE && node.textContent) {
+            if (node.nodeType === Node.TEXT_NODE) {
                 for (var j = 0; j < node.textContent!.length; j++) {
                     range.setStart(node, j);
                     range.setEnd(node, j + 1);

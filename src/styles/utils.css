@@ -1579,6 +1579,10 @@ body {
                 grid-template-columns: 1fr calc(var(--grid) * 1.6) calc(var(--grid) * 1.6);
                 align-items: center;
 
+                /* border: 3px solid var(--black);
+                border-bottom: none;
+                border-radius: 15px 15px 0 0; */
+
                 > button {
                     width: calc(var(--grid) * 1.5);
                     height: calc(var(--grid) * 1.5);
@@ -1603,6 +1607,9 @@ body {
 
                 position: relative;
                 overflow: hidden;
+
+                /* border: 3px solid var(--black);
+                border-radius: 0 0 15px 15px; */
 
                 .caleandarContainer {
                     position: absolute;
@@ -1651,8 +1658,8 @@ body {
                     }
 
                     &.cellToday {
-                        outline: 2px solid var(--black);
-                        outline-offset: -2px;
+                        outline: 3px solid var(--black);
+                        outline-offset: -4px;
                     }
 
                     &.cellGoast {
