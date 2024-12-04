@@ -3,7 +3,7 @@
     .stopwatchPage,
     .timerPage {
         .clockArea {
-            height: calc(var(--grid) * 8.2);
+            /* height: calc(var(--grid) * 8.2); */
             position: sticky;
             z-index: 0;
             top: 0;
@@ -44,6 +44,34 @@
                 height: calc(var(--grid) * 12);
                 padding-bottom: 0;
                 /* overscroll-behavior: none; */
+
+                .clockArea {
+                    .clock {
+                        background-color: var(--black);
+    
+                        .clock-face {
+                            .hand {
+                                background: var(--white);
+                            }
+    
+                            .hour-hand {
+                                outline: 4px solid var(--white);
+                            }
+    
+                            .minute-hand {
+                                outline: 4px solid var(--white);
+                            }
+    
+                            .second-hand {
+                                background-color: transparent;
+    
+                                &::before {
+                                    background-color: var(--white);
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
         .alarmList {
@@ -66,7 +94,6 @@
             border: 2px solid var(--black);
             width: calc(100% - 10px);
             border-radius: 0 0 var(--grid) var(--grid);
-            border: 2px solid var(--black);
             border-top: none;
             padding-bottom: 5px;
         }
@@ -190,7 +217,7 @@
     }
 
     .timeLaps {
-        margin-block: calc(var(--grid) * 2) 5px;
+        margin-block: calc(var(--grid) * 1) 5px;
         padding: var(--half) var(--padding);
 
         .timeLap {
@@ -215,7 +242,7 @@
     }
 
     .timerList {
-        margin-block: calc(var(--grid) * 2) 5px;
+        margin-block: calc(var(--grid) * 1) 5px;
         padding-inline: var(--padding);
         padding-block: var(--grid) var(--padding);
 
@@ -231,7 +258,7 @@
     }
 
     .alarmList {
-        margin-block: calc(var(--grid) * 1.8) 0;
+        margin-block: calc(var(--grid) * 1) 0;
         padding-block: var(--half) calc(var(--grid) * 1.5);
 
         .dateContainer {

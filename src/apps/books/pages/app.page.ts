@@ -44,7 +44,7 @@ export class BooksApp extends App {
 
         this.book.addChangeListener((status: string) => {
             if (status === 'BOOKS_CHANGE') {
-                this.update("update", this.book.books);
+                this.update("update", this.book.latestBooks);
             }
         });
     }

@@ -2180,19 +2180,19 @@ body {
 
         .clockArea {
             width: calc(var(--grid) * 10);
-            height: calc(var(--grid) * 8);
+            height: calc(var(--grid) * 9);
 
             display: flex;
             justify-content: center;
-            align-items: flex-end;
+            align-items: center;
 
             .clockRing {
                 --icon-color: var(--black);
                 --stoke-color: transparent;
                 --fill-color: var(--black);
 
-                width: calc(var(--grid) * 7.5);
-                height: calc(var(--grid) * 7.5);
+                width: calc(var(--grid) * 8);
+                height: calc(var(--grid) * 8);
                 position: relative;
 
                 outline: 2px solid var(--black);
@@ -2235,12 +2235,15 @@ body {
             }
 
             .clock {
-                width: calc(var(--grid) * 7.5);
-                height: calc(var(--grid) * 7.5);
+                width: calc(var(--grid) * 8);
+                height: calc(var(--grid) * 8);
                 border: 4px solid var(--black);
                 border-radius: 50%;
                 position: relative;
                 padding: 6px;
+
+                /* background-image: linear-gradient(#444cf722 1px, transparent 1px), linear-gradient(to right, #444cf722 1px, transparent 1px);
+                background-size: calc(var(--grid) - 1px) calc(var(--grid) - 1px); */
 
                 .currentTime {
                     position: absolute;
@@ -2263,7 +2266,7 @@ body {
                     width: 100%;
                     height: 100%;
                     position: relative;
-                    transform: translateY(-3px); /* account for the height of the clock hands */
+                    transform: translateY(-6px);
 
                     .hand {
                         width: 50%;
@@ -2271,7 +2274,7 @@ body {
                         border-radius: 4px;
                         background: var(--black);
                         position: absolute;
-                        top: calc(50% - 4px);
+                        top: 50%;
                         left: 0;
                         transform-origin: 100%;
                         transform: rotate(90deg);
@@ -2282,14 +2285,14 @@ body {
 
                     .hour-hand {
                         width: 25%;
-                        translate: 99% 0;
+                        translate: 100% 0;
                         border-radius: 12px;
                         outline: 4px solid var(--black);
                     }
 
                     .minute-hand {
                         width: 36%;
-                        translate: 38% 0;
+                        translate: 38.5% 0;
                         outline: 4px solid var(--black);
                     }
 

@@ -53,7 +53,7 @@ export class WeatherApp extends App {
         const weatherData = this.createElement('div', ['weatherData']);
 
         const iconEl = this.createElement('div', ['weatherIcon']);
-        iconEl.innerHTML = `<span class="material-symbols-outlined icon">${WeatherService.getIcon(weather.weather[0].icon)}</span>`;
+        iconEl.innerHTML = `<span class="material-symbols-outlined icon fill-icon">${WeatherService.getIcon(weather.weather[0].icon)}</span>`;
         weatherData.appendChild(iconEl);
 
         const tempEl = this.createElement('div', ['temperture']);

@@ -4,6 +4,9 @@ import { HistoryStateManager } from "../../../device/history.manager";
 import { EPUBParser } from "../../../services/ebook.parser";
 import { EpubUploader } from "../services/book.uploader";
 import { BooksController } from "../books.controller";
+import { Book } from "../../../stores/books.store";
+import { OSNumber } from "../../../utils/number";
+import { ScrollBar } from "../../../components/scroll-bar";
 
 export class BookStorePage extends Page {
     private uploadEl: HTMLInputElement;
@@ -14,6 +17,7 @@ export class BookStorePage extends Page {
         private device: DeviceController
     ) {
         super(history, { btnEnd: 'add' });
+        this.component.classList.add('storePage');
         this.uploadEl = this.createElement<HTMLInputElement>('input', [], {
             type: 'file',
             accept: '.epub'
@@ -37,14 +41,45 @@ export class BookStorePage extends Page {
         }, this.btnEnd, false);
     }
 
-    render() {
-        const flexCenter = this.createFlexCenter();
+    render(books: Book[]) {
+        const scrollArea = this.createScrollArea();
+        const bookList = this.createElement('ul', ['titleList']);
+        for(const book of books) {
+            const bookHeight = OSNumber.clamp(Math.round(book.totalPages * 0.1), [32, 140]);
+            const bookTitle = this.createElement('li', ['bookItem'], { style: `height: ${bookHeight}px` });
 
-        const message = this.createElement('div', ['message']);
-        message.textContent = 'Coming soon..';
+            const titleEl = this.createElement('div', ['bookTitle']);
+            if (bookHeight < 40) {
+                titleEl.classList.add('smallText');
+            }
+            if (bookHeight < 90) {
+                titleEl.classList.add('oneLine');
+            }
 
-        flexCenter.appendChild(message);
-        this.mainArea.appendChild(flexCenter);
+            titleEl.textContent = book.title;
+
+            // const authorEl = this.createElement('small', ['bookAuthor']);
+            // authorEl.textContent = book.author;
+
+            // const bookSize = Math.min(Math.round(book.totalPages / 350 * 100), 100);
+            const readingProgress =  Math.round(book.currantPage / book.totalPages * 100);
+
+            const progressContainerEl = this.createElement('div', ['progressContainer']);
+            const progressEl = this.createElement('div', ['progress'], { style: `height: ${readingProgress}%;` });
+            progressContainerEl.appendChild(progressEl);
+
+            bookTitle.appendChild(titleEl);
+            // bookTitle.appendChild(authorEl);
+            bookTitle.appendChild(progressContainerEl);
+
+            this.addEventListener('click', () => {
+                this.history.pushState('/books/reader', book.id);
+            }, bookTitle)
+            bookList.appendChild(bookTitle);
+        }
+        scrollArea.appendChild(bookList);
+        this.mainArea.appendChild(scrollArea);
+        new ScrollBar(this.component);
     }
 
     update() {}

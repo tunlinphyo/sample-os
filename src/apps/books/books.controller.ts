@@ -10,12 +10,16 @@ export class BooksController extends BaseController {
         this.setupListeners();
     }
 
-    get books() {
+    get latestBooks() {
         return this._books.sort((a, b) => {
             if (!a.lastReadDate) return 1;
             if (!b.lastReadDate) return -1;
             return b.lastReadDate.getTime() - a.lastReadDate.getTime();
-        });
+        }).slice(0, 10);
+    }
+
+    get books() {
+        return this._books.sort((a, b) => a.title.localeCompare(b.title));
     }
 
     private setupListeners() {

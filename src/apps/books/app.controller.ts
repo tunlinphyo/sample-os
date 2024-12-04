@@ -17,20 +17,12 @@ export class BooksAppController {
     }
 
     private renderListeners() {
-        const handleChange = (state: any, url: string) => {
+        const handleChange = (_: any, url: string) => {
             this.history.handleChange(url, [
                 {
-                    pattern: '/books/reader',
-                    callback: () => {
-                        const book = this.book.getBook(state);
-                        if (book) {
-                            this.ebookReader.openPage(book.title, book);
-                        }
-                    }
-                }, {
                     pattern: '/books/store',
                     callback: () => {
-                        this.bookStorePage.openPage('Book Store');
+                        this.bookStorePage.openPage('Library', this.book.books);
                     }
                 },
                 {
