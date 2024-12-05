@@ -17,7 +17,7 @@ export class BooksAppController {
     }
 
     private renderListeners() {
-        const handleChange = (_: any, url: string) => {
+        const handleChange = (state: any, url: string) => {
             this.history.handleChange(url, [
                 {
                     pattern: '/books/store',
@@ -26,9 +26,9 @@ export class BooksAppController {
                     }
                 },
                 {
-                    pattern: '/ebooks/reader',
+                    pattern: '/books/reader',
                     callback: () => {
-                        const book = EBOOKS[0];
+                        const book = this.book.getBook(state);
                         if (book) {
                             this.ebookReader.openPage(book.title, book);
                         }

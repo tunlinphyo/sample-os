@@ -1,4 +1,245 @@
 @layer component {
+    .musicRecoderPage {
+        .mainArea {
+            width: calc(var(--grid) * 10);
+            height: calc(var(--grid) * 14);
+
+            /* background-image: linear-gradient(#444cf722 1px, transparent 1px), linear-gradient(to right, #444cf722 1px, transparent 1px);
+            background-size: calc(var(--grid) - .1px) calc(var(--grid) - .05px); */
+
+            .musicRecoder {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: var(--half);
+                position: relative;
+                z-index: 0;
+
+                .recordContainer {
+                    width: 100%;
+                    height: calc(var(--grid) * 8.2);
+
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    .record {
+                        width: calc(var(--grid) * 8.2);
+                        height: calc(var(--grid) * 8.2);
+                        background-color: var(--black);
+                        border-radius: 100%;
+
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        position: relative;
+
+                        animation: rotate 30s linear infinite;
+
+                        /* background-image: repeating-radial-gradient(circle, transparent, transparent 10px, var(--white) 10px, var(--white) 11px);
+                        transform: translate(-50%, -50%);
+                        border-radius: 50%; */
+
+                        .recordCenter {
+                            width: 28%;
+                            height: 28%;
+                            border-radius: 100%;
+                            background-color: var(--white);
+
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+
+                            &::before {
+                                content: '';
+                                display: block;
+                                width: 5px;
+                                height: 5px;
+                                border-radius: 100%;
+                                background-color: var(--black);
+                            }
+                        }
+
+                        .time {
+                            content: '';
+                            display: block;
+                            position: absolute;
+                            width: 25%;
+                            color: var(--white);
+                            text-align: center;
+
+                            &.timeCurrent {
+                                left: 7%;
+                            }
+                            &.timeDuration {
+                                right: 7%;
+                            }
+                        }
+
+                        &::before,
+                        &::after {
+                            content: '';
+                            display: block;
+                            position: absolute;
+                            width: 25%;
+                            height: 2px;
+                            background-color: var(--white);
+                            left: 50%;
+                            top: 50%;
+                            translate: -50% -50%;
+                            rotate: 90deg;
+                        }
+
+                        &::before {
+                            translate: -50% calc(var(--grid) * 2.5);
+                        }
+
+                        &::after {
+                            translate: -50% calc(var(--grid) * -2.5);
+                        }
+                    }
+                }
+
+                .recordActions {
+                    height: calc(var(--grid) * 4.3);
+                    padding-inline: var(--padding) var(--grid);
+
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+
+                    .musicControl {
+                        display: flex;
+                        gap: 3px;
+                        /* padding-inline-start: 4px; */
+
+                        & button {
+                            width: calc(var(--grid) * 1.8);
+                            height: calc(var(--grid) * 4.3);
+
+                            display: flex;
+                            justify-content: center;
+                            align-items: flex-end;
+                            padding-block-end: 12px;
+
+                            border: 3px solid var(--black);
+                            border-radius: 3px;
+
+                            .icon {
+                                font-size: 26px;
+                            }
+
+                            &.btnNext {
+                                background-color: var(--black);
+
+                                .icon {
+                                    color: var(--white);
+                                }
+                            }
+                        }
+                    }
+
+                    .playHand {
+                        position: relative;
+                        width: calc(var(--grid) * 1.5);
+                        height: calc(var(--grid) * 1.5);
+
+                        .playHandCircle {
+                            position: absolute;
+                            inset: 0;
+                            z-index: 1;
+
+                            rotate: 33deg;
+
+                            .playHandStick {
+                                position: absolute;
+                                width: calc(var(--grid) * 9);
+                                height: 12px;
+                                background-color: var(--black);
+                                outline: 2px solid var(--white);
+                                border-radius: 10px;
+
+                                top: 50%;
+                                right: 0;
+                                translate: var(--half) -50%;
+
+                                /* &::before {
+                                    content: '';
+                                    display: block;
+                                    position: absolute;
+                                    top: 50%;
+                                    left: 0;
+                                    width: 34px;
+                                    height: 30px;
+                                    background-color: var(--black);
+                                    translate: 12px -50%;
+                                    outline: 2px solid var(--white);
+                                } */
+                            }
+                        }
+
+                        .playButton {
+                            position: absolute;
+                            inset: 0;
+                            z-index: 2;
+
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+
+                            background-color: var(--black);
+                            border-radius: 100%;
+                            border: 2px solid var(--white);
+
+                            .icon {
+                                color: var(--white);
+                                font-size: 24px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .playerButton {
+            display: none;
+        }
+
+        .actionBar {
+            position: absolute;
+            z-index: 1;
+            background-color: transparent;
+            bottom: var(--grid);
+            transform: translateZ(0);
+            padding-inline-end: 6px;
+
+            .actionButton {
+                &:has(span) {
+                    pointer-events: auto;
+                    border-radius: calc(var(--grid) * 1.5);
+                    position: relative;
+                    z-index: 0;
+                    translate: -8px 20px;
+
+                    .icon {
+                        color: var(--white);
+                        font-size: 26px;
+                    }
+
+                    &::before {
+                        content: '';
+                        inset: 2px;
+                        display: block;
+                        position: absolute;
+                        z-index: -1;
+                        border-radius: var(--grid);
+                        background-color: var(--black);
+                        border: 2px solid var(--black);
+                    }
+                }
+            }
+        }
+    }
+
     .scrollArea {
         .noData {
             height: calc(var(--grid) * 7);
@@ -589,16 +830,6 @@
             justify-content: center;
             gap: 4px;
             .actionButton {
-                &.center {
-                    order: 0;
-                }
-                &.start {
-                    order: 1;
-                    opacity: 0;
-                }
-                &.end {
-                    order: 2;
-                }
                 &:has(span) {
                     pointer-events: auto;
                     border-radius: calc(var(--grid) * 1.5);
@@ -618,7 +849,7 @@
                         z-index: -1;
                         background-color: var(--white);
                         border-radius: 50%;
-                        border: 2px solid var(--black);
+                        /* border: 2px solid var(--black); */
                     }
                 }
             }

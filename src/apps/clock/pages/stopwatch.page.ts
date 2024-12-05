@@ -94,9 +94,9 @@ export class StopwatchPage extends Page {
                 <div class="clockArea">
                     <div class="clock">
                         <div class="clock-face">
-                            <div class="hand hour-hand"></div>
-                            <div class="hand minute-hand"></div>
-                            <div class="hand second-hand"></div>
+                            <div class="hand hour-hand"><span></span></div>
+                            <div class="hand minute-hand"><span></span></div>
+                            <div class="hand second-hand"><span></span></div>
                         </div>
                         <div class="currentTime" id="currentTime">00:00:00:00</div>
                     </div>

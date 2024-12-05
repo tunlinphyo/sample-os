@@ -45,9 +45,9 @@ export class ClockApp extends App {
                 <div class="clockArea">
                     <div class="clock">
                         <div class="clock-face">
-                            <div class="hand hour-hand"></div>
-                            <div class="hand minute-hand"></div>
-                            <div class="hand second-hand"></div>
+                            <div class="hand hour-hand"><span></span></div>
+                            <div class="hand minute-hand"><span></span></div>
+                            <div class="hand second-hand"><span></span></div>
                         </div>
                     </div>
                 </div>
@@ -142,6 +142,7 @@ export class ClockApp extends App {
     }
 
     private setClock() {
+        // const time = new Date('Thu Dec 05 2024 12:00:00 GMT+0900');
         const now = new OSDate().getDateByTimeZone(this.device.timeZone);
 
         const seconds = now.getSeconds();
