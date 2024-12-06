@@ -56,7 +56,7 @@ export class BookStorePage extends Page {
                 titleEl.classList.add('oneLine');
             }
 
-            titleEl.textContent = book.title;
+            titleEl.innerHTML = `<span>${book.title}</span>`;
 
             // const authorEl = this.createElement('small', ['bookAuthor']);
             // authorEl.textContent = book.author;

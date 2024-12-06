@@ -16,7 +16,7 @@ export class AlbumPage extends Page {
         private device: DeviceController,
         private music: MusicController,
     ) {
-        super(history, { btnEnd: 'favorite' });
+        super(history, { });
         this.component.classList.add('musicPage');
         this.init();
 
@@ -24,9 +24,9 @@ export class AlbumPage extends Page {
     }
 
     private init() {
-        this.addEventListener('click', () => {
-            if (this._album) this.music.toggleAlbumFavorite(this._album.id);
-        }, this.btnEnd, false);
+        // this.addEventListener('click', () => {
+        //     if (this._album) this.music.toggleAlbumFavorite(this._album.id);
+        // }, this.btnEnd, false);
 
         const musicListener = (status: string, data: any) => {
             if (status === 'UPDATE_ALBUM_FAVORITE' && this._album && this._album.id == data) {

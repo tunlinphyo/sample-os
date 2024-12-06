@@ -16,15 +16,15 @@
 
                 .recordContainer {
                     width: 100%;
-                    height: calc(var(--grid) * 8.2);
+                    height: calc(var(--grid) * 8);
 
                     display: flex;
                     justify-content: center;
                     align-items: center;
 
                     .record {
-                        width: calc(var(--grid) * 8.2);
-                        height: calc(var(--grid) * 8.2);
+                        width: calc(var(--grid) * 8);
+                        height: calc(var(--grid) * 8);
                         background-color: var(--black);
                         border-radius: 100%;
 
@@ -100,7 +100,7 @@
                 }
 
                 .recordActions {
-                    height: calc(var(--grid) * 4.3);
+                    height: calc(var(--grid) * 4.5);
                     padding-inline: var(--padding) var(--grid);
 
                     display: flex;
@@ -114,12 +114,12 @@
 
                         & button {
                             width: calc(var(--grid) * 1.8);
-                            height: calc(var(--grid) * 4.3);
+                            height: calc(var(--grid) * 4.5);
 
                             display: flex;
                             justify-content: center;
-                            align-items: flex-end;
-                            padding-block-end: 12px;
+                            align-items: flex-start;
+                            padding-block-start: 12px;
 
                             border: 3px solid var(--black);
                             border-radius: 3px;
@@ -143,12 +143,14 @@
                         width: calc(var(--grid) * 1.5);
                         height: calc(var(--grid) * 1.5);
 
+                        translate: 0 calc(var(--grid) * -1);
+
                         .playHandCircle {
                             position: absolute;
                             inset: 0;
                             z-index: 1;
 
-                            rotate: 33deg;
+                            rotate: 30deg;
 
                             .playHandStick {
                                 position: absolute;
@@ -222,7 +224,7 @@
 
                     .icon {
                         color: var(--white);
-                        font-size: 26px;
+                        font-size: 28px;
                     }
 
                     &::before {
@@ -444,17 +446,74 @@
         }
     }
 
+    .albumsPage {
+        .mainArea {
+            height: calc(var(--grid) * 14);
+
+            .scrollArea {
+                padding-block: var(--half);
+                width: calc(var(--grid) * 10);
+                height: calc(var(--grid) * 10);
+                transform: rotate(-90deg);
+                translate: 0 calc(var(--grid) * .5);
+            }
+        }
+        .actionBar {
+            position: absolute;
+            z-index: 2;
+            transform: translateZ(0);
+            background-color: transparent;
+            bottom: var(--grid);
+
+            .actionButton {
+                &:has(span) {
+                    pointer-events: auto;
+                    border-radius: calc(var(--grid) * 1.5);
+                    position: relative;
+                    z-index: 0;
+
+                    .icon {
+                        /* color: var(--white); */
+                        font-size: 28px;
+                    }
+
+                    &::before {
+                        content: '';
+                        inset: 8px;
+                        display: block;
+                        position: absolute;
+                        z-index: -1;
+                        border-radius: var(--grid);
+                        background-color: var(--white);
+                        /* border: 2px solid var(--black); */
+                    }
+                }
+            }
+        }
+    }
+
     .albumList {
         width: 100%;
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        padding: 10px;
-        gap: 10px;
+        grid-template-columns: 1fr;
+        padding: calc(var(--grid) * 0.2) var(--padding);
+        gap: 0;
+        scroll-snap-type: both mandatory;
 
         .albumCard {
+            scroll-snap-align: center;
+            scroll-snap-stop: always;
             /* aspect-ratio: 1/1; */
             display: grid;
             grid-template-areas: "album";
+            outline: 3px solid var(--white);
+            border-radius: 3px;
+            background-color: var(--black);
+
+            transition: all .4s ease;
+
+            margin-block: calc(var(--grid) * -0.2);
+            transform: rotate(90deg);
 
             &::before {
                 content: '';
@@ -475,35 +534,37 @@
                     height: calc(var(--grid) * 1.6);
                     border: 2px solid var(--black);
                     border-radius: 100%;
-                    margin-block-end: -75%;
+                    margin-block-end: -50%;
                     box-shadow:
-                        0 0 0 4px var(--white),
+                        0 0 0 1px var(--white),
                         0 0 0 5px var(--black),
-                        0 0 0 9px var(--white),
+                        0 0 0 6px var(--white),
                         0 0 0 10px var(--black),
-                        0 0 0 14px var(--white),
+                        0 0 0 11px var(--white),
                         0 0 0 15px var(--black),
-                        0 0 0 19px var(--white),
+                        0 0 0 16px var(--white),
                         0 0 0 20px var(--black),
-                        0 0 0 24px var(--white),
+                        0 0 0 21px var(--white),
                         0 0 0 25px var(--black),
-                        0 0 0 29px var(--white),
+                        0 0 0 26px var(--white),
                         0 0 0 30px var(--black),
-                        0 0 0 34px var(--white),
-                        0 0 0 36px var(--black)
+                        0 0 0 31px var(--white),
+                        0 0 0 35px var(--black),
+                        0 0 0 36px var(--white),
+                        0 0 0 40px var(--black)
                     ;
 
                     display: flex;
                     justify-content: center;
                     align-items: center;
+
+                    color: var(--white);
                 }
             }
 
             .albumButton {
                 grid-area: album;
-                border: 3px solid var(--black);
-                border-radius: 10px;
-                padding: 8px;
+                padding: var(--padding);
 
                 display: flex;
                 flex-direction: column;
@@ -512,13 +573,14 @@
                 text-align: left;
 
                 .albumName {
-                    font-size: 18px;
+                    color: var(--white);
+                    font-size: var(--grid);
                     padding: 0 2px;
                 }
 
                 .artists {
                     font-size: 15px;
-                    padding: 0;
+                    padding: 0 10px;
                     background-color: var(--white);
                 }
             }

@@ -14,7 +14,7 @@ export class MusicApp extends App {
         private device: DeviceController,
         private music: MusicController,
     ) {
-        super(history, { btnEnd: 'library_music' });
+        super(history, { btnEnd: 'art_track' });
         this.component.classList.add('musicRecoderPage');
         this.playerBtn = this.createPlayer();
         this.component.appendChild(this.playerBtn);
@@ -34,7 +34,7 @@ export class MusicApp extends App {
         // }, this.btnEnd, false);
 
         this.addEventListener('click', () => {
-            this.history.pushState('/library', null);
+            this.history.pushState('/albums', null);
         }, this.btnEnd, false);
 
         const musicListener = (status: string, data: any) => {
