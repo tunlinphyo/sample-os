@@ -71,6 +71,7 @@ export class AlbumsPage extends Page {
                 const elem = entry.target as HTMLElement;
                 elem.style.scale = `${entry.isIntersecting ? 1 : 0.9}`;
                 elem.style.zIndex = `${entry.isIntersecting ? 1 : 0}`;
+                // elem.scrollIntoView({ behavior: "smooth", block: 'center', inline: 'center' });
             }
         }, {
             threshold: 0.6

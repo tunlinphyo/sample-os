@@ -108,20 +108,22 @@
                     align-items: flex-start;
 
                     .musicControl {
+                        height: 100%;
                         display: flex;
                         gap: 3px;
                         /* padding-inline-start: 4px; */
+                        align-items: center;
 
                         & button {
                             width: calc(var(--grid) * 1.8);
-                            height: calc(var(--grid) * 4.5);
+                            height: calc(var(--grid) * 4);
 
                             display: flex;
                             justify-content: center;
                             align-items: flex-start;
                             padding-block-start: 12px;
 
-                            border: 3px solid var(--black);
+                            border: 2px solid var(--black);
                             border-radius: 3px;
 
                             .icon {
@@ -143,7 +145,7 @@
                         width: calc(var(--grid) * 1.5);
                         height: calc(var(--grid) * 1.5);
 
-                        translate: 0 calc(var(--grid) * -1);
+                        translate: 0 calc(var(--grid) * -0.9);
 
                         .playHandCircle {
                             position: absolute;
@@ -155,10 +157,10 @@
                             .playHandStick {
                                 position: absolute;
                                 width: calc(var(--grid) * 9);
-                                height: 12px;
+                                height: 24px;
                                 background-color: var(--black);
                                 outline: 2px solid var(--white);
-                                border-radius: 10px;
+                                border-radius: 5px;
 
                                 top: 50%;
                                 right: 0;
@@ -575,6 +577,7 @@
                 .albumName {
                     color: var(--white);
                     font-size: var(--grid);
+                    font-weight: normal;
                     padding: 0 2px;
                 }
 
@@ -615,6 +618,13 @@
 
                     .icon {
                         font-size: 28px;
+                        color: var(--white);
+                    }
+
+                    &.playAll {
+                        background-color: var(--black);
+                        color: var(--white);
+
                     }
                 }
             }

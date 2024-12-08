@@ -57,6 +57,11 @@ export class BookStorePage extends Page {
             }
 
             titleEl.innerHTML = `<span>${book.title}</span>`;
+            titleEl.style.fontSize = `${OSNumber.mapRange(bookHeight, 50, 140, 18, 24)}px`;
+
+            const length = OSNumber.clamp(book.title.length, [10, 35]);
+            const width = OSNumber.mapRange(length, 10, 30, 80, 100);
+            bookTitle.style.width = `${OSNumber.clamp(width, [80, 100])}%`;
 
             // const authorEl = this.createElement('small', ['bookAuthor']);
             // authorEl.textContent = book.author;

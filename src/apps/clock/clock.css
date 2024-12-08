@@ -50,7 +50,7 @@
                         background-color: var(--black);
 
                         outline: 2px solid var(--white);
-                        outline-offset: -6px;
+                        outline-offset: -10px;
 
                         .clock-face {
                             .hand {
@@ -70,33 +70,45 @@
 
                             .hour-hand {
                                 z-index: 1;
-                                > span {
+                                /* > span {
                                     width: 60%;
-                                    height: 24px;
-                                    border-radius: 24px;
+                                    height: 28px;
+                                    border-radius: 28px;
                                     background-color: var(--white);
                                     position: absolute;
                                     left: 50%;
                                     right: initial;
                                     top: 50%;
                                     translate: -50% -50%;
-                                }
+                                } */
                                 /* > span {
                                     width: 70%;
-                                    height: 36px;
-                                    border-radius: 36px;
+                                    height: 40px;
+                                    border-radius: 40px;
                                     background-color: var(--white);
                                     position: absolute;
                                     right: 0;
                                     top: 50%;
-                                    translate: 18px -50%;
+                                    translate: 20px -50%;
                                 } */
+                                > span {
+                                    width: 20px;
+                                    height: 20px;
+                                    line-height: 1;
+                                    border-radius: 100%;
+                                    background-color: var(--white);
+                                    position: absolute;
+                                    top: 50%;
+                                    left: 0;
+                                    translate: 15px -50%;
+                                }
                             }
 
                             .minute-hand {
                                 border-radius: 6px;
+                                background-color: transparent;
                                 z-index: 2;
-                                > span {
+                                /* > span {
                                     width: 89%;
                                     height: 8px;
                                     background-color: var(--white);
@@ -106,23 +118,36 @@
                                     right: 0;
                                     translate: 10px -50%;
                                     outline: 2px solid var(--black);
-                                }
+                                } */
                                 /* > span {
                                     width: 100%;
-                                    height: 36px;
-                                    border-radius: 36px;
-                                    border: 3px solid var(--white);
+                                    height: 40px;
+                                    border-radius: 40px;
+                                    background-color: transparent;
+                                    border: 4px solid var(--white);
+                                    box-shadow: inset 0 0 0 2px var(--black), 0 0 0 2px var(--black);
                                     position: absolute;
                                     right: 0;
                                     top: 50%;
-                                    translate: 18px -50%;
+                                    translate: 20px -50%;
                                 } */
+                                > span {
+                                    width: 95%;
+                                    height: 15px;
+                                    background-color: var(--white);
+                                    border-radius: 15px;
+                                    position: absolute;
+                                    top: 50%;
+                                    right: 0;
+                                    translate: 10px -50%;
+                                    outline: 2px solid var(--black);
+                                }
                             }
 
                             .second-hand {
                                 color: var(--white);
                                 z-index: 0;
-                                /* opacity: 0; */
+                                opacity: 0;
                                 > span {
                                     width: 15px;
                                     height: 15px;

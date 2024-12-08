@@ -73,8 +73,8 @@ export class MusicApp extends App {
             <div class="recordContainer">
                 <div class="record">
                     <div class="recordCenter"></div>
-                    <div class="time timeCurrent">0:24</div>
-                    <div class="time timeDuration">3:52</div>
+                    <div class="time timeCurrent">0:00</div>
+                    <div class="time timeDuration">0:00</div>
                 </div>
             </div>
             <div class="recordActions">

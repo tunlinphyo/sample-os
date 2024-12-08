@@ -309,7 +309,7 @@
                     background-color: var(--black);
 
                     overflow: hidden;
-                    margin-bottom: 4px;
+                    margin-bottom: 5px;
 
                     display: flex;
                     flex-direction: column;
@@ -399,18 +399,94 @@
         .mainArea {
             height: calc(var(--grid) * 14);
             .scrollArea {
-                height: calc(var(--grid) * 14);
+                /* height: calc(var(--grid) * 14); */
+
+                width: calc(var(--grid) * 13);
+                height: calc(var(--grid) * 10);
+                padding: 0;
+                transform: rotate(-90deg);
+                translate: calc(var(--grid) * -1.5) calc(var(--grid) * 1.5);
             }
         }
 
         .titleList {
+            /* padding-block: calc(var(--grid) * 1) calc(var(--grid) * 1.5); */
+            padding-inline: 10px;
+            padding-block: var(--padding);
+
+            .bookItem {
+                cursor: pointer;
+
+                border: 3px solid var(--black);
+                border-radius: 2px;
+                /* border-right: none;
+                border-radius: 24px 0 0 24px; */
+
+                background-color: var(--black);
+
+                overflow: hidden;
+                margin-bottom: 5px;
+
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: flex-start;
+
+                padding-inline: 16px;
+                position: relative;
+
+                .bookTitle {
+                    font-size: 18px;
+                    position: relative;
+                    z-index: 1;
+                    padding-inline-start: var(--half);
+                    font-weight: 700;
+                    line-height: 1.3;
+                    color: var(--white);
+
+                    &.oneLine {
+                        width: calc(var(--grid) * 11);
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                    }
+
+                    &.smallText {
+                        /* font-size: 16px; */
+                        line-height: 1;
+                    }
+                }
+
+                .progressContainer {
+                    position: absolute;
+                    z-index: 0;
+                    top: 2px; bottom: 2px;
+                    left: 10px;
+                    width: 4px;
+                    background-color: var(--white);
+
+                    background-size: 4px 4px;
+                    background-image: repeating-linear-gradient(0deg, var(--black), var(--black) 2px, var(--white) 2px, var(--white));
+
+                    .progress {
+                        width: 6px;
+                        background-color: var(--white);
+                        margin-inline-start: -1px;
+                    }
+                }
+            }
+        }
+        /* .titleList {
             padding-block: var(--half) calc(var(--grid) * 3);
             padding-inline: 10px;
 
             .bookItem {
                 cursor: pointer;
 
-                border: 5px solid var(--black);
+                width: 100%;
+                height: calc(var(--grid) * 5);
+
+                border: 4px solid var(--black);
                 border-right: none;
                 border-radius: 24px 0 0 24px;
 
@@ -426,21 +502,13 @@
                 position: relative;
                 line-height: 1.3;
 
-                /* background-image: linear-gradient(0deg, var(--black) 5%, var(--white) 50%);
-                background-size: 4px 4px; */
-
-                background-size: 2px 2px;
-                background-image: repeating-linear-gradient(0deg, var(--black), var(--black) 1px, var(--white) 1px, var(--white));
-
                 .bookTitle {
-                    font-size: 20px;
+                    font-size: 18px;
                     position: relative;
                     z-index: 1;
-                    color: var(--zero-bit);
-                    font-weight: 900;
 
                     &.oneLine {
-                        width: calc(var(--grid) * 8.5);
+                        width: calc(var(--grid) * 8.3);
                         overflow: hidden;
                         white-space: nowrap;
                         text-overflow: ellipsis;
@@ -453,15 +521,15 @@
                     z-index: 0;
                     top: 0;
                     bottom: 0;
-                    right: 0;
-                    width: 6px;
-                    background-color: var(--white);
+                    right: 10px;
+                    width: 3px;
+                    background-color: var(--black);
 
-                    /* background-size: 4px 4px;
-                    background-image: repeating-linear-gradient(0deg, var(--black), var(--black) 2px, var(--white) 2px, var(--white)); */
+                    background-size: 4px 4px;
+                    background-image: repeating-linear-gradient(0deg, var(--black), var(--black) 2px, var(--white) 2px, var(--white));
                 }
             }
-        }
+        } */
 
         .actionBar {
             position: absolute;

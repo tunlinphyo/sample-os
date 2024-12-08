@@ -21,7 +21,7 @@
             padding-block: 24px 12px;
 
             .icon {
-                font-size: calc(var(--grid) * 3);
+                font-size: calc(var(--grid) * 3.2);
             }
         }
 
