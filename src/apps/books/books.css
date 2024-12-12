@@ -309,7 +309,7 @@
                     background-color: var(--black);
 
                     overflow: hidden;
-                    margin-bottom: 5px;
+                    margin-bottom: 6px;
 
                     display: flex;
                     flex-direction: column;
@@ -328,6 +328,8 @@
 
                     .bookTitle {
                         font-size: 18px;
+                        text-transform: uppercase;
+                        /* font-variant-caps: petite-caps; */
                         position: relative;
                         z-index: 1;
                         padding-inline-start: var(--half);
@@ -425,7 +427,7 @@
                 background-color: var(--black);
 
                 overflow: hidden;
-                margin-bottom: 5px;
+                margin-bottom: 6px;
 
                 display: flex;
                 flex-direction: column;
@@ -437,6 +439,8 @@
 
                 .bookTitle {
                     font-size: 18px;
+                    text-transform: uppercase;
+                    /* font-variant-caps: petite-caps; */
                     position: relative;
                     z-index: 1;
                     padding-inline-start: var(--half);
@@ -537,6 +541,7 @@
             background-color: transparent;
             bottom: var(--grid);
             transform: translateZ(0);
+            justify-content: center;
 
             .actionButton {
                 &:has(span) {

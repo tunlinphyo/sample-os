@@ -16,7 +16,7 @@ export class BookStorePage extends Page {
         private book: BooksController,
         private device: DeviceController
     ) {
-        super(history, { btnEnd: 'add' });
+        super(history, { btnStart: 'filter_list', btnEnd: 'add' });
         this.component.classList.add('storePage');
         this.uploadEl = this.createElement<HTMLInputElement>('input', [], {
             type: 'file',

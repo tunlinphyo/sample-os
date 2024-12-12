@@ -5,6 +5,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Symbols+2&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200') layer(icon);
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200') layer(icon);
+/* @import url('https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&display=swap'); */
 
 @import url(./styles/reset.css) layer(reset);
 @import url(./styles/theme.css) layer(theme);

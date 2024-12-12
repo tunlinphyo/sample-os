@@ -1651,6 +1651,9 @@ body {
                     font-family: var(--number-fonts);
                     font-size: 18px;
                     font-weight: 500;
+                    /* font-variant-numeric: tabular-nums;
+                    font-variant-numeric: oldstyle-nums; */
+                    /* font-feature-settings: "ss04" on; */
 
                     &.cellTitle {
                         font-weight: 500;
