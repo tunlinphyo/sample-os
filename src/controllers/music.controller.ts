@@ -202,6 +202,14 @@ export class MusicController extends BaseController {
         this.playMusic(list[0], list);
     }
 
+    recordPlay() {
+        if(!this.queue.length) {
+            this.playMusic(this.songs[0], this.songs);
+        } else {
+            this.play();
+        }
+    }
+
     play() {
         this.audio.play();
     }

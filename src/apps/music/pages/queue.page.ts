@@ -14,14 +14,18 @@ export class QueuePage extends Modal {
         private device: DeviceController,
         private music: MusicController,
     ) {
-        super(history, { btnEnd: 'playlist_remove' });
-        this.component.classList.add('musicPage');
+        super(history, { btnStart: 'music_note', btnEnd: 'playlist_remove' });
+        this.component.classList.add('queuePage');
         this.init();
 
         this.scrollBar = new ScrollBar(this.component);
     }
 
     private init() {
+        this.addEventListener('click', async () => {
+            this.history.pushState('/player', null);
+        }, this.btnStart, false);
+
         this.addEventListener('click', async () => {
             const result = await this.device.confirmPopup.openPage('Clear queue', 'Are you sure to clear queue!');
             if (result) this.music.clearQueue();

@@ -6,8 +6,15 @@ import { HistoryStateManager } from "../../../device/history.manager";
 import { Music } from "../../../stores/music.store";
 
 export class MusicApp extends App {
-    // private scrollBar: ScrollBar;
-    private playerBtn: HTMLButtonElement;
+    private btnPrev: HTMLButtonElement;
+    private btnPlay: HTMLButtonElement;
+    private btnNext: HTMLButtonElement;
+    private queueButton: HTMLButtonElement;
+
+    private record: HTMLElement;
+    private playHand: HTMLElement;
+    private timeCurrent: HTMLElement;
+    private timeDuration: HTMLElement;
 
     constructor(
         history: HistoryStateManager,
@@ -16,37 +23,61 @@ export class MusicApp extends App {
     ) {
         super(history, { btnEnd: 'art_track' });
         this.component.classList.add('musicRecoderPage');
-        this.playerBtn = this.createPlayer();
-        this.component.appendChild(this.playerBtn);
+
+        this.btnPrev = this.createElement<HTMLButtonElement>('button', ['btnPrev']);
+        this.btnPlay = this.createElement<HTMLButtonElement>('button', ['btnPlay']);
+        this.btnNext = this.createElement<HTMLButtonElement>('button', ['btnNext']);
+        this.queueButton = this.createElement<HTMLButtonElement>('button', ['queueButton']);
+
+        this.record = this.createElement('div', ['record']);
+        this.playHand = this.createElement('div', ['playHand']);
+
+        this.timeCurrent = this.createElement('div', ['time', 'timeCurrent']);
+        this.timeDuration = this.createElement('div', ['time', 'timeDuration']);
+
+
         this.init();
         this.render(music.list);
-
-        // this.scrollBar = new ScrollBar(this.component);
     }
 
     private init() {
-        // this.addEventListener('click', () => {
-        //     this.history.pushState('/player', null);
-        // }, this.playerBtn, false);
-
-        // this.addEventListener('click', () => {
-        //     this.history.pushState('/queue', null);
-        // }, this.btnEnd, false);
-
         this.addEventListener('click', () => {
             this.history.pushState('/albums', null);
         }, this.btnEnd, false);
+
+        this.addEventListener('click', () => {
+            this.history.pushState('/player', null);
+        }, this.record, false);
+
+        this.addEventListener('click', () => {
+            this.history.pushState('/queue', null);
+        }, this.queueButton, false);
+
+        this.addEventListener('click', () => {
+            if (this.music.status == 'playing') {
+                this.music.pause();
+            } else {
+                this.music.recordPlay();
+            }
+        }, this.btnPlay, false);
+
+        this.addEventListener('click', () => {
+            this.music.playPrevSong();
+        }, this.btnPrev, false);
+
+        this.addEventListener('click', () => {
+            this.music.playNextSong();
+        }, this.btnNext, false);
 
         const musicListener = (status: string, data: any) => {
             if (status === "LATEST_CHANGE") {
                 this.update('update', data);
             }
             if (status === 'SONG_PLAY_STATUS') {
-                if (data === 'playing') {
-                    this.component.classList.add('playing');
-                } else {
-                    this.component.classList.remove('playing');
-                }
+                this.renderPlayButton(this.music.status);
+            }
+            if (status === 'SONG_TIMELINE_STATUS') {
+                this.renderDuration();
             }
             if (status === 'UPDATE_ALBUM_FAVORITE') {
                 this.update('update', this.music.list);
@@ -69,111 +100,16 @@ export class MusicApp extends App {
 
         const recoder = this.createElement('div', ['musicRecoder']);
 
-        recoder.innerHTML = `
-            <div class="recordContainer">
-                <div class="record">
-                    <div class="recordCenter"></div>
-                    <div class="time timeCurrent">0:00</div>
-                    <div class="time timeDuration">0:00</div>
-                </div>
-            </div>
-            <div class="recordActions">
-                <div class="musicControl">
-                    <button class="btnPrev">
-                        <span class="material-symbols-outlined icon fill-icon">skip_previous</span>
-                    </button>
-                    <button class="btnPlay">
-                        <span class="material-symbols-outlined icon fill-icon">stop</span>
-                    </button>
-                    <button class="btnNext">
-                        <span class="material-symbols-outlined icon fill-icon">skip_next</span>
-                    </button>
-                </div>
-                <div class="playHand">
-                    <div class="playHandCircle">
-                        <div class="playHandStick"></div>
-                    </div>
-                    <button class="playButton">
-                        <span class="material-symbols-outlined icon">queue_music</span>
-                    </button>
-                </div>
-            </div>
-        `;
+        const recordContainer = this.createRecord();
+        const recordActions = this.createActions();
+
+        recoder.appendChild(recordContainer);
+        recoder.appendChild(recordActions);
+
+        this.renderPlayButton(this.music.status);
+        this.renderDuration();
 
         this.mainArea.appendChild(recoder);
-        // const scrollArea = this.createScrollArea();
-
-        // const musicList = this.createElement('ul', ['musicList']);
-
-        // for (const music of list) {
-        //     const musicCard = this.createElement('li', ['musicCard']);
-
-        //     const backgroundEl = this.createElement('div', ['backgroundEl']);
-        //     backgroundEl.innerHTML = `
-        //         <div class="diamondCard">
-        //             <span class="material-symbols-outlined icon">music_note</span>
-        //         </div>
-        //     `;
-        //     const albumEl = this.createElement('button', ['albumEl']);
-        //     albumEl.innerHTML = `
-        //         <h3 class="albumName">${music.name}</h3>
-        //     `;
-
-        //     const playButton = this.createElement('button', ['playButton']);
-        //     playButton.innerHTML = `<span class="material-symbols-rounded icon--sm">play_arrow</span>`;
-
-        //     musicCard.appendChild(backgroundEl);
-        //     musicCard.appendChild(albumEl);
-        //     musicCard.appendChild(playButton);
-
-        //     this.addEventListener('click', () => {
-        //         this.history.pushState('/songs', music.id);
-        //     }, albumEl);
-
-        //     this.addEventListener('click', () => {
-        //         const musicSongs = this.music.getMusicSongs(music.id);
-        //         if (!musicSongs) return;
-        //         const songs = this.music.getSongs(musicSongs.songIds);
-        //         if (songs.length) this.music.playAll(music.id, songs, true);
-        //         // this.history.pushState('/player', null);
-        //     }, playButton);
-
-        //     musicList.appendChild(musicCard);
-        // }
-
-        // const albumList = this.createElement('ul', ['titleList', 'albumList']);
-
-        // for (const album of this.music.favoriteAlbums) {
-        //     const albumEl = this.createElement('li', ['albumCard']);
-
-        //     const albumRecord = this.createElement('div', ['albumRecord']);
-        //     albumRecord.innerHTML = `
-        //         <span class="record">
-        //             <span class="material-symbols-outlined">music_note</span>
-        //         </span>
-        //     `;
-
-        //     const albumBtn = this.createElement('button', ['albumButton']);
-        //     const artists = album.artists?.map(artist => artist.name) || [];
-        //     albumBtn.innerHTML = `
-        //         <div class="albumName">${album.name}</div>
-        //         <div class="artists">${artists.join(', ')}</div>
-        //     `;
-
-        //     this.addEventListener('click', () => {
-        //         this.history.pushState('/albums/detail', album.id);
-        //     }, albumBtn);
-
-        //     albumEl.appendChild(albumRecord);
-        //     albumEl.appendChild(albumBtn);
-        //     albumList.appendChild(albumEl);
-        // }
-
-        // scrollArea.appendChild(musicList);
-        // this.createTitle('Albums', scrollArea);
-        // scrollArea.appendChild(albumList);
-        // this.mainArea.appendChild(scrollArea);
-        // this.scrollBar?.reCalculate();
     }
 
     update(_: string, data: Music[]) {
@@ -182,16 +118,72 @@ export class MusicApp extends App {
         this.render(data);
     }
 
-    private createPlayer() {
-        const playerBtn = this.createElement<HTMLButtonElement>('button', ['playerButton']);
-        playerBtn.innerHTML = `<span class="material-symbols-outlined icon">music_note</span>`;
-
-        return playerBtn;
+    private renderDuration() {
+        this.timeCurrent.textContent = `${this.getTimeString(this.music.time)}`;
+        this.timeDuration.textContent = `${this.getTimeString(this.music.duration)}`;
     }
 
-    private createTitle(title: string, parentEl: HTMLElement) {
-        const titleEl = this.createElement('h2', ['musicTitle']);
-        titleEl.textContent = title;
-        parentEl.appendChild(titleEl);
+    private renderPlayButton(status: string) {
+        this.record.classList.toggle('active', status == 'playing');
+        this.playHand.classList.toggle('active', status == 'playing');
+        this.btnPlay.innerHTML = `<span class="material-symbols-outlined icon fill-icon">${status == 'playing' ? 'stop' : 'play_arrow'}</span>`;
+
+        const marquee = this.getElement('p', this.playHand)
+        const song = this.music.getSong(this.music.currentSong?.id || '')
+        if (marquee) {
+            if (!song) {
+                marquee.textContent = '';
+            } else {
+                const artist = song.artists ? song.artists[0].name : '';
+                marquee.textContent = `${song.title} - ${artist} - ${song.album?.name}`;
+            }
+        }
+    }
+    private createRecord() {
+        const recordContainer = this.createElement('div', ['recordContainer']);
+        
+        this.record.innerHTML = `<div class="recordCenter"></div>`;
+
+        this.record.appendChild(this.timeCurrent);
+        this.record.appendChild(this.timeDuration);
+        recordContainer.appendChild(this.record);
+
+        return recordContainer;
+    }
+
+    private createActions() {
+        const recordActions = this.createElement('div', ['recordActions']);
+        const musicControl = this.createElement('div', ['musicControl']);
+
+
+        this.playHand.innerHTML = `<div class="playHandCircle">
+            <div class="playHandStick">
+                <div class="marquee">
+                    <p>This is a scrolling marquee effect using CSS!</p>
+                </div>
+            </div>
+        </div>`;
+
+        this.btnPrev.innerHTML = `<span class="material-symbols-outlined icon fill-icon">skip_previous</span>`;
+        this.btnPlay.innerHTML = `<span class="material-symbols-outlined icon fill-icon">stop</span>`;
+        this.btnNext.innerHTML = `<span class="material-symbols-outlined icon fill-icon">skip_next</span>`;
+        this.queueButton.innerHTML = `<span class="material-symbols-outlined icon">queue_music</span>`;
+
+        musicControl.appendChild(this.btnPrev);
+        musicControl.appendChild(this.btnPlay);
+        musicControl.appendChild(this.btnNext);
+
+        this.playHand.appendChild(this.queueButton);
+
+        recordActions.appendChild(musicControl);
+        recordActions.appendChild(this.playHand);
+
+        return recordActions;
+    }
+
+    private getTimeString(time: number) {
+        const minutes = Math.floor(time / 60);
+        const seconds = Math.floor(time % 60);
+        return `${minutes.toString().padStart(1, '0')}:${seconds.toString().padStart(2, '0')}`;
     }
 }

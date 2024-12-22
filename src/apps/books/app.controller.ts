@@ -3,7 +3,6 @@ import { HistoryState, HistoryStateManager } from "../../device/history.manager"
 import { BooksController } from "./books.controller";
 import { BookStorePage } from './pages/books.store';
 import { EBookReader } from "./pages/ebook.reader";
-import { EBOOKS } from "./services/book-list";
 
 export class BooksAppController {
     constructor(
