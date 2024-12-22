@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // new Battery();
     // const fullScreen = new FullscreenController();
 
-    // window.weather.fetchWeather();
+    window.weather.fetchWeather();
 
     let inCall: boolean = false;
 
