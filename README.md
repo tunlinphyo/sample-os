@@ -23,6 +23,19 @@ A frontend-only operating system simulation using Web Components, TypeScript, an
 
 ---
 
+## 🧠 Tech Stack
+
+| Area        | Tools/Technologies                     |
+|-------------|----------------------------------------|
+| Language    | TypeScript                             |
+| UI Layer    | Web Components, HTML, CSS              |
+| State Mgmt  | Custom signal-based stores             |
+| Build Tool  | Vite                                   |
+| Styling     | Vanilla CSS, modular theme structure   |
+| Hosting     | Firebase static hosting                |
+
+---
+
 ## 📦 Setup & Run
 
 ```bash
