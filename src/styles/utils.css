@@ -229,7 +229,7 @@ body {
             left: 50%;
             width: calc(var(--grid) * 3);
             height: 6px;
-            background-color: #151515;
+            background-color: #333;
             translate: -50% -15px;
             border-radius: 0 0 5px 5px;
         }
@@ -495,7 +495,7 @@ body {
         &.screen--device {
             position: relative;
             outline: 15px solid #000;
-            box-shadow: 0 0 0 21px var(--device-color), 0 0 30px 0 #000;
+            box-shadow: 0 0 0 20px var(--device-color), 0 0 30px 0 #000;
             /* border-radius: var(--grid); */
             border-radius: calc(var(--grid) * 1.5);
         }

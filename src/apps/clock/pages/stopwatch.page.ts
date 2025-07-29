@@ -17,7 +17,7 @@ export class StopwatchPage extends Page {
     private stopTime: number | null = null;
     private running: boolean = false;
     private laps: number[] = [];
-    private timerInterval: number | null = null;
+    private timerInterval: NodeJS.Timeout | number | null = null;
 
     private hourHand?: HTMLElement;
     private minuteHand?: HTMLElement;

@@ -7,7 +7,7 @@ export interface StopWatchData {
     stopTime: number | null;
     running: boolean;
     laps: number[];
-    timerInterval: number | null;
+    timerInterval: NodeJS.Timeout | number | null;
 }
 
 export interface TimerData {

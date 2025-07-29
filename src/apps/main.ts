@@ -5,6 +5,8 @@ import { HomePages } from './home.pages';
 document.body.dataset.schema = parent.device.theme;
 
 document.addEventListener('DOMContentLoaded', () => {
+
+
     setTimeout(() => {
         const homePages = new HomePages(parent.setting.history);
 

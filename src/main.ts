@@ -151,4 +151,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     console.log('TimeZones', timeZone);
+
+
+
+    const main = document.querySelector<HTMLElement>('.main');
+    if (main) {
+        main.style.scale = `.9`
+    }
 });
