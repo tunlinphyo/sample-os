@@ -4,6 +4,12 @@ A frontend-only operating system simulation using Web Components, TypeScript, an
 
 ---
 
+## 🚀 Live Website
+
+[🔗 View the site](https://paper-os.web.app/)
+
+---
+
 ## 🚀 Features
 
 - 🪟 Modular app structure (`counter`, `books`, `songs`, `alarm`)
