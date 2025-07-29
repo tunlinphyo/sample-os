@@ -60,14 +60,17 @@ npm run build
 ## 🙋‍♂️ About the Author
 
 **Tun Lin Phyo**
-Frontend engineer and system-level UI builder. Based in Tokyo 🇯🇵.
-Specializes in performance-first, framework-free web applications.
+Frontend Engineer and system-level UI builder based in Tokyo 🇯🇵.
+He specializes in **Web Components**, **custom reactive architectures**, and **performance-first web applications** — all without relying on heavy frameworks.
 
-- 🌐 [Portfolio](https://tunlinphyo.com)
-- 💻 Uses Web Components, custom stores, and Vite.
+- 💻 Passionate about UI/UX systems, clean architecture, and modular design
+- 🔧 Builds projects with Vite, custom stores, and native browser APIs
+- 🌐 [Portfolio Website](https://tunlinphyo.com)
 
 ---
 
 ## 📝 License
 
 MIT License
+
+---
