@@ -14,27 +14,6 @@ A frontend-only operating system simulation using Web Components, TypeScript, an
 
 ---
 
-## 📁 Project Structure
-
-```
-sample-os/
-├── src/
-│   ├── main.ts               # OS boot logic and app init
-│   ├── counter.ts            # Sample app component
-│   ├── style.css             # Base styles
-│   ├── types/                # Global TypeScript declarations
-│   └── stores/               # Modular signal-based app stores
-│       ├── noti.store.ts     # Notifications
-│       ├── alarm.store.ts    # Alarms
-│       ├── books.store.ts    # Book data and logic
-│       └── songs.store.ts    # Song data and logic
-├── index.html                # Entry point HTML
-├── package.json              # Scripts and dependencies
-├── vite.config.js            # Vite config
-```
-
----
-
 ## 🧠 Architecture & Concepts
 
 - `main.ts` initializes and boots the "OS" by mounting apps and UI containers.
